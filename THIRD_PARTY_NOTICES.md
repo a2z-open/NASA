@@ -34,7 +34,7 @@ See `web/package.json` for exact versions.
 - React and React DOM: MIT
 - Vite and @vitejs/plugin-react: MIT
 - TypeScript: Apache-2.0
-- Web fonts from Google Fonts, under the SIL Open Font License 1.1: IBM Plex Sans, IBM Plex Mono and Instrument Serif.
+- Web fonts from Google Fonts, under the SIL Open Font License 1.1: Unbounded (display), Instrument Sans (text) and IBM Plex Mono (numbers).
 
 ## External services called at runtime
 
@@ -43,3 +43,5 @@ See `web/package.json` for exact versions.
 | NASA/IPAC IRSA SIA2 and cutout service | SPHEREx observations | Public NASA archive; cite per DATA_SOURCES.md |
 | ESA Gaia archive TAP | Gaia DR3 field stars | ESA Gaia data terms; cite Gaia Collaboration 2023 |
 | CDS Sesame / SIMBAD (CfA mirror) | Object-name resolution | CDS terms; cite Wenger et al. 2000 |
+| NASA/IPAC IRSA TAP (CatWISE2020) | Decade-baseline check of movers | Public NASA archive; cite Marocco et al. 2021 |
+| IMCCE SkyBoT | Known solar-system objects near a source | IMCCE terms; cite Berthier et al. 2006 |

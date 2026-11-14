@@ -33,7 +33,7 @@ export function Home() {
     huntApi.index().then(setHunt).catch(() => undefined);
   }, []);
   const exp = val?.experiments.find(e => /indi/i.test(e.target)) ?? val?.experiments[0];
-  const miss = exp?.result?.[exp.primary_model]?.residual_arcsec;
+  const miss = exp?.result?.primary?.residual_arcsec;
   const nc = val?.negative_controls;
 
   return (

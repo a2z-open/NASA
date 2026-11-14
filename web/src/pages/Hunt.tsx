@@ -11,6 +11,7 @@ const FLAG_TEXT: Record<string, string> = {
   colour_dependent_motion: 'its motion differs between short and long wavelengths, which is what a blend of two sources does',
   poor_model_fit: 'its positions do not follow a clean path',
   near_bright_star: 'it sits in the glare of a bright star',
+  near_saturated_star: 'it sits next to a star so bright it saturates the detector',
   near_edge: 'it is too close to the edge of the images',
   motion_explained_by_colour: 'the shift is explained by colour, not motion',
   depends_on_one_visit: 'the motion depends on a single visit',
@@ -27,6 +28,7 @@ function speed(m: HuntMover): number | null {
 
 function moverLabel(m: HuntMover): { text: string; tone: string } {
   if (m.truth_match) return { text: 'Found blind', tone: 'hot' };
+  if (m.catalogued_as) return { text: `Known mover (${m.catalogued_as.startsWith('Gaia') ? 'Gaia' : 'WISE'})`, tone: 'known' };
   if (m.class === 'candidate') return { text: 'Unexplained mover', tone: 'hot' };
   if (m.class === 'stack_candidate') return { text: 'Faint mover, stacked images only', tone: 'hot' };
   if (m.class === 'two_visit_candidate') return { text: 'Possible mover, two visits', tone: 'hot' };
@@ -36,7 +38,7 @@ function moverLabel(m: HuntMover): { text: string; tone: string } {
 
 function fieldResult(f: HuntFieldRow): { text: string; tone: string } {
   const t = f.truth;
-  const extra = f.movers.filter(m => !m.truth_match && ['candidate', 'stack_candidate', 'two_visit_candidate'].includes(m.class)).length;
+  const extra = f.movers.filter(m => !m.truth_match && !m.catalogued_as && ['candidate', 'stack_candidate', 'two_visit_candidate'].includes(m.class)).length;
   const tail = extra ? ` Plus ${extra} unexplained mover${extra > 1 ? 's' : ''}.` : '';
   if (f.kind === 'control') {
     return extra ? { text: `${extra} unexplained mover${extra > 1 ? 's' : ''} in blank sky.`, tone: 'hot' } : { text: 'Nothing unexplained moved. That is the right answer.', tone: 'ok' };
@@ -74,7 +76,7 @@ function HuntViewer({ id, focusId }: { id: string; focusId: string | null }) {
   useEffect(() => {
     if (!doc || !current || !ref.current) return;
     let alive = true;
-    loadFrame(current.data_url, 'float32').then(data => {
+    loadFrame(current.data_url, doc.grid.dtype).then(data => {
       if (alive && ref.current) paint(ref.current, data, doc.grid.nx, doc.grid.ny, { colormap: 'ember', hiPct: 99.8, loSigma: 1.5 });
     }).catch(() => undefined);
     return () => { alive = false; };
@@ -85,9 +87,10 @@ function HuntViewer({ id, focusId }: { id: string; focusId: string | null }) {
 
   const g = doc.grid;
   const cosd = Math.cos((g.dec0 * Math.PI) / 180);
+  const gc = g as typeof g & { cx?: number; cy?: number };
   const frac = (ra: number, dec: number): [number, number] => [
-    ((g.nx - 1) / 2 - ((ra - g.ra0) * cosd * 3600) / g.pixel_arcsec + 0.5) / g.nx,
-    ((g.ny - 1) / 2 - ((dec - g.dec0) * 3600) / g.pixel_arcsec + 0.5) / g.ny,
+    ((gc.cx ?? (g.nx - 1) / 2) - ((ra - g.ra0) * cosd * 3600) / g.pixel_arcsec + 0.5) / g.nx,
+    ((gc.cy ?? (g.ny - 1) / 2) - ((dec - g.dec0) * 3600) / g.pixel_arcsec + 0.5) / g.ny,
   ];
   const movers = doc.sources.filter(s => MOVER_CLASSES.includes(s.class));
   const focus = movers.find(m => m.id === focusId) ?? movers.find(m => m.truth_match) ?? movers.find(m => m.class !== 'suspect') ?? null;
@@ -163,9 +166,11 @@ function FieldRow({ f }: { f: HuntFieldRow }) {
                   </div>
                   <p>
                     {m.truth_match && <>This is {m.truth_match}. The search was not told it was here. </>}
+                    {m.decade_confirmed && m.catalogued_as && <>{m.catalogued_as.startsWith('Gaia') ? 'Gaia' : 'WISE'} saw it years ago exactly where this motion says it should have been ({m.catalogued_as}). </>}
+                    {m.cold_only && <>Visible only at 4–5 µm: a cold object. </>}
                     {m.class === 'known_mover' && m.gaia && <>Gaia DR3 {m.gaia.source_id} moves the same way. </>}
                     {m.class === 'suspect' && why.length > 0 && <>Rejected because {why.join('; ')}. </>}
-                    {!m.truth_match && ['candidate', 'stack_candidate', 'two_visit_candidate'].includes(m.class) && <>No catalogue we checked explains it. A candidate, not a discovery. </>}
+                    {!m.truth_match && !m.catalogued_as && ['candidate', 'stack_candidate', 'two_visit_candidate'].includes(m.class) && <>No catalogue we checked explains it. A candidate, not a discovery. </>}
                     <span className="mono small dim">{m.ra.toFixed(5)}, {m.dec.toFixed(5)}{m.sigma != null ? ` · ${m.sigma >= 99 ? '>30' : m.sigma.toFixed(1)}σ` : ''}{m.n_native_positions ? ` · ${m.n_native_positions} positions` : ''}</span>
                   </p>
                 </div>
@@ -190,7 +195,7 @@ export function Hunt() {
       control: f.filter(x => x.kind === 'control' || !x.truth || x.truth.catalogue_pm_arcsec_yr < 0.2),
     };
   }, [idx]);
-  const reach = (idx as (HuntIndex & { reach?: { median_depth_ujy: number; reach_ly: number } }) | null)?.reach;
+  const reach = idx?.reach;
   const rejected = idx?.classes.suspect ?? 0;
 
   return (

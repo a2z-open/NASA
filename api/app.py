@@ -333,6 +333,43 @@ def get_field(field_id: str):
     return doc
 
 
+@app.get('/api/fields/{field_id}/wise')
+def field_wise(field_id: str):
+    """CatWISE2020 sources in a field (WISE + NEOWISE, positions near 2015), for the viewer overlay."""
+    p = field_path(field_id)
+    if not p.exists():
+        raise HTTPException(404, 'Unknown field.')
+    cache = CACHE / 'wise' / f'{field_id}.json'
+    if cache.is_file():
+        return read_json(cache)
+    f = read_json(p)
+    rad = min(max(float(f.get('fov_arcmin') or 6.0), 2.0) / 60 * 0.75, 0.25)
+    q = ('SELECT TOP 800 source_name, ra, dec, w1mpro, w2mpro, pmra, pmdec, sigpmra, sigpmdec FROM catwise_2020 '
+         f"WHERE CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',{float(f['ra']):.6f},{float(f['dec']):.6f},{rad:.5f}))=1 AND w2mpro < 16.5")
+    try:
+        r = requests.get('https://irsa.ipac.caltech.edu/TAP/sync', params={'FORMAT': 'csv', 'QUERY': q}, timeout=60)
+        r.raise_for_status()
+    except requests.RequestException:
+        raise HTTPException(503, 'The WISE catalogue (IRSA) could not be reached. Try again in a moment.')
+    out = []
+    for row in csv.DictReader(io.StringIO(r.text)):
+        def num(k):
+            try:
+                v = float(row[k])
+                return v if math.isfinite(v) else None
+            except (TypeError, ValueError):
+                return None
+        pa, pd_, sa, sd = num('pmra') or 0.0, num('pmdec') or 0.0, num('sigpmra') or 9.0, num('sigpmdec') or 9.0
+        pmv = math.hypot(pa, pd_)
+        sig = math.hypot(pa * sa, pd_ * sd) / pmv if pmv > 0 else 9.0
+        out.append({'name': row['source_name'], 'ra': num('ra'), 'dec': num('dec'), 'w1': num('w1mpro'), 'w2': num('w2mpro'),
+                    'pm_arcsec_yr': round(pmv, 3), 'mover': bool(pmv >= 0.3 and pmv / sig >= 5)})
+    doc = {'catalogue': 'CatWISE2020 (Marocco et al. 2021), via NASA/IPAC IRSA', 'epoch': 'about 2015', 'n': len(out), 'sources': out}
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    cache.write_text(json.dumps(doc))
+    return doc
+
+
 @app.get('/api/jobs/{job_id}')
 def get_job(job_id: str):
     with _jobs_lock:
@@ -483,7 +520,13 @@ def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
                 'catalogs': [{'name': 'Gaia DR3', 'url': 'https://doi.org/10.1051/0004-6361/202243940'}],
                 'software': software_versions(), 'n_files': len(rows), 'manifest_url': f'/api/investigations/{inv_id}/export?format=json',
                 'photometry_track': note}
+        try:
+            from pipeline import solarsystem
+            ss_doc = solarsystem.check(ra, dec, [r['mjd'] for r in rows if r.get('mjd')], max_epochs=6)
+        except Exception:  # noqa: BLE001 - the check is optional; a failure must not sink the investigation
+            ss_doc = None
         doc = build_investigation(rows, inv_id=inv_id, kind='user', title=label or f'Source at {ra:.5f}, {dec:+.5f}', field_id=fid,
+                                  solar_system=ss_doc,
                                   source={'ra': ra, 'dec': dec, 'label': label or 'User-selected source', 'catalog': nb[0] if nb else None},
                                   visits=visits, identification=ident, catalog=catalog, catalog_stars=stars, provenance=prov)
         (INVESTIGATIONS / f'{inv_id}.json').write_text(json.dumps(sanitize(doc), allow_nan=False))
@@ -612,6 +655,36 @@ def lab():
 # ---------------------------------------------------------------------------
 
 HUNT = ROOT / 'data' / 'hunt'
+
+
+@app.get('/api/forecasts')
+def forecasts():
+    """Forward predictions for SPHEREx data that did not exist when they were locked (validation/forecast.py)."""
+    out = []
+    for p in sorted((ROOT / 'validation' / 'forecasts').glob('*.json')):
+        d = read_json(p)
+        sha_p = p.with_suffix('.sha256')
+        commit = None
+        try:
+            log = subprocess.run(['git', 'log', '--diff-filter=A', '--format=%H %cI', '--', str(p.relative_to(ROOT))], cwd=ROOT,
+                                 capture_output=True, text=True, timeout=5).stdout.strip().splitlines()
+            if log:
+                h, t = log[-1].split(' ', 1)
+                commit = {'hash': h, 'time': t}
+        except Exception:  # noqa: BLE001
+            pass
+        out.append({k: d.get(k) for k in ('target', 'title', 'locked_utc', 'model', 'model_note', 'data_used', 'archive_at_lock', 'fit',
+                                          'criterion', 'stays_here_null', 'predictions', 'how_to_check')}
+                   | {'sha256': sha_p.read_text().split()[0] if sha_p.is_file() else None, 'commit': commit})
+    return {'forecasts': out}
+
+
+@app.get('/api/halo')
+def halo_results():
+    p = ROOT / 'validation' / 'halo_results.json'
+    if not p.exists():
+        raise HTTPException(404, 'Halo results have not been generated yet (python -m validation.halo_controls).')
+    return read_json(p)
 
 
 @app.get('/api/hunt')

@@ -210,12 +210,27 @@ export interface Investigation {
     investigation_id: string; title: string; why: string; naive_max_ratio: number | null;
     matched_visit_pairs: VisitPair[]; variability_status: string;
   } | null;
+  halo_variability?: HaloVariability | null;
+  solar_system?: { status: string; n_epochs_checked: number; radius_arcsec: number; service: string; matches: { name: string; time_utc: string }[] } | null;
   cold_search?: {
     method: string;
     bands: { band: string; n: number; flux_ujy: number | null; flux_err_ujy: number | null; snr: number | null; detected: boolean; upper_limit_3sigma_ujy: number | null; ab_mag: number | null }[];
   } | null;
 }
 
+export interface HaloVisit {
+  visit: string; n: number; start_utc: string; end_utc: string; ratio: number; err_vs_first?: number; sigma?: number | null; scatter: number;
+}
+export interface HaloVariability {
+  status: 'variable' | 'not_detected' | 'insufficient'; ring: string | null; ring_pixels: [number, number] | null;
+  n_exposures: number; n_used: number; n_core_saturated?: number; target?: string; visits?: HaloVisit[];
+  light_curve?: { mjd: number; time_utc: string; relative: number; err: number; wavelength_um: number; visit: string; matched: boolean }[];
+}
+export interface HaloResults {
+  generated_utc: string; targets: Record<string, HaloVariability>;
+  controls: { field: string; source_id: string; g: number; status: string; visits: { visit: string; ratio: number; sigma: number; n: number }[] }[];
+  control_summary: { n_stars: number; n_with_comparison: number; n_comparisons: number; n_flagged_variable: number; median_abs_change: number | null; max_abs_change: number | null };
+}
 export interface LabExperiment {
   id: string; target: string; title: string;
   prediction: any; prediction_sha256: string;
@@ -267,6 +282,7 @@ export const api = {
   createField: (body: { ra: number | string; dec: number | string; fov_arcmin?: number; max_frames?: number; wavelength_min_um?: number; wavelength_max_um?: number }) =>
     request<{ field_id: string; status: string; job_id?: string }>('/api/fields', post(body)),
   field: (id: string) => request<Field>(`/api/fields/${encodeURIComponent(id)}`),
+  fieldWise: (id: string) => request<{ n: number; sources: { name: string; ra: number; dec: number; w2: number | null; pm_arcsec_yr: number; mover: boolean }[] }>(`/api/fields/${encodeURIComponent(id)}/wise`),
   job: (id: string) => request<{ job_id: string; kind: string; status: string; progress: { stage: string; done: number; total: number } | null; result_id: string | null; message: string | null }>(`/api/jobs/${encodeURIComponent(id)}`),
   createInvestigation: (body: { field_id: string; ra: number; dec: number; label?: string }) =>
     request<{ investigation_id: string; status: string; job_id?: string }>('/api/investigations', post(body)),
@@ -341,7 +357,7 @@ export async function loadFrames(urls: string[], dtype: string, onEach?: (url: s
 export interface HuntMover {
   id: string; class: string; ra: number; dec: number; pm_arcsec_yr?: number | null; sigma?: number | null;
   pm_over_error?: number | null; stack_snr: number; best_band: string; cold_only?: boolean; flags: string[];
-  truth_match?: string | null; n_native_positions?: number;
+  truth_match?: string | null; n_native_positions?: number; catalogued_as?: string | null; decade_confirmed?: boolean | null;
   parallax_mas?: number | null; parallax_err_mas?: number | null;
   gaia?: { source_id: string; g: number | null; pmra_masyr: number | null; pmdec_masyr: number | null } | null;
   stack_motion?: { pm_arcsec_yr: number; pm_err_arcsec_yr: number; significance: number; n_visits: number } | null;
@@ -364,6 +380,7 @@ export interface HuntIndex {
   classes: Record<string, number>;
   recovery: { n_known: number; n_detected: number; n_recovered: number };
   unexplained: HuntMover[];
+  reach?: { median_depth_ujy: number; reach_ly: number; reference: string } | null;
   thresholds: Record<string, number>;
   fields: HuntFieldRow[];
 }
@@ -375,7 +392,17 @@ export interface HuntField extends Omit<HuntFieldRow, 'movers' | 'n_visits'> {
   grid: Grid; stacks: HuntStack[]; sources: (HuntMover & { motion_status: string; track?: { visit: string; ra: number; dec: number }[] })[];
   visits: { id: string; start_utc: string; end_utc: string; n_exposures: number }[];
 }
+export interface Forecast {
+  target: string; title: string; locked_utc: string; model: string; model_note: string;
+  data_used: { n_usable_positions: number; first_observation_utc: string; last_observation_utc: string };
+  archive_at_lock: { n_products_covering_the_source: number; latest_exposure_utc: string };
+  fit: { pm_total_masyr?: number; pm_total_err_masyr?: number; parallax_mas?: number; parallax_err_mas?: number };
+  criterion: string; sha256: string | null; commit: { hash: string; time: string } | null;
+  predictions: { date_utc: string; ra_deg: number; dec_deg: number; sigma_ra_arcsec: number; sigma_dec_arcsec: number; offset_from_stays_here_arcsec: number }[];
+}
 export const huntApi = {
+  forecasts: () => request<{ forecasts: Forecast[] }>('/api/forecasts'),
   index: () => request<HuntIndex>('/api/hunt'),
+  halo: () => request<HaloResults>('/api/halo'),
   field: (id: string) => request<HuntField>(`/api/hunt/${encodeURIComponent(id)}`),
 };

@@ -59,6 +59,19 @@ Release handling:
 Not used, despite being mentioned in planning: WISE/NEOWISE images, CatWISE2020 (queried once and found to split
 WISE 0855 into several entries), the MOCA database and the all-sky cube. They are not cited as data sources.
 
+### Added for the blind search, the decade check and the variable stars (14 Nov 2026)
+
+| Source | What it is used for | Citation / access |
+|---|---|---|
+| **CatWISE2020** | After a source passes the SPHEREx motion test: was it at the same place around 2015 (rejects the motion), or does WISE list a source with the same motion (confirms it over a ~10-year baseline)? Never used to decide where to look. | Marocco et al. 2021, ApJS 253, 8; IRSA table `catwise_2020` through the IRSA TAP service (`https://irsa.ipac.caltech.edu/TAP/sync`); doi:10.26131/IRSA551. Based on WISE and NEOWISE data (Wright et al. 2010; Mainzer et al. 2014). |
+| **Gaia DR3, all magnitudes** | Same decade check against Gaia's 2016.0 positions, for sources fainter than the G < 18.5 list used for registration. | Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1; ESA Gaia archive TAP. |
+| **SIMBAD through CDS Sesame** | Coordinates, proper motions and spectral types of the known brown dwarfs used as *recovery fields* in the hunt. Used to choose the fields and, after the search, to score it. | Wenger et al. 2000, A&AS 143, 9; Sesame name resolver (CfA mirror). Each resolved record is saved in `validation/hunt_fields.json` with its retrieval time. |
+| **IMCCE SkyBoT** | Known asteroids and comets within 60″ of a source at the times it was observed (hypothesis H5). | Berthier et al. 2006, ASP Conf. Ser. 351, 367; `https://ssp.imcce.fr/webservices/skybot/`. Queried from the geocentre. |
+
+The 16 recovery fields and 4 control fields of the hunt are listed in `validation/hunt_fields.py`. For every field,
+`data/hunt/<field>/manifest.json` records the archive query, and `data/hunt/<field>/hunt.json` lists every exposure used
+with its SHA-256 and archive URL.
+
 ## Provenance records
 
 - `data/targets/<slug>/archive_manifest.json`:

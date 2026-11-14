@@ -1,50 +1,64 @@
 # PARALLAX
 
-**A scientific discovery engine for the infrared universe.**
-*Motion tells you something moved. Spectroscopy helps tell you what it is.*
+**Find what moves in the infrared sky. Then prove it.**
 
 PARALLAX is the team's entry for the NASA Space Apps Challenge 2026, Seattle, in the challenge
 [Planet X and SPHEREx](https://www.spaceappschallenge.org/2026/challenges/planet-x-and-spherex/).
 
-You can type any sky coordinates or object name. PARALLAX then:
-1. retrieves real NASA SPHEREx observations (DR1 + QR3) from IRSA;
-2. plays them back in time order on one aligned sky grid;
-3. lets you click a source;
-4. measures that source on native pixels: its motion (proper motion and parallax), its brightness at matched
-   wavelengths, and a motion-corrected 0.75–5 µm spectrum;
-5. weighs seven competing explanations (H0–H6);
-6. writes a reproducible evidence dossier that you can export and share.
+Type any sky coordinates or object name. PARALLAX fetches real NASA SPHEREx images of that patch, lines them up and
+plays them like a short video, so anything that moves stands out. Click a source and it measures the motion, the
+distance and the spectrum. A blind search does the same for every source in a field at once.
 
-> Status: built for team review. **Not deployed and not submitted.** The demo URL is TBD and needs team approval. Everything
-> below runs locally.
+> Status: built for team review. **Not deployed and not submitted.** Everything below runs locally.
+
+## What the challenge asks, and where it is
+
+| The challenge asks for | In PARALLAX |
+|---|---|
+| A public web tool: enter RA and Dec, see the images play as a video | Home and **Explore**: a name or coordinates, then Play, Blink, Subtract, Add |
+| Tested on Barnard's Star, Epsilon Indi B, WISE 0855, RW Aurigae, R Draconis | All five are built in and work offline; results below |
+| Easy to update with new data releases | One `RELEASES` table in `pipeline/spherex.py`; DR1 and QR3 are both searched |
+| Show the 102 bands; add detectors together; spectra on the fly | Every frame shows its wavelength; filter by detector or wavelength; **Add** mode; click a source for its 0.75–5 µm spectrum |
+| Add or subtract images taken at different times | **Add** and **Subtract** modes, with a warning when two frames are not the same wavelength |
+| Let the user choose the field of view | The **Width** box (2′ to 30′) |
+| Overlays from other telescopes (Gaia, WISE) | Gaia DR3 stars moved to each frame's date; **What WISE saw around 2015** (CatWISE2020) |
+| Coordinates in the URL, embeddable | `/explore?ra=..&dec=..&fov=..`; add `&embed=1` for a viewer-only page |
+| Show metadata such as contamination flags | Flags, release, wavelength and SHA-256 for every frame; saturated sources are refused, not forced |
+| Use Astropy | Yes, throughout the pipeline |
 
 ## What PARALLAX found with real SPHEREx data
 
-All of these come from this repository's code and data. See [VALIDATION.md](VALIDATION.md) and [RESULTS_LOG.md](RESULTS_LOG.md).
+Everything here comes from this repository's code and data. Details: [VALIDATION.md](VALIDATION.md),
+[docs/HUNT_REPORT.md](docs/HUNT_REPORT.md), [RESULTS_LOG.md](RESULTS_LOG.md).
 
-| Target | Result |
+| | Result |
 |---|---|
-| **Epsilon Indi B** (brown-dwarf binary) | **Held-out prediction passed.** A motion model fitted only to SPHEREx visits 1–3 (337 exposures) was locked (SHA-256 `c902006d…`) and committed *before* the sealed visit 4 was downloaded. Visit 4 (111 usable exposures) landed **0.072″** from the prediction (d² = 4.85 against a pre-registered pass threshold of 11.83). A "stays here" null missed by 1.95″. All four visits give proper motion 4635 ± 16 mas/yr and parallax 298 ± 9 mas (Gaia DR3: 4685 mas/yr total, 270.7 mas; the differences are 2–3σ and plausibly due to the unresolved binary's photocentre). The motion-corrected spectrum fills all 102 SPHEREx bins and best matches a **T3** template (SPIFF library, reduced χ² 1.5), consistent with the unresolved T1 + T6 pair. Measured at one fixed sky position instead, the source keeps only **55 %** of its flux, which shows why following the motion matters. |
-| **WISE 0855−0714** (coldest known brown dwarf) | **Invisible at 0.75–3.8 µm, detected at 3.8–5.0 µm.** The source was deblended from an 8″ Gaia neighbour and measured with forced photometry along the Kirkpatrick et al. (2021) track. Results: −10 ± 6 µJy at 0.75–2.4 µm; 298 ± 28 µJy at 3.8–4.4 µm; 460 ± 32 µJy at 4.4–5.0 µm (17.24 AB, S/N 14), consistent with its WISE W2 brightness. The spectrum best matches **Y1**, the coldest template in the library, so read it as "at least as cold as Y1". Twelve high-S/N exposures show motion of 10.1 ± 1.1″/yr, consistent within 2σ with the published 8.15″/yr. |
-| **2MASS J0415−0935** (T8; extra validation target) | **Second held-out experiment**, run with the identical protocol. The catalogue-parallax prediction landed 0.13″ from the sealed visit (d² 1.46); the SPHEREx-only primary passed, but only as a weak test because two training visits make pm and parallax degenerate. All 3 visits: μ = 2239 ± 56 mas/yr and ϖ = 195 ± 27 mas, both within 1σ of the literature. The spectrum independently matches its published type, **T8**. |
-| **Barnard's Star** | **Inconclusive, saturated.** All 63 cached exposures are flagged OVERFLOW at the core, so PARALLAX refuses to fit it rather than forcing a result. Visit 3 (Aug–Sep 2026) remains sealed and was never downloaded. |
-| **RW Aurigae** and **R Draconis** | **Variability not measurable: saturated** (RW Aur in 131 of 142 exposures; R Dra in 103 of 103). An experimental fit to the unsaturated PSF wings was attempted and rejected (median reduced χ² ≈ 400). The naive-versus-wavelength-matched lesson is shown instead on real, unsaturated comparison stars in the same images. Their apparent 9–11× "changes" in a time-ordered light curve shrink to 0.98–1.02 once the comparison is matched in wavelength. |
+| **A prediction locked before the data was downloaded** | A motion model fitted only to SPHEREx visits 1–3 of **Epsilon Indi B** was hashed and committed, and only then was visit 4 downloaded. Visit 4 landed **0.072″** from the prediction (pass limit set in advance). "It stays put" missed by 1.95″. A second experiment on 2MASS J0415−0935 also passed. |
+| **Predictions for images that do not exist yet** | Positions of Epsilon Indi B and 2MASS J0415−0935 for every month of 2027 were locked in commit `bbfd25f` on 14 Nov 2026. The archive's newest image of each field at that moment is recorded. Anyone can check them when NASA releases the next visit. |
+| **A blind search that finds known movers by itself** | {{HUNT_SENTENCE}} |
+| **The coldest known brown dwarf** | **WISE 0855** is invisible at 0.75–3.8 µm and detected at 3.8–5.0 µm (460 ± 32 µJy at 4.4–5.0 µm, S/N 14). The blind search flags it as a cold-only mover, and the WISE catalogue confirms it was where its motion says, ten years ago. |
+| **The two variable stars** | RW Aurigae and R Draconis saturate SPHEREx, so normal photometry fails. Measured from the unsaturated ring of light around each star, at matched wavelength: **R Draconis faded by 42 %** (12σ) and **RW Aurigae by 36 %** (6σ) between visits. Barnard's Star, the control, stayed flat (4 %, 1.5σ). {{HALO_SENTENCE}} Experimental. |
+| **Barnard's Star** | Saturated in all 63 cached exposures. PARALLAX says so instead of forcing a motion. Its third visit is still sealed and was never downloaded. |
+| **No false alarms** | 33 stars that Gaia says are still: 0 flagged as moving, and the error bars behave as quoted (pull spread 0.93). |
 
-Validation numbers (negative controls, false positives, synthetic injections) are in [VALIDATION.md](VALIDATION.md).
+No new object is claimed. Sources the search cannot explain are called candidates, and movers that an older catalogue
+already lists are labelled as known.
 
 ## What is new, and what is not
 
-Blinking images, mover detection, catalogue overlays, spectra and path-following photometry already exist in tools such as
-SPHEREx Blink 3.0, SpectraShift, WiseView, IRSA's SPHEREx tools, Driftnet and SkyShift. PARALLAX does not claim them.
-What PARALLAX adds is one accessible workflow that combines:
-1. **Wavelength-aware** time exploration. Every frame shows its true per-pixel wavelength, and difference images warn
-   when the two frames are not wavelength-matched.
-2. **Motion-corrected spectral extraction** with forced ePSF photometry on native pixels.
-3. **Evidence-based comparison of competing explanations** (H0–H6), with thresholds you can inspect.
-4. **Independent prediction and held-out validation** (Lock → Predict → Reveal).
-5. **Reproducible, shareable dossiers** with per-file SHA-256 provenance.
+Blinking images, mover searches, catalogue overlays and spectra already exist in tools such as SPHEREx Blink 3.0,
+WiseView, Driftnet and others ([docs/COMPETITORS.md](docs/COMPETITORS.md)). PARALLAX does not claim them. What it adds:
 
-PARALLAX builds on SPIFF (Gagné et al. 2026, arXiv:2604.22012) for template comparison and its 102-bin wavelength table.
+1. **It tests itself in public.** Predictions are locked before the data exists, and the pass rule is fixed first.
+2. **Its blind search is scored.** Known movers are hidden in the fields, and the search is graded on finding them
+   and on not inventing others.
+3. **Every claimed mover faces older catalogues.** If Gaia (2016) or WISE (2015) saw a source at the same spot, the
+   motion is rejected. If they saw it where the motion says it was, it is confirmed over ten years.
+4. **Wavelength is never ignored.** Each frame carries its true per-pixel wavelength, and brightness is compared only
+   at matched wavelength, including for the saturated variable stars.
+5. **Everything is reproducible.** Each file's SHA-256 and archive URL are recorded, and every page has a shareable link.
+
+PARALLAX builds on SPIFF (Gagné et al. 2026, arXiv:2604.22012) for brown-dwarf templates.
 
 ## Run it locally
 
@@ -58,31 +72,30 @@ npm --prefix web run build
 .venv/bin/python -m uvicorn api.app:app --host 127.0.0.1 --port 8000
 ```
 
-Open http://127.0.0.1:8000. For frontend development, run `npm --prefix web run dev`, open http://127.0.0.1:5173,
-and keep the API on port 8000.
+Open http://127.0.0.1:8000. The five NASA targets, the hunt results and the proofs work offline. Any other
+coordinates query the NASA archive live.
 
-The five curated targets work offline from `data/targets/`, which holds real SPHEREx display frames, investigations and
-provenance. Any other coordinates query IRSA live. Clicking a source in a curated field re-fetches its native cutouts from
-IRSA and checks each one against its recorded SHA-256.
-
-**Docker:** run `docker build -t parallax . && docker run -p 8000:8000 parallax`.
+**Docker:** `docker build -t parallax . && docker run -p 8000:8000 parallax`.
 
 ## Reproduce the science
 
 ```sh
-# 1. Fetch cutouts. The held-out visit is sealed: only its metadata is recorded.
+# 1. Fetch cutouts for the test targets. A held-out visit is sealed: only its metadata is recorded.
 .venv/bin/python -m pipeline.fetch_target epsilon-indi-b --seal-last-visit --workers 6
-.venv/bin/python -m pipeline.fetch_target wise-0855 --per-detector-visit 6 --detectors 5,6
-.venv/bin/python -m pipeline.fetch_target barnards-star --seal-last-visit --per-detector-visit 6
-.venv/bin/python -m pipeline.fetch_target rw-aurigae --per-detector-visit 8
-.venv/bin/python -m pipeline.fetch_target r-draconis --per-detector-visit 6
-# 2. Lock -> commit -> reveal (a new target needs its own sealed visit)
-.venv/bin/python -m validation.experiment lock <slug>  &&  git add validation/experiments/<slug> && git commit -m "lock"
+# 2. Lock -> commit -> reveal
+.venv/bin/python -m validation.experiment lock <slug> && git add validation/experiments/<slug> && git commit -m lock
 .venv/bin/python -m validation.experiment reveal <slug>
-# 3. Build the curated fields and investigations, then validate
+# 3. Build the target pages, then validate
 .venv/bin/python -m pipeline.build_curated --all
-.venv/bin/python -m validation.run
-.venv/bin/python -m validation.inject
+.venv/bin/python -m validation.run && .venv/bin/python -m validation.inject
+# 4. The Planet X hunt: resolve the fields, download, search, summarise
+.venv/bin/python -m validation.hunt_fields resolve
+.venv/bin/python -m validation.hunt_fields fetch
+.venv/bin/python -m validation.hunt_fields run all && .venv/bin/python -m validation.hunt_fields index
+# 5. Variable stars from their halo, with controls; forward predictions; the hunt report
+.venv/bin/python -m validation.halo_controls
+.venv/bin/python -m validation.forecast
+.venv/bin/python -m validation.hunt_report
 # Tests
 .venv/bin/python -m pytest -q
 npm --prefix web test
@@ -91,54 +104,58 @@ npm --prefix web test
 ## Architecture
 
 ```
-web/            Vite + React + TypeScript. Canvas sky viewer (float16 frames, client-side stretch, blink,
-                difference, stack, spectral sort) and custom SVG charts.
-api/app.py      FastAPI service (docs/API.md). Background jobs for live fields and investigations; static frames.
+web/            Vite + React + TypeScript. Canvas sky viewer, SVG charts, pages: Home, Explore, Planet X hunt, Proof, About.
+api/app.py      FastAPI service (docs/API.md). Live fields and measurements run as background jobs.
 pipeline/
-  spherex.py      IRSA SIA2 (DR1+QR3) discovery, dedupe, visits, checksummed cutouts, FITS loading, flags, spectral WCS
-  astrometry.py   coordinate parsing, tangent plane, proper motion, parallax factors (sign checked against astropy)
-  measure.py      native-pixel ePSF fits (release EPSF), Gaia DR3 registration, neighbour deblending
-  motion.py       weighted tangent-plane fits: stationary / linear / linear + parallax; model comparison
-  investigate.py  per-exposure measurement along a track (centroid, follow and fixed forced photometry)
-  analysis.py     spectrum (102 bins), SPIFF templates, wavelength-matched variability, H0–H6 evidence, verdicts
-  frames.py       display-only reprojection onto a north-up TAN grid
-  build_curated.py  curated fields, investigations and provenance
-validation/     experiment.py (lock/reveal), run.py (benchmark + negative controls), inject.py (synthetic), results
-data/targets/   committed curated products: frames, investigations, provenance, archive manifests, Gaia fields
+  spherex.py      IRSA SIA2 (DR1 + QR3) search, de-duplication, visits, checksummed cutouts, FITS loading, flags, wavelengths
+  astrometry.py   coordinates, tangent plane, proper motion, parallax factors
+  measure.py      native-pixel ePSF fits, Gaia DR3 registration, neighbour deblending
+  motion.py       weighted fits: stationary, linear, linear + parallax; model comparison
+  investigate.py  one source measured in every exposure along a track
+  analysis.py     spectrum (102 bins), SPIFF templates, matched-wavelength variability, seven competing explanations
+  hunt.py         the blind search: stacks, linking, motion test on every source, vetting, Gaia and WISE decade checks
+  halo.py         brightness of saturated stars from their unsaturated halo
+  solarsystem.py  known asteroids and comets near a source (IMCCE SkyBoT)
+  frames.py       display-only reprojection onto a north-up grid
+validation/     experiment.py (lock and reveal), forecast.py, run.py (targets and controls), inject.py (synthetic),
+                hunt_fields.py (the hunt), halo_controls.py, hunt_report.py
+data/           targets/ (the five NASA targets), hunt/ (every searched field), investigations/
 ```
 
-### Scientific method (short version)
+### Method, briefly
 
-- **Time and wavelength.** Time is `MJD-AVG`. Wavelength comes per pixel from the spectral WCS (`key='W'`), so a
-  detector name alone is never treated as a wavelength.
-- **Registration.** Each exposure is shifted onto Gaia DR3 stars propagated to that epoch with proper motion and parallax.
-  Typical registration RMS is about 0.25″. An empirical error floor comes from the scatter of the reference stars.
-- **Centroids and fluxes.** The release ePSF is fitted to native pixels. Hard-flagged pixels are masked; saturated cores
-  are refused; known Gaia neighbours are fitted at the same time.
-- **Motion.** Weighted least squares in the tangent plane. Covariances are scaled by max(1, χ²ᵣ). Models are compared
-  with Δχ² and BIC. Parallax is fitted only with three or more visits.
-- **Thresholds** (fixed before validation): motion needs ≥ 5σ and |μ|/σ ≥ 5; variability needs ≥ 5σ and ≥ 5 %;
-  a template match needs reduced χ² ≤ 3 over ≥ 15 bins.
+- **Time and wavelength.** Time is `MJD-AVG`. Wavelength comes per pixel from the spectral WCS, so a detector name is
+  never treated as a wavelength.
+- **Registration.** Each exposure is shifted on to Gaia DR3 stars moved to that date. Typical scatter is 0.25″.
+- **Positions and fluxes.** The release ePSF is fitted to the original pixels. Flagged pixels are masked, saturated
+  cores are refused, and known neighbours are fitted at the same time.
+- **Motion.** Weighted least squares in the tangent plane; errors grow when the fit is worse than they claim.
+- **Rules fixed in advance.** Motion needs ≥ 5σ and |μ|/σ ≥ 5. A brightness change needs ≥ 5σ and ≥ 5 %. A template
+  match needs reduced χ² ≤ 3 over ≥ 15 bins.
+- **The blind search** adds: the motion must look the same at short and long wavelengths, must survive dropping any
+  one visit, must not sit next to a saturated star, and must agree with Gaia and WISE positions from ten years ago.
 
-## Known limitations
+## Known limits
 
-- Three of the five NASA targets saturate SPHEREx. PARALLAX reports this rather than forcing a measurement.
+- Three of the five NASA targets saturate SPHEREx. Their cores cannot be measured; the halo method is experimental.
 - Pixels are 6.15″, so close pairs (Epsilon Indi Ba/Bb, RW Aur A/B) are measured as one blend.
-- Display frames are bilinearly reprojected for viewing only; science uses native pixels.
-- Fluxes use the median pixel solid angle and the release ePSF. Absolute-calibration systematics of a few percent are not propagated.
-- No solar-system ephemeris check yet, so H5 is "not testable" unless the motion is clearly stellar.
-- Live queries download at most 48 cutouts (about 4 MB each) to respect IRSA and keep response times reasonable.
-- The validation set is small. It does not establish full-sky completeness or false-positive rates.
+- With fewer than three visits, motion and parallax cannot be separated, and nearby objects come out too fast
+  (WISE 0855: 10.0 ± 0.6″/yr measured, 8.15″/yr in the catalogue).
+- The hunt's recovery fields were chosen because a known mover is there. They measure completeness, not discovery.
+- This is not yet a search for Planet Nine: a planet that far away would move by arcminutes between visits, beyond
+  these cutouts, and is expected to be too faint for one visit.
+- Live queries download at most 48 cutouts to stay polite to the archive, and about one in five can fail when it is busy.
 
 ## Documents
 
-[DATA_SOURCES.md](DATA_SOURCES.md) · [VALIDATION.md](VALIDATION.md) · [RESULTS_LOG.md](RESULTS_LOG.md) ·
-[AI_USAGE.md](AI_USAGE.md) · [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) ·
+[VALIDATION.md](VALIDATION.md) · [docs/HUNT_REPORT.md](docs/HUNT_REPORT.md) · [RESULTS_LOG.md](RESULTS_LOG.md) ·
+[DATA_SOURCES.md](DATA_SOURCES.md) · [AI_USAGE.md](AI_USAGE.md) · [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) ·
 [DEVELOPMENT_HISTORY.md](DEVELOPMENT_HISTORY.md) · [SUBMISSION.md](SUBMISSION.md) (draft) ·
-[DEMO_SCRIPT.md](DEMO_SCRIPT.md) · [docs/API.md](docs/API.md)
+[DEMO_SCRIPT.md](DEMO_SCRIPT.md) · [docs/API.md](docs/API.md) · [docs/COMPETITORS.md](docs/COMPETITORS.md) ·
+[docs/REVIEW_CHECKLIST.md](docs/REVIEW_CHECKLIST.md)
 
-Data: NASA SPHEREx DR1 Spectral Images (doi:10.26131/IRSA678) and QR3 via NASA/IPAC IRSA; Gaia DR3 (ESA). *This
-publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization
-and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the California Institute of
-Technology, and is funded by the National Aeronautics and Space Administration.* PARALLAX is not affiliated with or
-endorsed by NASA.
+Data: NASA SPHEREx DR1 Spectral Images (doi:10.26131/IRSA678) and QR3 from NASA/IPAC IRSA; Gaia DR3 (ESA);
+CatWISE2020. *This publication makes use of data products from the Spectro-Photometer for the History of the Universe,
+Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the
+California Institute of Technology, and is funded by the National Aeronautics and Space Administration.* PARALLAX is
+not affiliated with or endorsed by NASA.

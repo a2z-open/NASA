@@ -13,6 +13,7 @@ the organizers exactly what existed before the official start. Git history is pr
 | Sat 14 Nov 2026, 00:39:41 | Claude Code | Held-out visit downloaded, measured and evaluated. | Commit `51d8ea1`; `validation/experiments/epsilon-indi-b/result.json` |
 | Sat 14 Nov 2026, 01:21:13 | Claude Code | Second experiment (2MASS J0415−0935) locked before its held-out visit was downloaded. | Commit `4a5d715`; SHA-256 `c9beae2e2bb8d75321b9d96b1d18ea20831fc0000e121ce6073483acff6b3b8c` |
 | Sat 14 Nov 2026, 01:29:42 | Claude Code | Second held-out visit revealed and evaluated. | Commit `ce84964` |
+| Sat 14 Nov 2026, 03:19 – about 08:00 | Claude Code | Blind search ("Planet X hunt") with 6 cached and 20 newly downloaded fields, halo photometry of the two saturated variable stars, solar-system and catalogue checks, interface redesign, and updated documents. | Local commits from `7bb4516` onwards. |
 
 ## Authorization: TEAM ACTION REQUIRED
 
@@ -21,6 +22,8 @@ the organizers exactly what existed before the official start. Git history is pr
 - Both commit `dbec275` (Friday night) and all work on `parallax-build` (from 00:19 Saturday) **predate** 9:00 a.m. Saturday.
 - The master build prompt states that *"the organizers have authorized us to begin building now."* Claude Code acted on
   that statement but **cannot verify it**.
+- On 14 Nov 2026 a team member told Claude Code that the organizers **allowed hacking overnight**. Claude Code cannot
+  verify this either; it is recorded here so the team can attach the evidence.
 - **Before submission, keep the organizers' written authorization** and confirm with the Seattle lead that it covers:
   1. building before the official start,
   2. reusing commit `dbec275`,

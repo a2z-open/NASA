@@ -202,7 +202,7 @@ def index():
                      'n_motion_tested': d['n_motion_tested'], 'counts': d['counts'], 'depth_5sigma_ujy': d['depth_5sigma_ujy'],
                      'truth': d.get('truth'), 'generated_utc': d['generated_utc'],
                      'movers': [{k: s.get(k) for k in ('id', 'class', 'ra', 'dec', 'pm_arcsec_yr', 'sigma', 'pm_over_error', 'stack_snr',
-                                                       'best_band', 'cold_only', 'flags', 'truth_match', 'gaia', 'stack_motion',
+                                                       'best_band', 'cold_only', 'flags', 'truth_match', 'gaia', 'stack_motion', 'catalogued_as', 'decade_confirmed',
                                                        'n_native_positions', 'parallax_mas', 'parallax_err_mas')} for s in movers]})
         totals['fields'] += 1
         totals['area_deg2'] += d['area_deg2']
@@ -217,9 +217,22 @@ def index():
            'recovery': {'n_known': len(truths), 'n_detected': sum(1 for t in truths if t['detected']),
                         'n_recovered': sum(1 for t in truths if t['recovered'])},
            'unexplained': [m | {'field_id': r['field_id']} for r in rows for m in r['movers']
-                           if m['class'] in ('candidate', 'stack_candidate', 'two_visit_candidate') and not m.get('truth_match')],
+                           if m['class'] in ('candidate', 'stack_candidate', 'two_visit_candidate') and not m.get('truth_match')
+                           and not m.get('catalogued_as')],
            'thresholds': json.loads(next(iter(sorted(hunt.HUNT_DATA.glob('*/hunt.json')))).read_text())['thresholds'] if rows else {},
            'fields': rows}
+    # How far could a twin of WISE 0855 be seen?  Uses the search's own stack flux of WISE 0855 and its catalogue distance.
+    ref = None
+    w = hunt.HUNT_DATA / 'wise-0855' / 'hunt.json'
+    if w.is_file():
+        for s_ in json.loads(w.read_text())['sources']:
+            if s_.get('truth_match') and (s_.get('flux_ujy') or {}).get('cold'):
+                ref = s_['flux_ujy']['cold']
+    depths = [r['depth_5sigma_ujy']['cold'] for r in rows if r['depth_5sigma_ujy'].get('cold') and r['kind'] != 'validation']
+    if ref and depths:
+        med = float(np.median(depths))
+        doc['reach'] = {'median_depth_ujy': round(med, 1), 'reference': 'WISE 0855-0714 at 2.28 pc (7.43 light-years), stack flux %.0f uJy at 3.8-5.0 um' % ref,
+                        'reach_ly': round(7.43 * math.sqrt(ref / med), 1)}
     (hunt.HUNT_DATA / 'index.json').write_text(json.dumps(doc, indent=1))
     print(json.dumps({k: doc[k] for k in ('totals', 'classes', 'recovery')}, indent=1))
     print('unexplained:', len(doc['unexplained']))
@@ -234,5 +247,8 @@ if __name__ == '__main__':
         fetch(sys.argv[2:] or None)
     elif cmd == 'run':
         run(sys.argv[2], sys.argv[3:] or None)
+    elif cmd == 'compact':
+        for path in sorted(hunt.HUNT_DATA.glob('*/hunt.json')):
+            print(path.parent.name, 'compacted' if hunt.compact_stacks(path.parent) else 'already compact')
     else:
         index()

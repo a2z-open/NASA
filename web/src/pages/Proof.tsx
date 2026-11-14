@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { api, huntApi, type HuntIndex, type ValidationReport } from '../api.ts';
+import { api, huntApi, type Forecast, type HaloResults, type HaloVariability, type HuntIndex, type ValidationReport } from '../api.ts';
 import { Page } from '../components/Shell.tsx';
 import { Link } from '../router.tsx';
 import { humanize, num } from '../lib/format.ts';
@@ -10,10 +10,14 @@ import { ControlsScatter, InjectionGrid, TargetsTable, THRESHOLD_LABELS } from '
 export function Proof() {
   const [d, setD] = useState<ValidationReport | null>(null);
   const [hunt, setHunt] = useState<HuntIndex | null>(null);
+  const [halo, setHalo] = useState<HaloResults | null>(null);
+  const [fc, setFc] = useState<Forecast[]>([]);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     api.validation().then(setD).catch(e => setError((e as Error).message));
     huntApi.index().then(setHunt).catch(() => undefined);
+    huntApi.halo().then(setHalo).catch(() => undefined);
+    huntApi.forecasts().then(r => setFc(r.forecasts)).catch(() => undefined);
   }, []);
   const nc = d?.negative_controls;
   return (
@@ -63,6 +67,29 @@ export function Proof() {
         <p style={{ marginTop: 18 }}><Link className="button button--primary" href="/hunt">Open the Planet X hunt</Link></p>
       </section>
 
+      {halo && (
+        <section className="band2" aria-labelledby="t4h">
+          <h2 className="test-h" id="t4h"><span>Test 4</span>Measure a star that is too bright to measure</h2>
+          <p className="test-p">Two of NASA's five targets are variable stars, and both saturate SPHEREx. We measure the ring of light around each star instead, and check the trick on stars that do not vary.</p>
+          <div className="tiles tiles--3">
+            <HaloTile name="R Draconis" slug="r-draconis" h={halo.targets['r-draconis']} />
+            <HaloTile name="RW Aurigae" slug="rw-aurigae" h={halo.targets['rw-aurigae']} />
+            <div className="tile">
+              <span className="tile__n">{halo.control_summary.n_flagged_variable}<small> of {halo.control_summary.n_with_comparison + 1}</small></span>
+              <span className="tile__t">steady bright stars wrongly called variable (Barnard's Star and {halo.control_summary.n_with_comparison} others)</span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {fc.length > 0 && (
+        <section className="band2" aria-labelledby="t5">
+          <h2 className="test-h" id="t5"><span>Test 5 · still open</span>Predictions for images that do not exist yet</h2>
+          <p className="test-p">Locked today, for dates SPHEREx has not observed. When NASA releases the next images, anyone can check them.</p>
+          <div className="hlist">{fc.map(f => <ForecastCard key={f.target} f={f} />)}</div>
+        </section>
+      )}
+
       {d && (
         <section className="band2" aria-labelledby="t4">
           <h2 className="test-h" id="t4"><span>Scorecard</span>NASA's five test targets</h2>
@@ -95,5 +122,57 @@ export function Proof() {
         </section>
       )}
     </Page>
+  );
+}
+
+
+function HaloTile({ name, slug, h }: { name: string; slug: string; h?: HaloVariability }) {
+  const later = (h?.visits ?? []).slice(1).filter(v => v.sigma != null && v.n >= 5);
+  const big = later.slice().sort((a, b) => Math.abs(b.ratio - 1) - Math.abs(a.ratio - 1))[0];
+  if (!h || !big) return <div className="tile"><span className="tile__n">—</span><span className="tile__t">{name}: not measured</span></div>;
+  const pct = Math.round((big.ratio - 1) * 100);
+  return (
+    <Link className="tile tile--hot" href={`/explore?target=${slug}`} style={{ textDecoration: 'none' }}>
+      <span className="tile__n">{pct > 0 ? '+' : '−'}{Math.abs(pct)}%</span>
+      <span className="tile__t">{name} {pct < 0 ? 'faded' : 'brightened'} between visits ({(big.sigma ?? 0).toFixed(1)}σ)</span>
+    </Link>
+  );
+}
+
+
+const longDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+function ForecastCard({ f }: { f: Forecast }) {
+  const p = f.predictions.find(x => x.date_utc.startsWith('2027-04')) ?? f.predictions[0];
+  return (
+    <details className="hrow">
+      <summary>
+        <span className="hrow__name">{f.title}<small>locked {longDate(f.locked_utc)}</small></span>
+        <span className="hrow__result">
+          On {longDate(p.date_utc)} it should be <strong>{p.offset_from_stays_here_arcsec.toFixed(1)}″</strong> from where it is now, at{' '}
+          <span className="mono">{p.ra_deg.toFixed(5)}, {p.dec_deg.toFixed(5)}</span> (± {Math.max(p.sigma_ra_arcsec, p.sigma_dec_arcsec).toFixed(2)}″).
+        </span>
+        <span className="hrow__chev" aria-hidden="true">›</span>
+      </summary>
+      <div className="hrow__body" style={{ gridTemplateColumns: 'minmax(0, 1fr)' }}>
+        <p className="small muted">{f.model_note} Fitted to {f.data_used.n_usable_positions} positions. When this was locked, the newest SPHEREx image of this field in NASA's archive was taken on {longDate(f.archive_at_lock.latest_exposure_utc)}.</p>
+        <dl className="kv small">
+          <dt>Fingerprint (SHA-256)</dt><dd className="mono hash">{f.sha256}</dd>
+          <dt>Git commit</dt><dd className="mono">{f.commit ? `${f.commit.hash.slice(0, 10)} · ${f.commit.time}` : 'not committed yet'}</dd>
+          <dt>Pass rule</dt><dd>{f.criterion}</dd>
+        </dl>
+        <div className="table-wrap">
+          <table className="table table--dense">
+            <thead><tr><th>Date</th><th>RA (deg)</th><th>Dec (deg)</th><th>± RA (″)</th><th>± Dec (″)</th><th>From today's position (″)</th></tr></thead>
+            <tbody>
+              {f.predictions.map(x => (
+                <tr key={x.date_utc}><td>{x.date_utc.slice(0, 10)}</td><td className="mono">{x.ra_deg.toFixed(6)}</td><td className="mono">{x.dec_deg.toFixed(6)}</td>
+                  <td className="mono">{x.sigma_ra_arcsec.toFixed(3)}</td><td className="mono">{x.sigma_dec_arcsec.toFixed(3)}</td><td className="mono">{x.offset_from_stays_here_arcsec.toFixed(2)}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
   );
 }

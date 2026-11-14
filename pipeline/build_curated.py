@@ -31,6 +31,7 @@ GAIA_IDS = {'epsilon-indi-b': '6412596012146801152', 'barnards-star': '447283213
             'rw-aurigae': '156430817820015232', 'r-draconis': '1648328016354496384'}
 # Real, unsaturated comparison stars in the same SPHEREx images, used to demonstrate the naive (mixed-wavelength)
 # versus wavelength-matched comparison when the named target itself saturates.  Created with POST /api/investigations.
+HALO_TARGETS = ('rw-aurigae', 'r-draconis', 'barnards-star')   # saturated: brightness from the unsaturated halo
 DEMOS = {'rw-aurigae': 'i3d564e91b603', 'r-draconis': 'ib1edeba1aaeb'}
 KNOWN_BLENDS = {'rw-aurigae': 'RW Aur A and RW Aur B (Gaia DR3 156430822114424576) are 1.4 arcsec apart, far below one SPHEREx pixel: always blended.',
                 'epsilon-indi-b': 'Epsilon Indi Ba (T1) and Bb (T6) are separated by well under one SPHEREx pixel; the measurement is their combined light.'}
@@ -173,8 +174,16 @@ def build(slug, *, workers=8, reuse=False):
         'software': software_versions(), 'n_files': len(rows), 'manifest_url': f'/files/targets/{slug}/provenance.json',
         'photometry_track': track_note, 'fixed_position': {'ra': fixed[0], 'dec': fixed[1], 'epoch_utc': mjd_to_iso(first_mjd)},
     }
+    from . import halo as halo_mod
+    from . import solarsystem
+    halo_doc = None
+    if slug in HALO_TARGETS:
+        halo_doc, _ = halo_mod.run_target(slug, workers=workers)
+        print(f'  halo: {halo_doc.get("status")}', [(v['visit'], round(v['ratio'], 3)) for v in halo_doc.get('visits', [])], flush=True)
+    ss_doc = solarsystem.check(src_pos[0], src_pos[1], [r['mjd'] for r in rows if r.get('mjd')])
+    print(f"  solar system: {ss_doc['status']} ({ss_doc['n_epochs_checked']} epochs, {len(ss_doc['matches'])} matches)", flush=True)
     inv = build_investigation(
-        rows, inv_id=slug, kind='curated', title=t.title, field_id=slug,
+        rows, inv_id=slug, kind='curated', title=t.title, field_id=slug, solar_system=ss_doc, halo=halo_doc,
         source={'ra': src_pos[0], 'dec': src_pos[1], 'label': t.title, 'epoch_note': 'catalogue position propagated to 2026.0',
                 'catalog': t.astrometry.__dict__},
         visits=visits, identification=t.astrometry.source.split(' (')[0], catalog=catalog, catalog_stars=stars,

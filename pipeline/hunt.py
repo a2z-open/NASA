@@ -29,14 +29,14 @@ import time
 import warnings
 
 import numpy as np
-from scipy.ndimage import correlate, maximum_filter, map_coordinates, median_filter
+from scipy.ndimage import binary_dilation, correlate, maximum_filter, map_coordinates, median_filter
 
 from .analysis import MOTION_PM_SNR, MOTION_SIGMA, analyse_motion
 from .astrometry import JULIAN_YEAR_DAYS, mjd_to_iso
 from .frames import display_wcs
 from .measure import GAIA_EPOCH_MJD, gaia_field, gaia_positions, measure_position, reference_candidates, register
 from .motion import fit_motion
-from .spherex import CACHE, ROOT, SR_PER_ARCSEC2, load_observation
+from .spherex import CACHE, ROOT, SR_PER_ARCSEC2, flag_mask, load_observation
 
 GRID_ARCSEC = 3.075                       # stack grid: half a native pixel
 BANDS = {'short': (1, 2, 3), 'mid': (4,), 'cold': (5, 6)}
@@ -56,8 +56,9 @@ MIN_COVER = 3             # exposures per stack pixel
 CANDIDATE_PM_MIN = 0.2    # arcsec / yr: slower drifts are reported but not listed as candidates
 CHROMATIC_SIGMA = 4.0
 MAX_MODEL_CHI2R = 4.0
-BRIGHT_STAR = [(7.0, 90.0), (9.5, 45.0)]   # (Gaia G limit, exclusion radius in arcsec)
-BLOCKING_FLAGS = ('colour_dependent_motion', 'poor_model_fit', 'near_bright_star', 'near_edge',
+BRIGHT_STAR = [(7.0, 90.0), (9.5, 45.0), (11.5, 25.0)]   # (Gaia G limit, exclusion radius in arcsec)
+SAT_GROW = 4              # native pixels (about 25 arcsec) around any saturated pixel
+BLOCKING_FLAGS = ('colour_dependent_motion', 'poor_model_fit', 'near_bright_star', 'near_saturated_star', 'near_edge',
                   'motion_explained_by_colour', 'depends_on_one_visit', 'negative_parallax')
 
 HUNT_DATA = ROOT / 'data' / 'hunt'
@@ -99,9 +100,16 @@ def _stack_one(args):
     x, y = obs.wcs.world_to_pixel_values(ra, dec)
     out = map_coordinates(res, [y + dy, x + dx], order=1, mode='constant', cval=np.nan)
     v = map_coordinates(var, [y + dy, x + dx], order=1, mode='constant', cval=np.nan)
+    # Where is the detector saturated?  Grown by SAT_GROW native pixels: the halo and diffraction pattern of a
+    # saturated star produce spurious, shifting peaks next to it.
+    satm = (obs.flags & flag_mask(obs.flag_names, {'OVERFLOW', 'NONLINEAR'})) != 0
+    sat = None
+    if satm.any():
+        satm = binary_dilation(satm, iterations=SAT_GROW)
+        sat = map_coordinates(satm.astype('f4'), [y + dy, x + dx], order=0, mode='constant', cval=0.0) > 0.5
     prov = obs.meta.get('provenance', {})
     return {'id': prov.get('product_id', obs.product_id), 'mjd': obs.mjd, 'detector': obs.detector, 'path': str(path),
-            'img': out.astype('f4'), 'var': v.astype('f4'), 'reg_ok': bool(reg.ok),
+            'img': out.astype('f4'), 'var': v.astype('f4'), 'sat': sat, 'reg_ok': bool(reg.ok),
             'reg_rms': reg.rms_arcsec if reg.ok else None, 'release': obs.release or prov.get('release'),
             'sha256': prov.get('sha256'), 'archive_url': prov.get('archive_url')}
 
@@ -170,10 +178,17 @@ def find_peaks(snr, thresh, edge=5):
         if not (edge <= x < nx - edge and edge <= y < ny - edge):
             continue
         c = s[y, x]
-        # sub-pixel peak from a parabola through the three samples on each axis
+        # Sub-pixel peak from the three samples on each axis.  The matched-filter peak of a point source is
+        # close to Gaussian, so the parabola is fitted to the logarithm (exact for a Gaussian) when it can be.
         def off(a, b):
-            d = 2 * c - a - b
-            return float(np.clip(0.5 * (b - a) / d, -0.5, 0.5)) if d > 0 and a > -1e8 and b > -1e8 else 0.0
+            if a > 0 and b > 0 and c > 0:
+                a, b, cc = math.log(a), math.log(b), math.log(c)
+            elif a > -1e8 and b > -1e8:
+                cc = c
+            else:
+                return 0.0
+            d = 2 * cc - a - b
+            return float(np.clip(0.5 * (b - a) / d, -0.5, 0.5)) if d > 0 else 0.0
         out.append((x + off(s[y, x - 1], s[y, x + 1]), y + off(s[y - 1, x], s[y + 1, x]), float(c)))
     return out
 
@@ -204,6 +219,9 @@ def build_stacks(files, ra0, dec0, fov, refs, *, workers=8, nz=4, log=print):
         members = [items[i] for i in idx]
         v = {'id': f'visit-{k + 1}', 'mjd_start': float(mjds[idx].min()), 'mjd_end': float(mjds[idx].max()),
              'mjd_mid': float(np.median(mjds[idx])), 'n_exposures': len(members), 'bands': {}}
+        sats = [m['sat'] for m in members if m['sat'] is not None]
+        # saturated in at least a quarter of this visit's exposures: a persistently saturated star, not a cosmic ray
+        v['sat'] = (np.sum(sats, axis=0) >= 0.25 * len(members)) if sats else None
         for band, dets in BANDS.items():
             sel = [m for m in members if m['detector'] in dets]
             if len(sel) < MIN_COVER:
@@ -231,7 +249,7 @@ def detect_visit(v, k):
         if hit is None:
             fw = KERNEL_FWHM_ARCSEC[band]
             sources.append({'visit': k, 'x': x, 'y': y, 'band': band, 'snr': s, 'det': {band: s},
-                            'sigma': math.hypot(0.6 * fw / s, 0.3)})
+                            'sigma': math.hypot(1.2 * fw / s, 0.3)})   # empirical: twice the ideal matched-filter error
         else:
             hit['det'].setdefault(band, s)
     for q in sources:
@@ -382,7 +400,12 @@ def link(visits, per_visit):
         b = src[g['best']]
         det_snr = {band: max((src[i]['det'].get(band, 0) for i in ms), default=0) for band in BANDS}
         forced_max = {band: max((src[i]['forced'].get(band) or -9 for i in ms), default=-9) for band in BANDS}
-        out.append({'knots_t': t.tolist(), 'knots_x': px.tolist(), 'knots_y': py.tolist(), 'vx': vx, 'vy': vy,
+        near_sat = False
+        for i in ms:
+            sm_ = visits[int(vis[i])].get('sat')
+            if sm_ is not None and sm_[int(round(src[i]['y'])), int(round(src[i]['x']))]:
+                near_sat = True
+        out.append({'knots_t': t.tolist(), 'knots_x': px.tolist(), 'knots_y': py.tolist(), 'vx': vx, 'vy': vy, 'near_saturation': near_sat,
                     'visits_detected': sorted({int(vis[i]) for i in ms}), 'missing_visits': g.get('missing', []),
                     'linked_orphans': bool(g.get('linked_orphans')), 'intermittent': bool(g.get('intermittent')),
                     'best_band': b['band'], 'best_snr': b['snr'], 'det_snr': det_snr, 'forced_snr': forced_max,
@@ -639,6 +662,8 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
             if near.any():
                 doc['flags'].append('near_bright_star')
                 break
+    if o.get('near_saturation'):
+        doc['flags'].append('near_saturated_star')
     edge = 15.0 / GRID_ARCSEC
     if not (edge <= x <= n_grid - 1 - edge and edge <= y <= n_grid - 1 - edge):
         doc['flags'].append('near_edge')
@@ -663,7 +688,7 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
     elif sig_ok:
         doc['class'] = 'slow_drift'
     elif sm and sm['significance'] >= 5 and sm['pm_arcsec_yr'] >= CANDIDATE_PM_MIN and len(usable) < 6 \
-            and not any(f in doc['flags'] for f in ('near_bright_star', 'near_edge')) and 'gaia' not in doc:
+            and not any(f in doc['flags'] for f in ('near_bright_star', 'near_saturated_star', 'near_edge')) and 'gaia' not in doc:
         doc['class'] = 'stack_candidate' if sm['n_visits'] >= 3 and sm['chi2'] <= 4 * max(sm['dof'], 1) else 'two_visit_candidate'
     elif doc['motion_status'] == 'insufficient':
         doc['class'] = 'intermittent' if o['intermittent'] else 'too_faint'
@@ -932,10 +957,49 @@ def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None,
         'generated_utc': datetime.now(timezone.utc).isoformat(timespec='seconds'),
     }
     (out_dir / 'hunt.json').write_text(json.dumps(doc, indent=1, default=float))
+    compact_stacks(out_dir)
     log(f"[{name}] {len(sources)} sources, {len(tested)} motion-tested: {counts}; depth {depth} uJy; {doc['runtime_s']}s")
     if truth_doc:
         log(f"[{name}] truth {truth_doc}")
     return doc
+
+
+def compact_stacks(out_dir):
+    """Shrink the display stacks of one field: drop the mid band, bin 20-arcmin fields 2x2, store float16.
+
+    The stacks are for viewing only (the search itself used the full-resolution arrays in memory), so this
+    changes no result.  It cuts the committed size of the hunt from hundreds of megabytes to tens.
+    """
+    out_dir = Path(out_dir)
+    doc = json.loads((out_dir / 'hunt.json').read_text())
+    g = doc['grid']
+    if g.get('dtype') == 'float16':
+        return False
+    n = g['nx']
+    f = 2 if n > 250 else 1
+    keep = []
+    for st in doc['stacks']:
+        path = out_dir / 'frames' / st['data_url'].rsplit('/', 1)[-1]
+        if st['band'] == 'mid':
+            path.unlink(missing_ok=True)
+            continue
+        arr = np.fromfile(path, '<f4').reshape(n, n)
+        if f == 2:
+            m = (n // 2) * 2
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore')
+                arr = np.nanmean(arr[:m, :m].reshape(m // 2, 2, m // 2, 2), axis=(1, 3))
+        arr.astype('<f2').tofile(path)
+        keep.append(st)
+    doc['stacks'] = keep
+    if f == 2:
+        m = (n // 2) * 2
+        # the field centre sat on pixel (n-1)/2 = m/2 of the full grid; in binned pixels that is m/4 - 0.25
+        g.update({'nx': m // 2, 'ny': m // 2, 'pixel_arcsec': g['pixel_arcsec'] * 2, 'cx': m / 4 - 0.25, 'cy': m / 4 - 0.25})
+    g['dtype'] = 'float16'
+    g['note'] = 'display stacks; the search used the full-resolution arrays'
+    (out_dir / 'hunt.json').write_text(json.dumps(doc, indent=1, default=float))
+    return True
 
 
 def curated_field(slug):

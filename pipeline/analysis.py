@@ -486,6 +486,8 @@ def evaluate(doc, *, identification=None, catalog_stars=None, known_blend=None):
     n_sat = sum(1 for d in dets if d['outcome'] in ('core_saturated', 'saturation_flag_near_core'))
     n_meas = sum(1 for d in dets if d['outcome'] not in ('outside_cutout',))
     H = []
+    halo = doc.get('halo_variability') or {}
+    ss = doc.get('solar_system') or {}
     ms = motion.get('status')
     sig = (motion.get('significance') or {})
     rep = (motion.get('models') or {}).get(motion.get('reported_model') or '', {})
@@ -539,6 +541,14 @@ def evaluate(doc, *, identification=None, catalog_stars=None, known_blend=None):
         pr = var['matched']['visit_pairs']
         H.append({'id': 'H2', 'name': 'Variable astronomical source', 'status': 'disfavored',
                   'evidence': [f"Wavelength-matched visit-to-visit ratios: " + ', '.join(f"{p['mean_ratio']:.3f} ± {p['mean_ratio_err']:.3f}" for p in pr) + '.']})
+    elif halo.get('status') in ('variable', 'not_detected'):
+        hv = [v for v in halo['visits'][1:] if v.get('sigma') is not None]
+        txt = ', '.join(f"{v['visit']} / visit-1 = {v['ratio']:.2f} ± {v['ratio'] * v['err_vs_first']:.2f} ({v['sigma']:.1f} sigma)" for v in hv)
+        H.append({'id': 'H2', 'name': 'Variable astronomical source', 'status': 'supported' if halo['status'] == 'variable' else 'disfavored',
+                  'evidence': [f"The core is saturated, so brightness was measured from the unsaturated halo ({halo['ring_pixels'][0]:.0f}-{halo['ring_pixels'][1]:.0f} "
+                               f"pixels from the star) at matched wavelength: {txt}.",
+                               'Experimental method. On control stars that are not large-amplitude variables the same measurement stays flat '
+                               '(see validation/halo_results.json).']})
     else:
         H.append({'id': 'H2', 'name': 'Variable astronomical source', 'status': 'not_testable',
                   'evidence': [var.get('reason', 'Variability not measured.')]})
@@ -568,15 +578,28 @@ def evaluate(doc, *, identification=None, catalog_stars=None, known_blend=None):
     else:
         H.append({'id': 'H4', 'name': 'Instrumental or processing artifact', 'status': 'not_testable', 'evidence': ['No usable detections.']})
     # H5 solar-system object
-    if ms == 'significant' and rep.get('chi2_reduced', 99) < 3 and (motion.get('baseline_days') or 0) > 150:
+    stellar = ms == 'significant' and rep.get('chi2_reduced', 99) < 3 and (motion.get('baseline_days') or 0) > 150
+    ev5 = []
+    if stellar:
         model_txt = 'proper motion plus annual parallax' if 'parallax_mas' in rep else 'linear proper motion'
-        H.append({'id': 'H5', 'name': 'Known solar-system object', 'status': 'disfavored',
-                  'evidence': [f"Positions over {motion.get('baseline_days', 0):.0f} days follow {model_txt} of a few arcsec per year "
-                               f"(reduced chi-square {rep.get('chi2_reduced', 0):.2f}); solar-system bodies move arcseconds to arcminutes per hour "
-                               f"and would not repeat a stellar track across visits."]})
+        ev5.append(f"Positions over {motion.get('baseline_days', 0):.0f} days follow {model_txt} of a few arcsec per year "
+                   f"(reduced chi-square {rep.get('chi2_reduced', 0):.2f}); solar-system bodies move arcseconds to arcminutes per hour "
+                   f"and would not repeat a stellar track across visits.")
+    if ss.get('status') == 'none_found':
+        ev5.append(f"No known asteroid or comet lies within {ss['radius_arcsec']:.0f} arcsec of the source at any of the "
+                   f"{ss['n_epochs_checked']} observation times checked ({ss['service']}).")
+        st5 = 'disfavored'
+    elif ss.get('status') == 'found':
+        names = sorted({m['name'] for m in ss['matches'] if m.get('name')})
+        ev5.append(f"Known solar-system bodies passed within {ss['radius_arcsec']:.0f} arcsec during {len(ss['matches'])} of the checked times: "
+                   + ', '.join(names[:5]) + '. Detections at those times may be the asteroid, not the source.')
+        st5 = 'disfavored' if stellar else 'possible'
+    elif stellar:
+        st5 = 'disfavored'
     else:
-        H.append({'id': 'H5', 'name': 'Known solar-system object', 'status': 'not_testable',
-                  'evidence': ['PARALLAX does not yet query solar-system ephemerides (e.g. JPL Horizons); not evaluated.']})
+        st5 = 'not_testable'
+        ev5.append('The solar-system catalogue (IMCCE SkyBoT) was not queried or could not be reached; not evaluated.')
+    H.append({'id': 'H5', 'name': 'Known solar-system object', 'status': st5, 'evidence': ev5})
     H.sort(key=lambda h: h['id'])
 
     verdicts = []
@@ -594,6 +617,9 @@ def evaluate(doc, *, identification=None, catalog_stars=None, known_blend=None):
         verdicts.append({'code': 'variability_supported',
                          'label': 'Evidence supports temporal variability' + (' (wing photometry, experimental)' if wing else ''),
                          'strength': 'tentative' if wing else 'supported'})
+    if halo.get('status') == 'variable' and vs != 'variable':
+        verdicts.insert(0, {'code': 'variability_supported', 'label': 'Brightness changed between visits (measured from the unsaturated halo, experimental)',
+                            'strength': 'supported'})
     if blend in ('possible', 'supported'):
         verdicts.append({'code': 'possible_blend', 'label': 'Possible blended source' if blend == 'possible' else 'Blended source',
                          'strength': 'tentative' if blend == 'possible' else 'supported'})
@@ -616,12 +642,23 @@ def headline(doc):
     parts = []
     if 'motion_supported' in v and v['motion_supported']['strength'] == 'supported':
         parts.append(f"Moves {rep.get('pm_total_masyr', 0) / 1000:.2f}″/yr across {doc['observations']['n_usable_positions']} SPHEREx exposures")
-    if 'variability_supported' in v:
+    halo = doc.get('halo_variability') or {}
+    hv = [x for x in (halo.get('visits') or [])[1:] if x.get('sigma') is not None]
+    if halo.get('status') == 'variable' and hv:
+        big = max(hv, key=lambda x: abs(x['ratio'] - 1))
+        word = 'faded' if big['ratio'] < 1 else 'brightened'
+        parts.append(f"{word} by {abs(big['ratio'] - 1) * 100:.0f}% between visits, measured from its unsaturated halo")
+    elif 'variability_supported' in v:
         parts.append('brightness changes at matched wavelengths')
     if 'ultracool_candidate' in v:
         parts.append(f"spectrum matches a {spec['templates']['best']['spectral_type']} template")
     if 'saturated' in v:
-        parts.append('too bright: SPHEREx cores are saturated')
+        if halo.get('status') == 'variable':
+            parts.append('its core is saturated')
+        elif halo.get('status') == 'not_detected' and hv:
+            parts.append(f"too bright: SPHEREx cores are saturated; halo brightness steady within {max(abs(x['ratio'] - 1) for x in hv) * 100:.0f}%")
+        else:
+            parts.append('too bright: SPHEREx cores are saturated')
     if 'insufficient_evidence' in v and not parts:
         parts.append('not enough clean measurements for a conclusion')
     if not parts:
@@ -631,7 +668,7 @@ def headline(doc):
 
 
 def build_investigation(rows, *, inv_id, kind, title, field_id, source, visits, identification=None, catalog=None,
-                        catalog_stars=None, known_blend=None, extra_limitations=(), provenance=None):
+                        catalog_stars=None, known_blend=None, extra_limitations=(), provenance=None, solar_system=None, halo=None):
     motion, used = analyse_motion(rows, visits, catalog)
     used_ids = {r['product_id'] for r in used}
     dets = detections_table(rows, visits, used_ids)
@@ -650,6 +687,10 @@ def build_investigation(rows, *, inv_id, kind, title, field_id, source, visits, 
                          'visits': visits, 'quality': quality_summary(rows)},
         'detections': dets, 'motion': motion, 'spectrum': spectrum, 'variability': variability,
     }
+    if solar_system is not None:
+        doc['solar_system'] = solar_system
+    if halo is not None:
+        doc['halo_variability'] = halo
     hyps, verdicts = evaluate(doc, identification=identification, catalog_stars=catalog_stars, known_blend=known_blend)
     doc['hypotheses'] = hyps
     doc['summary'] = {'verdicts': verdicts}
@@ -663,6 +704,13 @@ def build_investigation(rows, *, inv_id, kind, title, field_id, source, visits, 
 
 def one_liner(doc):
     v = {x['code'] for x in doc['summary']['verdicts']}
+    halo = doc.get('halo_variability') or {}
+    hv = [x for x in (halo.get('visits') or [])[1:] if x.get('sigma') is not None]
+    if halo.get('status') == 'variable' and hv:
+        big = max(hv, key=lambda x: abs(x['ratio'] - 1))
+        return (f"The core saturates the detector, so brightness is measured from the unsaturated ring of light around the star: "
+                f"it {'faded' if big['ratio'] < 1 else 'brightened'} by {abs(big['ratio'] - 1) * 100:.0f}% between visits "
+                f"({big['sigma']:.1f} sigma). An experimental method, checked on stars that do not vary.")
     spec = doc.get('spectrum') or {}
     tm = spec.get('templates') or {}
     s = []

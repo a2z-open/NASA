@@ -8,6 +8,7 @@ import { InvestigationPage } from './pages/InvestigationPage.tsx';
 import { Evidence } from './pages/Evidence.tsx';
 import { Proof } from './pages/Proof.tsx';
 import { Hunt } from './pages/Hunt.tsx';
+import { Deck } from './pages/Deck.tsx';
 import { Targets } from './pages/Targets.tsx';
 import { DataAbout } from './pages/DataAbout.tsx';
 import { Page } from './components/Shell.tsx';
@@ -29,6 +30,7 @@ const TITLES: Record<string, string> = {
   '/': 'PARALLAX · Find what moves in the infrared sky',
   '/explore': 'Explore · PARALLAX',
   '/hunt': 'Planet X hunt · PARALLAX',
+  '/deck': 'PARALLAX in seven slides',
   '/proof': 'Proof · PARALLAX',
   '/about': 'About · PARALLAX',
   '/targets': 'Targets · PARALLAX',
@@ -47,6 +49,7 @@ function App() {
   if (path.startsWith('/investigation/')) return <InvestigationPage id={decodeURIComponent(path.slice('/investigation/'.length))} />;
   if (path.startsWith('/evidence/')) return <Evidence id={decodeURIComponent(path.slice('/evidence/'.length))} />;
   if (path.startsWith('/hunt')) return <Hunt />;
+  if (path.startsWith('/deck')) return <Deck />;
   if (path.startsWith('/proof') || path.startsWith('/lab') || path.startsWith('/method')) return <Proof />;
   if (path.startsWith('/targets')) return <Targets />;
   if (path.startsWith('/about') || path.startsWith('/data')) return <DataAbout />;

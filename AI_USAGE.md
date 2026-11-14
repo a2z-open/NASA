@@ -12,6 +12,8 @@ review it and add your own tools (for example ChatGPT, or AI design tools) and y
 | ChatGPT (OpenAI) | Earlier research, planning and review, as stated in the team's master prompt. | TEAM TODO: describe. |
 | Claude (claude.ai) | Earlier planning documents, including the team plan artifact and handoff. | TEAM TODO: describe. |
 
+| Claude Code (Anthropic, model Claude Fable 5.2), same app, 14 Nov 2026 from about 03:20 PT | Wrote the blind search (`pipeline/hunt.py`), the hunt field list and runner, the halo photometry for saturated stars (`pipeline/halo.py`), the solar-system lookup, the catalogue checks, their tests, and redesigned the web interface (new home, Planet X hunt, Proof and About pages). A research sub-agent read public competitor pages and wrote `docs/COMPETITORS.md`. | TEAM TODO: review the new pages and the hunt results before presenting them. |
+
 Commits that Claude Code helped write carry a `Co-Authored-By: Claude` trailer.
 
 ## Runtime AI
@@ -32,5 +34,7 @@ reprojected for display. PARALLAX uses no NASA logos or mission branding.
   runs, and failures (Barnard's Star, RW Aur, R Dra saturation) are reported as failures.
 - It did not view any held-out pixel of the Epsilon Indi B experiment before the prediction was locked and committed
   (see `validation/experiments/epsilon-indi-b/prediction.json` → `disclosures`).
+- It did not label anything a discovery. Sources the blind search cannot explain are called candidates, and movers
+  that an older catalogue already lists are labelled as known.
 - It did not submit the project, publish the repository, deploy anything publicly, or contact organizers, sponsors or
   scientists. Those steps wait for explicit team approval.

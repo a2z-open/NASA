@@ -157,6 +157,23 @@ interface LabExperiment {
 }
 ```
 
+## Planet X hunt (blind search) and halo photometry
+
+| Method | Path | Returns |
+|---|---|---|
+| GET | `/api/hunt` | The hunt index: totals (fields, area, exposures, sources, sources motion-tested), counts per class, `recovery` (known movers found blind), `unexplained` (candidates no catalogue explains), `reach`, thresholds, and one row per field with its movers. 404 until `python -m validation.hunt_fields run all` has been run. |
+| GET | `/api/hunt/{field_id}` | One field: `grid`, `visits`, `stacks` (per visit and band, with `data_url`), every `sources[]` entry (class, flags, motion, `robust`, `chromatic`, `external` catalogue checks, `track`), `truth` (catalogue comparison made after the search), and every exposure used with its SHA-256. |
+| GET | `/files/hunt/{field_id}/frames/{visit}-{band}.bin` | A stack as little-endian float32, row 0 = north, `grid.nx` × `grid.ny`. |
+| GET | `/api/halo` | Halo-brightness results for the saturated targets and the control stars (`validation/halo_results.json`). |
+
+Source classes: `candidate` (passes every test, not matched to truth), `stack_candidate` and `two_visit_candidate`
+(weaker tiers), `known_mover` (Gaia shows the same motion), `suspect` (failed a vetting test; `flags` says which),
+`slow_drift`, `static`, `too_faint`, `intermittent`. A candidate with `catalogued_as` set was found in Gaia or CatWISE
+with the same motion and is not counted as unexplained.
+
+Investigations now also carry `solar_system` (the SkyBoT check used by hypothesis H5) and, for saturated targets,
+`halo_variability`.
+
 ## Jobs
 
 `GET /api/jobs/{job_id}` → `{ job_id, kind, status: "queued"|"running"|"done"|"failed", progress: {stage, done, total}, result_id, message }`

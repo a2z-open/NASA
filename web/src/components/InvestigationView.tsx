@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import type { Investigation, Hypothesis, Verdict } from '../api.ts';
+import type { HaloVariability, Investigation, Hypothesis, Verdict } from '../api.ts';
 import { exportUrl } from '../api.ts';
 import { Link } from '../router.tsx';
 import { formatDec, formatRA, wavelengthColor } from '../lib/astro.ts';
 import { NA, date, dateTime, humanize, num, pm, sig, ujy, um } from '../lib/format.ts';
-import { MatchedComparisons, MotionPlot, NaiveLightCurve, SpectrumPlot } from './Charts.tsx';
+import { MatchedComparisons, MotionPlot, NaiveLightCurve, SpectrumPlot, visitColor } from './Charts.tsx';
 import { Term } from './Term.tsx';
 
 const STRENGTH_LABEL: Record<Verdict['strength'], string> = {
@@ -37,6 +37,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
   const obs = inv.observations;
   const tmpl = inv.spectrum?.templates;
   const visits = useMemo(() => [...new Set(inv.detections.map(d => d.visit))], [inv.detections]);
+  const haloOk = !!inv.halo_variability && (inv.halo_variability.status === 'variable' || inv.halo_variability.status === 'not_detected');
 
   if (inv.status === 'processing') {
     return (
@@ -75,7 +76,10 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
       )}
 
       {inv.spectrum?.wing_attempt && (
-        <p className="notice small"><strong>Saturated core — experimental wing photometry:</strong> {inv.spectrum.wing_attempt.summary} <span className="dim">(acceptance: {inv.spectrum.wing_attempt.acceptance})</span></p>
+        <details className="more">
+          <summary>Why the usual measurement fails on this star</summary>
+          <p className="small">{inv.spectrum.wing_attempt.summary} <span className="dim">(Rule set in advance: {inv.spectrum.wing_attempt.acceptance}.)</span></p>
+        </details>
       )}
 
       <div className="stats">
@@ -88,13 +92,15 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
       </div>
 
       <div className="inv__actions">
-        <Link className="button button--ghost" href={`/evidence/${encodeURIComponent(inv.id)}`}>Open evidence dossier</Link>
-        <a className="button button--ghost" href={exportUrl(inv.id, 'json')}>Export JSON</a>
-        <a className="button button--ghost" href={exportUrl(inv.id, 'csv')}>Export CSV</a>
+        <Link className="button button--ghost" href={`/evidence/${encodeURIComponent(inv.id)}`}>Printable report</Link>
+        <a className="button button--ghost" href={exportUrl(inv.id, 'json')}>Download JSON</a>
+        <a className="button button--ghost" href={exportUrl(inv.id, 'csv')}>Download CSV</a>
       </div>
 
+      {haloOk && <HaloSection halo={inv.halo_variability!} />}
+
       {m && (
-        <details className="section" open>
+        <details className="section" open={m.status !== 'insufficient'}>
           <summary><h3>Is it moving?</h3><span className={`tag tag--${m.status}`}>{humanize(m.status)}</span></summary>
           {m.points.length > 0 && <MotionPlot motion={m} />}
           <div className="table-wrap"><table className="table">
@@ -130,7 +136,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
       )}
 
       {inv.spectrum && (
-        <details className="section" open>
+        <details className="section" open={inv.spectrum.status !== 'insufficient' && (inv.spectrum.status as string) !== 'saturated'}>
           <summary><h3>What kind of object is it?</h3><span className={`tag tag--${inv.spectrum.status}`}>{humanize(inv.spectrum.status)}</span></summary>
           <p className="small muted">{inv.spectrum.method}</p>
           {inv.spectrum.binned.some(b => b.flux_ujy != null) ? (
@@ -207,7 +213,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
         </section>
       )}
 
-      {inv.variability && (
+      {inv.variability && !haloOk && (
         <details className="section" open={inv.variability.status === 'variable' || (!compact && inv.variability.status !== 'insufficient')}>
           <summary><h3>Does its brightness change?</h3><span className={`tag tag--${inv.variability.status}`}>{humanize(inv.variability.status)}</span></summary>
           <div className="compare">
@@ -343,3 +349,64 @@ export function Progress({ stage, done, total }: { stage: string; done: number; 
 }
 
 export function um2(v: number | null | undefined) { return um(v); }
+
+
+const monthYear = (iso: string) => new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+/** Brightness of a saturated star, measured from the unsaturated ring of light around it. */
+function HaloSection({ halo }: { halo: HaloVariability }) {
+  const vs = (halo.visits ?? []).filter(v => v.n >= 5);
+  const later = vs.slice(1).filter(v => v.sigma != null);
+  const big = later.slice().sort((a, b) => Math.abs(b.ratio - 1) - Math.abs(a.ratio - 1))[0];
+  const pts = (halo.light_curve ?? []).filter(p => p.matched && p.relative > 0);
+  const names = vs.map(v => v.visit);
+  const w = 560, h = 250, m = { l: 52, r: 12, t: 12, b: 34 };
+  const t0 = Math.min(...pts.map(p => p.mjd)), t1 = Math.max(...pts.map(p => p.mjd));
+  const sorted = pts.map(p => Math.log(p.relative)).sort((a, b) => a - b);
+  const lo = Math.min(sorted[Math.floor(sorted.length * 0.02)] ?? -0.3, -0.15) - 0.1;
+  const hi = Math.max(sorted[Math.floor(sorted.length * 0.98)] ?? 0.3, 0.15) + 0.1;
+  const sx = (t: number) => m.l + ((t - t0) / (t1 - t0 || 1)) * (w - m.l - m.r);
+  const sy = (r: number) => m.t + (1 - (Math.log(r) - lo) / (hi - lo)) * (h - m.t - m.b);
+  const ticks = [0.25, 0.4, 0.6, 0.8, 1, 1.25, 1.6, 2].filter(v => Math.log(v) > lo && Math.log(v) < hi);
+  return (
+    <details className="section" open>
+      <summary><h3>Does its brightness change?</h3><span className={`tag tag--${halo.status === 'variable' ? 'variable' : 'not_detected'}`}>{halo.status === 'variable' ? 'Yes' : 'Steady'}</span></summary>
+      <p>
+        {halo.status === 'variable' && big
+          ? <>It <strong>{big.ratio < 1 ? 'faded' : 'brightened'} by {Math.round(Math.abs(big.ratio - 1) * 100)}%</strong> between {monthYear(vs[0].start_utc)} and {monthYear(big.start_utc)} ({num(big.sigma ?? 0, 1)}σ). </>
+          : <>No change larger than the noise{later[0] ? ` (${Math.round(Math.abs(later[0].ratio - 1) * 100)}% between visits)` : ''}. </>}
+        The star's core is saturated, so this is measured from the ring of light it scatters {halo.ring_pixels?.[0]}–{halo.ring_pixels?.[1]} pixels away, comparing only images of the same colour.
+      </p>
+      {pts.length > 3 && (
+        <figure className="chart">
+          <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label="Brightness relative to the first visit, against date">
+            <rect x={m.l} y={m.t} width={w - m.l - m.r} height={h - m.t - m.b} className="axes__frame" />
+            {ticks.map(v => <g key={v}><line x1={m.l} x2={w - m.r} y1={sy(v)} y2={sy(v)} className="axes__grid" /><text x={m.l - 7} y={sy(v) + 4} textAnchor="end" className="axes__tick">{v}×</text></g>)}
+            <line x1={m.l} x2={w - m.r} y1={sy(1)} y2={sy(1)} stroke="#8f97ae" strokeDasharray="4 4" />
+            {pts.map((p, i) => Math.log(p.relative) > lo && Math.log(p.relative) < hi
+              ? <circle key={i} cx={sx(p.mjd)} cy={sy(p.relative)} r={2.6} fill={visitColor(p.visit, names)} fillOpacity={0.85} /> : null)}
+            {vs.map(v => {
+              const a = Date.parse(v.start_utc) / 86400000 + 40587, b = Date.parse(v.end_utc) / 86400000 + 40587;
+              return <line key={v.visit} x1={sx(a) - 4} x2={sx(b) + 4} y1={sy(v.ratio)} y2={sy(v.ratio)} stroke="#ffb454" strokeWidth={2} />;
+            })}
+            {vs.map(v => <text key={v.visit} x={sx(Date.parse(v.start_utc) / 86400000 + 40587)} y={h - 12} className="axes__tick">{monthYear(v.start_utc)}</text>)}
+            <text x={14} y={(m.t + h - m.b) / 2} textAnchor="middle" transform={`rotate(-90 14 ${(m.t + h - m.b) / 2})`} className="axes__label">Brightness vs first visit</text>
+          </svg>
+          <figcaption><span className="legend">Each dot is one image. Orange bars: the average of each visit.</span></figcaption>
+        </figure>
+      )}
+      <table className="table">
+        <thead><tr><th>Visit</th><th>Dates</th><th>Images</th><th>Brightness vs first visit</th></tr></thead>
+        <tbody>
+          {vs.map((v, i) => (
+            <tr key={v.visit}>
+              <td>{i + 1}</td><td className="small">{date(v.start_utc)} – {date(v.end_utc)}</td><td className="mono">{v.n}</td>
+              <td className="mono">{i === 0 ? '1 (reference)' : `${num(v.ratio, 2)} ± ${num(v.ratio * (v.err_vs_first ?? 0), 2)}${v.sigma != null ? ` (${num(v.sigma, 1)}σ)` : ''}`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="small dim">An experimental method. <Link href="/proof">See how it behaves on stars that do not vary →</Link></p>
+    </details>
+  );
+}

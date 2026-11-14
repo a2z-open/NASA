@@ -32,6 +32,10 @@ export function DataAbout() {
           <li>A dashed line is always a fitted model, never an observation.</li>
         </ul>
 
+        <h3>Link to it or embed it</h3>
+        <p>Every view has its own address. Put coordinates in the link to open any patch of sky, and add <code>embed=1</code> to show only the viewer inside another page:</p>
+        <p><code>/explore?ra=331.0965&amp;dec=-56.8006&amp;fov=6&amp;embed=1</code></p>
+
         <h3>AI use</h3>
         <p>AI tools helped build this: Claude Code (Anthropic) wrote and tested much of the code and documents under the team's direction, and ChatGPT helped with research and planning. No AI runs inside the app. Every measurement comes from fixed code you can read.</p>
 

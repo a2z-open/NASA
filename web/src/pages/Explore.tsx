@@ -66,6 +66,7 @@ export function Explore() {
   const decParam = params.get('dec');
   const fovParam = Number(params.get('fov') ?? '') || null;
   const invParam = params.get('inv');
+  const embed = params.get('embed') === '1';
 
   const [targets, setTargets] = useState<Target[] | null>(null);
   const [liveFieldId, setLiveFieldId] = useState<string | null>(null);
@@ -92,10 +93,13 @@ export function Explore() {
   const idle = !targetSlug && !fieldParam && !raParam;
 
   return (
-    <div className="explore">
-      <Header>
-        <ExploreSearch fov={fovParam ?? field?.fov_arcmin ?? 6} />
-      </Header>
+    <div className={`explore${embed ? ' explore--embed' : ''}`}>
+      {!embed && (
+        <Header>
+          <ExploreSearch fov={fovParam ?? field?.fov_arcmin ?? 6} />
+        </Header>
+      )}
+      {embed && <a className="embed-link" href={window.location.pathname + window.location.search.replace(/[?&]embed=1/, '')} target="_blank" rel="noreferrer">Open in PARALLAX ↗</a>}
       {idle ? <ExploreIdle targets={targets} /> : (
         <ExploreWorkspace
           key={fieldId ?? 'pending'}
@@ -192,6 +196,16 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const [smooth, setSmooth] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [showCatalog, setShowCatalog] = useState(false);
+  const [showWise, setShowWise] = useState(false);
+  const [wise, setWise] = useState<{ ra: number; dec: number; mover: boolean; pm_arcsec_yr: number }[] | null>(null);
+  const [wiseError, setWiseError] = useState<string | null>(null);
+  useEffect(() => {
+    if (!showWise || wise || !field?.field_id) return;
+    let alive = true;
+    setWiseError(null);
+    api.fieldWise(field.field_id).then(d => { if (alive) setWise(d.sources); }).catch(e => { if (alive) { setWiseError((e as Error).message); setShowWise(false); } });
+    return () => { alive = false; };
+  }, [showWise, wise, field?.field_id]);
   const [fps, setFps] = useState(4);
   const [playing, setPlaying] = useState(false);
   const [index, setIndex] = useState(0);
@@ -435,8 +449,15 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       }
     }
     if (selected && !(m && m.track.length > 1 && invId === curatedInvId)) o.markers!.push({ ...selected, color: '#ffa269', shape: 'ring', size: 11, label: invId ? 'selected' : undefined });
+    if (showWise && wise) {
+      for (const w of wise) {
+        o.markers!.push(w.mover
+          ? { ra: w.ra, dec: w.dec, color: '#7f97ff', shape: 'diamond', size: 9, label: `WISE saw a mover here in 2015 (${w.pm_arcsec_yr.toFixed(1)}″/yr)` }
+          : { ra: w.ra, dec: w.dec, color: 'rgba(127,151,255,0.75)', shape: 'circle', size: 5 });
+      }
+    }
     return o;
-  }, [field, trackSource, showTrack, current?.mjd, composed, selected, invId, curatedInvId]);
+  }, [field, trackSource, showTrack, current?.mjd, composed, selected, invId, curatedInvId, showWise, wise]);
 
   const hint = targetHere && !invId && field?.kind === 'curated' ? { ...targetHere, text: `${target?.title} · click to measure` } : null;
 
@@ -655,6 +676,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
             <div className="checks">
               <label><input type="checkbox" checked={showTrack} onChange={e => setShowTrack(e.target.checked)} disabled={!trackSource?.motion} /> Fitted path (a model)</label>
               <label><input type="checkbox" checked={showCatalog} onChange={e => setShowCatalog(e.target.checked)} /> Known stars (Gaia)</label>
+              <label><input type="checkbox" checked={showWise} onChange={e => setShowWise(e.target.checked)} /> What WISE saw around 2015{showWise && !wise ? ' (loading…)' : ''}</label>
+              {wiseError && <span className="small" style={{ color: 'var(--bad)' }}>{wiseError}</span>}
               <label><input type="checkbox" checked={showGrid} onChange={e => setShowGrid(e.target.checked)} /> Coordinate grid</label>
               <label><input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} /> Smooth pixels</label>
               <label><input type="checkbox" checked={independent} onChange={e => setIndependent(e.target.checked)} /> Rescale every image on its own</label>
