@@ -156,19 +156,107 @@ Teegarden's Star was resolved by name through Sesame and propagated to 2026.0. I
 overlay, all in about 80 s. The star itself is saturated in 14 of 19 exposures. PARALLAX reports "saturated" instead of a
 motion. A second live query (RA 270.0, Dec −23.5, 3′) rendered 16 frames in the browser test.
 
-## 6. Test suite
+## 6. Blind search: the Planet X hunt
 
-- `pytest`: 45 tests, all passing. They cover coordinate parsing and sexagesimal input, RA wrap, tangent-plane round trips
-  across RA = 0, the parallax sign against astropy, the cos δ convention, motion fits on synthetic tracks, covariance inflation,
-  ePSF centroids and flux, neighbour deblending, saturated-core refusal, flag decoding, release dedupe, visit grouping,
-  evidence serialisation (null, not 0, for missing values), API contracts, invalid inputs, held-out isolation, and tamper refusal.
-- `npm test`: 12 frontend unit tests, all passing (coordinates, TAN grid orientation, float16 decoding, stretch, propagation,
-  wavelength matching, difference and stack).
+Full tables: [docs/HUNT_REPORT.md](docs/HUNT_REPORT.md), generated from the result files by `validation/hunt_report.py`.
+
+The search (`pipeline/hunt.py`) receives a field and its exposures and nothing else. It stacks each visit in three
+bands, detects every source, links detections across visits, measures every linked source in every exposure on native
+pixels, and applies the motion rule above (≥ 5σ and |μ|/σ_μ ≥ 5). A mover must then (a) move the same way below and
+above 2.42 µm, (b) keep its motion when the positions are refitted with a colour term, (c) survive dropping any one
+visit (after removing the fitted parallax), (d) not sit within 4 native pixels of a persistently saturated star, (e) not
+need a parallax above 800 mas, and (f) not have a motionless counterpart at its present position in Gaia DR3 (2016.0) or
+CatWISE2020 (about 2015). A visit counts for a source only if it was measured in at least 4 exposures. All of these were
+fixed in code before the final run; several were added after earlier runs exposed false alarms (RESULTS_LOG.md).
+
+| | |
+|---|---|
+| Fields | {{HUNT_FIELDS}} ({{HUNT_AREA}} square degrees): the 5 NASA target fields and J0415−0935, 15 recovery fields around known cold brown dwarfs, and 4 blank control fields |
+| SPHEREx exposures | {{HUNT_EXPOSURES}} |
+| Sources found / motion-tested | {{HUNT_SOURCES}} / {{HUNT_TESTED}} |
+| Known fast movers in the fields | {{HUNT_KNOWN}} |
+| Detected | {{HUNT_DETECTED}} |
+| **Found as movers, blind** | **{{HUNT_RECOVERED}}** |
+| Movers no catalogue explains | **{{HUNT_UNEXPLAINED}}** |
+| False alarms caught by the vetting | {{HUNT_SUSPECT}} |
+| Median single-visit 5σ depth at 3.8–5.0 µm | {{HUNT_DEPTH}} µJy |
+
+For the recovery fields the catalogue position was used only to choose the field (offset by a pseudo-random amount of
+up to 4′) and, after the search, to score it.
+
+Three false alarms found during development, all now caught, are recorded in RESULTS_LOG.md: a faint Gaia star at
+0.95″/yr, a G = 19.6 star at 1.39″/yr that passed every test until the decade check was added, and two halo artifacts
+beside the saturated RW Aurigae.
+
+### 6b. Blind injection test (SYNTHETIC: not real sources)
+
+Sixteen cold point sources (no flux below 3.8 µm) were added to the real exposures of the blank field `control-cosmos`
+(69 exposures, 3 visits) from each exposure's own ePSF. The blind search was run without being told where they are.
+
+| Injected speed | 150 µJy | 300 µJy | 600 µJy | 1200 µJy |
+|---|---|---|---|---|
+| not moving | too faint | still (correct) | still (correct) | still (correct) |
+| 1″/yr | too faint | seen, motion not proven | seen, motion not proven | found (1.14″/yr) |
+| 3″/yr | too faint | seen, motion not proven | found (2.55″/yr) | found (3.31″/yr) |
+| 8″/yr | seen, motion not proven | found (9.06″/yr) | found (8.46″/yr) | found (8.05″/yr) |
+
+6 of 12 moving injections were found, 0 of 4 stationary injections were called movers, and the search reported no
+other mover in that field. WISE 0855 (about 350 µJy in this band, 8.15″/yr) sits at the edge of this limit, which is
+consistent with it being found. A twin of WISE 0855 much farther away than WISE 0855 itself would not be confirmed with
+three visits.
+
+## 7. The saturated variable stars, from their halo (experimental)
+
+`pipeline/halo.py` measures the median surface brightness in an unsaturated ring around the star in every exposure and
+solves ln H = S(wavelength bin) + V(visit). Only wavelength bins observed in at least two visits constrain V. The same
+5σ and 5 % rule as section 0 applies.
+
+| Star | Ring (px) | Exposures used | Visit 2 / visit 1 | Visit 3 / visit 1 | Verdict |
+|---|---|---|---|---|---|
+| R Draconis (Mira variable) | 8–12 | 99 | 0.81 ± 0.04 (4.7σ) | **0.58 ± 0.03 (12.4σ)** | variable |
+| RW Aurigae (T Tauri) | 3–5 | 107 | 0.83 ± 0.05 (3.1σ) | **0.64 ± 0.04 (6.4σ)** | variable |
+| Barnard's Star (control: saturated, not a large-amplitude variable) | 5–8 | 61 | 1.04 ± 0.03 (1.5σ) | not available (sealed) | not variable |
+
+{{HALO_SENTENCE}}
+
+Caveats: the ring differs between stars; the method assumes the wing profile at a fixed wavelength does not change
+between visits; R Draconis's visits each span two to three months, during which a Mira changes, so "visit 1" is an
+average. The result is a brightness ratio, not a calibrated flux.
+
+## 8. Known solar-system objects
+
+For each of the five targets, IMCCE SkyBoT was queried at 8 observation times spread over the data (geocentric, 60″
+radius). No known asteroid or comet was within 60″ at any of them. Hypothesis H5 is "disfavoured" on that evidence.
+Asteroids are not something the hunt can find: they cross a stack in hours and are rejected as outliers by design.
+
+## 9. Forward predictions (open)
+
+`validation/forecast.py` fitted all current data and wrote monthly positions for Dec 2026 to Dec 2027, locked in commit
+`bbfd25f` (14 Nov 2026, 04:11:33 PT).
+
+| Target | Positions used | Newest archive exposure at lock | Predicted for 1 Apr 2027 (deg) | 1σ | SHA-256 |
+|---|---|---|---|---|---|
+| Epsilon Indi B | 434 | 2 Oct 2026 | 331.099349, −56.801591 | 0.02″, 0.03″ | `61320ba9…` |
+| 2MASS J0415−0935 | 240 | 20 Sep 2026 | 63.849105, −9.580958 | 0.07″, 0.07″ | `b35e4458…` |
+
+The pass rule is the held-out criterion of section 1. The Epsilon Indi B forecast ignores the binary's orbital motion,
+which is its main risk. WISE 0855 was not forecast because its SPHEREx motion is already 2–3σ from the catalogue value.
+Git times are self-reported until the commit is pushed.
+
+## 10. Test suite
+
+- `pytest`: 69 tests, all passing. The 45 earlier tests cover coordinates, motion fits, ePSF centroids, deblending,
+  saturation refusal, flags, de-duplication, evidence serialisation, the API contract and held-out isolation. The 24 new
+  tests cover the matched filter, outlier rejection in stacks, static and fast-mover linking, the colour-term and
+  leave-one-visit-out vetting, the Gaia and CatWISE decade checks (HTTP mocked), halo photometry on synthetic series,
+  the SkyBoT parser, the hunt API, and the rules for thin visits, parallax and saturated neighbours.
+- `npm test`: 12 frontend unit tests, all passing.
 
 ## Limitations
 
-- The validation set is small: five named targets plus one extra target, two held-out experiments, 33 measured controls and 16 synthetic scenarios.
-  It does not establish full-sky completeness or false-positive rates.
+- The validation set is small: five named targets plus one extra target, two held-out experiments, 33 measured controls, 16 targeted and
+  16 blind synthetic scenarios, and {{HUNT_FIELDS}} hunt fields. It does not establish full-sky completeness or false-positive rates.
+- The hunt's recovery fields were chosen because a known mover is there; they measure completeness, not a discovery rate.
 - The controls are moderately bright, isolated stars. Crowded fields, nebulosity and faint sources near the detection limit are under-represented.
 - Three of the five NASA targets saturate SPHEREx; the release ePSF cannot model their wings.
 - The Epsilon Indi B photocentre is a binary blend. Agreement with Gaia at the few-σ level is all that should be expected.
@@ -181,5 +269,8 @@ motion. A second live query (RA 270.0, Dec −23.5, 3′) rendered 16 frames in 
 ```sh
 .venv/bin/python -m validation.run          # benchmark + negative controls (~15 min on 8 cores)
 .venv/bin/python -m validation.inject       # synthetic injections (~5 min)
+.venv/bin/python -m validation.hunt_fields run all && .venv/bin/python -m validation.hunt_fields index   # the hunt (~1 h)
+.venv/bin/python -m validation.hunt_inject  # blind injections (~3 min)
+.venv/bin/python -m validation.halo_controls && .venv/bin/python -m validation.hunt_report
 .venv/bin/python -m pytest -q && npm --prefix web test
 ```

@@ -36,14 +36,14 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
   const pref = m?.models?.[m.reported_model ?? m.preferred_model];
   const obs = inv.observations;
   const tmpl = inv.spectrum?.templates;
-  const visits = useMemo(() => [...new Set(inv.detections.map(d => d.visit))], [inv.detections]);
+  const visits = useMemo(() => [...new Set((inv.detections ?? []).map(d => d.visit))], [inv.detections]);
   const haloOk = !!inv.halo_variability && (inv.halo_variability.status === 'variable' || inv.halo_variability.status === 'not_detected');
 
   if (inv.status === 'processing') {
     return (
       <div className="inv inv--processing" aria-busy="true">
         <p className="eyebrow">Measuring</p>
-        <h2>{inv.title}</h2>
+        <h2>{inv.title ?? 'This source'}</h2>
         <p className="muted">{inv.message ?? 'Measuring this source in every image…'}</p>
         {inv.progress && <Progress {...inv.progress} />}
       </div>
@@ -75,7 +75,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
         </section>
       )}
 
-      {inv.spectrum?.wing_attempt && (
+      {inv.spectrum?.wing_attempt && inv.spectrum.status !== 'measured' && (
         <details className="more">
           <summary>Why the usual measurement fails on this star</summary>
           <p className="small">{inv.spectrum.wing_attempt.summary} <span className="dim">(Rule set in advance: {inv.spectrum.wing_attempt.acceptance}.)</span></p>

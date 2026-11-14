@@ -817,3 +817,17 @@ details.more[open] > summary { margin-bottom: 14px; }
 .deck__nav { position: fixed; right: clamp(20px, 4vw, 56px); bottom: 26px; z-index: 5; display: flex; gap: 8px; }
 .deck__nav .icon { width: 44px; height: 44px; background: rgba(4, 6, 11, 0.7); }
 @media print { .deck__nav, .deck__home { display: none; } }
+
+/* ---------- hunt: injection grid ---------- */
+.igrid { display: grid; grid-template-columns: minmax(96px, 0.8fr) repeat(4, minmax(0, 1fr)); gap: 6px; max-width: 860px; }
+.igrid__row { display: contents; }
+.igrid__h, .igrid__corner { padding: 10px 8px; color: var(--muted); align-self: center; }
+.igrid__cell { padding: 12px 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2); display: grid; gap: 2px; font-size: 0.88rem; color: var(--muted); }
+.igrid__cell strong { font-weight: 600; color: var(--ink-2); }
+.igrid__cell--recovered { border-color: rgba(255, 180, 84, 0.55); background: rgba(255, 180, 84, 0.09); }
+.igrid__cell--recovered strong { color: var(--accent); }
+.igrid__cell--correctly_still { border-color: #1f4c3e; background: #0b1c17; }
+.igrid__cell--correctly_still strong { color: var(--ok); }
+.igrid__cell--false_alarm, .igrid__cell--wrong_speed { border-color: #55302b; background: #1d0f0d; }
+.igrid__cell--false_alarm strong, .igrid__cell--wrong_speed strong { color: var(--bad); }
+@media (max-width: 700px) { .igrid { grid-template-columns: 70px repeat(4, minmax(0, 1fr)); gap: 3px; } .igrid__cell { padding: 8px 6px; font-size: 0.74rem; } }

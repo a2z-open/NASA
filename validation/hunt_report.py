@@ -25,6 +25,7 @@ FLAG = {
     'motion_explained_by_colour': 'shift explained by colour, not motion',
     'depends_on_one_visit': 'motion depends on a single visit',
     'negative_parallax': 'negative parallax',
+    'unphysical_parallax': 'impossible parallax (closer than the nearest star)',
     'disagrees_with_gaia': 'Gaia measured a different motion',
     'gaia_2016_shows_it_here': 'Gaia saw a star at this spot in 2016',
     'wise_2015_shows_it_here': 'WISE saw a source at this spot around 2015',
@@ -178,6 +179,35 @@ def main():
           f"**{cs['n_flagged_variable']} were flagged variable.** "
           + (f"Their median change was {cs['median_abs_change'] * 100:.1f}% and the largest {cs['max_abs_change'] * 100:.1f}%." if cs['median_abs_change'] is not None else ''))
         w("Barnard's Star, itself saturated and not a large-amplitude variable, is the third row of the table above.")
+        w('')
+    ip = ROOT / 'validation' / 'hunt_injection.json'
+    if ip.is_file():
+        inj = json.loads(ip.read_text())
+        w('## How faint and how slow: blind injection test (SYNTHETIC, not real sources)')
+        w('')
+        w(inj['description'])
+        w(f"Field `{inj['field']}`: {inj['n_exposures']} exposures over {inj['n_visits']} visits, baseline {inj['baseline_days']:.0f} days.")
+        w('')
+        label = {'recovered': 'found', 'seen_not_moving': 'seen, motion not proven', 'not_detected': 'too faint', 'correctly_still': 'still (correct)',
+                 'false_alarm': '**FALSE ALARM**', 'wrong_speed': 'found, wrong speed'}
+        w('| Injected speed | ' + ' | '.join(f'{f:.0f} µJy' for f in inj['fluxes_ujy']) + ' |')
+        w('|---|' + '---|' * len(inj['fluxes_ujy']))
+        for v in inj['speeds_arcsec_yr']:
+            cells = []
+            for f in inj['fluxes_ujy']:
+                r = next((x for x in inj['results'] if x['speed_arcsec_yr'] == v and x['flux_ujy'] == f), None)
+                t_ = label.get(r['outcome'], r['outcome']) if r else 'not run'
+                if r and r['outcome'] == 'recovered':
+                    t_ += f" ({r['measured_pm_arcsec_yr']:.2f}″/yr)"
+                cells.append(t_)
+            w(f"| {'not moving' if v == 0 else f'{v:.0f}″/yr'} | " + ' | '.join(cells) + ' |')
+        nrec = sum(1 for x in inj['results'] if x['outcome'] == 'recovered')
+        nmov = sum(1 for x in inj['results'] if x['speed_arcsec_yr'] > 0)
+        nfa = sum(1 for x in inj['results'] if x['outcome'] == 'false_alarm')
+        w('')
+        w(f"{nrec} of {nmov} moving injections were found; {nfa} of {len(inj['results']) - nmov} stationary injections were called movers; "
+          f"besides the injections the search reported {inj['other_movers_reported']} movers in this field. "
+          'For scale, WISE 0855 measures about 350 µJy in this band and moves 8″/yr.')
         w('')
     w('## Limits')
     w('')

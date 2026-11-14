@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, type HuntMover } from '../api.ts';
+import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, type HuntInjection, type HuntMover } from '../api.ts';
 import { Page } from '../components/Shell.tsx';
 import { paint } from '../components/FieldImage.tsx';
 import { Link } from '../router.tsx';
@@ -16,10 +16,16 @@ const FLAG_TEXT: Record<string, string> = {
   motion_explained_by_colour: 'the shift is explained by colour, not motion',
   depends_on_one_visit: 'the motion depends on a single visit',
   negative_parallax: 'the fit needs an impossible (negative) parallax',
+  unphysical_parallax: 'the fit needs an impossible parallax, closer than the nearest star',
   disagrees_with_gaia: 'Gaia measured a different motion for this star',
   gaia_2016_shows_it_here: 'Gaia saw a star at this exact spot in 2016, so it has not moved',
   wise_2015_shows_it_here: 'WISE saw a source at this exact spot around 2015, so it has not moved',
   two_visits_only: 'it was seen in only two visits',
+};
+
+const INJ_LABEL: Record<string, string> = {
+  recovered: 'Found', seen_not_moving: 'Seen, motion not proven', not_detected: 'Too faint', correctly_still: 'Still (correct)',
+  false_alarm: 'False alarm', wrong_speed: 'Found, wrong speed',
 };
 
 function speed(m: HuntMover): number | null {
@@ -186,7 +192,8 @@ function FieldRow({ f }: { f: HuntFieldRow }) {
 export function Hunt() {
   const [idx, setIdx] = useState<HuntIndex | null>(null);
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => { huntApi.index().then(setIdx).catch(e => setError((e as Error).message)); }, []);
+  const [inj, setInj] = useState<HuntInjection | null>(null);
+  useEffect(() => { huntApi.index().then(setIdx).catch(e => setError((e as Error).message)); huntApi.injection().then(setInj).catch(() => undefined); }, []);
 
   const groups = useMemo(() => {
     const f = idx?.fields ?? [];
@@ -220,7 +227,7 @@ export function Hunt() {
             {idx.unexplained.length === 0
               ? <><strong>No new world yet.</strong> Everything the search flagged as moving turned out to be a known star or brown dwarf, and {rejected} false alarm{rejected === 1 ? ' was' : 's were'} caught and rejected by the checks. For this much sky that is the expected result, and it shows the search does not invent discoveries.</>
               : <><strong>{idx.unexplained.length} mover{idx.unexplained.length > 1 ? 's are' : ' is'} not explained by any catalogue we checked.</strong> These are candidates, not discoveries. Each needs a second look before anyone should believe it.</>}
-            {reach && <> In a single visit the search sees down to about {Math.round(reach.median_depth_ujy)} µJy at 4–5 µm, enough to find a twin of WISE 0855 (the coldest known brown dwarf) out to about {Math.round(reach.reach_ly)} light-years.</>}
+            {reach && <> In a single visit the search sees down to about {Math.round(reach.median_depth_ujy)} µJy at 4–5 µm, enough to glimpse a twin of WISE 0855 (the coldest known brown dwarf) out to about {Math.round(reach.reach_ly)} light-years. Proving that it moves takes more: see the limits below.</>}
           </p>
 
           {idx.unexplained.length > 0 && (
@@ -252,6 +259,33 @@ export function Hunt() {
             <p className="test-p">Blank, well-studied fields, plus fields around stars too bright to measure. A mover here would be a false alarm.</p>
             <div className="hlist">{groups.control.map(f => <FieldRow key={f.field_id} f={f} />)}</div>
           </section>
+
+          {inj && (
+            <section className="band2">
+              <h2 className="test-h"><span>Limits · synthetic test</span>How faint and how slow can it go?</h2>
+              <p className="test-p">We hid sixteen fake cold sources in the real images of a blank field, then ran the search without telling it. These are not real objects.</p>
+              <div className="igrid" role="table" aria-label="Which hidden test sources the blind search found">
+                <div className="igrid__corner small dim" role="columnheader">speed ↓ · brightness →</div>
+                {inj.fluxes_ujy.map(f => <div key={f} className="igrid__h mono small" role="columnheader">{f} µJy</div>)}
+                {inj.speeds_arcsec_yr.map(v => (
+                  <div key={v} className="igrid__row" role="row">
+                    <div className="igrid__h mono small" role="rowheader">{v === 0 ? 'not moving' : `${v}″ a year`}</div>
+                    {inj.fluxes_ujy.map(f => {
+                      const r = inj.results.find(x => x.speed_arcsec_yr === v && x.flux_ujy === f);
+                      const o = r?.outcome ?? 'not_run';
+                      return (
+                        <div key={f} className={`igrid__cell igrid__cell--${o}`} role="cell">
+                          <strong>{INJ_LABEL[o] ?? o}</strong>
+                          {r?.measured_pm_arcsec_yr != null && o === 'recovered' && <span className="mono small">{r.measured_pm_arcsec_yr.toFixed(1)}″ a year</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+              <p className="small dim" style={{ marginTop: 12 }}>{inj.n_exposures} real images over {inj.n_visits} visits. Fake sources shine only above 3.8 µm, like WISE 0855 (about 350 µJy, 8″ a year). Besides the fakes, the search reported {inj.other_movers_reported} movers in this field.</p>
+            </section>
+          )}
 
           <section className="band2 plain">
             <details className="more">

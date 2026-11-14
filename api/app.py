@@ -695,6 +695,14 @@ def hunt_index():
     return read_json(p)
 
 
+@app.get('/api/hunt-injection')
+def hunt_injection():
+    p = ROOT / 'validation' / 'hunt_injection.json'
+    if not p.exists():
+        raise HTTPException(404, 'The blind injection test has not been run yet (python -m validation.hunt_inject).')
+    return read_json(p)
+
+
 @app.get('/api/hunt/{field_id}')
 def hunt_field(field_id: str):
     p = HUNT / field_id / 'hunt.json'

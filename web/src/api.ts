@@ -400,7 +400,13 @@ export interface Forecast {
   criterion: string; sha256: string | null; commit: { hash: string; time: string } | null;
   predictions: { date_utc: string; ra_deg: number; dec_deg: number; sigma_ra_arcsec: number; sigma_dec_arcsec: number; offset_from_stays_here_arcsec: number }[];
 }
+export interface HuntInjection {
+  label: string; description: string; field: string; n_exposures: number; n_visits: number; baseline_days: number;
+  speeds_arcsec_yr: number[]; fluxes_ujy: number[]; other_movers_reported: number;
+  results: { speed_arcsec_yr: number; flux_ujy: number; outcome: string; measured_pm_arcsec_yr: number | null; n_native_positions: number | null }[];
+}
 export const huntApi = {
+  injection: () => request<HuntInjection>('/api/hunt-injection'),
   forecasts: () => request<{ forecasts: Forecast[] }>('/api/forecasts'),
   index: () => request<HuntIndex>('/api/hunt'),
   halo: () => request<HaloResults>('/api/halo'),

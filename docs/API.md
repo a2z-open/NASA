@@ -165,6 +165,12 @@ interface LabExperiment {
 | GET | `/api/hunt/{field_id}` | One field: `grid`, `visits`, `stacks` (per visit and band, with `data_url`), every `sources[]` entry (class, flags, motion, `robust`, `chromatic`, `external` catalogue checks, `track`), `truth` (catalogue comparison made after the search), and every exposure used with its SHA-256. |
 | GET | `/files/hunt/{field_id}/frames/{visit}-{band}.bin` | A stack as little-endian float32, row 0 = north, `grid.nx` × `grid.ny`. |
 | GET | `/api/halo` | Halo-brightness results for the saturated targets and the control stars (`validation/halo_results.json`). |
+| GET | `/api/hunt-injection` | The blind injection test (SYNTHETIC sources hidden in a blank field): the 4 × 4 grid of outcomes. |
+| GET | `/api/forecasts` | Forward predictions for dates SPHEREx has not observed yet, each with its SHA-256 and the commit that first added it. |
+| GET | `/api/fields/{field_id}/wise` | CatWISE2020 sources in a field (positions near 2015), for the viewer overlay. `mover` marks sources WISE itself saw moving. 503 if IRSA cannot be reached. |
+
+Viewer links: `/explore?ra=<deg>&dec=<deg>&fov=<arcmin>` opens any position; `&embed=1` hides the header and controls
+so the viewer can sit in an `<iframe>` on another site. `/deck` is a seven-slide presentation that reads these endpoints live.
 
 Source classes: `candidate` (passes every test, not matched to truth), `stack_candidate` and `two_visit_candidate`
 (weaker tiers), `known_mover` (Gaia shows the same motion), `suspect` (failed a vetting test; `flags` says which),

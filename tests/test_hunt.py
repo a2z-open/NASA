@@ -299,3 +299,62 @@ def test_hunt_api_rejects_unknown_fields():
     assert c.get('/api/hunt/does-not-exist').status_code == 404
     assert c.get('/files/hunt/does-not-exist/frames/x.bin').status_code == 404
     assert c.get('/files/hunt/..%2F..%2Fetc/frames/passwd.bin').status_code == 404
+
+
+# ---------------------------------------------------------------------------
+# Rules added after the first full run (see RESULTS_LOG.md, 04:30)
+# ---------------------------------------------------------------------------
+
+def _nearby_rows(pmra=1000.0, pmdec=-300.0, plx=200.0, n_per=(30, 30, 30), sigma=0.25, seed=9, offset_last=0.0):
+    from pipeline.astrometry import propagate
+    rng = np.random.default_rng(seed)
+    spans = [(60800, 60815), (60980, 60995), (61160, 61175)]
+    rows = []
+    for k, (a, b) in enumerate(spans):
+        for i in range(n_per[k]):
+            t = float(rng.uniform(a, b))
+            p = propagate(150.0, -20.0, 60990.0, pmra, pmdec, plx, [t])
+            dra = rng.normal(0, sigma) + (offset_last if k == 2 else 0.0)
+            rows.append({'status': 'measured', 'product_id': f'v{k}e{i}', 'mjd': t, 'centroid': {'ok': True, 'snr': 20.0},
+                         'position': {'ra': float(p.ra[0]) + dra / 3600 / math.cos(math.radians(-20.0)),
+                                      'dec': float(p.dec[0]) + rng.normal(0, sigma) / 3600, 'sigma_arcsec': sigma},
+                         'wavelength_um': float(rng.uniform(3.9, 4.9)), 'flags': []})
+    visits = [{'id': f'visit-{k + 1}', 'mjd_start': a, 'mjd_end': b} for k, (a, b) in enumerate(spans)]
+    return rows, visits
+
+
+def test_a_nearby_mover_with_parallax_survives_leave_one_visit_out():
+    # 1.04 arcsec/yr with a 0.2 arcsec parallax: the parallax loop is comparable to half a year of motion.
+    rows, visits = _nearby_rows()
+    rb = hunt.robust_motion(rows, visits, parallax_mas=200.0)
+    assert rb['tested'] and rb['jackknife_stable'] is True
+    assert abs(rb['pm_arcsec_yr'] - math.hypot(1.0, 0.3)) < 0.15
+
+
+def _object():
+    return {'knots_t': [60807.0, 60987.0, 61167.0], 'knots_x': [40.0, 40.0, 40.0], 'knots_y': [40.0, 40.0, 40.0], 'vx': 0.0, 'vy': 0.0,
+            'linked_orphans': False, 'intermittent': False, 'best_band': 'cold', 'best_snr': 20.0, 'det_snr': {'short': 0, 'mid': 0, 'cold': 20.0},
+            'forced_snr': {'short': -9, 'mid': -9, 'cold': 20.0}, 'flux_ujy': {'cold': 500.0}, 'visits_detected': [0, 1, 2],
+            'missing_visits': [], 'knot_sigma': [0.3, 0.3, 0.3], 'near_saturation': False}
+
+
+def test_a_visit_with_two_positions_cannot_create_a_mover():
+    from pipeline.frames import display_wcs
+    # a motionless source, but the third visit has only two positions and they are 3 arcsec off
+    rows, visits = _nearby_rows(pmra=0.0, pmdec=0.0, plx=0.0, n_per=(30, 30, 2), offset_last=3.0)
+    gw, n = display_wcs(150.0, -20.0, 5.0, hunt.GRID_ARCSEC)
+    doc, _ = hunt.classify(_object(), rows, visits, [], gw, n, 60990.0)
+    assert doc['visits_too_thin'] == ['visit-3']
+    assert doc['class'] == 'static'
+
+
+def test_near_saturation_blocks_a_candidate():
+    from pipeline.frames import display_wcs
+    rows, visits = _nearby_rows(pmra=3000.0, pmdec=0.0, plx=0.0)
+    gw, n = display_wcs(150.0, -20.0, 5.0, hunt.GRID_ARCSEC)
+    clean, _ = hunt.classify(_object(), rows, visits, [], gw, n, 60990.0)
+    assert clean['class'] == 'candidate'
+    o = _object()
+    o['near_saturation'] = True
+    doc, _ = hunt.classify(o, rows, visits, [], gw, n, 60990.0)
+    assert doc['class'] == 'suspect' and 'near_saturated_star' in doc['flags']

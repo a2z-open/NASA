@@ -24,6 +24,7 @@ from datetime import datetime, timezone
 import json
 import math
 from pathlib import Path
+import pickle
 import sys
 import time
 import warnings
@@ -31,9 +32,10 @@ import warnings
 import numpy as np
 from scipy.ndimage import binary_dilation, correlate, maximum_filter, map_coordinates, median_filter
 
-from .analysis import MOTION_PM_SNR, MOTION_SIGMA, analyse_motion
+from .analysis import MOTION_PM_SNR, MOTION_SIGMA, analyse_motion, visit_of
 from .astrometry import JULIAN_YEAR_DAYS, mjd_to_iso
 from .frames import display_wcs
+from .investigate import usable_positions
 from .measure import GAIA_EPOCH_MJD, gaia_field, gaia_positions, measure_position, reference_candidates, register
 from .motion import fit_motion
 from .spherex import CACHE, ROOT, SR_PER_ARCSEC2, flag_mask, load_observation
@@ -55,10 +57,12 @@ EXPECT_SNR = 6.0          # an absence only counts if the source should have rea
 MIN_COVER = 3             # exposures per stack pixel
 CANDIDATE_PM_MIN = 0.2    # arcsec / yr: slower drifts are reported but not listed as candidates
 CHROMATIC_SIGMA = 4.0
+MIN_PER_VISIT = 4         # a visit counts for a source only if it was measured in at least this many exposures
+MAX_PARALLAX_MAS = 800.0  # the nearest star has 768 mas; anything larger is a fit gone wrong
 MAX_MODEL_CHI2R = 4.0
 BRIGHT_STAR = [(7.0, 90.0), (9.5, 45.0), (11.5, 25.0)]   # (Gaia G limit, exclusion radius in arcsec)
 SAT_GROW = 4              # native pixels (about 25 arcsec) around any saturated pixel
-BLOCKING_FLAGS = ('colour_dependent_motion', 'poor_model_fit', 'near_bright_star', 'near_saturated_star', 'near_edge',
+BLOCKING_FLAGS = ('colour_dependent_motion', 'poor_model_fit', 'near_bright_star', 'near_saturated_star', 'near_edge', 'unphysical_parallax',
                   'motion_explained_by_colour', 'depends_on_one_visit', 'negative_parallax')
 
 HUNT_DATA = ROOT / 'data' / 'hunt'
@@ -76,12 +80,38 @@ def _mad(v):
     return float(1.4826 * np.median(np.abs(v - np.median(v))))
 
 
+def inject_sources(obs, injections):
+    """SYNTHETIC test sources (never real): moving point sources built from this exposure's own ePSF.
+
+    Used only by validation/hunt_inject.py to measure what the blind search can and cannot find.
+    Each injection: ra, dec (deg) at t0 (MJD), pmra, pmdec (arcsec/yr), flux_ujy, and optional min_um
+    (no flux below that wavelength, to imitate a cold object).
+    """
+    from .measure import epsf_values
+    ny, nx = obs.shape
+    for inj in injections or ():
+        dt = (obs.mjd - inj['t0']) / JULIAN_YEAR_DAYS
+        dec = inj['dec'] + inj['pmdec'] * dt / 3600
+        ra = inj['ra'] + inj['pmra'] * dt / 3600 / math.cos(math.radians(inj['dec']))
+        x, y = (float(v) for v in obs.wcs.world_to_pixel_values(ra, dec))
+        if not (7 <= x < nx - 7 and 7 <= y < ny - 7):
+            continue
+        lam, _ = obs.wavelength_at(x, y)
+        if not math.isfinite(lam) or lam < inj.get('min_um', 0.0):
+            continue
+        zone = obs.epsf_at(x, y)
+        yy, xx = np.mgrid[int(y) - 5:int(y) + 6, int(x) - 5:int(x) + 6]
+        obs.image[yy, xx] += (inj['flux_ujy'] / obs.ujy_per_unit) * epsf_values(zone, xx - x, yy - y)
+
+
 def _stack_one(args):
-    path, ra0, dec0, fov, refs, nz = args
+    path, ra0, dec0, fov, refs, nz = args[:6]
+    injections = args[6] if len(args) > 6 else None
     try:
         obs = load_observation(path, keep_epsf_zones=nz)
     except Exception as error:  # noqa: BLE001
         return {'path': str(path), 'error': str(error)[:200]}
+    inject_sources(obs, injections)
     mask = obs.hard_mask(strict=False)        # OUTLIER / TRANSIENT are NOT masked: they can be set on movers
     if (~mask).sum() < 400:
         return {'path': str(path), 'error': 'mostly masked'}
@@ -205,8 +235,8 @@ def group_visits(mjds, gap=VISIT_GAP_DAYS):
     return visits
 
 
-def build_stacks(files, ra0, dec0, fov, refs, *, workers=8, nz=4, log=print):
-    jobs = [(str(f), ra0, dec0, fov, refs, nz) for f in files]
+def build_stacks(files, ra0, dec0, fov, refs, *, workers=8, nz=4, log=print, injections=None):
+    jobs = [(str(f), ra0, dec0, fov, refs, nz, injections) for f in files]
     with ProcessPoolExecutor(max_workers=workers) as ex:
         res = list(ex.map(_stack_one, jobs, chunksize=4))
     items = [r for r in res if 'error' not in r]
@@ -429,11 +459,13 @@ def object_xy(o, mjd):
 # ---------------------------------------------------------------------------
 
 def _astrometry_one(args):
-    path, ra0, dec0, fov, refs, nz, objs = args
+    path, ra0, dec0, fov, refs, nz, objs = args[:7]
+    injections = args[7] if len(args) > 7 else None
     try:
         obs = load_observation(path, keep_epsf_zones=nz)
     except Exception as error:  # noqa: BLE001
         return {'path': str(path), 'error': str(error)[:200]}
+    inject_sources(obs, injections)
     reg, _ = register(obs, refs)
     dx, dy = (reg.dx, reg.dy) if reg.ok else (0.0, 0.0)
     gw, _ = display_wcs(ra0, dec0, fov, GRID_ARCSEC)
@@ -459,9 +491,9 @@ def _astrometry_one(args):
             'reg_ok': bool(reg.ok)}
 
 
-def native_astrometry(files, ra0, dec0, fov, refs, objs, *, workers=8, nz=4):
+def native_astrometry(files, ra0, dec0, fov, refs, objs, *, workers=8, nz=4, injections=None):
     slim = [{k: o[k] for k in ('knots_t', 'knots_x', 'knots_y', 'vx', 'vy', 'linked_orphans')} for o in objs]
-    jobs = [(str(f), ra0, dec0, fov, refs, nz, slim) for f in files]
+    jobs = [(str(f), ra0, dec0, fov, refs, nz, slim, injections) for f in files]
     per_obj = [[] for _ in objs]
     band_of = {d: b for b, dets in BANDS.items() for d in dets}
     # A source is only centroided in bands where its stack was detected.  Otherwise a free centroid on a
@@ -515,13 +547,17 @@ def chromatic_check(usable):
             'consistent': bool(math.hypot(dra, ddec) < CHROMATIC_SIGMA)}
 
 
-def robust_motion(usable, visits_doc):
+def robust_motion(usable, visits_doc, parallax_mas=0.0):
     """Two independent checks on a claimed motion.
 
     (a) Refit linear motion with a chromatic term per axis (position = a + mu*t + c*(lambda - median)).
         A blend of two sources with different colours shifts its photocentre with wavelength; if the
         wavelength mix differs between visits that shift imitates motion.  The chromatic term absorbs it.
     (b) Leave one visit out: a real mover keeps its direction and speed whichever visit is dropped.
+
+    Both tests fit straight-line motion.  For a nearby object the yearly parallax loop is comparable to the motion
+    between two visits, so the fitted parallax (if any) is removed from the positions first.  Otherwise real
+    neighbours of the Sun, exactly what this search is for, fail the leave-one-visit-out test.
     """
     from .analysis import visit_of
     from .astrometry import to_tangent
@@ -533,7 +569,13 @@ def robust_motion(usable, visits_doc):
     lam = np.where(np.isfinite(lam), lam, np.nanmedian(lam) if np.isfinite(lam).any() else 0.0)
     vis = np.array([visit_of(m, visits_doc) for m in mjd])
     w = 1 / sig ** 2
-    xi, eta = to_tangent(ra, dec, float(np.average(ra, weights=w)), float(np.average(dec, weights=w)))
+    ra_ref, dec_ref = float(np.average(ra, weights=w)), float(np.average(dec, weights=w))
+    xi, eta = to_tangent(ra, dec, ra_ref, dec_ref)
+    if parallax_mas:
+        from .astrometry import parallax_factors
+        pa, pd = parallax_factors(ra_ref, dec_ref, mjd)
+        xi = xi - parallax_mas / 1000 * pa
+        eta = eta - parallax_mas / 1000 * pd
     t = (mjd - mjd.mean()) / JULIAN_YEAR_DAYS
     lc = lam - np.median(lam)
 
@@ -556,7 +598,7 @@ def robust_motion(usable, visits_doc):
     pm = math.hypot(full[0], full[1])
     out = {'tested': True, 'pm_arcsec_yr': round(pm, 4), 'pm_err_arcsec_yr': round(full[2], 4),
            'pm_over_error': round(pm / full[2], 2) if full[2] > 0 else None, 'chi2_reduced': round(full[3], 2),
-           'n_visits': int(len(set(vis))), 'jackknife': [], 'jackknife_stable': None}
+           'n_visits': int(len(set(vis))), 'jackknife': [], 'jackknife_stable': None, 'parallax_removed_mas': float(parallax_mas or 0.0)}
     names = sorted(set(vis))
     if len(names) >= 3:
         stable = True
@@ -600,6 +642,12 @@ def stack_motion(o):
 
 
 def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
+    # A visit with only one to three usable positions has too much leverage on a motion fit: drop it for this source.
+    per_visit = {}
+    for r in usable_positions(rows):
+        per_visit.setdefault(visit_of(r['mjd'], visits_doc), []).append(r)
+    thin = sorted(v for v, rr in per_visit.items() if len(rr) < MIN_PER_VISIT)
+    rows = [r for r in rows if visit_of(r['mjd'], visits_doc) not in thin]
     motion, usable = analyse_motion(rows, visits_doc)
     x, y = object_xy(o, epoch_mjd)
     ra, dec = (float(v) for v in grid_wcs.pixel_to_world_values(x, y))
@@ -611,7 +659,7 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
            'missing_visits': [f'visit-{k + 1}' for k in o['missing_visits']],
            'linked_orphans': o['linked_orphans'], 'intermittent': o['intermittent'],
            'n_native_positions': len(usable), 'n_native_visits': motion.get('n_visits') if motion.get('models') else 0,
-           'motion_status': motion['status'], 'flags': []}
+           'motion_status': motion['status'], 'flags': [], 'visits_too_thin': thin}
     doc['cold_only'] = bool(o['det_snr'].get('cold', 0) >= SEED_SNR and not o['det_snr'].get('short'))
     if motion.get('models'):
         m = motion['models'][motion['reported_model']]
@@ -630,7 +678,11 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
                 doc['flags'].append('colour_dependent_motion')
             if (m.get('chi2_reduced') or 0) > MAX_MODEL_CHI2R:
                 doc['flags'].append('poor_model_fit')
-            rb = robust_motion(usable, visits_doc)
+            plx = m.get('parallax_mas')
+            unphysical = plx is not None and (abs(plx) > MAX_PARALLAX_MAS or ((m.get('parallax_err_mas') or 0) > 0 and plx < -3 * m['parallax_err_mas']))
+            if plx is not None and abs(plx) > MAX_PARALLAX_MAS:
+                doc['flags'].append('unphysical_parallax')
+            rb = robust_motion(usable, visits_doc, parallax_mas=0.0 if (plx is None or unphysical) else plx)
             doc['robust'] = rb
             if rb.get('tested'):
                 if (rb['pm_over_error'] or 0) < MOTION_PM_SNR:
@@ -833,28 +885,8 @@ def apply_external(doc, ext):
 # Driver
 # ---------------------------------------------------------------------------
 
-def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None, gaia=None, out_dir=None, log=print,
-              kind='hunt', notes=None, max_objects=900, external=True):
-    t_start = time.time()
-    files = sorted(str(f) for f in files)
-    nz = 4 if fov <= 12 else 16
-    if gaia is None:
-        gaia = gaia_field(ra0, dec0, fov / 60 * 0.75, cache=HUNT_CACHE / name / 'gaia_field.json')
-    refs = reference_candidates(gaia)
-    log(f'[{name}] {len(files)} exposures, {len(gaia)} Gaia stars ({len(refs)} usable references)')
-    items, visits, errors = build_stacks(files, ra0, dec0, fov, refs, workers=workers, nz=nz, log=log)
-    per_visit = [detect_visit(v, k) for k, v in enumerate(visits)]
-    objs = link(visits, per_visit)
-    n_linked = len(objs)
-    if len(objs) > max_objects:      # crowded field: keep every orphan chain, then the brightest
-        objs.sort(key=lambda o: (not o['linked_orphans'], -o['best_snr']))
-        objs = objs[:max_objects]
-    log(f'[{name}] stage 1-2: {sum(len(p) for p in per_visit)} stack detections -> {len(objs)} sources to test '
-        f'({sum(o["linked_orphans"] for o in objs)} linked-orphan chains) in {time.time() - t_start:.0f}s')
-    rows = native_astrometry(files, ra0, dec0, fov, refs, objs, workers=workers, nz=nz) if objs else []
-    visits_doc = [{'id': v['id'], 'mjd_start': v['mjd_start'], 'mjd_end': v['mjd_end']} for v in visits]
-    gw, n = display_wcs(ra0, dec0, fov, GRID_ARCSEC)
-    epoch = float(np.median([i['mjd'] for i in items]))
+def score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, *, external=True, truth=None, injections=None):
+    """Stages 4-5: motion test, vetting, catalogue checks and scoring against truth, from the stage-3 measurements."""
     sources = []
     for k, o in enumerate(objs):
         doc, motion = classify(o, rows[k], visits_doc, gaia, gw, n, epoch)
@@ -869,6 +901,37 @@ def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None,
         for s_ in sources:
             if s_['class'] in ('candidate', 'two_visit_candidate', 'stack_candidate'):
                 apply_external(s_, external_checks(s_, epoch))
+
+    # --- SYNTHETIC injections: which were found? ---
+    inj_doc = None
+    if injections:
+        inj_doc = []
+        movers = ('candidate', 'known_mover', 'stack_candidate', 'two_visit_candidate')
+        for k, inj in enumerate(injections):
+            dt = (epoch - inj['t0']) / JULIAN_YEAR_DAYS
+            idec = inj['dec'] + inj['pmdec'] * dt / 3600
+            ira = inj['ra'] + inj['pmra'] * dt / 3600 / math.cos(math.radians(inj['dec']))
+            speed = math.hypot(inj['pmra'], inj['pmdec'])
+            best, bsep = None, 1e9
+            for s_ in sources:
+                sep = math.hypot((s_['ra'] - ira) * math.cos(math.radians(idec)), s_['dec'] - idec) * 3600
+                if sep < bsep:
+                    best, bsep = s_, sep
+            hit = best is not None and bsep <= max(6.0, 0.6 * speed)
+            pm_meas = None
+            if hit:
+                pm_meas = best.get('pm_arcsec_yr') if best['class'] != 'stack_candidate' else best['stack_motion']['pm_arcsec_yr']
+                best['injected'] = k
+            is_mover = bool(hit and best['class'] in movers)
+            if speed == 0:
+                outcome = 'false_alarm' if is_mover else ('correctly_still' if hit else 'not_detected')
+            else:
+                good = bool(is_mover and pm_meas is not None and abs(pm_meas - speed) <= max(0.5, 0.35 * speed))
+                outcome = 'recovered' if good else ('wrong_speed' if is_mover else ('seen_not_moving' if hit else 'not_detected'))
+            inj_doc.append({'index': k, 'speed_arcsec_yr': speed, 'flux_ujy': inj['flux_ujy'], 'min_um': inj.get('min_um', 0.0),
+                            'detected': bool(hit), 'class': best['class'] if hit else None, 'flags': best.get('flags') if hit else None,
+                            'measured_pm_arcsec_yr': pm_meas, 'n_native_positions': best.get('n_native_positions') if hit else None,
+                            'stack_snr': best.get('stack_snr') if hit else None, 'outcome': outcome})
 
     # --- truth comparison for validation fields (never used by the search itself) ---
     truth_doc = None
@@ -909,6 +972,37 @@ def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None,
     for s in sources:
         counts[s['class']] = counts.get(s['class'], 0) + 1
     tested = [s for s in sources if s['motion_status'] != 'insufficient']
+    return sources, truth_doc, inj_doc, counts, tested
+
+
+def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None, gaia=None, out_dir=None, log=print,
+              kind='hunt', notes=None, max_objects=900, external=True, injections=None):
+    t_start = time.time()
+    files = sorted(str(f) for f in files)
+    nz = 4 if fov <= 12 else 16
+    if gaia is None:
+        gaia = gaia_field(ra0, dec0, fov / 60 * 0.75, cache=HUNT_CACHE / name / 'gaia_field.json')
+    refs = reference_candidates(gaia)
+    log(f'[{name}] {len(files)} exposures, {len(gaia)} Gaia stars ({len(refs)} usable references)')
+    items, visits, errors = build_stacks(files, ra0, dec0, fov, refs, workers=workers, nz=nz, log=log, injections=injections)
+    per_visit = [detect_visit(v, k) for k, v in enumerate(visits)]
+    objs = link(visits, per_visit)
+    n_linked = len(objs)
+    if len(objs) > max_objects:      # crowded field: keep every orphan chain, then the brightest
+        objs.sort(key=lambda o: (not o['linked_orphans'], -o['best_snr']))
+        objs = objs[:max_objects]
+    log(f'[{name}] stage 1-2: {sum(len(p) for p in per_visit)} stack detections -> {len(objs)} sources to test '
+        f'({sum(o["linked_orphans"] for o in objs)} linked-orphan chains) in {time.time() - t_start:.0f}s')
+    rows = native_astrometry(files, ra0, dec0, fov, refs, objs, workers=workers, nz=nz, injections=injections) if objs else []
+    visits_doc = [{'id': v['id'], 'mjd_start': v['mjd_start'], 'mjd_end': v['mjd_end']} for v in visits]
+    gw, n = display_wcs(ra0, dec0, fov, GRID_ARCSEC)
+    epoch = float(np.median([i['mjd'] for i in items]))
+    if not injections:      # keep the expensive measurements so the scoring rules can be re-applied without re-measuring
+        cache = HUNT_CACHE / name / 'stage3.pkl'
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_bytes(pickle.dumps({'objs': objs, 'rows': rows, 'visits_doc': visits_doc, 'epoch': epoch, 'ra0': ra0, 'dec0': dec0, 'fov': fov}))
+    sources, truth_doc, inj_doc, counts, tested = score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, external=external,
+                                                               truth=truth, injections=injections)
     # depth: median 5-sigma point-source limit of each visit's stacks
     depth = {}
     for v in visits:
@@ -946,10 +1040,8 @@ def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None,
         'baseline_days': round(visits[-1]['mjd_end'] - visits[0]['mjd_start'], 1),
         'n_exposures': len(items), 'n_unreadable': len(errors), 'n_gaia': len(gaia),
         'n_detections': int(sum(len(p) for p in per_visit)), 'n_sources': len(sources), 'n_sources_before_cap': n_linked, 'n_motion_tested': len(tested),
-        'counts': counts, 'depth_5sigma_ujy': depth, 'truth': truth_doc,
-        'thresholds': {'seed_snr': SEED_SNR, 'motion_sigma': MOTION_SIGMA, 'pm_over_error': MOTION_PM_SNR,
-                       'candidate_pm_min_arcsec_yr': CANDIDATE_PM_MIN, 'v_max_arcsec_yr': V_MAX,
-                       'chromatic_sigma': CHROMATIC_SIGMA, 'max_model_chi2r': MAX_MODEL_CHI2R},
+        'counts': counts, 'depth_5sigma_ujy': depth, 'truth': truth_doc, 'injections': inj_doc,
+        'thresholds': thresholds(),
         'stacks': stacks, 'sources': sources,
         'exposures': [{'id': i['id'], 'mjd': i['mjd'], 'detector': i['detector'], 'release': i['release'],
                        'sha256': i['sha256'], 'archive_url': i['archive_url']} for i in sorted(items, key=lambda i: i['mjd'])],
@@ -959,6 +1051,32 @@ def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None,
     (out_dir / 'hunt.json').write_text(json.dumps(doc, indent=1, default=float))
     compact_stacks(out_dir)
     log(f"[{name}] {len(sources)} sources, {len(tested)} motion-tested: {counts}; depth {depth} uJy; {doc['runtime_s']}s")
+    if truth_doc:
+        log(f"[{name}] truth {truth_doc}")
+    return doc
+
+
+def thresholds():
+    return {'seed_snr': SEED_SNR, 'motion_sigma': MOTION_SIGMA, 'pm_over_error': MOTION_PM_SNR,
+            'candidate_pm_min_arcsec_yr': CANDIDATE_PM_MIN, 'v_max_arcsec_yr': V_MAX, 'chromatic_sigma': CHROMATIC_SIGMA,
+            'max_model_chi2r': MAX_MODEL_CHI2R, 'min_positions_per_visit': MIN_PER_VISIT, 'max_parallax_mas': MAX_PARALLAX_MAS,
+            'saturation_grow_native_px': SAT_GROW}
+
+
+def rescore(name, *, truth=None, gaia=None, external=True, out_dir=None, log=print):
+    """Re-apply stages 4-5 to the cached stage-3 measurements of a field (seconds instead of minutes)."""
+    out_dir = Path(out_dir or HUNT_DATA / name)
+    doc = json.loads((out_dir / 'hunt.json').read_text())
+    st = pickle.loads((HUNT_CACHE / name / 'stage3.pkl').read_bytes())
+    if gaia is None:
+        gaia = json.loads((HUNT_CACHE / name / 'gaia_field.json').read_text())
+    gw, n = display_wcs(st['ra0'], st['dec0'], st['fov'], GRID_ARCSEC)
+    sources, truth_doc, _, counts, tested = score_sources(st['objs'], st['rows'], st['visits_doc'], gaia, gw, n, st['epoch'],
+                                                          external=external, truth=truth)
+    doc.update({'sources': sources, 'counts': counts, 'n_sources': len(sources), 'n_motion_tested': len(tested), 'truth': truth_doc,
+                'thresholds': thresholds(), 'generated_utc': datetime.now(timezone.utc).isoformat(timespec='seconds')})
+    (out_dir / 'hunt.json').write_text(json.dumps(doc, indent=1, default=float))
+    log(f"[{name}] rescored: {len(sources)} sources, {len(tested)} motion-tested: {counts}")
     if truth_doc:
         log(f"[{name}] truth {truth_doc}")
     return doc

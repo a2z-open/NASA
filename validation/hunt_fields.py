@@ -158,13 +158,16 @@ def fetch(names=None, workers=8):
         print(f'{name}: {len(done)}/{len(wanted)} cutouts in {len(visits)} visits ({time.time() - t0:.0f}s, {len(failures)} failed)', flush=True)
 
 
-def run(which, names=None, workers=8):
+def run(which, names=None, workers=10, rescore=False):
     if which in ('cached', 'all'):
         for slug in CACHED:
             if names and slug not in names:
                 continue
             f = hunt.curated_field(slug)
             try:
+                if rescore and (hunt.HUNT_CACHE / slug / 'stage3.pkl').is_file():
+                    hunt.rescore(slug, truth=f['truth'], gaia=f['gaia'])
+                    continue
                 hunt.run_field(f['name'], f['files'], f['ra'], f['dec'], f['fov'], title=f['title'], workers=workers,
                                truth=f['truth'], gaia=f['gaia'], kind='validation')
             except Exception as error:  # noqa: BLE001
@@ -184,6 +187,9 @@ def run(which, names=None, workers=8):
                          'pmdec': f['pmdec'], 'parallax': f.get('parallax', 0.0), 'spectral_type': f.get('spectral_type'),
                          'source': 'SIMBAD via Sesame (' + f.get('position_ref', 'ref. not given') + ')'}
             try:
+                if rescore and (hunt.HUNT_CACHE / name / 'stage3.pkl').is_file():
+                    hunt.rescore(name, truth=truth)
+                    continue
                 hunt.run_field(name, files, f['field_ra'], f['field_dec'], FOV_ARCMIN, title=f.get('identifier') or f['description'],
                                workers=workers, truth=truth, kind=f['kind'], notes=f['description'])
             except Exception as error:  # noqa: BLE001
@@ -247,6 +253,8 @@ if __name__ == '__main__':
         fetch(sys.argv[2:] or None)
     elif cmd == 'run':
         run(sys.argv[2], sys.argv[3:] or None)
+    elif cmd == 'rescore':
+        run(sys.argv[2], sys.argv[3:] or None, rescore=True)
     elif cmd == 'compact':
         for path in sorted(hunt.HUNT_DATA.glob('*/hunt.json')):
             print(path.parent.name, 'compacted' if hunt.compact_stacks(path.parent) else 'already compact')
