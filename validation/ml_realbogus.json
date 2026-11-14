@@ -1,0 +1,75 @@
+{
+ "synthetic": true,
+ "model": "gradient-boosted decision trees (scikit-learn HistGradientBoostingClassifier)",
+ "features": [
+  "snr",
+  "peak_snr",
+  "chi2r",
+  "log_flux",
+  "wavelength_um",
+  "detector",
+  "n_flags",
+  "peak_fit_offset_px",
+  "nearest_catalogue_px",
+  "catalogue_within_3px",
+  "flux_snr_ratio"
+ ],
+ "n_examples": {
+  "makemake": 366,
+  "haumea": 228,
+  "eris": 208,
+  "pluto": 133
+ },
+ "folds": [
+  {
+   "held_out": "makemake",
+   "n_train": 529,
+   "n_test": 328,
+   "auc_synthetic": 0.999830033143537,
+   "auc_snr_only": 0.9830882977819325,
+   "n_real_body": 38,
+   "n_artefacts": 287,
+   "auc_real_body_vs_artefacts": 0.9344397579314139,
+   "auc_real_body_snr_only": 0.9139006051714652
+  },
+  {
+   "held_out": "haumea",
+   "n_train": 651,
+   "n_test": 206,
+   "auc_synthetic": 0.9991408934707904,
+   "auc_snr_only": 0.9424398625429553,
+   "n_real_body": 22,
+   "n_artefacts": 194,
+   "auc_real_body_vs_artefacts": 0.9761012183692596,
+   "auc_real_body_snr_only": 0.9151827553889409
+  },
+  {
+   "held_out": "eris",
+   "n_train": 653,
+   "n_test": 204,
+   "auc_synthetic": 1.0,
+   "auc_snr_only": 0.9504629629629628,
+   "n_real_body": 4,
+   "n_artefacts": 144,
+   "auc_real_body_vs_artefacts": 0.6032986111111112,
+   "auc_real_body_snr_only": 0.7100694444444444
+  },
+  {
+   "held_out": "pluto",
+   "n_train": 738,
+   "n_test": 119,
+   "auc_synthetic": 1.0,
+   "auc_snr_only": 1.0,
+   "n_real_body": 14,
+   "n_artefacts": 118,
+   "auc_real_body_vs_artefacts": 0.9860774818401937,
+   "auc_real_body_snr_only": 0.9987893462469734
+  }
+ ],
+ "mean_auc_synthetic": 0.9997427316535819,
+ "mean_auc_snr_only": 0.9689977808219628,
+ "mean_auc_real_body": 0.8749792673129946,
+ "mean_auc_real_body_snr_only": 0.884485537812956,
+ "role": "Ranks detections only. It is not used to accept or reject anything in a locked result.",
+ "note": "Positives are SYNTHETIC point sources added to real exposures. AUC 0.5 is guessing, 1.0 is perfect."
+}

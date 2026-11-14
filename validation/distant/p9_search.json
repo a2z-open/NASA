@@ -1,0 +1,483 @@
+{
+ "thresholds": {
+  "orphan_snr": 5.0,
+  "r_lo_au": 200.0,
+  "r_hi_au": 20000.0,
+  "pos_tol_arcsec": 6.0,
+  "flux_ratio_max": 2.5,
+  "bright_factor": 10.0,
+  "stack_sigma_floor_arcsec": 2.0,
+  "triple_chi2r_max": 4.0,
+  "mirror_ratio_min": 9.0
+ },
+ "fields": [
+  {
+   "field_id": "2mass-0348",
+   "title": "2MASS J03480772-6022270",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 29,
+   "n_pairs": 47,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 103.6,
+    "cold": 136.0
+   },
+   "capped": false
+  },
+  {
+   "field_id": "2mass-0559",
+   "title": "2MASS J05591914-1404488",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 36,
+   "n_pairs": 19,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 201.7,
+    "cold": 194.7
+   },
+   "capped": false
+  },
+  {
+   "field_id": "2mass-0727",
+   "title": "2MASSI J0727182+171001",
+   "area_deg2": 0.1111,
+   "n_visits": 2,
+   "n_single_visit_sources": 23,
+   "n_pairs": 3,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 251.4,
+    "cold": 221.6
+   },
+   "capped": false
+  },
+  {
+   "field_id": "2mass-0939",
+   "title": "2MASS J09393548-2448279",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 37,
+   "n_pairs": 3,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 171.8,
+    "cold": 177.0
+   },
+   "capped": false
+  },
+  {
+   "field_id": "2mass-1217",
+   "title": "2MASS J12171110-0311131",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 20,
+   "n_pairs": 23,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 114.4,
+    "cold": 136.3
+   },
+   "capped": false
+  },
+  {
+   "field_id": "barnards-star",
+   "title": "Barnard's Star",
+   "area_deg2": 0.0278,
+   "n_visits": 3,
+   "n_single_visit_sources": 3,
+   "n_pairs": 0,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 756.5,
+    "mid": 567.7,
+    "cold": 452.3
+   },
+   "capped": false
+  },
+  {
+   "field_id": "control-cdfs",
+   "title": "Chandra Deep Field South",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 8,
+   "n_pairs": 3,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 83.0,
+    "cold": 117.4
+   },
+   "capped": false
+  },
+  {
+   "field_id": "control-cosmos",
+   "title": "COSMOS field",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 15,
+   "n_pairs": 2,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 113.7,
+    "cold": 153.1
+   },
+   "capped": false
+  },
+  {
+   "field_id": "control-goodsn",
+   "title": "GOODS-North",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 13,
+   "n_pairs": 7,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 80.5,
+    "cold": 115.2
+   },
+   "capped": false
+  },
+  {
+   "field_id": "control-uds",
+   "title": "UKIDSS Ultra Deep Survey field",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 18,
+   "n_pairs": 8,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 95.3,
+    "cold": 128.1
+   },
+   "capped": false
+  },
+  {
+   "field_id": "denis-0255",
+   "title": "DENIS J025503.3-470049",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 7,
+   "n_pairs": 1,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 87.3,
+    "cold": 121.1
+   },
+   "capped": false
+  },
+  {
+   "field_id": "epsilon-indi-b",
+   "title": "Epsilon Indi B",
+   "area_deg2": 0.0278,
+   "n_visits": 4,
+   "n_single_visit_sources": 5,
+   "n_pairs": 0,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 115.3,
+    "mid": 134.3,
+    "cold": 148.7
+   },
+   "capped": false
+  },
+  {
+   "field_id": "j0415-0935",
+   "title": "2MASS J0415-0935",
+   "area_deg2": 0.0278,
+   "n_visits": 3,
+   "n_single_visit_sources": 6,
+   "n_pairs": 1,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 74.8,
+    "mid": 106.5,
+    "cold": 133.0
+   },
+   "capped": false
+  },
+  {
+   "field_id": "luhman-16",
+   "title": "WISE J104915.57-531906.1",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 39,
+   "n_pairs": 76,
+   "n_triples": 1,
+   "depth_5sigma_ujy": {
+    "short": 1647.5,
+    "cold": 730.5
+   },
+   "capped": false
+  },
+  {
+   "field_id": "r-draconis",
+   "title": "R Draconis",
+   "area_deg2": 0.0278,
+   "n_visits": 3,
+   "n_single_visit_sources": 16,
+   "n_pairs": 18,
+   "n_triples": 1,
+   "depth_5sigma_ujy": {
+    "short": 187.4,
+    "mid": 300.8,
+    "cold": 365.1
+   },
+   "capped": false
+  },
+  {
+   "field_id": "rw-aurigae",
+   "title": "RW Aurigae",
+   "area_deg2": 0.0278,
+   "n_visits": 3,
+   "n_single_visit_sources": 0,
+   "n_pairs": 0,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 522.1,
+    "mid": 437.2,
+    "cold": 403.7
+   },
+   "capped": false
+  },
+  {
+   "field_id": "simp-0136",
+   "title": "SIMP J013656.5+093347.3",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 4,
+   "n_pairs": 0,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 93.6,
+    "cold": 131.6
+   },
+   "capped": false
+  },
+  {
+   "field_id": "ugps-0722",
+   "title": "UGPS J072227.51-054031.2",
+   "area_deg2": 0.1111,
+   "n_visits": 2,
+   "n_single_visit_sources": 39,
+   "n_pairs": 14,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 867.6,
+    "cold": 424.3
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-0254",
+   "title": "WISEP J025409.45+022359.1",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 16,
+   "n_pairs": 11,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 109.8,
+    "cold": 141.0
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-0410",
+   "title": "WISEP J041022.71+150248.5",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 19,
+   "n_pairs": 8,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 146.0,
+    "cold": 164.3
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-0855",
+   "title": "WISE 0855-0714",
+   "area_deg2": 0.0278,
+   "n_visits": 3,
+   "n_single_visit_sources": 6,
+   "n_pairs": 3,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 101.2,
+    "mid": 131.3,
+    "cold": 149.6
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-1405",
+   "title": "WISEP J140518.40+553421.4",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 19,
+   "n_pairs": 7,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 92.4,
+    "cold": 125.8
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-1506",
+   "title": "WISEP J150649.97+702736.0",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 53,
+   "n_pairs": 21,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 101.8,
+    "cold": 137.2
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-1639",
+   "title": "WISE J163940.83-684738.6",
+   "area_deg2": 0.1111,
+   "n_visits": 4,
+   "n_single_visit_sources": 70,
+   "n_pairs": 322,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 884.9,
+    "cold": 405.6
+   },
+   "capped": false
+  },
+  {
+   "field_id": "wise-2056",
+   "title": "WISEP J205628.90+145953.3",
+   "area_deg2": 0.1111,
+   "n_visits": 3,
+   "n_single_visit_sources": 36,
+   "n_pairs": 35,
+   "n_triples": 0,
+   "depth_5sigma_ujy": {
+    "short": 387.8,
+    "cold": 251.6
+   },
+   "capped": false
+  }
+ ],
+ "candidates": [
+  {
+   "field_id": "luhman-16",
+   "flux_ujy": 5872.5,
+   "jupiter_twin_ujy": 1.486785510609605,
+   "too_bright_for_a_planet": true,
+   "members": [
+    "s0448.0",
+    "s0424.0",
+    "s0448.1"
+   ],
+   "points": [
+    {
+     "id": "s0448.0",
+     "visit": 0,
+     "mjd": 60847.823899215495,
+     "ra": 162.45863244676872,
+     "dec": -53.339301202480385,
+     "snr": 6.5,
+     "band": "short",
+     "flux_ujy": 5872.5,
+     "sigma_arcsec": 2.5766984976766287
+    },
+    {
+     "id": "s0424.0",
+     "visit": 1,
+     "mjd": 61039.710797051506,
+     "ra": 162.52747759600638,
+     "dec": -53.36735371082813,
+     "snr": 5.3,
+     "band": "short",
+     "flux_ujy": 3944.7,
+     "sigma_arcsec": 2.823095513886641
+    },
+    {
+     "id": "s0448.1",
+     "visit": 2,
+     "mjd": 61209.250254667,
+     "ra": 162.45578434011492,
+     "dec": -53.342121206916744,
+     "snr": 6.5,
+     "band": "short",
+     "flux_ujy": 5872.5,
+     "sigma_arcsec": 2.5766984976766287
+    }
+   ],
+   "r_au": 2280.068138605196,
+   "r_err_au": 68.00408379888577,
+   "chi2r": 2.515653486115206,
+   "tangential_arcsec_yr": 7.639282776808506,
+   "inclination_deg": 88.94377044467704,
+   "mirror_ratio": 1125.2642110606546,
+   "passes_mirror_test": true
+  },
+  {
+   "field_id": "r-draconis",
+   "flux_ujy": 31205.2,
+   "jupiter_twin_ujy": 0.28422979723881836,
+   "too_bright_for_a_planet": true,
+   "members": [
+    "s0097.0",
+    "s0105.0",
+    "s0071.0"
+   ],
+   "points": [
+    {
+     "id": "s0097.0",
+     "visit": 0,
+     "mjd": 60872.087065842,
+     "ra": 248.1467824360127,
+     "dec": 66.76823906591933,
+     "snr": 67.0,
+     "band": "mid",
+     "flux_ujy": 42209.4,
+     "sigma_arcsec": 2.006200768548517
+    },
+    {
+     "id": "s0105.0",
+     "visit": 1,
+     "mjd": 60979.197740888,
+     "ra": 248.15489916678877,
+     "dec": 66.74155927954034,
+     "snr": 76.3,
+     "band": "mid",
+     "flux_ujy": 25786.9,
+     "sigma_arcsec": 2.0047829932997496
+    },
+    {
+     "id": "s0071.0",
+     "visit": 2,
+     "mjd": 61232.443459731,
+     "ra": 248.14906746940812,
+     "dec": 66.76735975655312,
+     "snr": 66.7,
+     "band": "mid",
+     "flux_ujy": 31205.2,
+     "sigma_arcsec": 2.0062565858447376
+    }
+   ],
+   "r_au": 3448.200452825787,
+   "r_err_au": 90.9082185610104,
+   "chi2r": 0.30868157481150216,
+   "tangential_arcsec_yr": 6.534723177715488,
+   "inclination_deg": 81.67294177558756,
+   "mirror_ratio": 4663.738510658601,
+   "passes_mirror_test": true
+  }
+ ],
+ "area_deg2_three_visits": 2.055,
+ "n_fields_three_visits": 23,
+ "median_depth_short_ujy": 113.7,
+ "accepted": []
+}

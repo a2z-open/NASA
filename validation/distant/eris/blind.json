@@ -1,0 +1,42 @@
+{
+ "body_field_set": "eris",
+ "thresholds": {
+  "detect_snr": 5.0,
+  "fit_snr_min": 4.0,
+  "star_radius_px": 1.3,
+  "rate_max_arcsec_day": 200.0,
+  "tracklet_min": 4,
+  "tracklet_tol_arcsec": 2.5,
+  "sigma_floor_arcsec": 0.6,
+  "r_min_au": 15.0,
+  "r_max_au": 20000.0,
+  "orbit_chi2r_max": 4.0,
+  "mirror_ratio_min": 9.0
+ },
+ "n_exposures": 147,
+ "n_orphans": 24,
+ "n_visits": 3,
+ "visits": [
+  {
+   "visit": 0,
+   "n_orphans": 17,
+   "mjd_start": 60866.089471236,
+   "mjd_end": 60879.74106296
+  },
+  {
+   "visit": 1,
+   "n_orphans": 3,
+   "mjd_start": 61047.051837671,
+   "mjd_end": 61049.358508168
+  },
+  {
+   "visit": 2,
+   "n_orphans": 4,
+   "mjd_start": 61232.829154395,
+   "mjd_end": 61238.466769511
+  }
+ ],
+ "tracklets": [],
+ "objects": [],
+ "statement": "Produced from image files, Gaia DR3 and CatWISE2020 only. No ephemeris was read."
+}

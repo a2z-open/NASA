@@ -178,17 +178,40 @@ def raw_dir(field_id: str) -> Path:
     return CACHE / 'targets' / field_id / 'raw' if field_id in TARGETS else FIELDS / field_id / 'raw'
 
 
+async def _json_body(request: Request) -> dict:
+    """The request body as a JSON object, or a 400 (never a 500) when it is missing or malformed."""
+    try:
+        body = await request.json()
+    except Exception:  # noqa: BLE001
+        raise HTTPException(400, 'The request body must be JSON.')
+    if not isinstance(body, dict):
+        raise HTTPException(400, 'The request body must be a JSON object.')
+    return body
+
+
+def _number(value, default: float, what: str) -> float:
+    if value is None or value == '':
+        return default
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        raise HTTPException(400, f'{what} must be a number.')
+    if not math.isfinite(v):
+        raise HTTPException(400, f'{what} must be a number.')
+    return v
+
+
 @app.post('/api/fields')
 async def create_field(request: Request):
-    body = await request.json()
+    body = await _json_body(request)
     try:
         ra, dec = parse_ra(body.get('ra')), parse_dec(body.get('dec'))
     except CoordinateError as error:
         raise HTTPException(400, str(error))
-    fov = float(body.get('fov_arcmin') or 6.0)
+    fov = _number(body.get('fov_arcmin'), 6.0, 'Field of view')
     if not 2.0 <= fov <= 30.0:
         raise HTTPException(400, 'Field of view must be between 2 and 30 arcmin.')
-    max_frames = int(min(max(int(body.get('max_frames') or 24), 4), 48))
+    max_frames = int(min(max(int(_number(body.get('max_frames'), 24, 'max_frames')), 4), 48))
     wmin = body.get('wavelength_min_um')
     wmax = body.get('wavelength_max_um')
     # Curated target nearby? Re-use its cache.
@@ -394,7 +417,7 @@ def inv_path(inv_id: str) -> Path:
 
 @app.post('/api/investigations')
 async def create_investigation(request: Request):
-    body = await request.json()
+    body = await _json_body(request)
     fid = str(body.get('field_id', ''))
     try:
         ra, dec = parse_ra(body.get('ra')), parse_dec(body.get('dec'))
@@ -474,8 +497,9 @@ def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
         gcache = (DATA / fid / 'gaia_field.json') if fid in TARGETS else (FIELDS / fid / 'gaia_field.json')
         try:
             stars = gaia_field(field['ra'], field['dec'], field['fov_arcmin'] / 60 * 0.75, gmax=19.0, cache=gcache)
-        except Exception:  # noqa: BLE001
-            stars = []
+        except Exception as error:  # noqa: BLE001
+            # Without Gaia the exposures cannot be lined up and "no Gaia counterpart" would be an empty claim: stop here.
+            raise RuntimeError('The Gaia catalogue could not be reached, so this source was not measured. Try again in a minute.') from error
         nb = neighbours(stars, ra, dec, 61040.0, 3.0)
         ident = None
         exclude = []
@@ -661,8 +685,12 @@ HUNT = ROOT / 'data' / 'hunt'
 def forecasts():
     """Forward predictions for SPHEREx data that did not exist when they were locked (validation/forecast.py)."""
     out = []
+    from validation import ledger
     for p in sorted((ROOT / 'validation' / 'forecasts').glob('*.json')):
+        if p.name.endswith('-vs-jpl.json'):
+            continue
         d = read_json(p)
+        lk = ledger.find(f"forecast:{d.get('target')}")
         sha_p = p.with_suffix('.sha256')
         commit = None
         try:
@@ -674,9 +702,77 @@ def forecasts():
         except Exception:  # noqa: BLE001
             pass
         out.append({k: d.get(k) for k in ('target', 'title', 'locked_utc', 'model', 'model_note', 'data_used', 'archive_at_lock', 'fit',
-                                          'criterion', 'stays_here_null', 'predictions', 'how_to_check')}
-                   | {'sha256': sha_p.read_text().split()[0] if sha_p.is_file() else None, 'commit': commit})
+                                          'criterion', 'stays_here_null', 'predictions', 'how_to_check', 'kind', 'spherex_windows')}
+                   | {'sha256': sha_p.read_text().split()[0] if sha_p.is_file() else None, 'commit': commit,
+                      'ledger': {'seq': lk['seq'], 'time_utc': lk['time_utc'], 'hash': lk['hash']} if lk else None,
+                      'jpl_check': read_json(p.with_name(p.stem + '-vs-jpl.json')) if p.with_name(p.stem + '-vs-jpl.json').is_file() else None})
     return {'forecasts': out}
+
+
+@app.get('/api/distant')
+def distant_results():
+    """Blind recovery of known distant bodies by parallax (validation/distant_report.py)."""
+    p = ROOT / 'validation' / 'distant_results.json'
+    if not p.exists():
+        raise HTTPException(404, 'Distant-world results have not been generated yet (python -m validation.distant_report).')
+    return read_json(p)
+
+
+@app.get('/api/planet-nine')
+def planet_nine_results():
+    """The Planet Nine mode: search of the hunt fields, synthetic test and reach (validation/planet_nine.py)."""
+    p = ROOT / 'validation' / 'planet_nine.json'
+    if not p.exists():
+        raise HTTPException(404, 'Planet Nine results have not been generated yet (python -m validation.planet_nine report).')
+    return read_json(p)
+
+
+@app.get('/api/barnard-halo')
+def barnard_halo():
+    """Barnard's Star: motion measured from its unsaturated halo, tested on the sealed visit (validation/barnard_halo.py)."""
+    folder = ROOT / 'validation' / 'experiments' / 'barnards-star-halo'
+    if not (folder / 'result.json').exists():
+        raise HTTPException(404, "The Barnard's Star halo test has not been run yet (python -m validation.barnard_halo open).")
+    proto = read_json(folder / 'protocol.json')
+    return {'result': read_json(folder / 'result.json'), 'pass_rule': proto['pass_rule'], 'method': proto['method'],
+            'disclosures': proto['disclosures'], 'n_reference': proto['reference_visit']['n_exposures']}
+
+
+@app.get('/api/vanished')
+def vanished_results():
+    """Bright WISE sources (about 2015) that SPHEREx no longer sees where WISE saw them (validation/vanished.py)."""
+    p = ROOT / 'validation' / 'vanished.json'
+    if not p.exists():
+        raise HTTPException(404, 'The disappearance check has not been run yet (python -m validation.vanished).')
+    d = read_json(p)
+    return {k: d[k] for k in ('method', 'thresholds', 'n_fields', 'n_tested', 'counts', 'flagged')} | {
+        'fields_without_catalogue': [f['field_id'] for f in d['fields'] if f['n_wise'] == 0]}
+
+
+@app.get('/api/ml')
+def ml_results():
+    """The machine-learning real/artefact test (validation/ml_realbogus.py)."""
+    p = ROOT / 'validation' / 'ml_realbogus.json'
+    if not p.exists():
+        raise HTTPException(404, 'The machine-learning test has not been run yet (python -m validation.ml_realbogus).')
+    return read_json(p)
+
+
+@app.get('/api/watch')
+def watch_status():
+    """The latest check of NASA's archive for new SPHEREx images of everything PARALLAX has predicted (pipeline/watch.py)."""
+    p = ROOT / 'data' / 'watch' / 'status.json'
+    if not p.exists():
+        raise HTTPException(404, 'The archive has not been checked yet (python -m pipeline.watch).')
+    return read_json(p)
+
+
+@app.get('/api/ledger')
+def lock_ledger():
+    """The local lock record: what was hashed, when, and whether the chain and the files still match."""
+    from validation import ledger
+    ok, problems = ledger.verify()
+    return {'ok': ok, 'problems': problems, 'entries': ledger.entries()}
 
 
 @app.get('/api/halo')
@@ -727,10 +823,11 @@ def hunt_frame(field_id: str, name: str):
 
 @app.get('/files/targets/{slug}/{path:path}')
 def target_file(slug: str, path: str):
-    if slug not in TARGETS or '..' in path:
+    if slug not in TARGETS:
         raise HTTPException(404)
-    p = DATA / slug / path
-    if not p.is_file():
+    base = (DATA / slug).resolve()
+    p = (base / path.lstrip('/')).resolve()      # a leading slash or '..' must never escape the target's folder
+    if base not in p.parents or not p.is_file():
         raise HTTPException(404)
     mt = 'application/octet-stream' if p.suffix == '.bin' else 'application/json'
     return FileResponse(p, media_type=mt, headers={'Cache-Control': 'public, max-age=86400'})

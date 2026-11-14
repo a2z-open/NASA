@@ -104,9 +104,9 @@ SPHEREx alone gives μα* = 2180 ± 56 and μδ = 512 ± 56 mas/yr, against the 
 |---|---|---|---|
 | **Epsilon Indi B** | 458 / 449 / 434 (4 visits, 2025-04 → 2026-10) | Recovered: motion, parallax and spectral type measured; held-out prediction passed | μ = 4635 ± 16 mas/yr (μα* 3952 ± 17, μδ −2421 ± 16), ϖ = 298 ± 9 mas, χ²ᵣ 0.89. Gaia DR3 differs by −1.8σ, +2.8σ and +2.9σ (binary photocentre; see above). Spectrum: 102/102 bins filled, 99 detected; best template **T3** (χ²ᵣ 1.55; T2 2.64; T4 3.74). Fixed-position extraction recovers 55 % of the flux. No variability: matched ratios 0.971 ± 0.009, 1.012 ± 0.009, 1.008 ± 0.015. |
 | **Barnard's Star** | 358 / 63 / 0 (visits 1–2; visit 3 sealed, never downloaded) | **Inconclusive: saturated.** OVERFLOW within 1.5 px of the core in 63 of 63 exposures; BLOOM in 62. | None. PARALLAX refuses to fit saturated cores. |
-| **WISE 0855−0714** | 258 / 155 / 12 (3 visits; D5/D6 fully, others subsampled) | **Detected only at 3.8–5.0 µm** (forced ePSF photometry on the Kirkpatrick et al. 2021 track, G = 16.3 neighbour 7–8″ away deblended) | 0.75–2.42 µm: −10 ± 6 µJy (3σ < 9 µJy). 2.42–3.83 µm: 6 ± 8 µJy. 3.83–4.42 µm: 298 ± 28 µJy (S/N 11). 4.42–5.00 µm: **460 ± 32 µJy = 17.24 AB** (S/N 14). Spectrum best fits **Y1**, the coldest template, so "at least as cold as Y1". 12 exposures at S/N ≥ 5: μ = 10.1 ± 1.1″/yr (published 8.15″/yr: −1.8σ in RA, +0.4σ in Dec). Parallax not fitted (only two visits have usable positions). |
-| **RW Aurigae** | 335 / 142 / 3 | **Inconclusive: saturated** in 131 of 142 exposures. A/B are 1.4″ apart, always blended. | Wing photometry was attempted on saturated frames: 48 converged with χ²ᵣ 250–770 and all were **rejected**. |
-| **R Draconis** | 539 / 104 / 0 | **Inconclusive: saturated** in 103 of 103 measured exposures. | No unflagged pixels inside the ePSF footprint (±3.3 px), so no wing photometry is possible. |
+| **WISE 0855−0714** | 258 / 155 / 12 (3 visits; D5/D6 fully, others subsampled) | **Detected only at 3.8–5.0 µm** (forced ePSF photometry on the Kirkpatrick et al. 2021 track, G = 16.3 neighbour 7–8″ away deblended) | 0.75–2.42 µm: −10 ± 6 µJy (3σ < 19 µJy; an earlier version said 9, which let a negative mean lower the limit). 2.42–3.83 µm: 6 ± 8 µJy. 3.83–4.42 µm: 298 ± 28 µJy (S/N 11). 4.42–5.00 µm: **460 ± 32 µJy = 17.24 AB** (S/N 14). Spectrum best fits **Y1**, the coldest template, so "at least as cold as Y1". 12 exposures at S/N ≥ 5: μ = 10.1 ± 1.1″/yr. The published motion plus parallax predicts 6.6″/yr between these two visits, so the measurement is about 3σ high (in RA) and unexplained; the positions sit about 1″ off the published track. Parallax not fitted (only two visits have usable positions). |
+| **RW Aurigae** | 335 / 142 / 3 | **Inconclusive: saturated** in 131 of 142 exposures. A/B are 1.4″ apart, always blended. | Wing photometry was attempted on saturated frames: 48 converged with χ²ᵣ 250–770. All but 2 were **rejected**, and those 2 are not used for any claim. |
+| **R Draconis** | 539 / 104 / 0 | **Inconclusive: saturated** in 103 of 103 measured exposures. | Almost no unflagged pixels inside the ePSF footprint (±3.3 px): 3 of 103 wing fits converged, too few for photometry. |
 
 **Naive vs wavelength-matched comparison** (the RW Aur / R Dra lesson, shown on real unsaturated stars in the same images):
 
@@ -185,7 +185,7 @@ For the recovery fields the catalogue position was used only to choose the field
 up to 4′) and, after the search, to score it.
 
 Three false alarms found during development, all now caught, are recorded in RESULTS_LOG.md: a faint Gaia star at
-0.95″/yr, a G = 19.6 star at 1.39″/yr that passed every test until the decade check was added, and two halo artifacts
+0.95″/yr, a G = 19.6 star at 1.37″/yr that passed every test until the decade check was added, and two halo artifacts
 beside the saturated RW Aurigae.
 
 ### 6b. Blind injection test (SYNTHETIC: not real sources)
@@ -214,9 +214,14 @@ solves ln H = S(wavelength bin) + V(visit). Only wavelength bins observed in at 
 
 | Star | Ring (px) | Exposures used | Visit 2 / visit 1 | Visit 3 / visit 1 | Verdict |
 |---|---|---|---|---|---|
-| R Draconis (Mira variable) | 8–12 | 99 | 0.81 ± 0.04 (4.7σ) | **0.58 ± 0.03 (12.4σ)** | variable |
-| RW Aurigae (T Tauri) | 3–5 | 107 | 0.83 ± 0.05 (3.1σ) | **0.64 ± 0.04 (6.4σ)** | variable |
-| Barnard's Star (control: saturated, not a large-amplitude variable) | 5–8 | 61 | 1.04 ± 0.03 (1.5σ) | not available (sealed) | not variable |
+| R Draconis (Mira variable) | 8–12 | 99 | 0.81 ± 0.04 (3.6σ) | **0.58 ± 0.03 (9.6σ)** | variable |
+| RW Aurigae (T Tauri) | 3–5 | 107 | 0.83 ± 0.05 (2.6σ) | **0.64 ± 0.04 (5.3σ)** | variable |
+| Barnard's Star (control: saturated, not a large-amplitude variable) | 5–8 | 61 | 1.04 ± 0.03 (0.8σ) | not measured | not variable |
+
+Significances in this table are calibrated. The solver fits one level per wavelength bin and per visit from few points, so its formal errors are too
+small: for simulated constant stars with each star's own sampling, the same statistic has a spread of 1.30 (R Draconis), 1.21 (RW Aurigae) and 1.98
+(Barnard's Star) instead of 1. Every significance is divided by that factor (`pipeline/halo.py`, `null_scale`). Before calibration they read 12.4σ, 6.4σ
+and 1.5σ. RW Aurigae now clears the 5σ rule by a small margin.
 
 Of 6 other bright stars measured the same way (11 visit comparisons), 0 were flagged variable; their median change was 3 % and the largest 8 %.
 
@@ -246,7 +251,9 @@ Git times are self-reported until the commit is pushed.
 
 ## 10. Test suite
 
-- `pytest`: 71 tests, all passing. The 45 earlier tests cover coordinates, motion fits, ePSF centroids, deblending,
+- `pytest`: 85 tests, all passing (14 added in the third session: orbit fit against an independent calculation, the mirrored-Earth
+  test, tracklets, linking, the lock ledger, the Planet Nine arithmetic and linker, the halo centre, the WISE motion rule, the file-route
+  containment and request validation). The 45 earlier tests cover coordinates, motion fits, ePSF centroids, deblending,
   saturation refusal, flags, de-duplication, evidence serialisation, the API contract and held-out isolation. The 26 new
   tests cover the matched filter, outlier rejection in stacks, static and fast-mover linking, the colour-term and
   leave-one-visit-out vetting, the Gaia and CatWISE decade checks (HTTP mocked), halo photometry on synthetic series,
@@ -275,3 +282,18 @@ Git times are self-reported until the commit is pushed.
 .venv/bin/python -m validation.halo_controls && .venv/bin/python -m validation.hunt_report
 .venv/bin/python -m pytest -q && npm --prefix web test
 ```
+
+<!-- DISTANT_SECTION:start -->
+## 11. Distant worlds, Planet Nine mode and Barnard's Star (third session)
+
+Full tables: [docs/DISTANT_WORLDS.md](docs/DISTANT_WORLDS.md). Protocols: `validation/distant/PROTOCOL.md`, `validation/distant/PROTOCOL_P9.md`, `validation/experiments/barnards-star-halo/protocol.json`. Lock record: `validation/ledger.jsonl` (`python -m validation.ledger verify`).
+
+- **Blind recovery of known distant worlds.** **2 of 4 known distant worlds found blind and placed at the right distance**: Makemake (52.72 ± 0.01 AU; JPL 52.72), Eris (95.53 ± 0.07 AU; JPL 95.52). 0 false objects were linked. Missed: Pluto (only one visit holds enough detections of the body, and the rule needs two); Haumea (only one visit holds enough detections of the body, and the rule needs two). The largest distance error among those found is under 0.1 %. The pass rule (within 12″ of JPL's track, distance within 5 %, no second object) was written first. These fields were never used to tune the search, so unlike the hunt in section 6 this score is out of sample.
+- **Planet Nine mode.** The same search for a body at 200 to 20,000 AU in the 23 fields with three or more visits (2.1 square degrees): **no detection**. 2 geometric candidates were raised and both were rejected as thousands of times too bright to be planets; one is a reflection of a saturated star that imitates parallax. Synthetic planets are recovered down to 300 µJy (10 of 16); the predicted Planet Nine is about 7 µJy, so these images could not have found it. The thresholds went through four locked versions in one day; versions 2 and 3 were driven by synthetic planets, and version 4 added a brightness rule after the two real candidates had been seen. That last rule is therefore not blind.
+- **Barnard's Star.** Its core is saturated, so we tracked the centre of its halo. In a visit that had been sealed, the halo had moved **10.56″ in 0.98 years; Gaia says 10.23″** (they differ by 0.37″; limit set in advance 1.5″). PASS. Gaia supplies the expected motion, so this tests the halo method. A visit in the opposite season is 1.7″ off in RA and was left out.
+- **Shift-and-stack.** Eris was found only by adding exposures along trial paths. The way visits are joined went through three locked versions before it worked (`validation/distant/PROTOCOL_SHIFTSTACK.md`); none used JPL's positions, but the last was written after seeing which candidates fit.
+- **What disappeared since WISE.** Of 945 bright sources WISE saw around 2015 in our fields, the ones SPHEREx no longer sees at those spots are 4 known brown dwarfs (2MASS J0415-0935, Epsilon Indi B, SIMP J013656.5+093347.3, WISEP J150649.97+702736.0): each one's SPHEREx motion, run back to the WISE years, passes through the empty spot. 0 faded or vanished without an explanation. The rules that skip WISE artefacts and the glare of saturated stars were added after the first run (`validation/vanished.py`).
+- **Live forecasts.** A watcher checks NASA's archive for new SPHEREx images of every locked prediction (python -m pipeline.watch). Makemake's next position is locked from the blind orbit alone; SPHEREx should next see it between 2026-12-22 and 2027-01-17, and JPL's ephemeris, checked after locking, agrees to 3″.
+- **Machine learning.** A machine-learning real/artefact model, trained on synthetic stars in real SPHEREx images and tested on the real detections of four dwarf planets it never saw, ranks them with AUC 0.87; signal-to-noise alone gives 0.88. It does not beat the simple rule yet, so it is not used in any result. Results in `validation/ml_realbogus.json`.
+- **What this does not show.** It does not show that SPHEREx can find Planet Nine: the predicted planet is about 40 times fainter than the faintest synthetic planet recovered. It does not show discovery power for unknown worlds either: every field was chosen because a known body is in it.
+<!-- DISTANT_SECTION:end -->

@@ -1,0 +1,21 @@
+{
+ "body": "eris",
+ "title": "Eris",
+ "kind": "dwarf planet",
+ "pass_rule": {
+  "position_arcsec": 12.0,
+  "min_fraction_on_track": 0.9,
+  "distance_fraction": 0.05,
+  "max_other_objects": 0
+ },
+ "locked_entry": 8,
+ "locked_hash": "cfe13fadfd47f8ff7e90a3d010730caa6f27a72a03f762230cc4384b35d5cc01",
+ "locked_time_utc": "2026-11-14T19:10:44+00:00",
+ "vmag": 18.633,
+ "recovered": false,
+ "match": null,
+ "other_objects": 0,
+ "objects_scored": [],
+ "passed": false,
+ "truth_source": "JPL Horizons, geocentric astrometric positions"
+}

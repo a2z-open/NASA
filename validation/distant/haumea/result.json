@@ -1,0 +1,21 @@
+{
+ "body": "haumea",
+ "title": "Haumea",
+ "kind": "dwarf planet",
+ "pass_rule": {
+  "position_arcsec": 12.0,
+  "min_fraction_on_track": 0.9,
+  "distance_fraction": 0.05,
+  "max_other_objects": 0
+ },
+ "locked_entry": 2,
+ "locked_hash": "6b1511b32d2739666436cc090b89207c2c639b4feef826ba4982a8480281ae2a",
+ "locked_time_utc": "2026-11-14T18:41:58+00:00",
+ "vmag": 17.264,
+ "recovered": false,
+ "match": null,
+ "other_objects": 0,
+ "objects_scored": [],
+ "passed": false,
+ "truth_source": "JPL Horizons, geocentric astrometric positions"
+}

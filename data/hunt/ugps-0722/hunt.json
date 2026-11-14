@@ -253,24 +253,25 @@
     },
     "wise": {
      "status": "checked",
+     "service": "NOIRLab Astro Data Lab",
      "n_in_cone": 26,
      "epoch": 2015.4,
      "baseline_yr": 10.6,
      "expected_shift_arcsec": 21.0,
      "verdict": "same_motion",
-     "catwise_pm_arcsec_yr": 0.996,
-     "source_name": "J072226.89-054027.5",
-     "sep_arcsec": 0.44,
-     "w1": 15.425,
-     "w2": 12.487,
-     "pmra_arcsec_yr": -0.92046,
-     "pmdec_arcsec_yr": 0.38121,
-     "sigpmra": 0.0062,
-     "sigpmdec": 0.0063
+     "catwise_pm_arcsec_yr": 1.411,
+     "source_name": "J072227.25-054029.7",
+     "sep_arcsec": 3.34,
+     "w1": 16.637,
+     "w2": 13.776,
+     "pmra_arcsec_yr": -1.31753,
+     "pmdec_arcsec_yr": 0.50578,
+     "sigpmra": 0.0116,
+     "sigpmdec": 0.0117
     }
    },
    "decade_confirmed": true,
-   "catalogued_as": "CatWISE2020 J072226.89-054027.5",
+   "catalogued_as": "CatWISE2020 J072227.25-054029.7",
    "truth_match": "UGPS J072227.51-054031.2"
   },
   {
@@ -37697,5 +37698,5 @@
   }
  ],
  "runtime_s": 547.0,
- "generated_utc": "2026-11-14T13:43:06+00:00"
+ "generated_utc": "2026-11-14T18:58:35+00:00"
 }

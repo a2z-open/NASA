@@ -331,6 +331,7 @@
     },
     "wise": {
      "status": "checked",
+     "service": "NOIRLab Astro Data Lab",
      "n_in_cone": 259,
      "epoch": 2015.4,
      "baseline_yr": 10.5,
@@ -9851,5 +9852,5 @@
   }
  ],
  "runtime_s": 65.2,
- "generated_utc": "2026-11-14T13:42:40+00:00"
+ "generated_utc": "2026-11-14T18:54:24+00:00"
 }

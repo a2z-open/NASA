@@ -44,6 +44,8 @@ interface Props {
   showGrid?: boolean;
   showCatalog?: boolean;
   smoothing?: boolean;
+  /** Crossfade from the previous image to the new one over this many milliseconds (display only). */
+  fadeMs?: number;
   caption?: string;
   ariaLabel: string;
   onPick?: (p: SkyPoint) => void;
@@ -86,6 +88,12 @@ function niceStep(arcsec: number): number {
 
 export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(props, ref) {
   const { grid, pixels, display, overlays, showGrid, showCatalog, smoothing, caption, ariaLabel, onPick, hint, emptyMessage, compact } = props;
+  const fadeMs = props.fadeMs ?? 0;
+  const fadeMsRef = useRef(fadeMs);
+  fadeMsRef.current = fadeMs;
+  const prevRef = useRef<HTMLCanvasElement | null>(null);
+  const fadeRef = useRef({ start: 0, t: 1 });
+  const fadeRaf = useRef(0);
   const wheelZoom = props.wheelZoom ?? !compact;
   const wheelZoomRef = useRef(wheelZoom);
   wheelZoomRef.current = wheelZoom;
@@ -133,7 +141,18 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
 
   // Rebuild the offscreen image when pixels or display change
   useEffect(() => {
-    if (!pixels) { offRef.current = null; force(x => x + 1); return; }
+    if (!pixels) { offRef.current = null; prevRef.current = null; force(x => x + 1); return; }
+    // keep a copy of the image now on screen, so the new one can fade in over it
+    const old = offRef.current;
+    if (old && fadeMsRef.current > 0 && old.width === grid.nx && old.height === grid.ny) {
+      const keep = prevRef.current ?? document.createElement('canvas');
+      keep.width = old.width; keep.height = old.height;
+      keep.getContext('2d')?.drawImage(old, 0, 0);
+      prevRef.current = keep;
+      fadeRef.current = { start: performance.now(), t: 0 };
+    } else {
+      fadeRef.current = { start: 0, t: 1 };
+    }
     const off = offRef.current ?? document.createElement('canvas');
     off.width = grid.nx;
     off.height = grid.ny;
@@ -166,6 +185,16 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
     ctx.putImageData(img, 0, 0);
     offRef.current = off;
     force(x => x + 1);
+    if (fadeRef.current.t < 1) {
+      cancelAnimationFrame(fadeRaf.current);
+      const step = () => {
+        const t = Math.min(1, (performance.now() - fadeRef.current.start) / Math.max(fadeMsRef.current, 1));
+        fadeRef.current.t = t;
+        force(x => x + 1);
+        if (t < 1) fadeRaf.current = requestAnimationFrame(step);
+      };
+      fadeRaf.current = requestAnimationFrame(step);
+    }
   }, [pixels, display.lo, display.hi, display.kind, display.colormap, grid.nx, grid.ny]);
 
   const toScreen = useCallback((col: number, row: number) => {
@@ -199,7 +228,14 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
       if (off) {
         ctx.imageSmoothingEnabled = !!smoothing;
         ctx.imageSmoothingQuality = 'high';
+        const prev = prevRef.current;
+        const t = fadeRef.current.t;
+        if (prev && t < 1) {
+          ctx.drawImage(prev, v.ox, v.oy, grid.nx * v.scale, grid.ny * v.scale);
+          ctx.globalAlpha = t;
+        }
         ctx.drawImage(off, v.ox, v.oy, grid.nx * v.scale, grid.ny * v.scale);
+        ctx.globalAlpha = 1;
       }
       ctx.lineWidth = 1;
       // Coordinate grid

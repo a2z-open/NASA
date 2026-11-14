@@ -51,6 +51,15 @@ export function ujy(v: number | null | undefined): string {
   if (a >= 1e3) return `${(v / 1e3).toFixed(2)} mJy`;
   return `${v.toFixed(1)} µJy`;
 }
+/** A flux and its error in the SAME unit, e.g. "38.86 ± 0.36 mJy" (never "38.86 mJy ± 355"). */
+export function ujyWithError(v: number | null | undefined, e: number | null | undefined): string {
+  if (v === null || v === undefined || !Number.isFinite(v)) return NA;
+  if (e === null || e === undefined || !Number.isFinite(e)) return ujy(v);
+  const a = Math.max(Math.abs(v), Math.abs(e));
+  if (a >= 1e6) return `${(v / 1e6).toFixed(2)} ± ${(e / 1e6).toFixed(2)} Jy`;
+  if (a >= 1e3) return `${(v / 1e3).toFixed(2)} ± ${(e / 1e3).toFixed(2)} mJy`;
+  return `${v.toFixed(0)} ± ${e.toFixed(0)} µJy`;
+}
 export function humanize(s: string): string {
   return s.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
 }

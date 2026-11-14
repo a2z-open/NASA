@@ -346,11 +346,12 @@
     },
     "wise": {
      "status": "checked",
+     "service": "NOIRLab Astro Data Lab",
      "n_in_cone": 51,
      "epoch": 2015.4,
      "baseline_yr": 10.6,
      "expected_shift_arcsec": 29.9,
-     "verdict": "same_motion",
+     "verdict": "different_motion",
      "catwise_pm_arcsec_yr": 0.962,
      "source_name": "J104910.48-531909.2",
      "sep_arcsec": 1.43,
@@ -362,8 +363,6 @@
      "sigpmdec": 0.0522
     }
    },
-   "decade_confirmed": true,
-   "catalogued_as": "CatWISE2020 J104910.48-531909.2",
    "truth_match": "WISE J104915.57-531906.1"
   },
   {
@@ -34342,5 +34341,5 @@
   }
  ],
  "runtime_s": 94.0,
- "generated_utc": "2026-11-14T13:43:57+00:00"
+ "generated_utc": "2026-11-14T19:01:35+00:00"
 }

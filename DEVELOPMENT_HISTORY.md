@@ -35,3 +35,16 @@ the organizers exactly what existed before the official start. Git history is pr
 Git commit times are self-reported by the machine that made them. Nothing on `parallax-build` has been pushed: the team
 asked that nothing be published without approval. To prove publicly when the Epsilon Indi B prediction was frozen, the
 team can push commit `ef75c76` (or publish its SHA-256). Until then, the lock time rests on the local commit and this record.
+
+## Third session, 14 Nov 2026 (from about 10:15 PT): no Git
+
+The team asked that Git not be used for now. Nothing in this session was committed, branched or pushed, and the existing
+history on `parallax-build` (last commit `c56bf4d`) was left as it is. Everything new is in the working files.
+
+Because commits could not serve as locks, blind results and protocols were hashed into `validation/ledger.jsonl`, a local
+hash chain (`python -m validation.ledger verify`). Its clock is this computer's, so the times are self-reported, exactly as
+the earlier commit times are. When the team is ready, committing the tree and publishing the last ledger hash will give
+every entry an outside time-stamp.
+
+Built in this session: the distant-world search and its blind test, the Planet Nine mode, the Barnard's Star halo test on
+the previously sealed visit, the fixes from an independent audit, and the pages that show them.

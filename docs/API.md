@@ -163,7 +163,7 @@ interface LabExperiment {
 |---|---|---|
 | GET | `/api/hunt` | The hunt index: totals (fields, area, exposures, sources, sources motion-tested), counts per class, `recovery` (known movers found blind), `unexplained` (candidates no catalogue explains), `reach`, thresholds, and one row per field with its movers. 404 until `python -m validation.hunt_fields run all` has been run. |
 | GET | `/api/hunt/{field_id}` | One field: `grid`, `visits`, `stacks` (per visit and band, with `data_url`), every `sources[]` entry (class, flags, motion, `robust`, `chromatic`, `external` catalogue checks, `track`), `truth` (catalogue comparison made after the search), and every exposure used with its SHA-256. |
-| GET | `/files/hunt/{field_id}/frames/{visit}-{band}.bin` | A stack as little-endian float32, row 0 = north, `grid.nx` × `grid.ny`. |
+| GET | `/files/hunt/{field_id}/frames/{visit}-{band}.bin` | A stack as little-endian float16 (see `grid.dtype`), row 0 = north, `grid.nx` × `grid.ny`. |
 | GET | `/api/halo` | Halo-brightness results for the saturated targets and the control stars (`validation/halo_results.json`). |
 | GET | `/api/hunt-injection` | The blind injection test (SYNTHETIC sources hidden in a blank field): the 4 × 4 grid of outcomes. |
 | GET | `/api/forecasts` | Forward predictions for dates SPHEREx has not observed yet, each with its SHA-256 and the commit that first added it. |
@@ -179,6 +179,27 @@ with the same motion and is not counted as unexplained.
 
 Investigations now also carry `solar_system` (the SkyBoT check used by hypothesis H5) and, for saturated targets,
 `halo_variability`.
+
+## Distant worlds, Planet Nine mode and the lock record
+
+| Method | Path | Returns |
+|---|---|---|
+| GET | `/api/distant` | Blind recovery of known distant bodies: per body the pass or fail, fitted and JPL distances, the detections, the fitted path, the path seen from the Sun, and the forced spectrum. 404 until `python -m validation.distant_report` has run. |
+| GET | `/api/planet-nine` | The Planet Nine mode: per-field counts, geometric candidates with the reason each is rejected, the synthetic test, and the reach table. |
+| GET | `/api/barnard-halo` | Barnard's Star halo-centre test on the sealed visit: measured and Gaia displacement, per-detector differences, pass rule. |
+| GET | `/api/ledger` | `{ok, problems, entries}`: the local lock record and whether its chain and the locked files still verify. |
+
+`/files/targets/{slug}/{path}` now resolves the path and refuses anything outside that target's folder (a leading slash used to escape it).
+Malformed JSON, a non-object body or a non-numeric field of view return 400.
+
+## Live archive check, disappearance check, machine-learning test
+
+| Method | Path | Returns |
+|---|---|---|
+| GET | `/api/watch` | The last check of NASA's archive (`pipeline/watch.py`): per locked forecast, whether newer images exist where and when to look; per NASA target, any new exposures. |
+| GET | `/api/vanished` | Bright WISE sources (about 2015) that SPHEREx no longer sees where WISE saw them, each classed as moved, faded or vanished (`validation/vanished.py`). |
+| GET | `/api/ml` | The real/artefact model's held-out test, against signal-to-noise alone (`validation/ml_realbogus.py`). |
+| GET | `/api/forecasts` | Now also includes Makemake's forecast from its blind orbit, each forecast's local lock-record entry, and the after-the-fact JPL comparison. |
 
 ## Jobs
 

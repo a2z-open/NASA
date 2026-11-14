@@ -19,7 +19,7 @@ Work through this list, then decide separately on each gated action at the botto
 - [ ] **Phone width:** usable, no sideways scrolling.
 
 ## 2. Check the science claims (VALIDATION.md, docs/HUNT_REPORT.md, RESULTS_LOG.md)
-- [ ] Re-run `pytest -q` (71 tests) and `npm --prefix web test` (12 tests).
+- [ ] Re-run `pytest -q` (85 tests) and `npm --prefix web test` (12 tests).
 - [ ] Read docs/HUNT_REPORT.md. For every row of "Movers that no catalogue explains", open it in the app and decide
       whether to mention it at all. **None may be called a discovery.**
 - [ ] Decide how to word the variable-star result. It is experimental; the control is one saturated star plus the bright
@@ -51,3 +51,34 @@ Work through this list, then decide separately on each gated action at the botto
 - [ ] Record the 30-second video, or export `/deck` to PDF (DEMO_SCRIPT.md).
 - [ ] Submit on the Space Apps portal (SUBMISSION.md is a draft).
 - [ ] Any contact with organizers, sponsors or scientists.
+
+## 5. Added in the third session (14 Nov, no Git)
+
+Nothing from this session is committed. The team asked that Git not be used for now, so all of it is in the working files.
+
+**Look at these**
+- [ ] **Planet X hunt page:** three searches. Open "Find a distant world by its parallax": each world's distance against JPL's,
+      the wavy path, the spectrum. Check that the misses are shown as misses.
+- [ ] **"The same search, pointed at Planet Nine":** it must read as *not found, and could not have been*. Read the reach table,
+      the pretend-planet grid and the false alarms.
+- [ ] **Proof page, Test 6:** Barnard's Star from its halo, on the visit that had been sealed.
+- [ ] `python -m validation.ledger verify` prints "OK". Read `validation/distant/PROTOCOL.md` and `PROTOCOL_P9.md`.
+- [ ] `docs/DISTANT_WORLDS.md` (generated), `docs/PLANET_NINE_RESEARCH.md` and `docs/JUDGING_NOTES.md` (written by AI helpers from
+      public sources; both list what they could not confirm).
+
+**Decide these**
+- [ ] **The claim.** Suggested wording: "PARALLAX found a dwarf planet without being told where it was and measured its distance
+      from parallax; pointed at Planet Nine it found nothing, and we show why." Never "we searched for Planet Nine and ruled it out".
+- [ ] **The brightness rule in the Planet Nine mode was added after seeing two real candidates.** It is disclosed everywhere.
+      Confirm you are comfortable presenting it that way.
+- [ ] **Figures quoted from memory, to verify before the pitch:** the wavelengths of the methane-ice and water-ice bands
+      (`validation/distant_report.py`, `SURFACE`), the references for each world's surface, and the V magnitudes used for the
+      Neptune and Jupiter twins (`validation/planet_nine.py`, `reach`).
+- [ ] **Barnard's Star is no longer sealed.** 36 exposures of its third visit were downloaded for the halo test. Say so if asked.
+- [ ] **Slide 1 needs the team name and members** (the submission guide asks for them): fill `TEAM` in `web/src/pages/Deck.tsx`.
+- [ ] **Eligibility, from `docs/JUDGING_NOTES.md`:** work before the official start, credit for any reused code, and the rule that
+      AI must not supply the idea. These need the team's own answers, in writing.
+
+**Gated, as before (each needs its own explicit yes)**
+- [ ] Using Git again: commit this session's work, then push. Publishing the last ledger hash gives the locks an outside time-stamp.
+- [ ] Deploy, record or export the demo, submit, contact anyone.

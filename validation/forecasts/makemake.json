@@ -1,0 +1,211 @@
+{
+ "target": "makemake",
+ "title": "Makemake",
+ "kind": "forward_prediction_distant_world",
+ "locked_utc": "2026-11-14T20:25:59+00:00",
+ "model": "heliocentric_orbit",
+ "model_note": "The orbit the blind search fitted to its own SPHEREx detections (6 parameters, the Sun's gravity, light-travel time). No JPL ephemeris was used. Uncertainty from refitting it 60 times with every detection moved by its own error.",
+ "data_used": {
+  "n_usable_positions": 30,
+  "first_observation_utc": "2025-06-11T10:42:07.910Z",
+  "last_observation_utc": "2026-06-13T11:30:26.295Z"
+ },
+ "archive_at_lock": {
+  "service": "IRSA SIA2 (spherex_dr1, spherex_qr3)",
+  "n_products_at_first_window_position": 380,
+  "latest_exposure_utc": "2026-07-09T01:56:36.672Z",
+  "note": "No SPHEREx exposure of the first predicted position was taken after this time when the forecast was locked."
+ },
+ "fit": {
+  "r_au": 52.720406205755204,
+  "r_err_au": 0.010504413945552007,
+  "chi2_reduced": 0.6682803690349262,
+  "n_points": 30
+ },
+ "criterion": "PASS if the mean position measured in the next SPHEREx visit lies within 3 sigma of the forecast for that date, where sigma combines the forecast spread and the measurement error, with a floor of 2 arcseconds.",
+ "stays_here_null": {
+  "ra_deg": 200.6689930966373,
+  "dec_deg": 20.965189639510488,
+  "note": "the last measured position: where it would be if it did not move"
+ },
+ "spherex_windows": [
+  {
+   "start_utc": "2026-12-22",
+   "end_utc": "2027-01-17"
+  },
+  {
+   "start_utc": "2027-06-20",
+   "end_utc": "2027-07-18"
+  }
+ ],
+ "predictions": [
+  {
+   "date_utc": "2027-01-01T00:00:00Z",
+   "mjd": 61406.0,
+   "ra_deg": 203.0513684607834,
+   "dec_deg": 19.64280656650328,
+   "sigma_ra_arcsec": 15.989973670911187,
+   "sigma_dec_arcsec": 9.700240114965549,
+   "offset_from_stays_here_arcsec": 9375.945268631225,
+   "elongation_deg": 87.02526573059363,
+   "in_spherex_window": true
+  },
+  {
+   "date_utc": "2027-01-04T00:00:00Z",
+   "mjd": 61409.0,
+   "ra_deg": 203.07055177839652,
+   "dec_deg": 19.66158392309404,
+   "sigma_ra_arcsec": 16.252095699903943,
+   "sigma_dec_arcsec": 9.661532645301099,
+   "offset_from_stays_here_arcsec": 9397.273519435437,
+   "elongation_deg": 89.73931433598408,
+   "in_spherex_window": true
+  },
+  {
+   "date_utc": "2027-02-01T00:00:00Z",
+   "mjd": 61437.0,
+   "ra_deg": 203.10871706602546,
+   "dec_deg": 19.88859856658132,
+   "sigma_ra_arcsec": 17.84672307511256,
+   "sigma_dec_arcsec": 8.814324530682061,
+   "offset_from_stays_here_arcsec": 9123.31333223105,
+   "elongation_deg": 114.890240053987,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-03-01T00:00:00Z",
+   "mjd": 61465.0,
+   "ra_deg": 202.90239555969814,
+   "dec_deg": 20.161255615408052,
+   "sigma_ra_arcsec": 17.68837574044264,
+   "sigma_dec_arcsec": 7.343400600123622,
+   "offset_from_stays_here_arcsec": 8083.460782478354,
+   "elongation_deg": 137.99105304276313,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-04-01T00:00:00Z",
+   "mjd": 61496.0,
+   "ra_deg": 202.4655933450711,
+   "dec_deg": 20.42483903249135,
+   "sigma_ra_arcsec": 15.609715580470183,
+   "sigma_dec_arcsec": 5.66837024805419,
+   "offset_from_stays_here_arcsec": 6365.645067655384,
+   "elongation_deg": 152.39632269240684,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-05-01T00:00:00Z",
+   "mjd": 61526.0,
+   "ra_deg": 201.97082785071925,
+   "dec_deg": 20.56043501018421,
+   "sigma_ra_arcsec": 12.525535678977352,
+   "sigma_dec_arcsec": 4.8082488072890746,
+   "offset_from_stays_here_arcsec": 4623.681052811672,
+   "elongation_deg": 141.4176109919453,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-06-01T00:00:00Z",
+   "mjd": 61557.0,
+   "ra_deg": 201.54664798035532,
+   "dec_deg": 20.53051954843274,
+   "sigma_ra_arcsec": 9.579747101647438,
+   "sigma_dec_arcsec": 5.350405234526084,
+   "offset_from_stays_here_arcsec": 3347.1790945679118,
+   "elongation_deg": 117.66440047589852,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-07-01T00:00:00Z",
+   "mjd": 61587.0,
+   "ra_deg": 201.3433199935193,
+   "dec_deg": 20.340423243192053,
+   "sigma_ra_arcsec": 8.235578489533944,
+   "sigma_dec_arcsec": 7.4615324983585705,
+   "offset_from_stays_here_arcsec": 3199.971090088253,
+   "elongation_deg": 92.43119359031702,
+   "in_spherex_window": true
+  },
+  {
+   "date_utc": "2027-07-04T00:00:00Z",
+   "mjd": 61590.0,
+   "ra_deg": 201.33712831371847,
+   "dec_deg": 20.31408411297797,
+   "sigma_ra_arcsec": 8.220147672046172,
+   "sigma_dec_arcsec": 7.753106531820101,
+   "offset_from_stays_here_arcsec": 3253.0545748658055,
+   "elongation_deg": 89.88856752173253,
+   "in_spherex_window": true
+  },
+  {
+   "date_utc": "2027-08-01T00:00:00Z",
+   "mjd": 61618.0,
+   "ra_deg": 201.41144023568515,
+   "dec_deg": 20.023280860836262,
+   "sigma_ra_arcsec": 9.300459147073813,
+   "sigma_dec_arcsec": 11.043127247629197,
+   "offset_from_stays_here_arcsec": 4219.523224043936,
+   "elongation_deg": 66.40424711681091,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-09-01T00:00:00Z",
+   "mjd": 61649.0,
+   "ra_deg": 201.7538941772698,
+   "dec_deg": 19.656578610813483,
+   "sigma_ra_arcsec": 13.139935216510553,
+   "sigma_dec_arcsec": 15.461447709671884,
+   "offset_from_stays_here_arcsec": 5976.7496237427,
+   "elongation_deg": 42.19162431864309,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-10-01T00:00:00Z",
+   "mjd": 61679.0,
+   "ra_deg": 202.276849144564,
+   "dec_deg": 19.332821638146505,
+   "sigma_ra_arcsec": 19.15047036885859,
+   "sigma_dec_arcsec": 19.79139513396543,
+   "offset_from_stays_here_arcsec": 8022.828402566757,
+   "elongation_deg": 27.00670182749491,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-11-01T00:00:00Z",
+   "mjd": 61710.0,
+   "ra_deg": 202.8958754234813,
+   "dec_deg": 19.104592162025718,
+   "sigma_ra_arcsec": 26.79126650682842,
+   "sigma_dec_arcsec": 23.48592159904104,
+   "offset_from_stays_here_arcsec": 10111.844219750432,
+   "elongation_deg": 35.531470779352915,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2027-12-01T00:00:00Z",
+   "mjd": 61740.0,
+   "ra_deg": 203.4341202139894,
+   "dec_deg": 19.036218237564057,
+   "sigma_ra_arcsec": 34.21765903838978,
+   "sigma_dec_arcsec": 25.57240899700623,
+   "offset_from_stays_here_arcsec": 11694.988484000918,
+   "elongation_deg": 58.5056168678287,
+   "in_spherex_window": false
+  },
+  {
+   "date_utc": "2028-01-01T00:00:00Z",
+   "mjd": 61771.0,
+   "ra_deg": 203.79244207409994,
+   "dec_deg": 19.137056156270795,
+   "sigma_ra_arcsec": 40.26412366058525,
+   "sigma_dec_arcsec": 25.698387579158126,
+   "offset_from_stays_here_arcsec": 12496.469338592984,
+   "elongation_deg": 85.94504696613863,
+   "in_spherex_window": false
+  }
+ ],
+ "how_to_check": "python -m pipeline.watch finds new SPHEREx exposures at the predicted positions. Measure the body there and compare with the prediction for that date. The JPL Horizons ephemeris can be used afterwards as an independent check.",
+ "statement": "Predicted positions of Makemake for SPHEREx images that did not exist when this was locked.",
+ "typical_uncertainty_arcsec": 15.000933500688813
+}

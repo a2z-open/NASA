@@ -1,0 +1,55 @@
+{
+ "body_field_set": "haumea",
+ "thresholds": {
+  "detect_snr": 5.0,
+  "fit_snr_min": 4.0,
+  "star_radius_px": 1.3,
+  "rate_max_arcsec_day": 200.0,
+  "tracklet_min": 4,
+  "tracklet_tol_arcsec": 2.5,
+  "sigma_floor_arcsec": 0.6,
+  "r_min_au": 15.0,
+  "r_max_au": 20000.0,
+  "orbit_chi2r_max": 4.0,
+  "mirror_ratio_min": 9.0
+ },
+ "n_exposures": 64,
+ "n_orphans": 33,
+ "n_visits": 2,
+ "visits": [
+  {
+   "visit": 0,
+   "n_orphans": 28,
+   "mjd_start": 61058.972715009,
+   "mjd_end": 61070.650994488
+  },
+  {
+   "visit": 1,
+   "n_orphans": 5,
+   "mjd_start": 61243.452429036,
+   "mjd_end": 61246.711406733
+  }
+ ],
+ "tracklets": [
+  {
+   "visit": 0,
+   "n": 14,
+   "nights": 4,
+   "span_days": 4.212031226998079,
+   "rate_arcsec_day": 35.62998649077275,
+   "rms_arcsec": 1.196146960825046,
+   "t_mid_mjd": 61063.34394035849
+  },
+  {
+   "visit": 0,
+   "n": 4,
+   "nights": 1,
+   "span_days": 0.004476759000681341,
+   "rate_arcsec_day": 40.395120594382945,
+   "rms_arcsec": 0.2837944094365868,
+   "t_mid_mjd": 61058.9749533855
+  }
+ ],
+ "objects": [],
+ "statement": "Produced from image files, Gaia DR3 and CatWISE2020 only. No ephemeris was read."
+}

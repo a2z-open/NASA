@@ -228,7 +228,7 @@ def main(argv=None):
         'negative_controls': prior.get('negative_controls') if skip_controls else negative_controls(),
         'injections': prior.get('injections'),
         'limitations': [
-            'The validation set is small (five named targets, one held-out experiment, tens of control stars); it does not establish full-sky performance.',
+            'The validation set is small (five named targets, two held-out experiments, tens of control stars); it does not establish full-sky performance.',
             'Negative controls are bright-ish isolated Gaia stars; faint, crowded or nebular regions are not represented.',
             'Three of the five NASA targets (Barnard\'s Star, RW Aur, R Dra) saturate SPHEREx; their core measurements are excluded and reported as such.',
             'Proper motions of a binary (Epsilon Indi Ba/Bb) include orbital photocentre motion, so differences from Gaia DR3 are expected at the few-sigma level.',

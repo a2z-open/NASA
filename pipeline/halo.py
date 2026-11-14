@@ -151,11 +151,46 @@ def analyse(rows, *, ring=None):
         visits.append({'visit': f'visit-{v + 1}', 'n': n, 'start_utc': mjd_to_iso(float(mjd[vis == v].min())), 'end_utc': mjd_to_iso(float(mjd[vis == v].max())),
                        'ln_ratio': float(V[v]), 'ratio': float(math.exp(V[v])), 'scatter': scat if math.isfinite(scat) else None,
                        'err': float(1.2533 * scat / math.sqrt(n)) if n >= 3 else None})
+    # ---- null calibration ----
+    # With no variability at all, this exact sampling and this solver, how large do the "sigmas" come out?  The solver
+    # fits one level per wavelength bin and per visit from few points, so its formal errors are too small.  Simulate
+    # constant stars with the observed scatter and divide every significance by the spread found (never below 1).
+    def _null_z(sim):
+        Vs, Ss = np.zeros(nv), {}
+        for _ in range(12):
+            for k in set(b):
+                sel = b == k
+                Ss[k] = float(np.median(sim[sel] - Vs[vis[sel]]))
+            ss = np.array([Ss[k] for k in b])
+            for v in range(nv):
+                sel = (vis == v) & multi
+                if sel.any():
+                    Vs[v] = float(np.median(sim[sel] - ss[sel]))
+            Vs -= Vs[0]
+        rr = sim - np.array([Ss[k] for k in b]) - Vs[vis]
+        errs = []
+        for v in range(nv):
+            sel = (vis == v) & multi
+            errs.append(1.2533 * 1.4826 * float(np.median(np.abs(rr[sel] - np.median(rr[sel])))) / math.sqrt(sel.sum()) if sel.sum() >= 3 else math.nan)
+        return [abs(Vs[v]) / math.hypot(errs[v], errs[0]) for v in range(1, nv)
+                if math.isfinite(errs[v]) and math.isfinite(errs[0]) and math.hypot(errs[v], errs[0]) > 0]
+
+    noise = float(1.4826 * np.median(np.abs(resid[multi] - np.median(resid[multi]))))
+    rng = np.random.default_rng(20261114)
+    zs = []
+    for _ in range(200):
+        zs += _null_z(s + rng.normal(0.0, max(noise, 1e-6), len(lnh)))
+    null_scale = float(max(1.0, math.sqrt(np.mean(np.square(zs))))) if zs else 1.0
+    out['null_scale'] = null_scale
+    out['null_note'] = ('Significances are divided by this factor: the spread of the same statistic for simulated constant stars '
+                        'with this sampling (200 simulations). 1.0 would mean the formal errors are right.')
     e0 = visits[0]['err'] or 0.0
     for d in visits[1:]:
         if d['err'] is not None:
             d['err_vs_first'] = float(math.hypot(d['err'], e0))
-            d['sigma'] = float(abs(d['ln_ratio']) / d['err_vs_first']) if d['err_vs_first'] > 0 else None
+            raw = float(abs(d['ln_ratio']) / d['err_vs_first']) if d['err_vs_first'] > 0 else None
+            d['sigma_uncalibrated'] = raw
+            d['sigma'] = (raw / null_scale) if raw is not None else None
     # light curve: brightness relative to the first visit, per exposure
     curve = [{'mjd': float(m), 'time_utc': mjd_to_iso(float(m)), 'relative': float(math.exp(x)), 'err': float(e), 'wavelength_um': float(w),
               'visit': f'visit-{int(v) + 1}', 'matched': bool(mm)}

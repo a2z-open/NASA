@@ -166,7 +166,7 @@ function ExploreIdle({ targets }: { targets: Target[] | null }) {
             </Link>
           ))}
         </div>
-        <p className="small dim">Or try anywhere: <Link href="/explore?ra=270.0&dec=-23.5&fov=6">the centre of the Milky Way</Link> · <Link href="/explore?ra=10.6847&dec=41.269&fov=8">the Andromeda galaxy</Link></p>
+        <p className="small dim">Or try anywhere: <Link href="/explore?ra=266.4168&dec=-29.0078&fov=6">the centre of the Milky Way</Link> · <Link href="/explore?ra=10.6847&dec=41.269&fov=8">the Andromeda galaxy</Link></p>
       </div>
     </div></main>
   );
@@ -197,7 +197,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const [black, setBlack] = useState(1.5);
   const [contrast, setContrast] = useState(1);
   const [independent, setIndependent] = useState(false);
-  const [smooth, setSmooth] = useState(false);
+  const [smooth, setSmooth] = useState(params.get('smooth') !== '0');
+  const [fade, setFade] = useState(params.get('fade') !== '0');
   const [showGrid, setShowGrid] = useState(false);
   const [showCatalog, setShowCatalog] = useState(false);
   const [showWise, setShowWise] = useState(false);
@@ -416,6 +417,9 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     function onKey(e: KeyboardEvent) {
       const t = e.target as HTMLElement;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;                       // leave browser shortcuts alone
+      const onControl = !!t && (t.tagName === 'BUTTON' || t.tagName === 'A' || t.tagName === 'SUMMARY');
+      if (onControl && (e.key === ' ' || e.key === 'Enter')) return;      // Space and Enter press the focused control
       if (e.key === ' ') { e.preventDefault(); setPlaying(p => !p); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }
@@ -542,6 +546,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               showGrid={showGrid}
               showCatalog={showCatalog}
               smoothing={smooth}
+              fadeMs={fade && mode !== 'difference' && mode !== 'stack' ? Math.min(900 / fps, mode === 'blink' ? 350 : 600) : 0}
               hint={hint}
               onPick={pick}
               emptyMessage={emptyMessage}
@@ -589,7 +594,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               <button className="icon" onClick={() => { setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Next exposure (→)">›</button>
               <label className="transport__speed"><span className="visually-hidden">Speed</span>
                 <select value={fps} onChange={e => setFps(Number(e.target.value))} aria-label="Playback speed">
-                  {[1, 2, 4, 8, 12].map(v => <option key={v} value={v}>{v} fps</option>)}
+                  {[1, 2, 4, 8, 12, 20, 30].map(v => <option key={v} value={v}>{v} fps</option>)}
                 </select>
               </label>
               <span className="transport__count mono">{frames.length ? `${safeIndex + 1} / ${frames.length}` : '0 / 0'}</span>
@@ -683,7 +688,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               <label><input type="checkbox" checked={showWise} onChange={e => setShowWise(e.target.checked)} /> What WISE saw around 2015{showWise && !wise ? ' (loading…)' : ''}</label>
               {wiseError && <span className="small" style={{ color: 'var(--bad)' }}>{wiseError}</span>}
               <label><input type="checkbox" checked={showGrid} onChange={e => setShowGrid(e.target.checked)} /> Coordinate grid</label>
-              <label><input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} /> Smooth pixels</label>
+              <label><input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} /> Smooth pixels (for viewing; measurements use the original pixels)</label>
+              <label><input type="checkbox" checked={fade} onChange={e => setFade(e.target.checked)} /> Smooth playback (each image fades into the next)</label>
               <label><input type="checkbox" checked={independent} onChange={e => setIndependent(e.target.checked)} /> Rescale every image on its own</label>
             </div>
             <div className="row-btns">

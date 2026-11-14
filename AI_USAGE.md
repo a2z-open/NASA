@@ -38,3 +38,16 @@ reprojected for display. PARALLAX uses no NASA logos or mission branding.
   that an older catalogue already lists are labelled as known.
 - It did not submit the project, publish the repository, deploy anything publicly, or contact organizers, sponsors or
   scientists. Those steps wait for explicit team approval.
+
+## Third session (14 Nov 2026): helpers and what they did
+
+- Claude Code (model Fable 5.2) wrote the distant-world search, the Planet Nine mode, the Barnard's Star halo test, the lock
+  ledger and the new pages, and fixed the defects listed in RESULTS_LOG.md.
+- Three AI helper agents ran in parallel, each with a narrow, read-mostly job:
+  1. a literature search on Planet Nine, which wrote `docs/PLANET_NINE_RESEARCH.md` with sources and flagged what it could not confirm;
+  2. a search of the official Space Apps pages, which wrote `docs/JUDGING_NOTES.md`;
+  3. an independent audit of the code and documents, which changed nothing and returned a list of defects. That list is the
+     source of the corrections in RESULTS_LOG.md, including claims that had overreached.
+- No AI runs inside the app. The orbit fit, the linking and every threshold are fixed, readable code.
+- TEAM TODO: the idea, the direction and the approval of every claim must be the team's own. State in your own words what
+  each member decided and checked. The official FAQ says AI must not supply the idea (see `docs/JUDGING_NOTES.md`).

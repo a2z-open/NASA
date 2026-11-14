@@ -197,7 +197,7 @@ def main():
         for v in inj['speeds_arcsec_yr']:
             cells = []
             for f in inj['fluxes_ujy']:
-                r = next((x for x in inj['results'] if x['speed_arcsec_yr'] == v and x['flux_ujy'] == f), None)
+                r = next((x for x in inj['results'] if abs(x['speed_arcsec_yr'] - v) < 1e-6 and abs(x['flux_ujy'] - f) < 1e-6), None)
                 t_ = label.get(r['outcome'], r['outcome']) if r else 'not run'
                 if r and r['outcome'] == 'recovered':
                     t_ += f" ({r['measured_pm_arcsec_yr']:.2f}″/yr)"

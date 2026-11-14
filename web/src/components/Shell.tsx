@@ -3,6 +3,7 @@ import { Link, useLocation } from '../router.tsx';
 import { Starfield } from './Starfield.tsx';
 
 const NAV = [
+  { href: '/map', label: 'Sky map' },
   { href: '/explore', label: 'Explore' },
   { href: '/hunt', label: 'Planet X hunt' },
   { href: '/proof', label: 'Proof' },

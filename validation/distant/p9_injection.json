@@ -1,0 +1,173 @@
+{
+ "synthetic": true,
+ "field": "control-uds",
+ "n_exposures": 88,
+ "n_visits": 3,
+ "r_au": [
+  500.0,
+  800.0,
+  1200.0,
+  2000.0
+ ],
+ "fluxes_ujy": [
+  150.0,
+  300.0,
+  600.0,
+  1200.0
+ ],
+ "band": "0.75-2.42 um, flat spectrum",
+ "results": [
+  {
+   "r_au": 500.0,
+   "flux_ujy": 150.0,
+   "outcome": "too_faint",
+   "visits_seen": 0,
+   "r_fit_au": null,
+   "r_err_au": null,
+   "chi2r": null
+  },
+  {
+   "r_au": 500.0,
+   "flux_ujy": 300.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 500.61607852949163,
+   "r_err_au": 1.7964331819725319,
+   "chi2r": 0.014134316379902284
+  },
+  {
+   "r_au": 500.0,
+   "flux_ujy": 600.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 500.500506598963,
+   "r_err_au": 1.5786280679503326,
+   "chi2r": 0.005302276122976237
+  },
+  {
+   "r_au": 500.0,
+   "flux_ujy": 1200.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 499.6854300554281,
+   "r_err_au": 1.5048664741409845,
+   "chi2r": 0.13618839141453962
+  },
+  {
+   "r_au": 800.0,
+   "flux_ujy": 150.0,
+   "outcome": "too_faint",
+   "visits_seen": 2,
+   "r_fit_au": null,
+   "r_err_au": null,
+   "chi2r": null
+  },
+  {
+   "r_au": 800.0,
+   "flux_ujy": 300.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 801.3665748098945,
+   "r_err_au": 4.334861742629034,
+   "chi2r": 0.18750461531203438
+  },
+  {
+   "r_au": 800.0,
+   "flux_ujy": 600.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 800.5699159279696,
+   "r_err_au": 3.9297308508922284,
+   "chi2r": 0.7955943048975516
+  },
+  {
+   "r_au": 800.0,
+   "flux_ujy": 1200.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 800.7424274259382,
+   "r_err_au": 3.847578698568332,
+   "chi2r": 0.017432289598095778
+  },
+  {
+   "r_au": 1200.0,
+   "flux_ujy": 150.0,
+   "outcome": "too_faint",
+   "visits_seen": 1,
+   "r_fit_au": null,
+   "r_err_au": null,
+   "chi2r": null
+  },
+  {
+   "r_au": 1200.0,
+   "flux_ujy": 300.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 1196.3016052998082,
+   "r_err_au": 9.310856226569818,
+   "chi2r": 0.004431572219739279
+  },
+  {
+   "r_au": 1200.0,
+   "flux_ujy": 600.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 1199.5109679295508,
+   "r_err_au": 8.82827034411141,
+   "chi2r": 0.23813318158418112
+  },
+  {
+   "r_au": 1200.0,
+   "flux_ujy": 1200.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 1201.4231750712788,
+   "r_err_au": 8.646902140337568,
+   "chi2r": 0.0031751279307464077
+  },
+  {
+   "r_au": 2000.0,
+   "flux_ujy": 150.0,
+   "outcome": "too_faint",
+   "visits_seen": 2,
+   "r_fit_au": null,
+   "r_err_au": null,
+   "chi2r": null
+  },
+  {
+   "r_au": 2000.0,
+   "flux_ujy": 300.0,
+   "outcome": "too_faint",
+   "visits_seen": 2,
+   "r_fit_au": null,
+   "r_err_au": null,
+   "chi2r": null
+  },
+  {
+   "r_au": 2000.0,
+   "flux_ujy": 600.0,
+   "outcome": "recovered",
+   "visits_seen": 3,
+   "r_fit_au": 1995.3253946220057,
+   "r_err_au": 24.34212622231013,
+   "chi2r": 0.059821791764267836
+  },
+  {
+   "r_au": 2000.0,
+   "flux_ujy": 1200.0,
+   "outcome": "too_faint",
+   "visits_seen": 2,
+   "r_fit_au": null,
+   "r_err_au": null,
+   "chi2r": null
+  }
+ ],
+ "n_single_visit_sources": 64,
+ "n_pairs": 186,
+ "false_triples": 0,
+ "depth_5sigma_ujy": {
+  "short": 96.57958221435547,
+  "cold": 128.44430541992188
+ },
+ "note": "SYNTHETIC planets built from each exposure's own ePSF and added to real images of a blank field. Never real."
+}

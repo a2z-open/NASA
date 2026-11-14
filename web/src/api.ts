@@ -398,7 +398,10 @@ export interface Forecast {
   archive_at_lock: { n_products_covering_the_source: number; latest_exposure_utc: string };
   fit: { pm_total_masyr?: number; pm_total_err_masyr?: number; parallax_mas?: number; parallax_err_mas?: number };
   criterion: string; sha256: string | null; commit: { hash: string; time: string } | null;
-  predictions: { date_utc: string; ra_deg: number; dec_deg: number; sigma_ra_arcsec: number; sigma_dec_arcsec: number; offset_from_stays_here_arcsec: number }[];
+  kind?: string; spherex_windows?: { start_utc: string; end_utc: string }[];
+  ledger?: { seq: number; time_utc: string; hash: string } | null;
+  jpl_check?: { note: string; rows: { date: string; offset_from_jpl_arcsec: number; forecast_sigma_arcsec: number; in_spherex_window: boolean }[] } | null;
+  predictions: { date_utc: string; ra_deg: number; dec_deg: number; sigma_ra_arcsec: number; sigma_dec_arcsec: number; offset_from_stays_here_arcsec: number; in_spherex_window?: boolean }[];
 }
 export interface HuntInjection {
   label: string; description: string; field: string; n_exposures: number; n_visits: number; baseline_days: number;

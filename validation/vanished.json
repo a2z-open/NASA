@@ -1,0 +1,627 @@
+{
+ "method": "    python -m validation.vanished",
+ "thresholds": {
+  "expected_snr_min": 15.0,
+  "gone_snr": 3.0,
+  "faded_ratio": 0.3,
+  "glare_sigma": 300.0,
+  "glare_arcsec": 45.0,
+  "bright_w2": 8.0,
+  "edge_fraction": 0.85
+ },
+ "n_fields": 25,
+ "n_tested": 945,
+ "counts": {
+  "moved": 9,
+  "faded": 0,
+  "vanished": 0
+ },
+ "fields": [
+  {
+   "field_id": "2mass-0348",
+   "title": "2MASS J03480772-6022270",
+   "n_wise": 2579,
+   "n_tested": 35,
+   "calibration_scale": 1.4343411910983141,
+   "depth_cold_ujy": 136.0,
+   "flagged": []
+  },
+  {
+   "field_id": "2mass-0559",
+   "title": "2MASS J05591914-1404488",
+   "n_wise": 2850,
+   "n_tested": 53,
+   "calibration_scale": 1.5669212052165253,
+   "depth_cold_ujy": 194.7,
+   "flagged": []
+  },
+  {
+   "field_id": "2mass-0727",
+   "title": "2MASSI J0727182+171001",
+   "n_wise": 2786,
+   "n_tested": 73,
+   "calibration_scale": 1.6730257519072729,
+   "depth_cold_ujy": 221.6,
+   "flagged": []
+  },
+  {
+   "field_id": "2mass-0939",
+   "title": "2MASS J09393548-2448279",
+   "n_wise": 2527,
+   "n_tested": 47,
+   "calibration_scale": 1.6316071735614528,
+   "depth_cold_ujy": 177.0,
+   "flagged": []
+  },
+  {
+   "field_id": "2mass-1217",
+   "title": "2MASS J12171110-0311131",
+   "n_wise": 2127,
+   "n_tested": 32,
+   "calibration_scale": 1.4224890667472703,
+   "depth_cold_ujy": 136.3,
+   "flagged": []
+  },
+  {
+   "field_id": "barnards-star",
+   "title": "Barnard's Star",
+   "n_wise": 914,
+   "n_tested": 5,
+   "calibration_scale": 4.169239788399317,
+   "depth_cold_ujy": 452.3,
+   "flagged": []
+  },
+  {
+   "field_id": "control-cdfs",
+   "title": "Chandra Deep Field South",
+   "n_wise": 1850,
+   "n_tested": 26,
+   "calibration_scale": 1.3913587223446013,
+   "depth_cold_ujy": 117.4,
+   "flagged": []
+  },
+  {
+   "field_id": "control-cosmos",
+   "title": "COSMOS field",
+   "n_wise": 2135,
+   "n_tested": 41,
+   "calibration_scale": 1.5254206889434891,
+   "depth_cold_ujy": 153.1,
+   "flagged": []
+  },
+  {
+   "field_id": "control-goodsn",
+   "title": "GOODS-North",
+   "n_wise": 2279,
+   "n_tested": 27,
+   "calibration_scale": 1.4110764464597152,
+   "depth_cold_ujy": 115.2,
+   "flagged": []
+  },
+  {
+   "field_id": "control-uds",
+   "title": "UKIDSS Ultra Deep Survey field",
+   "n_wise": 1721,
+   "n_tested": 19,
+   "calibration_scale": 1.455035862107486,
+   "depth_cold_ujy": 128.1,
+   "flagged": []
+  },
+  {
+   "field_id": "denis-0255",
+   "title": "DENIS J025503.3-470049",
+   "n_wise": 2239,
+   "n_tested": 30,
+   "calibration_scale": 1.450851536699067,
+   "depth_cold_ujy": 121.1,
+   "flagged": []
+  },
+  {
+   "field_id": "epsilon-indi-b",
+   "title": "Epsilon Indi B",
+   "n_wise": 458,
+   "n_tested": 11,
+   "calibration_scale": 3.792471237054292,
+   "depth_cold_ujy": 148.7,
+   "flagged": [
+    {
+     "name": "J220415.74-564724.4",
+     "ra": 331.0656012,
+     "dec": -56.7901207,
+     "w2": 11.397,
+     "expected_snr": 159.53255887887954,
+     "snr_by_visit": [
+      -2.1014681955067163,
+      -4.185582109665045,
+      -1.8591643252523893,
+      -0.7899728198814616
+     ],
+     "best_snr": -0.7899728198814616,
+     "pm_arcsec_yr": 0.5033433849768963,
+     "pm_sigma": 3.7557699955019053,
+     "spherex_mover_within_60": false,
+     "mover_track": "Epsilon Indi B",
+     "expected_snr_calibrated": 605.022640921821,
+     "kind": "moved",
+     "fraction_seen": 0.0
+    },
+    {
+     "name": "J220418.42-564738.2",
+     "ra": 331.0767776,
+     "dec": -56.793953,
+     "w2": 10.749,
+     "expected_snr": 289.7672714051833,
+     "snr_by_visit": [
+      -3.439206253531303,
+      -5.125681470077717,
+      -2.3165781444058235,
+      -3.6712356863580258
+     ],
+     "best_snr": -2.3165781444058235,
+     "pm_arcsec_yr": 1.1292132411993758,
+     "pm_sigma": 138.60856049877933,
+     "spherex_mover_within_60": true,
+     "mover_track": "Epsilon Indi B",
+     "expected_snr_calibrated": 1098.9340422438622,
+     "kind": "moved",
+     "fraction_seen": 0.0
+    },
+    {
+     "name": "J220417.71-564734.5",
+     "ra": 331.0738277,
+     "dec": -56.7929393,
+     "w2": 11.2,
+     "expected_snr": 191.27108932794198,
+     "snr_by_visit": [
+      -4.526386217127711,
+      -4.661483188483691,
+      0.1746514485322945,
+      -4.871173938563219
+     ],
+     "best_snr": 0.1746514485322945,
+     "pm_arcsec_yr": 0.3786333647474824,
+     "pm_sigma": 7.468171810322016,
+     "spherex_mover_within_60": true,
+     "mover_track": "Epsilon Indi B",
+     "expected_snr_calibrated": 725.3901047562621,
+     "kind": "moved",
+     "fraction_seen": 0.00024076899779461292
+    }
+   ]
+  },
+  {
+   "field_id": "j0415-0935",
+   "title": "2MASS J0415-0935",
+   "n_wise": 517,
+   "n_tested": 14,
+   "calibration_scale": 3.789642223252136,
+   "depth_cold_ujy": 133.0,
+   "flagged": [
+    {
+     "name": "J041521.90-093458.1",
+     "ra": 63.8412726,
+     "dec": -9.5828311,
+     "w2": 13.747,
+     "expected_snr": 20.47899588926848,
+     "snr_by_visit": [
+      -0.7862756249958863,
+      -0.26356738853850775,
+      -3.438647398364468
+     ],
+     "best_snr": -0.26356738853850775,
+     "pm_arcsec_yr": 2.8861576683195946,
+     "pm_sigma": 129.3876898309875,
+     "spherex_mover_within_60": true,
+     "mover_track": "2MASS J0415-0935",
+     "expected_snr_calibrated": 77.60806751177876,
+     "kind": "moved",
+     "fraction_seen": 0.0
+    },
+    {
+     "name": "J041522.17-093457.1",
+     "ra": 63.8423926,
+     "dec": -9.5825458,
+     "w2": 13.568,
+     "expected_snr": 24.149528661438378,
+     "snr_by_visit": [
+      -1.1822845075079709,
+      -0.7510016503536991,
+      -3.8599631012195235
+     ],
+     "best_snr": -0.7510016503536991,
+     "pm_arcsec_yr": 2.240730795968137,
+     "pm_sigma": 140.1853821465284,
+     "spherex_mover_within_60": true,
+     "mover_track": "2MASS J0415-0935",
+     "expected_snr_calibrated": 91.51807348702452,
+     "kind": "moved",
+     "fraction_seen": 0.0
+    },
+    {
+     "name": "J041522.43-093456.2",
+     "ra": 63.8434615,
+     "dec": -9.5822812,
+     "w2": 13.793,
+     "expected_snr": 19.62947384699667,
+     "snr_by_visit": [
+      0.13986017243009097,
+      0.5888078202425576,
+      -3.131303999179853
+     ],
+     "best_snr": 0.5888078202425576,
+     "pm_arcsec_yr": 1.1571336448742642,
+     "pm_sigma": 21.564121346324708,
+     "spherex_mover_within_60": true,
+     "mover_track": "2MASS J0415-0935",
+     "expected_snr_calibrated": 74.38868291080212,
+     "kind": "moved",
+     "fraction_seen": 0.007915287611001052
+    }
+   ]
+  },
+  {
+   "field_id": "luhman-16",
+   "title": "WISE J104915.57-531906.1",
+   "n_wise": 5056,
+   "n_tested": 82,
+   "calibration_scale": 1.8266520585699457,
+   "depth_cold_ujy": 730.5,
+   "flagged": []
+  },
+  {
+   "field_id": "r-draconis",
+   "title": "R Draconis",
+   "n_wise": 0,
+   "n_tested": 0,
+   "calibration_scale": 1.0,
+   "depth_cold_ujy": 365.1,
+   "flagged": []
+  },
+  {
+   "field_id": "rw-aurigae",
+   "title": "RW Aurigae",
+   "n_wise": 765,
+   "n_tested": 8,
+   "calibration_scale": 4.190024029276138,
+   "depth_cold_ujy": 403.7,
+   "flagged": []
+  },
+  {
+   "field_id": "simp-0136",
+   "title": "SIMP J013656.5+093347.3",
+   "n_wise": 1797,
+   "n_tested": 27,
+   "calibration_scale": 1.5087180353621332,
+   "depth_cold_ujy": 131.6,
+   "flagged": [
+    {
+     "name": "J013657.44+093347.1",
+     "ra": 24.2393688,
+     "dec": 9.5631102,
+     "w2": 12.483,
+     "expected_snr": 66.29860806477843,
+     "snr_by_visit": [
+      8.609932402613452,
+      7.690379309485482,
+      5.480910806510552
+     ],
+     "best_snr": 8.609932402613452,
+     "pm_arcsec_yr": 1.6092230007366908,
+     "pm_sigma": 413.71071326430854,
+     "spherex_mover_within_60": true,
+     "mover_track": "SIMP J013656.5+093347.3",
+     "expected_snr_calibrated": 100.02590570673661,
+     "kind": "moved",
+     "fraction_seen": 0.08607702516442783
+    }
+   ]
+  },
+  {
+   "field_id": "ugps-0722",
+   "title": "UGPS J072227.51-054031.2",
+   "n_wise": 4228,
+   "n_tested": 104,
+   "calibration_scale": 1.920944067699951,
+   "depth_cold_ujy": 424.3,
+   "flagged": []
+  },
+  {
+   "field_id": "wise-0254",
+   "title": "WISEP J025409.45+022359.1",
+   "n_wise": 2065,
+   "n_tested": 34,
+   "calibration_scale": 1.3669326278090277,
+   "depth_cold_ujy": 141.0,
+   "flagged": []
+  },
+  {
+   "field_id": "wise-0410",
+   "title": "WISEP J041022.71+150248.5",
+   "n_wise": 2035,
+   "n_tested": 52,
+   "calibration_scale": 1.4797387524127332,
+   "depth_cold_ujy": 164.3,
+   "flagged": []
+  },
+  {
+   "field_id": "wise-0855",
+   "title": "WISE 0855-0714",
+   "n_wise": 655,
+   "n_tested": 16,
+   "calibration_scale": 3.9363741595350703,
+   "depth_cold_ujy": 149.6,
+   "flagged": []
+  },
+  {
+   "field_id": "wise-1405",
+   "title": "WISEP J140518.40+553421.4",
+   "n_wise": 2516,
+   "n_tested": 28,
+   "calibration_scale": 1.4673503738667684,
+   "depth_cold_ujy": 125.8,
+   "flagged": []
+  },
+  {
+   "field_id": "wise-1506",
+   "title": "WISEP J150649.97+702736.0",
+   "n_wise": 2685,
+   "n_tested": 39,
+   "calibration_scale": 1.4537681658034447,
+   "depth_cold_ujy": 137.2,
+   "flagged": [
+    {
+     "name": "J150649.91+702736.1",
+     "ra": 226.707992,
+     "dec": 70.4600498,
+     "w2": 13.201,
+     "expected_snr": 32.82510987123772,
+     "snr_by_visit": [
+      -1.4242396665033266,
+      -0.46674597827031467,
+      -1.5898825153935754
+     ],
+     "best_snr": -0.46674597827031467,
+     "pm_arcsec_yr": 1.9772230944433156,
+     "pm_sigma": 155.3069748873737,
+     "spherex_mover_within_60": true,
+     "mover_track": "WISEP J150649.97+702736.0",
+     "expected_snr_calibrated": 47.720099769805806,
+     "kind": "moved",
+     "fraction_seen": 0.0
+    },
+    {
+     "name": "J150648.79+702741.0",
+     "ra": 226.7033264,
+     "dec": 70.4614073,
+     "w2": 12.228,
+     "expected_snr": 80.42779983866653,
+     "snr_by_visit": [
+      8.130061791828483,
+      16.86167079158135,
+      6.388010608018084
+     ],
+     "best_snr": 16.86167079158135,
+     "pm_arcsec_yr": 1.5660114375699816,
+     "pm_sigma": 434.16647085189663,
+     "spherex_mover_within_60": true,
+     "mover_track": "WISEP J150649.97+702736.0",
+     "expected_snr_calibrated": 116.92337505106482,
+     "kind": "moved",
+     "fraction_seen": 0.14421129037899585
+    }
+   ]
+  },
+  {
+   "field_id": "wise-1639",
+   "title": "WISE J163940.83-684738.6",
+   "n_wise": 4740,
+   "n_tested": 71,
+   "calibration_scale": 1.7715238323691362,
+   "depth_cold_ujy": 405.6,
+   "flagged": []
+  },
+  {
+   "field_id": "wise-2056",
+   "title": "WISEP J205628.90+145953.3",
+   "n_wise": 3061,
+   "n_tested": 71,
+   "calibration_scale": 1.6854240644333238,
+   "depth_cold_ujy": 251.6,
+   "flagged": []
+  }
+ ],
+ "flagged": [
+  {
+   "name": "J220415.74-564724.4",
+   "ra": 331.0656012,
+   "dec": -56.7901207,
+   "w2": 11.397,
+   "expected_snr": 159.53255887887954,
+   "snr_by_visit": [
+    -2.1014681955067163,
+    -4.185582109665045,
+    -1.8591643252523893,
+    -0.7899728198814616
+   ],
+   "best_snr": -0.7899728198814616,
+   "pm_arcsec_yr": 0.5033433849768963,
+   "pm_sigma": 3.7557699955019053,
+   "spherex_mover_within_60": false,
+   "mover_track": "Epsilon Indi B",
+   "expected_snr_calibrated": 605.022640921821,
+   "kind": "moved",
+   "fraction_seen": 0.0,
+   "field_id": "epsilon-indi-b"
+  },
+  {
+   "name": "J220418.42-564738.2",
+   "ra": 331.0767776,
+   "dec": -56.793953,
+   "w2": 10.749,
+   "expected_snr": 289.7672714051833,
+   "snr_by_visit": [
+    -3.439206253531303,
+    -5.125681470077717,
+    -2.3165781444058235,
+    -3.6712356863580258
+   ],
+   "best_snr": -2.3165781444058235,
+   "pm_arcsec_yr": 1.1292132411993758,
+   "pm_sigma": 138.60856049877933,
+   "spherex_mover_within_60": true,
+   "mover_track": "Epsilon Indi B",
+   "expected_snr_calibrated": 1098.9340422438622,
+   "kind": "moved",
+   "fraction_seen": 0.0,
+   "field_id": "epsilon-indi-b"
+  },
+  {
+   "name": "J220417.71-564734.5",
+   "ra": 331.0738277,
+   "dec": -56.7929393,
+   "w2": 11.2,
+   "expected_snr": 191.27108932794198,
+   "snr_by_visit": [
+    -4.526386217127711,
+    -4.661483188483691,
+    0.1746514485322945,
+    -4.871173938563219
+   ],
+   "best_snr": 0.1746514485322945,
+   "pm_arcsec_yr": 0.3786333647474824,
+   "pm_sigma": 7.468171810322016,
+   "spherex_mover_within_60": true,
+   "mover_track": "Epsilon Indi B",
+   "expected_snr_calibrated": 725.3901047562621,
+   "kind": "moved",
+   "fraction_seen": 0.00024076899779461292,
+   "field_id": "epsilon-indi-b"
+  },
+  {
+   "name": "J041521.90-093458.1",
+   "ra": 63.8412726,
+   "dec": -9.5828311,
+   "w2": 13.747,
+   "expected_snr": 20.47899588926848,
+   "snr_by_visit": [
+    -0.7862756249958863,
+    -0.26356738853850775,
+    -3.438647398364468
+   ],
+   "best_snr": -0.26356738853850775,
+   "pm_arcsec_yr": 2.8861576683195946,
+   "pm_sigma": 129.3876898309875,
+   "spherex_mover_within_60": true,
+   "mover_track": "2MASS J0415-0935",
+   "expected_snr_calibrated": 77.60806751177876,
+   "kind": "moved",
+   "fraction_seen": 0.0,
+   "field_id": "j0415-0935"
+  },
+  {
+   "name": "J041522.17-093457.1",
+   "ra": 63.8423926,
+   "dec": -9.5825458,
+   "w2": 13.568,
+   "expected_snr": 24.149528661438378,
+   "snr_by_visit": [
+    -1.1822845075079709,
+    -0.7510016503536991,
+    -3.8599631012195235
+   ],
+   "best_snr": -0.7510016503536991,
+   "pm_arcsec_yr": 2.240730795968137,
+   "pm_sigma": 140.1853821465284,
+   "spherex_mover_within_60": true,
+   "mover_track": "2MASS J0415-0935",
+   "expected_snr_calibrated": 91.51807348702452,
+   "kind": "moved",
+   "fraction_seen": 0.0,
+   "field_id": "j0415-0935"
+  },
+  {
+   "name": "J041522.43-093456.2",
+   "ra": 63.8434615,
+   "dec": -9.5822812,
+   "w2": 13.793,
+   "expected_snr": 19.62947384699667,
+   "snr_by_visit": [
+    0.13986017243009097,
+    0.5888078202425576,
+    -3.131303999179853
+   ],
+   "best_snr": 0.5888078202425576,
+   "pm_arcsec_yr": 1.1571336448742642,
+   "pm_sigma": 21.564121346324708,
+   "spherex_mover_within_60": true,
+   "mover_track": "2MASS J0415-0935",
+   "expected_snr_calibrated": 74.38868291080212,
+   "kind": "moved",
+   "fraction_seen": 0.007915287611001052,
+   "field_id": "j0415-0935"
+  },
+  {
+   "name": "J013657.44+093347.1",
+   "ra": 24.2393688,
+   "dec": 9.5631102,
+   "w2": 12.483,
+   "expected_snr": 66.29860806477843,
+   "snr_by_visit": [
+    8.609932402613452,
+    7.690379309485482,
+    5.480910806510552
+   ],
+   "best_snr": 8.609932402613452,
+   "pm_arcsec_yr": 1.6092230007366908,
+   "pm_sigma": 413.71071326430854,
+   "spherex_mover_within_60": true,
+   "mover_track": "SIMP J013656.5+093347.3",
+   "expected_snr_calibrated": 100.02590570673661,
+   "kind": "moved",
+   "fraction_seen": 0.08607702516442783,
+   "field_id": "simp-0136"
+  },
+  {
+   "name": "J150649.91+702736.1",
+   "ra": 226.707992,
+   "dec": 70.4600498,
+   "w2": 13.201,
+   "expected_snr": 32.82510987123772,
+   "snr_by_visit": [
+    -1.4242396665033266,
+    -0.46674597827031467,
+    -1.5898825153935754
+   ],
+   "best_snr": -0.46674597827031467,
+   "pm_arcsec_yr": 1.9772230944433156,
+   "pm_sigma": 155.3069748873737,
+   "spherex_mover_within_60": true,
+   "mover_track": "WISEP J150649.97+702736.0",
+   "expected_snr_calibrated": 47.720099769805806,
+   "kind": "moved",
+   "fraction_seen": 0.0,
+   "field_id": "wise-1506"
+  },
+  {
+   "name": "J150648.79+702741.0",
+   "ra": 226.7033264,
+   "dec": 70.4614073,
+   "w2": 12.228,
+   "expected_snr": 80.42779983866653,
+   "snr_by_visit": [
+    8.130061791828483,
+    16.86167079158135,
+    6.388010608018084
+   ],
+   "best_snr": 16.86167079158135,
+   "pm_arcsec_yr": 1.5660114375699816,
+   "pm_sigma": 434.16647085189663,
+   "spherex_mover_within_60": true,
+   "mover_track": "WISEP J150649.97+702736.0",
+   "expected_snr_calibrated": 116.92337505106482,
+   "kind": "moved",
+   "fraction_seen": 0.14421129037899585,
+   "field_id": "wise-1506"
+  }
+ ]
+}

@@ -1,0 +1,52 @@
+{
+ "body_field_set": "pluto",
+ "thresholds": {
+  "detect_snr": 5.0,
+  "fit_snr_min": 4.0,
+  "star_radius_px": 1.3,
+  "rate_max_arcsec_day": 200.0,
+  "tracklet_min": 4,
+  "tracklet_tol_arcsec": 2.5,
+  "sigma_floor_arcsec": 0.6,
+  "r_min_au": 15.0,
+  "r_max_au": 20000.0,
+  "orbit_chi2r_max": 4.0,
+  "mirror_ratio_min": 9.0
+ },
+ "n_exposures": 73,
+ "n_orphans": 19,
+ "n_visits": 3,
+ "visits": [
+  {
+   "visit": 0,
+   "n_orphans": 1,
+   "mjd_start": 60796.386021698,
+   "mjd_end": 60796.386021698
+  },
+  {
+   "visit": 1,
+   "n_orphans": 1,
+   "mjd_start": 60955.377275032,
+   "mjd_end": 60955.377275032
+  },
+  {
+   "visit": 2,
+   "n_orphans": 17,
+   "mjd_start": 61155.234277428,
+   "mjd_end": 61162.160825807
+  }
+ ],
+ "tracklets": [
+  {
+   "visit": 2,
+   "n": 12,
+   "nights": 3,
+   "span_days": 6.926548379000451,
+   "rate_arcsec_day": 17.50741244333041,
+   "rms_arcsec": 0.5780313648212996,
+   "t_mid_mjd": 61159.789100315415
+  }
+ ],
+ "objects": [],
+ "statement": "Produced from image files, Gaia DR3 and CatWISE2020 only. No ephemeris was read."
+}

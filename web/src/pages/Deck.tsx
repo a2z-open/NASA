@@ -4,6 +4,10 @@ import { HeroBlink } from '../components/HeroBlink.tsx';
 import { FieldStill } from '../components/FieldImage.tsx';
 import { Starfield } from '../components/Starfield.tsx';
 import { Link } from '../router.tsx';
+import { distantApi, type DistantResults } from './Distant.tsx';
+
+/** The Space Apps guide asks for the team name and members on the first slide. Fill these in before exporting. */
+const TEAM = { name: '', members: [] as string[] };
 
 const TOTAL = 7;
 
@@ -18,14 +22,17 @@ export function Deck() {
   const [val, setVal] = useState<ValidationReport | null>(null);
   const [hunt, setHunt] = useState<HuntIndex | null>(null);
   const [halo, setHalo] = useState<HaloResults | null>(null);
+  const [worlds, setWorlds] = useState<DistantResults | null>(null);
   const [n, setN] = useState(1);
   const root = useRef<HTMLDivElement>(null);
+  const w = worlds?.bodies.find(x => x.passed && x.match) ?? null;
   const goRef = useRef<(d: number) => void>(() => undefined);
 
   useEffect(() => {
     api.validation().then(setVal).catch(() => undefined);
     huntApi.index().then(setHunt).catch(() => undefined);
     huntApi.halo().then(setHalo).catch(() => undefined);
+    distantApi.results().then(setWorlds).catch(() => undefined);
   }, []);
 
   useEffect(() => {
@@ -74,6 +81,7 @@ export function Deck() {
           <p className="kicker">NASA Space Apps 2026 · Planet X and SPHEREx · Seattle</p>
           <h1 className="slide__title slide__title--xl">Find what <span>moves.</span></h1>
           <p className="slide__lede">Pick any patch of NASA's infrared sky. Watch it change. Measure what moved. Then prove it.</p>
+          <p className="slide__team">{TEAM.name ? `${TEAM.name} · ${TEAM.members.join(', ')}` : 'Team name and members: add them in web/src/pages/Deck.tsx before exporting'}</p>
         </div>
         <HeroBlink />
       </section>
@@ -94,7 +102,7 @@ export function Deck() {
 
       <section className="slide">
         <p className="kicker">Proof 1</p>
-        <h2 className="slide__title">We predicted where a star would be, before the images existed.</h2>
+        <h2 className="slide__title">We predicted where a star would be, before we opened the images.</h2>
         <div className="slide__nums">
           <div><b>{miss != null ? `${miss.toFixed(3)}″` : '—'}</b><span>how close the locked prediction landed</span></div>
           <div><b>{stays != null ? `${stays.toFixed(2)}″` : '—'}</b><span>how far off “it stays put” was</span></div>
@@ -105,13 +113,13 @@ export function Deck() {
 
       <section className="slide">
         <p className="kicker">Proof 2 · the Planet X hunt</p>
-        <h2 className="slide__title">A blind search that finds what it should, and nothing it should not.</h2>
+        <h2 className="slide__title">It found a dwarf planet by its parallax, and got the distance right.</h2>
         <div className="slide__nums">
-          <div><b>{hunt ? hunt.totals.motion_tested.toLocaleString('en-US') : '—'}</b><span>sources tested for motion in {hunt?.totals.fields ?? '—'} patches of sky</span></div>
-          <div><b>{hunt ? `${hunt.recovery.n_recovered} of ${hunt.recovery.n_known}` : '—'}</b><span>known movers found without being told where they are</span></div>
-          <div><b>{hunt ? hunt.unexplained.length : '—'}</b><span>movers no catalogue explains{hunt ? `; ${rejected} false alarm${rejected === 1 ? '' : 's'} caught and rejected` : ''}</span></div>
+          <div><b>{w?.match ? `${w.match.r_fit_au.toFixed(2)} AU` : '—'}</b><span>{w?.match ? `distance to ${w.title}, measured blind from SPHEREx images. NASA's JPL says ${w.match.r_true_au.toFixed(2)} AU` : 'distance to a dwarf planet, measured blind'}</span></div>
+          <div><b>{worlds ? `${worlds.n_passed} of ${worlds.n_tested}` : '—'}</b><span>known distant worlds found and placed at the right distance, with {worlds?.false_objects ?? '—'} false objects</span></div>
+          <div><b>{hunt ? `${hunt.recovery.n_recovered} of ${hunt.recovery.n_known}` : '—'}</b><span>cold neighbours of the Sun found by their motion{hunt ? `; ${rejected} false alarm${rejected === 1 ? '' : 's'} caught` : ''}</span></div>
         </div>
-        <p className="slide__foot">Every mover is checked against where Gaia and WISE saw the sky ten years ago. {nc ? `Separately, ${nc.false_positives} of ${nc.n_measured} still stars were flagged as moving.` : ''}</p>
+        <p className="slide__foot">Each blind result was locked before the truth was opened. The same search, pointed at Planet Nine, found nothing, and we show why these images could not have. {nc ? `Separately, ${nc.false_positives} of ${nc.n_measured} still stars were flagged as moving.` : ''}</p>
       </section>
 
       <section className="slide slide--split">

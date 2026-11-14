@@ -1,0 +1,89 @@
+{
+ "note": "After the lock: our forecast compared with JPL Horizons. Independent check only; it did not shape the forecast.",
+ "rows": [
+  {
+   "date": "2027-01-01",
+   "offset_from_jpl_arcsec": 3.0,
+   "forecast_sigma_arcsec": 18.7,
+   "in_spherex_window": true
+  },
+  {
+   "date": "2027-01-04",
+   "offset_from_jpl_arcsec": 3.0,
+   "forecast_sigma_arcsec": 18.9,
+   "in_spherex_window": true
+  },
+  {
+   "date": "2027-02-01",
+   "offset_from_jpl_arcsec": 3.1,
+   "forecast_sigma_arcsec": 19.9,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-03-01",
+   "offset_from_jpl_arcsec": 3.0,
+   "forecast_sigma_arcsec": 19.2,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-04-01",
+   "offset_from_jpl_arcsec": 2.5,
+   "forecast_sigma_arcsec": 16.6,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-05-01",
+   "offset_from_jpl_arcsec": 2.0,
+   "forecast_sigma_arcsec": 13.4,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-06-01",
+   "offset_from_jpl_arcsec": 1.7,
+   "forecast_sigma_arcsec": 11.0,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-07-01",
+   "offset_from_jpl_arcsec": 1.7,
+   "forecast_sigma_arcsec": 11.1,
+   "in_spherex_window": true
+  },
+  {
+   "date": "2027-07-04",
+   "offset_from_jpl_arcsec": 1.8,
+   "forecast_sigma_arcsec": 11.3,
+   "in_spherex_window": true
+  },
+  {
+   "date": "2027-08-01",
+   "offset_from_jpl_arcsec": 2.2,
+   "forecast_sigma_arcsec": 14.4,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-09-01",
+   "offset_from_jpl_arcsec": 3.1,
+   "forecast_sigma_arcsec": 20.3,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-10-01",
+   "offset_from_jpl_arcsec": 4.1,
+   "forecast_sigma_arcsec": 27.5,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-11-01",
+   "offset_from_jpl_arcsec": 5.3,
+   "forecast_sigma_arcsec": 35.6,
+   "in_spherex_window": false
+  },
+  {
+   "date": "2027-12-01",
+   "offset_from_jpl_arcsec": 6.3,
+   "forecast_sigma_arcsec": 42.7,
+   "in_spherex_window": false
+  }
+ ]
+}

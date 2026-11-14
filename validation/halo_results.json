@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-14T13:34:22+00:00",
+ "generated_utc": "2026-11-14T19:14:07+00:00",
  "method": "Brightness changes of SATURATED stars from their unsaturated halo (experimental).",
  "thresholds": {
   "sigma": 5.0,
@@ -21,6 +21,8 @@
    },
    "n_matched": 66,
    "n_visits": 3,
+   "null_scale": 1.29688559773536,
+   "null_note": "Significances are divided by this factor: the spread of the same statistic for simulated constant stars with this sampling (200 simulations). 1.0 would mean the formal errors are right.",
    "status": "variable",
    "visits": [
     {
@@ -46,7 +48,8 @@
      "scatter": 0.0817263789261862,
      "err": 0.021357645740949067,
      "err_vs_first": 0.04579454284348268,
-     "sigma": 4.675579042599647,
+     "sigma_uncalibrated": 4.675579042599647,
+     "sigma": 3.605236306706012,
      "trend_per_30d": 0.09942875337906498,
      "trend_err": 0.025214157131090216,
      "span_days": 87.8001179510029
@@ -61,7 +64,8 @@
      "scatter": 0.061819158215522106,
      "err": 0.01777466098550557,
      "err_vs_first": 0.04423719810066348,
-     "sigma": 12.427283908930407,
+     "sigma_uncalibrated": 12.427283908930407,
+     "sigma": 9.582405672968461,
      "trend_per_30d": 0.02935727273006542,
      "trend_err": 0.011624802069287054,
      "span_days": 85.54068993099645
@@ -980,6 +984,8 @@
    },
    "n_matched": 87,
    "n_visits": 3,
+   "null_scale": 1.2120130697189595,
+   "null_note": "Significances are divided by this factor: the spread of the same statistic for simulated constant stars with this sampling (200 simulations). 1.0 would mean the formal errors are right.",
    "status": "variable",
    "visits": [
     {
@@ -1005,7 +1011,8 @@
      "scatter": 0.0905089634801643,
      "err": 0.021437178062674055,
      "err_vs_first": 0.06010369030713946,
-     "sigma": 3.1418390337999793,
+     "sigma_uncalibrated": 3.1418390337999793,
+     "sigma": 2.5922484767664313,
      "trend_per_30d": 0.28373158434801743,
      "trend_err": 0.10965437873828358,
      "span_days": 19.28247103000467
@@ -1020,7 +1027,8 @@
      "scatter": 0.18281633321989485,
      "err": 0.041151833212286604,
      "err_vs_first": 0.069615905955303,
-     "sigma": 6.363935212218265,
+     "sigma_uncalibrated": 6.363935212218265,
+     "sigma": 5.250715005650829,
      "trend_per_30d": 0.10486180084700544,
      "trend_err": 0.11369958206161891,
      "span_days": 14.798727465000411
@@ -2011,6 +2019,8 @@
    },
    "n_matched": 31,
    "n_visits": 3,
+   "null_scale": 1.9781395326941211,
+   "null_note": "Significances are divided by this factor: the spread of the same statistic for simulated constant stars with this sampling (200 simulations). 1.0 would mean the formal errors are right.",
    "status": "not_detected",
    "visits": [
     {
@@ -2036,7 +2046,8 @@
      "scatter": 0.05441763987097217,
      "err": 0.01822765181316959,
      "err_vs_first": 0.026509517804881845,
-     "sigma": 1.5209219529116822,
+     "sigma_uncalibrated": 1.5209219529116822,
+     "sigma": 0.7688648489018706,
      "trend_per_30d": 0.21669184174389208,
      "trend_err": 0.0545525480872793,
      "span_days": 14.802863170996716
@@ -2622,13 +2633,13 @@
     {
      "visit": "visit-2",
      "ratio": 1.0443158627890046,
-     "sigma": 1.2451361718862688,
+     "sigma": 0.7733610664044789,
      "n": 16
     },
     {
      "visit": "visit-3",
      "ratio": 1.0553811168154286,
-     "sigma": 1.2685358368256054,
+     "sigma": 0.7878947296612282,
      "n": 11
     }
    ]
@@ -2645,13 +2656,13 @@
     {
      "visit": "visit-2",
      "ratio": 0.9742149705090816,
-     "sigma": 0.9356203450380786,
+     "sigma": 0.7812119150856015,
      "n": 26
     },
     {
      "visit": "visit-3",
      "ratio": 0.9784842434638159,
-     "sigma": 0.9600069894277072,
+     "sigma": 0.8015739532426042,
      "n": 29
     }
    ]
@@ -2678,7 +2689,7 @@
     {
      "visit": "visit-2",
      "ratio": 0.9574888375300995,
-     "sigma": 1.7410312148274592,
+     "sigma": 1.2700963967797516,
      "n": 25
     }
    ]
@@ -2695,13 +2706,13 @@
     {
      "visit": "visit-2",
      "ratio": 1.0446195391279305,
-     "sigma": 1.4869539440863364,
+     "sigma": 0.5281737174363295,
      "n": 27
     },
     {
      "visit": "visit-3",
      "ratio": 0.9953921970165717,
-     "sigma": 0.2144289981753558,
+     "sigma": 0.07616628715559576,
      "n": 29
     }
    ]
@@ -2718,13 +2729,13 @@
     {
      "visit": "visit-2",
      "ratio": 1.084226994354793,
-     "sigma": 3.550734091275403,
+     "sigma": 3.176546155670743,
      "n": 26
     },
     {
      "visit": "visit-4",
      "ratio": 1.0338640970607653,
-     "sigma": 0.9710461466568571,
+     "sigma": 0.8687141376542132,
      "n": 26
     }
    ]
@@ -2741,13 +2752,13 @@
     {
      "visit": "visit-2",
      "ratio": 0.9939313019105621,
-     "sigma": 0.28174130952306853,
+     "sigma": 0.2396197814513292,
      "n": 26
     },
     {
      "visit": "visit-3",
      "ratio": 0.976460729466004,
-     "sigma": 0.9317213575311021,
+     "sigma": 0.7924250385684332,
      "n": 23
     }
    ]

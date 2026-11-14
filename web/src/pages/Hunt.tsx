@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, type HuntInjection, type HuntMover } from '../api.ts';
 import { Page, PageHero } from '../components/Shell.tsx';
+import { DistantWorlds, PlanetNineReach, VanishedPanel } from './Distant.tsx';
 import { paint } from '../components/FieldImage.tsx';
 import { Link } from '../router.tsx';
 
@@ -174,10 +175,10 @@ function FieldRow({ f }: { f: HuntFieldRow }) {
                   </div>
                   <p>
                     {m.truth_match && <>This is {m.truth_match}. The search was not told it was here. </>}
-                    {m.decade_confirmed && m.catalogued_as && <>{m.catalogued_as.startsWith('Gaia') ? 'Gaia' : 'WISE'} saw it years ago exactly where this motion says it should have been ({m.catalogued_as}). </>}
+                    {m.decade_confirmed && m.catalogued_as && <>{m.catalogued_as.startsWith('Gaia') ? 'Gaia' : 'WISE'} recorded a source moving the same way years ago, and that source is now at this position ({m.catalogued_as}). </>}
                     {m.cold_only && <>Visible only at 4–5 µm: a cold object. </>}
-                    {m.parallax_mas != null && m.parallax_err_mas != null && m.parallax_mas > 0 && m.parallax_mas / m.parallax_err_mas >= 3 && m.class !== 'suspect'
-                      && <>Its distance, measured from these images alone: about {(3261.6 / m.parallax_mas).toFixed(1)} light-years. </>}
+                    {m.parallax_mas != null && m.parallax_err_mas != null && m.parallax_mas > 0 && m.parallax_mas / m.parallax_err_mas >= 5 && m.class !== 'suspect'
+                      && <>Its distance, measured from these images alone: {(3261.6 / m.parallax_mas).toFixed(1)} light-years (between {(3261.6 / (m.parallax_mas + m.parallax_err_mas)).toFixed(1)} and {(3261.6 / (m.parallax_mas - m.parallax_err_mas)).toFixed(1)}). </>}
                     {m.class === 'known_mover' && m.gaia && <>Gaia DR3 {m.gaia.source_id} moves the same way. </>}
                     {m.class === 'suspect' && why.length > 0 && <>Rejected because {why.join('; ')}. </>}
                     {!m.truth_match && !m.catalogued_as && ['candidate', 'stack_candidate', 'two_visit_candidate'].includes(m.class) && <>No catalogue we checked explains it. A candidate, not a discovery. </>}
@@ -213,11 +214,21 @@ export function Hunt() {
     <Page>
       <PageHero
         title="The Planet X hunt"
-        lede="A blind search. It gets a patch of sky and nothing else, finds every source, tests each one for motion, and only then looks it up."
+        lede="Three blind searches. One finds distant worlds by their parallax. One looks for Planet Nine the same way. One finds cold neighbours of the Sun by their motion. None is told where to look."
         img="/img/cold-dwarf.webp"
         alt="An artist's impression of the brown dwarf WISE 0855 as a dim blue world against the Milky Way"
         caption="WISE 0855, the coldest known brown dwarf, in an artist's impression. The search found it without being told."
       />
+
+      <DistantWorlds />
+      <PlanetNineReach />
+      <VanishedPanel />
+
+      <section className="band2" aria-labelledby="nb-h">
+        <h2 className="test-h" id="nb-h"><span>Search 3</span>Cold neighbours of the Sun</h2>
+        <p className="test-p">Nearby brown dwarfs and free-floating planets drift a few arcseconds a year. This search gets a patch of sky, finds every source, tests each one for motion, and only then looks it up.</p>
+      </section>
+
 
       {error && <p className="notice">The hunt has not been run on this machine yet.</p>}
       {idx && (
@@ -277,7 +288,7 @@ export function Hunt() {
                   <div key={v} className="igrid__row" role="row">
                     <div className="igrid__h mono small" role="rowheader">{v === 0 ? 'not moving' : `${v}″ a year`}</div>
                     {inj.fluxes_ujy.map(f => {
-                      const r = inj.results.find(x => x.speed_arcsec_yr === v && x.flux_ujy === f);
+                      const r = inj.results.find(x => Math.abs(x.speed_arcsec_yr - v) < 1e-6 && Math.abs(x.flux_ujy - f) < 1e-6);
                       const o = r?.outcome ?? 'not_run';
                       return (
                         <div key={f} className={`igrid__cell igrid__cell--${o}`} role="cell">

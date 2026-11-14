@@ -3,7 +3,7 @@ import type { HaloVariability, Investigation, Hypothesis, Verdict } from '../api
 import { exportUrl } from '../api.ts';
 import { Link } from '../router.tsx';
 import { formatDec, formatRA, wavelengthColor } from '../lib/astro.ts';
-import { NA, date, dateTime, humanize, num, pm, sig, ujy, um } from '../lib/format.ts';
+import { NA, date, dateTime, humanize, num, pm, sig, ujy, um, ujyWithError } from '../lib/format.ts';
 import { MatchedComparisons, MotionPlot, NaiveLightCurve, SpectrumPlot, visitColor } from './Charts.tsx';
 import { Term } from './Term.tsx';
 
@@ -227,7 +227,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
               <h4>The right way: compare the same colour</h4>
               <p className="small muted">{inv.variability.matched?.description ?? 'Only exposures at the same wavelength are compared between visits.'}</p>
               {inv.variability.matched?.median_log_ratio != null && (
-                <p className="small mono">Median matched change: {num((10 ** inv.variability.matched.median_log_ratio - 1) * 100, 1)}%{inv.variability.matched.chi2_reduced != null ? ` · χ²ᵣ of constancy ${num(inv.variability.matched.chi2_reduced, 1)}` : ''}</p>
+                <p className="small mono">Median matched change: {num((Math.exp(inv.variability.matched.median_log_ratio) - 1) * 100, 1)}%{inv.variability.matched.chi2_reduced != null ? ` · χ²ᵣ of constancy ${num(inv.variability.matched.chi2_reduced, 1)}` : ''}</p>
               )}
               <MatchedComparisons variability={inv.variability} />
               {inv.variability.matched?.visit_pairs && inv.variability.matched.visit_pairs.length > 0 && (
@@ -291,7 +291,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
                     <td className="mono"><span className="swatch" style={{ background: wavelengthColor(d.wavelength_um) }} />{num(d.wavelength_um, 3)}</td>
                     <td className="mono">{num(d.snr, 0)}</td>
                     <td className="mono">{num(d.sigma_arcsec, 2)}</td>
-                    <td className="mono">{d.flux_ujy != null ? `${ujy(d.flux_ujy)} ± ${num(d.flux_err_ujy, 0)}` : NA}</td>
+                    <td className="mono">{ujyWithError(d.flux_ujy, d.flux_err_ujy)}</td>
                     <td className="mono">{ujy(d.fixed_flux_ujy)}</td>
                     <td>{humanize(d.outcome)}</td>
                     <td className="small">{d.flags.filter(f => f !== 'SOURCE').join(', ') || '—'}</td>

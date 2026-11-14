@@ -21,7 +21,7 @@ def main():
     names = [f['truth']['name'] for f in idx['fields'] if f.get('truth') and f['truth']['recovered']]
     simp = any('SIMP' in n for n in names)
     hunt_sentence = (f"Across {t['fields']} fields ({t['area_deg2']:.1f} square degrees, {t['exposures']:,} exposures) the search tested "
-                     f"**{t['motion_tested']:,} sources** for motion with no catalogue input. It found **{r['n_recovered']} of {r['n_known']} "
+                     f"**{t['motion_tested']:,} sources** for motion without being told which ones move (Gaia is used only to line the images up). It found **{r['n_recovered']} of {r['n_known']} "
                      f"known fast movers** on its own" + (', including the free-floating planetary-mass object SIMP 0136' if simp else '') +
                      f", flagged **{unexpl} mover{'s' if unexpl != 1 else ''} that no catalogue explains**, and rejected {susp} false "
                      f"alarm{'s' if susp != 1 else ''} with its vetting tests. Hidden synthetic cold sources were recovered down to 600 µJy at 3–8″/yr, "

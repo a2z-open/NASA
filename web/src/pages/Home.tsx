@@ -6,6 +6,7 @@ import { SearchBox } from '../components/SearchBox.tsx';
 import { Link } from '../router.tsx';
 import { useTargets } from '../hooks.ts';
 import { api, huntApi, type HuntIndex, type Target, type ValidationReport } from '../api.ts';
+import { distantApi, type DistantResults } from './Distant.tsx';
 
 const TONE: Record<string, string> = {
   known_source_recovered: 'ok', motion_supported: 'ok', variability_supported: 'ok', ultracool_candidate: 'cold',
@@ -41,10 +42,14 @@ export function Home() {
   const targets = useTargets();
   const [val, setVal] = useState<ValidationReport | null>(null);
   const [hunt, setHunt] = useState<HuntIndex | null>(null);
+  const [worlds, setWorlds] = useState<DistantResults | null>(null);
+  const [barnard, setBarnard] = useState<{ measured: number; gaia: number } | null>(null);
   const hero = useRef<HTMLElement>(null);
   useEffect(() => {
     api.validation().then(setVal).catch(() => undefined);
     huntApi.index().then(setHunt).catch(() => undefined);
+    distantApi.results().then(setWorlds).catch(() => undefined);
+    fetch('/api/barnard-halo').then(r => (r.ok ? r.json() : null)).then(d => { if (d?.result?.passed) setBarnard({ measured: d.result.measured_total_arcsec, gaia: d.result.predicted_total_arcsec }); }).catch(() => undefined);
   }, []);
 
   // The planet drifts a little against the stars as the pointer and the page move: parallax.
@@ -64,7 +69,7 @@ export function Home() {
   const exp = val?.experiments.find(e => /indi/i.test(e.target)) ?? val?.experiments[0];
   const miss = exp?.result?.primary?.residual_arcsec;
   const found = hunt ? `${hunt.recovery.n_recovered} of ${hunt.recovery.n_known}` : '—';
-  const unexplained = hunt ? hunt.unexplained.length : null;
+  const world = worlds?.bodies.find(b => b.passed && b.match) ?? null;
 
   return (
     <>
@@ -77,7 +82,7 @@ export function Home() {
             <p className="hm-hero__lede">PARALLAX plays real NASA SPHEREx images of any patch of sky, so anything that moved stands out. Then it measures it.</p>
             <SearchBox large label="Search the sky" placeholder="A star name, or RA and Dec" />
             <p className="hm-hero__try">
-              Or start with <Link href="/explore?target=epsilon-indi-b">a star that moves</Link>, <Link href="/explore?target=wise-0855">the coldest brown dwarf</Link> or <Link href="/hunt">the Planet X hunt</Link>.
+              Or start with <Link href="/map">the whole sky in 102 colours</Link>, <Link href="/explore?target=epsilon-indi-b">a star that moves</Link> or <Link href="/hunt">the Planet X hunt</Link>.
             </p>
           </div>
           <figure className="hm-hero__planet">
@@ -102,12 +107,12 @@ export function Home() {
             <span className="hstat__t">How far our locked prediction landed from where the star really went. One SPHEREx pixel is 6″ wide.</span>
           </Link>
           <Link className="hstat hstat--b rv" style={delay(90)} href="/hunt">
-            <span className="hstat__n">{found}</span>
-            <span className="hstat__t">Known fast movers the blind search found by itself.</span>
+            <span className="hstat__n">{world?.match ? `${world.match.r_fit_au.toFixed(1)} AU` : '—'}</span>
+            <span className="hstat__t">{world?.match ? `How far away ${world.title} is, measured blind from its parallax. NASA's JPL says ${world.match.r_true_au.toFixed(1)}.` : 'Distance to a dwarf planet, measured blind from its parallax.'}</span>
           </Link>
           <Link className="hstat hstat--c rv" style={delay(180)} href="/hunt">
-            <span className="hstat__n">{unexplained ?? '—'}</span>
-            <span className="hstat__t">Movers no catalogue could explain. No new planet yet, and we say so.</span>
+            <span className="hstat__n">{found}</span>
+            <span className="hstat__t">Known cold neighbours of the Sun found by motion alone. No new planet yet, and we say so.</span>
           </Link>
         </section>
 
@@ -136,7 +141,7 @@ export function Home() {
           {targets.data?.map((t, i) => (
             <Link key={t.slug} className="tileb rv" style={delay((i % 4) * 60)} href={`/explore?target=${t.slug}`}>
               <strong>{t.title}</strong>
-              <span>{t.headline?.label ?? t.kind}</span>
+              <span>{t.slug === 'barnards-star' && barnard ? `Too bright for the camera, yet its halo moved ${barnard.measured.toFixed(1)}″ in a year. Gaia says ${barnard.gaia.toFixed(1)}″.` : t.headline?.label ?? t.kind}</span>
             </Link>
           ))}
           <Link className="tileb tileb--any rv" href="/explore">
@@ -149,13 +154,13 @@ export function Home() {
           <Link className="door rv" href="/hunt">
             <img src="/img/wise-sky-centre.webp" alt="The centre of the Milky Way in infrared, from NASA's WISE map of the whole sky" loading="lazy" decoding="async" />
             <h2>The Planet X hunt</h2>
-            <p>{hunt ? `${hunt.totals.fields} patches of sky. ${hunt.totals.motion_tested.toLocaleString('en-US')} sources tested for motion.` : 'A blind search of real SPHEREx fields.'} Nothing told it where to look.</p>
+            <p>{worlds ? `${worlds.n_passed} of ${worlds.n_tested} dwarf planets found by parallax and placed at the right distance.` : 'Distant worlds found by their parallax.'} {hunt ? `${hunt.totals.motion_tested.toLocaleString('en-US')} sources tested for motion.` : ''} Nothing told it where to look.</p>
             <span className="door__go">See what it found</span>
           </Link>
           <Link className="door rv" style={delay(120)} href="/proof">
             <img src="/img/neptune.webp" alt="Neptune, photographed by NASA's Voyager 2 in 1989" loading="lazy" decoding="async" />
             <h2>Predict first. Look after.</h2>
-            <p>Neptune was found in 1846 right where the maths said it would be. We lock our predictions before the images exist.</p>
+            <p>Neptune was found in 1846 right where the maths said it would be. We lock each prediction before we open the images.</p>
             <span className="door__go">See the proof</span>
           </Link>
         </section>

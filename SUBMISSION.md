@@ -19,7 +19,7 @@ to keep it, or add a subtitle such as "PARALLAX: find what moves, then prove it"
 
 PARALLAX plays NASA's SPHEREx images of any patch of sky like a short video, so moving objects stand out. Click one
 and it measures the motion, distance and spectrum. A blind search tests every source for motion, and every claim is
-checked: predictions are locked before the data exists, and movers must agree with ten-year-old catalogues.
+checked: predictions are locked before the test images are downloaded, and movers must agree with ten-year-old catalogues.
 
 ## Problem
 
@@ -40,6 +40,9 @@ One public web tool that does what the challenge asks, then goes further.
 - **Measure.** Click a source: its position in every image on the original pixels, its proper motion and parallax,
   and a 0.75–5 µm spectrum that follows the source as it moves, matched to brown-dwarf templates.
 - **Hunt.** A blind search finds every source in a field, tests each one for motion, and only then looks it up.
+- **Find distant worlds.** Six months apart, SPHEREx sees a solar-system world from opposite sides of the Earth's orbit. A second
+  search links such a world across visits with one orbit and reads its distance from the parallax jump. The same search runs in
+  a Planet Nine mode, with an honest statement of what it can and cannot reach.
 - **Prove.** Locked predictions, control stars, hidden test sources, and checks against Gaia (2016) and WISE (2015).
 
 ## How the challenge's test targets came out
@@ -48,9 +51,9 @@ One public web tool that does what the challenge asks, then goes further.
 |---|---|
 | Epsilon Indi B | Moves 4.63″/yr with parallax 298 ± 9 mas, from SPHEREx alone (434 exposures). Spectrum matches a T3 template. A locked prediction of its next visit landed 0.072″ away. The blind search finds it without being told. |
 | WISE 0855 | Invisible at 0.75–3.8 µm, detected at 3.8–5.0 µm (460 ± 32 µJy at 4.4–5.0 µm, S/N 14). The blind search flags it as a cold-only mover; CatWISE confirms the motion over ten years. |
-| Barnard's Star | Saturated in every exposure. PARALLAX says so and does not force a motion. Its brightness, from the halo, is steady (control). |
-| RW Aurigae | Saturated, so measured from the unsaturated halo at matched wavelength: faded by 36 % between Sept 2025 and Sept 2026 (6.4σ). Experimental. |
-| R Draconis | Same method: faded by 42 % between mid-2025 and mid-2026 (12.4σ). Experimental. |
+| Barnard's Star | Saturated in every exposure, so its core cannot be measured. Its halo can: steady in brightness (control), and its centre moved as Gaia predicts in a locked test on sealed images (see validation item 11). |
+| RW Aurigae | Saturated, so measured from the unsaturated halo at matched wavelength: faded by 36 % between Sept 2025 and Sept 2026 (5.3σ after calibration against simulated constant stars). Experimental. |
+| R Draconis | Same method: faded by 42 % between mid-2025 and mid-2026 (9.6σ, calibrated the same way). Experimental. |
 
 ## Scientific validation (actual results)
 
@@ -60,14 +63,22 @@ One public web tool that does what the challenge asks, then goes further.
    passed too.
 2. **Predictions for data that does not exist yet.** Monthly positions for 2027 for both objects are locked in commit
    `bbfd25f`, with the date of the archive's newest image recorded.
-3. **The blind search.** Across 25 fields (2.3 square degrees, 2,891 exposures) the search tested **5,195 sources** for motion with no catalogue input. It found **13 of 19 known fast movers** on its own, including the free-floating planetary-mass object SIMP 0136, flagged **0 movers that no catalogue explains**, and rejected 8 false alarms with its vetting tests. Hidden synthetic cold sources were recovered down to 600 µJy at 3–8″/yr, with no stationary one called a mover.
+3. **The blind search.** Across 25 fields (2.3 square degrees, 2,891 exposures) the search tested **5,195 sources** for motion without being told which ones move (Gaia is used only to line the images up). It found **13 of 19 known fast movers** on its own, including the free-floating planetary-mass object SIMP 0136, flagged **0 movers that no catalogue explains**, and rejected 8 false alarms with its vetting tests. Hidden synthetic cold sources were recovered down to 600 µJy at 3–8″/yr, with no stationary one called a mover.
 4. **Decade check.** Every mover is compared with Gaia 2016.0 and CatWISE2020. It rejected a convincing false alarm
-   (1.39″/yr at 13σ) and confirmed the real movers.
+   (1.37″/yr at 13σ) and confirmed 12 of the 13 real movers. The thirteenth, Luhman 16, had been marked confirmed by mistake: the WISE source at its position moves differently, so that confirmation was withdrawn.
 5. **Variable stars.** R Draconis 0.58 ± 0.03 and RW Aurigae 0.64 ± 0.04 of their first-visit brightness; the control
    1.04 ± 0.03. Of 6 other bright stars measured the same way (11 visit comparisons), 0 were flagged variable; their median change was 3 % and the largest 8 %.
 6. **Controls.** 33 still stars measured: 0 flagged as moving; error bars behave as quoted (pull spread 0.93).
 7. **Solar-system check.** No known asteroid or comet within 60″ of any target at the sampled observation times.
-8. **Tests.** 71 Python tests and 12 web tests pass.
+8. **Tests.** 85 Python tests and 12 web tests pass.
+<!-- DISTANT_LIST:start -->
+9. **Distant worlds by parallax (out of sample).** **2 of 4 known distant worlds found blind and placed at the right distance**: Makemake (52.72 ± 0.01 AU; JPL 52.72), Eris (95.53 ± 0.07 AU; JPL 95.52). 0 false objects were linked. Missed: Pluto (only one visit holds enough detections of the body, and the rule needs two); Haumea (only one visit holds enough detections of the body, and the rule needs two). The largest distance error among those found is under 0.1 %.
+10. **Planet Nine mode.** The same search for a body at 200 to 20,000 AU in the 23 fields with three or more visits (2.1 square degrees): **no detection**. 2 geometric candidates were raised and both were rejected as thousands of times too bright to be planets; one is a reflection of a saturated star that imitates parallax. Synthetic planets are recovered down to 300 µJy (10 of 16); the predicted Planet Nine is about 7 µJy, so these images could not have found it.
+11. **Barnard's Star, on sealed images.** Its core is saturated, so we tracked the centre of its halo. In a visit that had been sealed, the halo had moved **10.56″ in 0.98 years; Gaia says 10.23″** (they differ by 0.37″; limit set in advance 1.5″). PASS.
+12. **What disappeared since WISE.** Of 945 bright sources WISE saw around 2015 in our fields, the ones SPHEREx no longer sees at those spots are 4 known brown dwarfs (2MASS J0415-0935, Epsilon Indi B, SIMP J013656.5+093347.3, WISEP J150649.97+702736.0): each one's SPHEREx motion, run back to the WISE years, passes through the empty spot. 0 faded or vanished without an explanation.
+13. **Live forecasts.** A watcher checks NASA's archive for new SPHEREx images of every locked prediction (python -m pipeline.watch). Makemake's next position is locked from the blind orbit alone; SPHEREx should next see it between 2026-12-22 and 2027-01-17, and JPL's ephemeris, checked after locking, agrees to 3″.
+14. **Machine learning.** A machine-learning real/artefact model, trained on synthetic stars in real SPHEREx images and tested on the real detections of four dwarf planets it never saw, ranks them with AUC 0.87; signal-to-noise alone gives 0.88. It does not beat the simple rule yet, so it is not used in any result.
+<!-- DISTANT_LIST:end -->
 
 Mistakes found and fixed along the way are in RESULTS_LOG.md.
 
@@ -90,7 +101,9 @@ pointed at each new SPHEREx release.
 Viewers, blink tools and mover searches for SPHEREx and WISE already exist, and we do not claim them
 (docs/COMPETITORS.md). What is new here: the tool **tests itself in public**. Predictions are locked before the data
 exists; the blind search is graded on known movers it was not told about; every mover must agree with catalogues from
-ten years ago; and saturated variable stars are measured from their halo, at matched wavelength, with a control.
+ten years ago; and saturated stars are measured from their halo, with a control or a locked test. It also measures the
+**distance to a dwarf planet from parallax alone**, blind, and locks each blind result before the truth is opened. We found
+no other SPHEREx tool that does either.
 
 ## AI disclosure
 
@@ -103,14 +116,16 @@ NASA branding are used. See AI_USAGE.md. TEAM TODO: complete it with your own to
 - No new object is claimed. Unexplained movers are candidates only.
 - Three of the five test targets saturate SPHEREx; the halo method for them is experimental.
 - 6.15″ pixels blend close pairs.
-- With fewer than three visits, motion and parallax cannot be separated (WISE 0855 comes out about 3σ too fast).
+- WISE 0855 comes out about 3σ too fast against the published track at the same dates; we cannot explain it.
+- The hunt's vetting rules were tuned on the same 25 fields it is scored on. The distant-world test was scored out of sample.
 - The hunt's fields were chosen around known objects and blank sky. It measures how well the search works, not how
   many new objects exist.
-- Not a Planet Nine search yet: such a planet would move by arcminutes between visits and is expected to be too faint.
+- The Planet Nine mode is a working method and an honest limit, not a real chance of discovery: the predicted planet is about 40 times fainter than what these images can link.
 
 ## Future work
 
-- Follow moving objects within a visit, for comets, asteroids and distant planets.
+- Shift-and-stack along trial orbits, to reach worlds too faint for one exposure (Eris was missed for that reason).
+- A purpose-built Planet Nine run: wider fields along the predicted band and every short-wavelength exposure.
 - Search wider fields from the bulk archive instead of small cutouts.
 - Check the 2027 forecasts when the next SPHEREx visit is released.
 - A queue where volunteers vet candidates, as in Backyard Worlds.
@@ -122,7 +137,8 @@ NASA branding are used. See AI_USAGE.md. TEAM TODO: complete it with your own to
 - Marocco et al. 2021, ApJS 253, 8 (CatWISE2020).
 - Kirkpatrick et al. 2021, ApJS 253, 7.
 - Gagné et al. 2026, arXiv:2604.22012 (SPIFF).
-- Berthier et al. 2006 (SkyBoT); Wenger et al. 2000 (SIMBAD).
+- Berthier et al. 2006 (SkyBoT); Wenger et al. 2000 (SIMBAD); Giorgini et al. 1996 (JPL Horizons).
+- Holman et al. 2018, AJ 156, 135 (HelioLinC); Brown & Batygin 2021 and Brown, Holman & Batygin 2024 (Planet Nine). More in docs/PLANET_NINE_RESEARCH.md.
 - Astropy Collaboration 2022; Virtanen et al. 2020 (SciPy); Harris et al. 2020 (NumPy).
 
 *This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of

@@ -19,7 +19,10 @@ export function startReveal() {
   window.setInterval(() => {
     document.querySelectorAll<HTMLElement>('.rv:not(.is-in)').forEach(el => {
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.96 && r.bottom > 0) { el.classList.add('is-in'); io.unobserve(el); }
+      // on screen: show it.  Far below (more than three screens away): show it too, without ceremony, so that a long
+      // page is never hidden from a fast scroll, a jump to an anchor, a print-out or a capture tool.
+      const far = r.top > window.innerHeight * 4;
+      if ((r.top < window.innerHeight * 0.96 && r.bottom > 0) || far) { el.classList.add('is-in'); io.unobserve(el); }
     });
   }, 500);
   new MutationObserver(ms => {

@@ -69,6 +69,7 @@ export function useInvestigation(id: string | null): Loadable<Investigation> {
     const cached = invCache.get(id);
     if (cached && cached.status !== 'processing') { setState({ data: cached, error: null, loading: false }); return; }
     setState(s => ({ ...s, loading: true, error: null }));
+    let misses = 0;
     async function poll() {
       try {
         const inv = await api.investigation(id!);
@@ -80,8 +81,8 @@ export function useInvestigation(id: string | null): Loadable<Investigation> {
         if (!alive) return;
         const e = err as ApiError;
         // A freshly queued investigation may 404 for a moment
-        if (e.status === 404) { timer = window.setTimeout(poll, 1500); return; }
-        setState({ data: null, error: e.message, loading: false });
+        if (e.status === 404 && ++misses <= 6) { timer = window.setTimeout(poll, 1500); return; }
+        setState({ data: null, error: e.status === 404 ? 'This measurement does not exist. It may have been removed, or the link is wrong.' : e.message, loading: false });
       }
     }
     poll();

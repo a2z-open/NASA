@@ -289,7 +289,7 @@ def wise0855_summary(inv):
         err *= math.sqrt(max(chi2r, 1))
         snr = mean / err
         out.append({'band': label, 'n': len(sel), 'flux_ujy': mean, 'flux_err_ujy': err, 'snr': snr,
-                    'detected': snr >= DETECTION_SNR, 'upper_limit_3sigma_ujy': (mean + 3 * err) if snr < DETECTION_SNR else None,
+                    'detected': snr >= DETECTION_SNR, 'upper_limit_3sigma_ujy': (max(mean, 0.0) + 3 * err) if snr < DETECTION_SNR else None,
                     'ab_mag': (23.9 - 2.5 * math.log10(mean)) if mean > 0 and snr >= DETECTION_SNR else None})
     return {'method': 'Inverse-variance mean of forced ePSF photometry at the Kirkpatrick et al. (2021) track (proper motion + parallax) '
                       'in each exposure, grouped by wavelength. Detection threshold S/N >= 5 (pre-declared).', 'bands': out}

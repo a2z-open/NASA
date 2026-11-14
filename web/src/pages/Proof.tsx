@@ -5,6 +5,7 @@ import { Link } from '../router.tsx';
 import { humanize, num } from '../lib/format.ts';
 import { Experiments } from './Lab.tsx';
 import { ControlsScatter, InjectionGrid, TargetsTable, THRESHOLD_LABELS } from './Method.tsx';
+import { BarnardHalo, MLPanel, WatchPanel } from './Distant.tsx';
 
 /** One page that answers "why should I believe this?" in three tests. */
 export function Proof() {
@@ -31,7 +32,7 @@ export function Proof() {
       />
 
       <section className="band2" aria-labelledby="t1">
-        <h2 className="test-h" id="t1"><span>Test 1</span>Predict where a star will be, before the images exist</h2>
+        <h2 className="test-h" id="t1"><span>Test 1</span>Predict where a star will be, before opening the images</h2>
         <p className="test-p">We measured a star's motion from earlier images, locked a prediction with a time-stamp, and only then downloaded the new images.</p>
         <Experiments />
       </section>
@@ -84,9 +85,15 @@ export function Proof() {
         </section>
       )}
 
+      <BarnardHalo />
+
+      <WatchPanel />
+
+      <MLPanel />
+
       {fc.length > 0 && (
         <section className="band2" aria-labelledby="t5">
-          <h2 className="test-h" id="t5"><span>Test 5 · still open</span>Predictions for images that do not exist yet</h2>
+          <h2 className="test-h" id="t5"><span>Test 7 · still open</span>Predictions for images that do not exist yet</h2>
           <p className="test-p">Locked today, for dates SPHEREx has not observed. When NASA releases the next images, anyone can check them.</p>
           <div className="hlist">{fc.map(f => <ForecastCard key={f.target} f={f} />)}</div>
         </section>
@@ -145,13 +152,17 @@ function HaloTile({ name, slug, h }: { name: string; slug: string; h?: HaloVaria
 const longDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 function ForecastCard({ f }: { f: Forecast }) {
-  const p = f.predictions.find(x => x.date_utc.startsWith('2027-04')) ?? f.predictions[0];
+  const moving = f.kind === 'forward_prediction_distant_world';
+  const p = (moving ? f.predictions.find(x => x.in_spherex_window) : f.predictions.find(x => x.date_utc.startsWith('2027-04'))) ?? f.predictions[0];
+  const away = (s: number) => (s >= 3600 ? `${(s / 3600).toFixed(2)}°` : s >= 120 ? `${(s / 60).toFixed(1)}′` : `${s.toFixed(1)}″`);
+  const jpl = f.jpl_check?.rows.find(r => r.date === p.date_utc.slice(0, 10));
   return (
     <details className="hrow">
       <summary>
         <span className="hrow__name">{f.title}<small>locked {longDate(f.locked_utc)}</small></span>
         <span className="hrow__result">
-          On {longDate(p.date_utc)} it should be <strong>{p.offset_from_stays_here_arcsec.toFixed(1)}″</strong> from where it is now, at{' '}
+          {moving ? <>On {longDate(p.date_utc)}, when SPHEREx next looks, it should be <strong>{away(p.offset_from_stays_here_arcsec)}</strong> from where SPHEREx last saw it, at{' '}</>
+            : <>On {longDate(p.date_utc)} it should be <strong>{away(p.offset_from_stays_here_arcsec)}</strong> from where it is now, at{' '}</>}
           <span className="mono">{p.ra_deg.toFixed(5)}, {p.dec_deg.toFixed(5)}</span> (± {Math.max(p.sigma_ra_arcsec, p.sigma_dec_arcsec).toFixed(2)}″).
         </span>
         <span className="hrow__chev" aria-hidden="true">›</span>
@@ -161,6 +172,8 @@ function ForecastCard({ f }: { f: Forecast }) {
         <dl className="kv small">
           <dt>Fingerprint (SHA-256)</dt><dd className="mono hash">{f.sha256}</dd>
           <dt>Git commit</dt><dd className="mono">{f.commit ? `${f.commit.hash.slice(0, 10)} · ${f.commit.time}` : 'not committed yet'}</dd>
+          {f.ledger && <><dt>Local lock record</dt><dd className="mono">entry {f.ledger.seq} · {f.ledger.time_utc} · {f.ledger.hash.slice(0, 12)}</dd></>}
+          {jpl && <><dt>Checked after locking</dt><dd>NASA JPL's ephemeris for that date is {jpl.offset_from_jpl_arcsec.toFixed(1)}″ from this forecast, inside its ±{jpl.forecast_sigma_arcsec.toFixed(0)}″. The real test is the SPHEREx image.</dd></>}
           <dt>Pass rule</dt><dd>{f.criterion}</dd>
         </dl>
         <div className="table-wrap">

@@ -46,7 +46,9 @@ BAND_RANGE_UM = {'short': [0.75, 2.42], 'mid': [2.42, 3.82], 'cold': [3.82, 5.0]
 KERNEL_FWHM_ARCSEC = {'short': 8.0, 'mid': 8.8, 'cold': 9.6}
 VISIT_GAP_DAYS = 30.0
 
-# Pre-declared search thresholds (fixed before the search was run on any field).
+# Search thresholds.  The detection thresholds were set first; several vetting rules below were ADDED while the
+# same fields were being run, each after a false alarm was understood (RESULTS_LOG.md).  The hunt's scores on
+# these fields are therefore in-sample.  The distant-world search (pipeline/distant.py) was scored out of sample.
 SEED_SNR = 5.0            # a source must reach this in at least one visit stack to be tested
 FAINT_SNR = 3.0           # sub-threshold peaks count as "still there" when matching visits
 R_STATIC = 2.0            # arcsec: same place in two visits
@@ -97,11 +99,19 @@ def inject_sources(obs, injections):
         dt = (obs.mjd - inj['t0']) / JULIAN_YEAR_DAYS
         dec = inj['dec'] + inj['pmdec'] * dt / 3600
         ra = inj['ra'] + inj['pmra'] * dt / 3600 / math.cos(math.radians(inj['dec']))
+        if inj.get('r_au'):
+            # a solar-system body at r AU: (ra, dec) is its direction seen from the Sun, and the Earth's orbit adds
+            # a yearly parallax of 206265 / r arcseconds (used by validation/planet_nine.py)
+            from .astrometry import parallax_factors
+            plx = 206264.806 / inj['r_au']
+            pa, pd = parallax_factors(inj['ra'], inj['dec'], [obs.mjd])
+            ra += plx * float(pa[0]) / 3600 / math.cos(math.radians(inj['dec']))
+            dec += plx * float(pd[0]) / 3600
         x, y = (float(v) for v in obs.wcs.world_to_pixel_values(ra, dec))
         if not (7 <= x < nx - 7 and 7 <= y < ny - 7):
             continue
         lam, _ = obs.wavelength_at(x, y)
-        if not math.isfinite(lam) or lam < inj.get('min_um', 0.0):
+        if not math.isfinite(lam) or lam < inj.get('min_um', 0.0) or lam > inj.get('max_um', 99.0):
             continue
         zone = obs.epsf_at(x, y)
         yy, xx = np.mgrid[int(y) - 5:int(y) + 6, int(x) - 5:int(x) + 6]
@@ -765,6 +775,7 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd, gaia_pos=No
 # ---------------------------------------------------------------------------
 
 IRSA_TAP = 'https://irsa.ipac.caltech.edu/TAP/sync'
+NOIRLAB_TAP = 'https://datalab.noirlab.edu/tap/sync'
 GAIA_TAP_URL = 'https://gea.esac.esa.int/tap-server/tap/sync'
 
 
@@ -839,17 +850,24 @@ def external_checks(doc, epoch_mjd, session=None):
         rad = min((10 + max(pm, 1.0) * dt_w * 1.5) / 3600, 0.1)
         q = ('SELECT source_name, ra, dec, w1mpro, w2mpro, pmra, pmdec, sigpmra, sigpmdec, meanobsmjd FROM catwise_2020 '
              f"WHERE CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',{ra:.7f},{dec:.7f},{rad:.5f}))=1")
-        r = http.get(IRSA_TAP, params={'FORMAT': 'csv', 'QUERY': q}, timeout=90)
-        r.raise_for_status()
-        rows = _csv_rows(r.text)
-        w = {'status': 'checked', 'n_in_cone': len(rows), 'epoch': 2015.4, 'baseline_yr': round(dt_w, 1),
+        try:
+            r = http.get(IRSA_TAP, params={'FORMAT': 'csv', 'QUERY': q}, timeout=45)
+            r.raise_for_status()
+            rows, service = _csv_rows(r.text), 'IRSA'
+        except Exception:  # noqa: BLE001 - IRSA's catalogue service is sometimes down: same catalogue at NOIRLab
+            q2 = ('SELECT source_name, ra, dec, w1mpro, w2mpro, pmra, pmdec, sigpmra, sigpmdec, meanobsmjd FROM catwise2020.main '
+                  f"WHERE 't'=Q3C_RADIAL_QUERY(ra, dec, {ra:.7f}, {dec:.7f}, {rad:.5f})")
+            r = http.post(NOIRLAB_TAP, data={'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv', 'QUERY': q2}, timeout=120)
+            r.raise_for_status()
+            rows, service = _csv_rows(r.text), 'NOIRLab Astro Data Lab'
+        w = {'status': 'checked', 'service': service, 'n_in_cone': len(rows), 'epoch': 2015.4, 'baseline_yr': round(dt_w, 1),
              'expected_shift_arcsec': round(pm * dt_w, 1)}
 
         def pack(dist, x):
             return {'source_name': x['source_name'], 'sep_arcsec': round(dist, 2), 'w1': _num(x['w1mpro']), 'w2': _num(x['w2mpro']),
                     'pmra_arcsec_yr': _num(x['pmra']), 'pmdec_arcsec_yr': _num(x['pmdec']),
                     'sigpmra': _num(x['sigpmra']), 'sigpmdec': _num(x['sigpmdec'])}
-        moving, static = None, None
+        moving, static, other = None, None, None
         for x in rows:
             wra, wdec = _num(x['ra']), _num(x['dec'])
             wpa, wpd = _num(x['pmra']) or 0.0, _num(x['pmdec']) or 0.0
@@ -860,8 +878,14 @@ def external_checks(doc, epoch_mjd, session=None):
             if wpm >= 0.15 and wpm / wsig >= 5:
                 # a catalogued mover: where is it now, by WISE's own motion?
                 now = sep(wra + wpa * dtx / 3600 / cosd, wdec + wpd * dtx / 3600)
-                if now <= 4.0 + 3 * wsig * dtx and (moving is None or now < moving[0]):
-                    moving = (now, x, wpm)
+                if now <= 4.0 + 3 * wsig * dtx:
+                    # "the same motion" means the same vector: within 3 sigma, or within a quarter of the speed
+                    d_pm = math.hypot(wpa - pmra, wpd - pmdec)
+                    if d_pm <= max(0.15, 3 * math.hypot(pm_err, wsig), 0.25 * max(pm, wpm)):
+                        if moving is None or now < moving[0]:
+                            moving = (now, x, wpm)
+                    elif other is None or now < other[0]:
+                        other = (now, x, wpm)
             else:
                 here = sep(wra, wdec)
                 if here <= 3.5 and (static is None or here < static[0]):
@@ -870,6 +894,9 @@ def external_checks(doc, epoch_mjd, session=None):
             w.update({'verdict': 'same_motion', 'catwise_pm_arcsec_yr': round(moving[2], 3)} | pack(moving[0], moving[1]))
         elif static and pm * dt_w > 7.0:
             w.update({'verdict': 'static_counterpart'} | pack(static[0], static[1]))
+        elif other:
+            # a catalogued mover is nearby, but it moves differently: no confirmation and no rejection
+            w.update({'verdict': 'different_motion', 'catwise_pm_arcsec_yr': round(other[2], 3)} | pack(other[0], other[1]))
         else:
             w['verdict'] = 'no_counterpart'
         out['wise'] = w

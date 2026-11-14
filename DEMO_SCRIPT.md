@@ -10,8 +10,8 @@ Re-check them before recording if anything is rebuilt.
 | 0–5 s | Home page. The round window blinks two real images of Epsilon Indi B; the ring jumps. | "This star moved. NASA's SPHEREx saw it." |
 | 5–11 s | Type a name, press Search. Images play; switch to Blink, then Subtract. | "Pick any patch of sky. Watch it change." |
 | 11–17 s | Click the dot. The path, 4.6″ a year, the spectrum. | "Click a dot: its motion, distance and spectrum." |
-| 17–23 s | Proof page: press "Open them". PASS, 0.072″. | "We locked our prediction before the images existed. It landed 0.07″ away." |
-| 23–28 s | Planet X hunt: the tiles, then open one field and let it blink. | "A blind search found 13 of 19 known movers by itself." |
+| 17–23 s | Proof page: press "Open them". PASS, 0.072″. | "We locked our prediction before we downloaded the images. It landed 0.07″ away." |
+| 23–28 s | Planet X hunt: Makemake's card, the wavy path, the spectrum. | "It found a dwarf planet on its own: 52.72 AU away. NASA's JPL says 52.72." |
 | 28–30 s | Home page title. | "PARALLAX. Find what moves. Then prove it." |
 
 Use real recordings only. No mock-ups, no NASA logos.
@@ -38,7 +38,7 @@ photographs the whole sky in 102 infrared colours, again and again. NASA asked f
 then Blink: "Stars stay put. That one jumps." Switch on "What WISE saw around 2015". Show the address bar: "Any patch of
 sky is a link." Type other coordinates to show it is not canned (only if the network was tested).
 
-**1:10–1:50 Measure.** Click the dot. "4.6 arcseconds a year, and 12 light-years away, from SPHEREx alone." Show the
+**1:10–1:50 Measure.** Click the dot. "4.6 arcseconds a year, and 11 light-years away, from SPHEREx alone." Show the
 spectrum: "It follows the star as it moves. Its light matches a brown dwarf." Then WISE 0855: "The coldest brown dwarf
 known. Nothing at short wavelengths. At 4 to 5 microns, there it is."
 
@@ -46,11 +46,9 @@ known. Nothing at short wavelengths. At 4 to 5 microns, there it is."
 locked a prediction." Ask the room: stays put, or keeps moving? Press "Open them". "0.07 arcseconds. And we have locked
 new predictions for 2027, for images NASA has not taken yet."
 
-**2:35–3:20 Proof 2: the Planet X hunt.** Hunt page. "We gave the search 25 patches of sky and nothing
-else. It tested 5,195 sources. It found 13 of 19 known movers by itself, and
-0 it could not explain." Open a field and let it blink. "It also raised false alarms. One looked
-perfect: 13 sigma. Then we checked where Gaia saw that star in 2016. It had not moved. So now every mover must agree
-with the sky of ten years ago."
+<!-- DISTANT_PITCH:start -->
+**2:35–3:20 Proof 2: the Planet X hunt.** Sky map first: "This is the whole sky as NASA's SPHEREx sees it." Slide the colour bar. Then the Hunt page. "We let the search find dwarf planets on its own. Makemake's distance from SPHEREx images alone: 52.72 AU. NASA's JPL says 52.72 AU." "Eris is too faint to see in any single image. Adding 147 images along thousands of possible paths, it appeared: 95.53 AU. JPL says 95.52." "That jump between visits is parallax, and it is where our name comes from." Then: "We pointed the same search at Planet Nine. It found nothing, and we can show you why: Planet Nine is about 41 times fainter than these images can reach. And we have locked where Makemake will be in January, before NASA takes the images."
+<!-- DISTANT_PITCH:end -->
 
 **3:20–3:45 The variable stars.** "Two of NASA's five targets are variable stars, and both are too bright: they saturate
 the camera. So we measured the ring of light around them. R Draconis faded by 42 percent, RW Aurigae by 36. Barnard's
@@ -71,6 +69,13 @@ what moves. Then prove it."
 - **Did you find Planet X?** No, and we say so. 0 movers remain unexplained after the checks. Planet
   Nine itself would move by arcminutes between SPHEREx visits and is expected to be too faint for one visit. What
   SPHEREx can find today is a cold neighbour like WISE 0855, and we showed the search finds that one blind.
+- **How did you get a distance?** Parallax. SPHEREx sees every patch of sky twice a year from opposite sides of the Earth's
+  orbit. Makemake jumped 2.8 degrees between visits. One orbit through all three visits gives 52.72 AU; JPL says 52.72.
+- **Did it find Pluto?** No, and we show it. Pluto sits in a crowded star field and two of its three visits have few
+  exposures, so only one visit gave enough detections. Haumea was imaged in one visit only. Eris is too faint for a single
+  exposure. One of four found, three misses, each with its reason.
+- **Then how could it find Planet Nine?** With these images it cannot, and we say so: Planet Nine is about 40 times fainter
+  than the faintest pretend planet we can link. The method is right; the depth needs stacking along trial orbits.
 - **How do you know the blind search works?** Known movers were hidden in the fields. It found 13 of
   19. We also hid 16 fake cold sources in a blank field: it found the ones bright and fast enough, and called
   none of the still ones movers.

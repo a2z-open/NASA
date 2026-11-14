@@ -1,0 +1,38 @@
+{
+ "body": "eris",
+ "method": "shift-and-stack",
+ "pass_rule": {
+  "position_arcsec": 15.0,
+  "distance_fraction": 0.1,
+  "max_other_objects": 0
+ },
+ "locked_entry": 16,
+ "locked_hash": "11992e5a3e55a4438c2e59b6f21cee83a842bed7d5c591c327cf705b0f618339",
+ "locked_time_utc": "2026-11-14T20:35:56+00:00",
+ "recovered": true,
+ "match": {
+  "median_sep_arcsec": 1.6302820170098757,
+  "max_sep_arcsec": 2.6563996528889,
+  "r_fit_au": 95.52881175794899,
+  "r_err_au": 0.06790043876210491,
+  "r_true_au": 95.52181283444163,
+  "distance_error_fraction": 7.327042169398596e-05,
+  "n_visits": 3,
+  "is_body": true
+ },
+ "other_objects": 0,
+ "objects_scored": [
+  {
+   "median_sep_arcsec": 1.6302820170098757,
+   "max_sep_arcsec": 2.6563996528889,
+   "r_fit_au": 95.52881175794899,
+   "r_err_au": 0.06790043876210491,
+   "r_true_au": 95.52181283444163,
+   "distance_error_fraction": 7.327042169398596e-05,
+   "n_visits": 3,
+   "is_body": true
+  }
+ ],
+ "passed": true,
+ "version": 3
+}

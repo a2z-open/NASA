@@ -12,6 +12,7 @@ import { Hunt } from './pages/Hunt.tsx';
 import { Deck } from './pages/Deck.tsx';
 import { Targets } from './pages/Targets.tsx';
 import { DataAbout } from './pages/DataAbout.tsx';
+import { SkyMap } from './pages/SkyMap.tsx';
 import { Page } from './components/Shell.tsx';
 import { Component, useEffect, type ReactNode } from 'react';
 
@@ -47,6 +48,7 @@ function App() {
   }, [path]);
   if (path === '/' || path === '') return <Home />;
   if (path.startsWith('/explore')) return <Explore />;
+  if (path.startsWith('/map')) return <SkyMap />;
   if (path.startsWith('/investigation/')) return <InvestigationPage id={decodeURIComponent(path.slice('/investigation/'.length))} />;
   if (path.startsWith('/evidence/')) return <Evidence id={decodeURIComponent(path.slice('/evidence/'.length))} />;
   if (path.startsWith('/hunt')) return <Hunt />;

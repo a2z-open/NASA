@@ -72,6 +72,18 @@ The 16 recovery fields and 4 control fields of the hunt are listed in `validatio
 `data/hunt/<field>/manifest.json` records the archive query, and `data/hunt/<field>/hunt.json` lists every exposure used
 with its SHA-256 and archive URL.
 
+### Added for the distant-world search and the Barnard's Star halo test (14 Nov 2026, third session)
+
+| Source | Used for | How it is reached |
+|---|---|---|
+| JPL Horizons (Giorgini et al. 1996), https://ssd.jpl.nasa.gov/horizons/ | Positions of Pluto, Makemake, Haumea and Eris: to choose which patches to download, and to score the blind result afterwards. Never passed to the search. | `pipeline/ephem.py`, cached in `.parallax-cache/horizons/` |
+| CatWISE2020 (Marocco et al. 2021) at NOIRLab Astro Data Lab, https://datalab.noirlab.edu/ | The same catalogue as IRSA's, used when IRSA's catalogue service is down (it returned HTTP 502 for most of 14 Nov). | `pipeline/distant.py: catwise_field`, `pipeline/hunt.py: external_checks` |
+| AllWISE (Cutri et al. 2013) at the ESA Gaia archive | Last fallback if both CatWISE services fail. Each cached catalogue file records which service answered. | `pipeline/distant.py: catwise_field` |
+| Gaia DR3, all magnitudes to G = 21.5 | Removing known stars from the per-exposure detections; the expected displacement of Barnard's Star. | `pipeline/measure.py: gaia_field` |
+
+The distant-world fields (16 arcminutes, detectors 1 to 3) are in `.parallax-cache/distant/<body>/`, with a provenance record and SHA-256 beside
+every cutout. The 36 exposures of Barnard's Star's third visit, sealed until 14 Nov, are in `.parallax-cache/targets/barnards-star/unsealed-visit-3/`.
+
 ## Provenance records
 
 - `data/targets/<slug>/archive_manifest.json`:

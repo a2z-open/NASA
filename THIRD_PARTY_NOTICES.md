@@ -67,3 +67,15 @@ sites the team supplied were copied.
 | CDS Sesame / SIMBAD (CfA mirror) | Object-name resolution | CDS terms; cite Wenger et al. 2000 |
 | NASA/IPAC IRSA TAP (CatWISE2020) | Decade-baseline check of movers | Public NASA archive; cite Marocco et al. 2021 |
 | IMCCE SkyBoT | Known solar-system objects near a source | IMCCE terms; cite Berthier et al. 2006 |
+
+## Added on 14 Nov 2026 (fourth session)
+
+- **Aladin Lite 3.8.2** (CDS, Strasbourg; https://github.com/cds-astro/aladin-lite), the sky-map library on the Sky map page. The npm
+  package metadata says "GPL-3"; the LICENSE file shipped in the package is the GNU LGPL v3 (with COPYING and COPYING.LESSER). It is used
+  unmodified and loaded as its own separate file (`web/dist/assets/aladin-*.js`) only on the Sky map page. TEAM TODO: confirm this use
+  is acceptable under its licence before publishing.
+- **All-sky map layers (HiPS)** served by NASA/IPAC IRSA: the SPHEREx DR1 all-sky data cube (SPHEREx Science Data Center, NASA/SPHEREx,
+  Caltech/IPAC), and AllWISE, 2MASS, DSS2 and IRAS (IRIS) layers made by CDS. Loaded from IRSA at viewing time; nothing is copied.
+- **scikit-learn 1.9.1** (BSD-3-Clause), used only by `validation/ml_realbogus.py`.
+- **JPL Horizons** (NASA/JPL) and **CatWISE2020** via NOIRLab Astro Data Lab, as listed in DATA_SOURCES.md.
+

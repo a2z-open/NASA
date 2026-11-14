@@ -566,7 +566,7 @@ def evaluate(doc, *, identification=None, catalog_stars=None, known_blend=None):
         blend_ev.append(f"{len(nb)} Gaia DR3 source(s) within 12 arcsec (2 SPHEREx pixels); nearest {nb[0]['sep_arcsec']:.1f} arcsec, G = {nb[0]['g'] or float('nan'):.1f}.")
     chi = [d for d in dets if d['outcome'] == 'ok']
     if not blend_ev:
-        blend_ev.append('No Gaia DR3 neighbour within 2 SPHEREx pixels.')
+        blend_ev.append('No Gaia DR3 star brighter than G = 19 within 2 SPHEREx pixels.')
     H.append({'id': 'H3', 'name': 'Blended or overlapping sources', 'status': blend, 'evidence': blend_ev})
     # H4 artifact
     if n_use >= 5 and n_vis >= 2:
@@ -628,7 +628,7 @@ def evaluate(doc, *, identification=None, catalog_stars=None, known_blend=None):
         verdicts.append({'code': 'ultracool_candidate', 'label': f"Spectrum consistent with an ultracool dwarf ({tm['best']['spectral_type']})",
                          'strength': 'supported' if tm['best']['reduced_chi2'] < 2 else 'tentative'})
     if not identification and doc['kind'] == 'user' and not nb and n_use >= 5:
-        verdicts.append({'code': 'catalog_unmatched_followup', 'label': 'No Gaia DR3 counterpart: needs follow-up (not a discovery)', 'strength': 'tentative'})
+        verdicts.append({'code': 'catalog_unmatched_followup', 'label': 'No Gaia DR3 star brighter than G = 19 here: needs follow-up (not a discovery)', 'strength': 'tentative'})
     if insufficient and not any(v['code'] == 'saturated' for v in verdicts):
         verdicts.append({'code': 'insufficient_evidence', 'label': 'Insufficient evidence', 'strength': 'supported'})
     return H, verdicts
