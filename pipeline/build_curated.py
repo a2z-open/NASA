@@ -137,6 +137,8 @@ def build(slug, *, workers=8, reuse=False):
                'end_utc': v['end_utc'], 'n_products': v['n_products'], 'releases': v['releases'],
                'per_detector': v['per_detector'], 'sealed': v.get('sealed', False)} for v in man['visits']]
     cat_track = track_from_catalog(t.astrometry)
+    stars_all = stars
+    stars = [s_ for s_ in stars_all if s_['source_id'] != GAIA_IDS.get(slug)]   # never deblend the target from itself
     first_mjd = min(p['t_min'] for p in man['products'])
     fixed = track_position(cat_track, first_mjd)   # one fixed sky position: where the source was at the first visit
 
@@ -177,6 +179,7 @@ def build(slug, *, workers=8, reuse=False):
                 'catalog': t.astrometry.__dict__},
         visits=visits, identification=t.astrometry.source.split(' (')[0], catalog=catalog, catalog_stars=stars,
         known_blend=KNOWN_BLENDS.get(slug), extra_limitations=list(t.notes), provenance=provenance)
+    stars = stars_all
     # Frames
     vmap = {}
     for p in man['products']:
@@ -220,6 +223,12 @@ def build(slug, *, workers=8, reuse=False):
                            'nx': arr.shape[1], 'ny': arr.shape[0], 'pixel_arcsec': 3.075, 'dtype': 'float32', 'row0': 'north',
                            'stats': frame_stats(arr), 'centered_on': 'the source track at each exposure epoch (co-moving)',
                            'note': 'Shift-and-stack in the source rest frame; background stars smear, a co-moving source sharpens.'})
+    if slug == 'wise-0855':
+        for st in stacks:
+            if st['id'] == 'stack-short':
+                st['note'] = ("Shift-and-stack in WISE 0855's rest frame. Light just east of the centre is the G = 16.3 Gaia star about 8\u2033 "
+                              "away, fixed on the sky and therefore smeared here; joint PSF fitting attributes the short-wavelength flux to it, "
+                              "not to WISE 0855 (see the cold-object table).")
     field['stacks'] = stacks
     if slug == 'wise-0855':
         inv['cold_search'] = wise0855_summary(inv)

@@ -3,5 +3,7 @@ fastapi==0.162.7
 httpx==0.28.1
 numpy==2.5.4
 pillow==13.0.0
+requests==2.34.2
 scipy==1.18.1
 uvicorn==0.54.0
+spiff @ https://github.com/jgagneastro/SPIFF/archive/5252fc487549cb2fbef3245d0fba3dae6ca85e04.tar.gz

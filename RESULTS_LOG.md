@@ -1,0 +1,22 @@
+# Results log
+
+Verified outcomes only, in the order they were obtained. Times are Pacific (14 Nov 2026). Each entry names the file that holds it.
+
+| Time | Result | Evidence |
+|---|---|---|
+| 00:22 | First real SPHEREx cutout retrieved and parsed. Epsilon Indi B is clearly detected at its Gaia-propagated position: D6, 4.43 µm, peak 8.6 MJy/sr over a 0.3 MJy/sr background, SOURCE flag only. | DR1 `2025W18_1B_0081_2-D6` |
+| 00:30 | Epsilon Indi B: 458 DR1+QR3 products in 4 visits. Visit 4 (QR3, 2026-09-22 → 10-02, 120 products) **sealed**: only its metadata was recorded. | `data/targets/epsilon-indi-b/archive_manifest.json` |
+| 00:33 | Registration on real frames: 10–18 Gaia DR3 reference stars per exposure, RMS about 0.25″. Target S/N 20–136. | exploratory run (same code as below) |
+| 00:37:57 | **Prediction locked.** Training: 337 exposures from visits 1–3, 324 usable. SPHEREx-only fit: μ = 4594 ± 26 mas/yr, ϖ = 295 ± 10 mas, χ²ᵣ = 0.95. Predicted position at the held-out mean epoch: RA 331.098144°, Dec −56.801354°, σ ≈ 0.028″ per axis. | `validation/experiments/epsilon-indi-b/prediction.json` (SHA-256 `c902006d…`), commit `ef75c76` |
+| 00:39:41 | **Reveal: PASS.** 112 of 120 held-out cutouts downloaded (8 failed with IRSA 503), 111 usable. Residual 0.072″, d² = 4.85 (threshold 11.83). Catalogue-parallax variant also passes (0.084″). Gaia DR3 propagation fails (0.56″, d² = 1067). Stationary null fails (1.95″). | `validation/experiments/epsilon-indi-b/result.json`, commit `51d8ea1` |
+| 00:47 | Epsilon Indi B, all 4 visits (434 usable exposures): μ = 4635 ± 16 mas/yr, ϖ = 298 ± 9 mas, χ²ᵣ = 0.89. Spectrum: 102 of 102 bins filled, 99 detected at S/N ≥ 5. Best SPIFF template T3 (χ²ᵣ 1.55); next best T2 (2.64) and T4 (3.74). Fixed-position extraction keeps 55 % of the flux recovered by following the motion. Wavelength-matched visit-to-visit flux ratios: 0.971 ± 0.009, 1.012 ± 0.009, 1.008 ± 0.015, so no variability at the ≥ 5σ and ≥ 5 % thresholds. | `data/targets/epsilon-indi-b/investigation.json` |
+| 00:49 | Barnard's Star: 63 of 63 cached exposures (visits 1–2) have OVERFLOW within 1.5 px of the core, so no position or flux is measurable. This independently confirms the earlier team finding. | `data/targets/barnards-star/investigation.json` |
+| 00:50 | First WISE 0855 pass (single-PSF fits) showed implausible flux at 0.75–2.4 µm. **Diagnosed** as contamination from a G = 16.3 Gaia star about 8″ away. Fixed by fitting Gaia neighbours at the same time. Recorded here so this result is not mistaken for a detection. | this log |
+| 00:56 | **WISE 0855 (deblended):** 0.75–2.42 µm: −10 ± 6 µJy (3σ upper limit 9 µJy). 2.42–3.83 µm: 6 ± 8 µJy. 3.83–4.42 µm: 298 ± 28 µJy (S/N 10.8). 4.42–5.00 µm: 460 ± 32 µJy (17.24 AB, S/N 14.5). Best template Y1, the coldest in the library (χ²ᵣ 1.32). 12 exposures at S/N ≥ 5 give μ = 10.1 ± 1.1″/yr (published: 8.15″/yr; Δ < 2σ). | `data/targets/wise-0855/investigation.json` |
+| 00:58 | RW Aur saturated in 131 of 142 exposures; R Dra in 103 of 103. Experimental PSF-wing photometry was attempted. It converged on 48 RW Aur exposures with χ²ᵣ 250–770, so it was **rejected** by the pre-set χ²ᵣ < 50 acceptance cut. | investigations for both targets |
+| 01:00 | Naive versus wavelength-matched comparison on real, unsaturated comparison stars in the same images. R Dra field, Gaia DR3 1648326843826192768: naive max/min 9.1×, matched ratios 0.984 ± 0.013 and 1.017 ± 0.017. RW Aur field, Gaia DR3 156431234433162368: naive 10.7×, matched 0.986 ± 0.007 and 1.022 ± 0.012. | `data/investigations/ib1edeba1aaeb.json`, `data/investigations/i3d564e91b603.json` |
+| 01:02 | Live arbitrary-coordinate query (Teegarden's Star, resolved through Sesame): 332 products in 3 visits; 19 of 24 cutouts retrieved and reprojected. The star itself saturates in 14 of 19 exposures, which is reported as such. | `.parallax-cache/fields/f043.27953_p16.85379_06.0_n24/` |
+
+Negative controls and injection tests: see VALIDATION.md (appended when the runs finished).
+| 01:09 | **Negative controls:** 34 stationary Gaia stars (leave-one-out registration), 33 measured, **0 false positives**. Highest motion significance 4.3σ. Pull distribution σ = 0.93, mean −0.07. | `validation/validation_results.json` → `negative_controls` |
+| 01:10 | **Synthetic injections (SYNTHETIC):** 16 scenarios, 0 false positives. 1000 and 4000 mas/yr recovered at 300 µJy. 300 mas/yr recovered at 1000 µJy and missed at 300 µJy. Sources at 30–100 µJy are not detected. | `validation/validation_results.json` → `injections` |

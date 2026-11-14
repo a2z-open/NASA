@@ -1,0 +1,8 @@
+.venv
+.parallax-cache
+**/node_modules
+web/dist
+logs
+.git
+**/__pycache__
+*.fits

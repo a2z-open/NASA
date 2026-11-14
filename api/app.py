@@ -43,7 +43,7 @@ app.add_middleware(GZipMiddleware, minimum_size=2000)
 
 _jobs: dict[str, dict] = {}
 _jobs_lock = threading.Lock()
-_pool = ThreadPoolExecutor(max_workers=2)
+_pool = ThreadPoolExecutor(max_workers=3)
 _json_cache: dict[str, tuple[float, object]] = {}
 
 
@@ -201,15 +201,19 @@ async def create_field(request: Request):
                 return {'field_id': slug, 'status': 'ready', 'job_id': None}
     fid = field_key(ra, dec, fov) + (f'_w{float(wmin):.2f}-{float(wmax):.2f}' if wmin and wmax else '') + f'_n{max_frames}'
     fp = FIELDS / fid / 'field.json'
-    if fp.exists():
-        doc = read_json(fp)
-        if doc['data_state'] not in ('archive_unavailable', 'failed'):
-            return {'field_id': fid, 'status': 'ready', 'job_id': None}
     with _jobs_lock:
         running = next((j for j in _jobs.values() if j['result_id'] == fid and j['status'] in ('queued', 'running')), None)
     if running:
         return {'field_id': fid, 'status': 'processing', 'job_id': running['job_id']}
+    if fp.exists():
+        doc = read_json(fp)
+        # A 'processing' document with no live job was interrupted (e.g. a server restart): run it again.
+        if doc['data_state'] not in ('archive_unavailable', 'failed', 'processing'):
+            return {'field_id': fid, 'status': 'ready', 'job_id': None}
     job = new_job('field', fid)
+    from pipeline.frames import grid_doc
+    job_update(job, field_meta={'ra': ra, 'dec': dec, 'fov_arcmin': fov, 'grid': grid_doc(ra, dec, fov), 'catalog': [],
+                                'catalog_epoch_mjd': 57388.5, 'archive': None, 'stacks': [], 'title': None})
     _pool.submit(_field_job, job, fid, ra, dec, fov, max_frames, wmin, wmax)
     return {'field_id': fid, 'status': 'processing', 'job_id': job}
 
@@ -314,14 +318,18 @@ def get_field(field_id: str):
         with _jobs_lock:
             j = next((j for j in _jobs.values() if j['result_id'] == field_id), None)
         if j:
-            return {'field_id': field_id, 'data_state': 'processing', 'progress': j['progress'], 'frames': [], 'message': None}
+            return {'field_id': field_id, 'kind': 'live', 'data_state': 'processing', 'progress': j['progress'], 'frames': [],
+                    'message': None, **j.get('field_meta', {})}
         raise HTTPException(404, 'Unknown field.')
     doc = dict(read_json(p))
     if doc.get('data_state') == 'processing':
         with _jobs_lock:
-            j = next((j for j in _jobs.values() if j['result_id'] == field_id), None)
+            j = next((j for j in _jobs.values() if j['result_id'] == field_id and j['status'] in ('queued', 'running')), None)
         if j:
             doc['progress'] = j['progress']
+        else:
+            doc['data_state'] = 'failed'
+            doc['message'] = 'Processing was interrupted (the server restarted). Search this position again to retry.'
     return doc
 
 
@@ -378,6 +386,36 @@ async def create_investigation(request: Request):
     return {'investigation_id': inv_id, 'status': 'processing', 'job_id': job}
 
 
+def ensure_raw(fid, field, job_id=None, max_n=80):
+    """Re-download native cutouts for a field from their recorded cutout URLs (e.g. on a fresh deployment),
+    verifying each against the SHA-256 recorded at curation time."""
+    import hashlib as _h
+    d = raw_dir(fid)
+    if any(d.glob('*.fits')):
+        return
+    d.mkdir(parents=True, exist_ok=True)
+    frames = [fr for fr in field.get('frames', []) if fr.get('cutout_url')]
+    if len(frames) > max_n:
+        step = len(frames) / max_n
+        frames = [frames[int(i * step)] for i in range(max_n)]
+    from pipeline.spherex import _get
+    for i, fr in enumerate(frames):
+        if job_id:
+            job_update(job_id, progress={'stage': 'Re-fetching native cutouts from IRSA (verified by SHA-256)', 'done': i, 'total': len(frames)})
+        try:
+            raw = _get(fr['cutout_url'], timeout=90, retries=4).content
+        except Exception:  # noqa: BLE001
+            continue
+        if fr.get('sha256') and _h.sha256(raw).hexdigest() != fr['sha256']:
+            continue   # archive content changed since curation; do not mix versions silently
+        (d / f"{fr['id']}.fits").write_bytes(raw)
+        prov = {'product_id': fr['id'], 'obs_id': fr.get('obs_id'), 'detector': fr.get('detector'), 'release': fr.get('release'),
+                'collection': None, 'doi': None, 'archive_url': fr.get('archive_url'), 'cutout_url': fr['cutout_url'],
+                'center_ra': field['ra'], 'center_dec': field['dec'], 'size_arcmin': field['fov_arcmin'], 'sha256': fr.get('sha256'),
+                'bytes': len(raw), 'retrieved_utc': now(), 'processing_version': fr.get('processing_version'), 'path': ''}
+        (d / f"{fr['id']}.prov.json").write_text(json.dumps(prov))
+
+
 def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
     from pipeline.analysis import build_investigation, neighbours
     from pipeline.build_curated import sanitize, software_versions
@@ -387,7 +425,10 @@ def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
     from pipeline.spherex import RELEASES
     try:
         job_update(job_id, status='running', progress={'stage': 'Preparing reference stars', 'done': 0, 'total': 0})
+        ensure_raw(fid, field, job_id)
         files = sorted(str(p) for p in raw_dir(fid).glob('*.fits'))
+        if not files:
+            raise RuntimeError('No native cutouts are available for this field (IRSA unreachable?).')
         if fid in TARGETS:
             man = json.loads((DATA / fid / 'archive_manifest.json').read_text())
             sealed = {p['id'] for p in man['products'] if p.get('sealed')}
@@ -405,13 +446,18 @@ def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
             ident = f"Gaia DR3 {nb[0]['source_id']}"
             exclude = [nb[0]['source_id']]
         refs = reference_candidates(stars, exclude_ids=exclude)
+        deblend = [s for s in stars if s['source_id'] not in set(exclude)]   # never deblend the source from itself
         track = {'ra': ra, 'dec': dec, 't0_mjd': 61040.0, 'pmra': 0.0, 'pmdec': 0.0, 'parallax': 0.0, 'source': 'user click (stationary seed)'}
+        if nb and nb[0].get('pmra') is not None:
+            g = next(s for s in stars if s['source_id'] == nb[0]['source_id'])
+            track = {'ra': g['ra'], 'dec': g['dec'], 't0_mjd': 57388.5, 'pmra': g['pmra'], 'pmdec': g['pmdec'],
+                     'parallax': g.get('parallax') or 0.0, 'source': f'{ident} track (catalogue-assisted centroid seed)'}
         job_update(job_id, progress={'stage': f'Measuring the source in {len(files)} native SPHEREx exposures', 'done': 0, 'total': len(files)})
         def prog(n, tot, stage=f'Measuring the source in {len(files)} native SPHEREx exposures'):
             job_update(job_id, progress={'stage': stage, 'done': n, 'total': tot})
-        rows = measure_epochs(files, track, refs, fixed=(ra, dec), workers=6, stars=stars, progress=prog)
+        rows = measure_epochs(files, track, refs, fixed=(ra, dec), workers=6, stars=deblend, progress=prog)
         used = usable_positions(rows)
-        note = 'stationary seed at the clicked position'
+        note = track['source']
         if len(used) >= 8:
             mjd = [r['mjd'] for r in used]
             f = fit_motion(mjd, [r['position']['ra'] for r in used], [r['position']['dec'] for r in used],
@@ -419,9 +465,9 @@ def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
             pm = math.hypot(f.params['pmra'], f.params['pmdec']) * 1000
             e = f.errors()
             pm_err = math.hypot(e['pmra'], e['pmdec']) * 1000 / math.sqrt(2)
-            if pm > 5 * pm_err and pm > 100:
+            if pm > 5 * pm_err and pm > 50:
                 job_update(job_id, progress={'stage': 'Re-measuring along the fitted motion track', 'done': 0, 'total': len(files)})
-                rows = measure_epochs(files, track_from_fit(f), refs, fixed=(ra, dec), workers=6, stars=stars,
+                rows = measure_epochs(files, track_from_fit(f), refs, fixed=(ra, dec), workers=6, stars=deblend,
                                       progress=lambda n, t: job_update(job_id, progress={'stage': 'Re-measuring along the fitted motion track', 'done': n, 'total': t}))
                 note = 'SPHEREx-fitted linear track (second pass)'
         visits = field['archive']['visits'] if field.get('archive') else []
@@ -489,6 +535,11 @@ def export_investigation(inv_id: str, format: str = 'json'):
 # ---------------------------------------------------------------------------
 
 def git_commit_for(path: Path):
+    rec = path.parent / 'commits.json'
+    if rec.exists():
+        hist = json.loads(rec.read_text()).get(path.name) or []
+        if hist:
+            return hist[-1]   # oldest = the commit that first froze this file (git log lists newest first)
     try:
         out = subprocess.run(['git', 'log', '-1', '--format=%H %cI', '--', str(path.relative_to(ROOT))], cwd=ROOT,
                              capture_output=True, text=True, timeout=5).stdout.strip()

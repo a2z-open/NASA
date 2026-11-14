@@ -88,7 +88,9 @@ def recovery_status(slug, r):
         long = next((b for k, b in bands.items() if k.startswith('4.42')), None)
         short = next((b for k, b in bands.items() if k.startswith('0.75')), None)
         if long and long.get('detected') and short and not short.get('detected'):
-            return 'Forced-photometry detection at 4.4–5.0 µm only (catalogue track); motion not independently measured'
+            mv = (f"; {r['pm_total_masyr'] / 1000:.1f} ± {r['pm_total_err_masyr'] / 1000:.1f}″/yr motion from {r['usable_positions']} high-S/N exposures"
+                  if r['motion_status'] == 'significant' else '; motion not independently measured')
+            return f'Detected only at 3.8–5.0 µm (forced photometry on the catalogue track, neighbour deblended){mv}'
         if long and long.get('detected'):
             return 'Flux measured at the catalogue track, but short-wavelength flux also present: contamination not excluded'
         return 'Not detected (upper limits reported)'

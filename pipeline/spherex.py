@@ -151,7 +151,7 @@ def _get(url, params=None, *, timeout=60, retries=3, stream=False):
             r = session().get(url, params=params, timeout=timeout, stream=stream)
             if r.status_code in (429, 500, 502, 503, 504):
                 last = ArchiveUnavailable(f'HTTP {r.status_code} from {url}')
-                time.sleep(1.5 * (attempt + 1))
+                time.sleep(2.0 * (attempt + 1))
                 continue
             r.raise_for_status()
             return r
@@ -282,7 +282,7 @@ def fetch_cutout(p: Product, ra: float, dec: float, size_arcmin: float, folder: 
     if path.is_file() and meta_path.is_file():
         return Provenance(**json.loads(meta_path.read_text()))
     url = cutout_url(p, ra, dec, size_arcmin)
-    r = _get(url, timeout=90, retries=3)
+    r = _get(url, timeout=90, retries=5)
     raw = r.content
     if len(raw) > 40 * 1024 * 1024:
         raise ValueError('cutout response unexpectedly large')

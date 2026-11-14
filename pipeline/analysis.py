@@ -380,10 +380,12 @@ def analyse_variability(spectrum, visits):
     if len(pts) < 6:
         return {'status': 'insufficient', 'reason': 'Too few unsaturated photometric measurements.', 'naive': None, 'matched': None, 'light_curve': lc}
     f = np.array([p['flux_ujy'] for p in pts])
-    good = f > 0
+    e = np.array([p['flux_err_ujy'] for p in pts])
+    good = (f > 0) & (f >= 10 * e)      # high-S/N points only, so the ratio is not driven by noise near zero
     naive = {'description': 'Every exposure in time order, regardless of wavelength. Because SPHEREx sees a different '
                             'wavelength in each exposure, most of this apparent change is the source spectrum, not time variability.',
              'max_ratio': float(f[good].max() / f[good].min()) if good.sum() >= 2 else None,
+             'max_ratio_basis': 'brightest / faintest exposure among those with S/N >= 10',
              'points': [{'mjd': p['mjd'], 'flux_ujy': p['flux_ujy'], 'wavelength_um': p['wavelength_um']} for p in pts]}
     centers, _ = load_bins()
     idx = np.clip(np.searchsorted(centers, [p['wavelength_um'] for p in pts]), 1, len(centers) - 1)
