@@ -8,3 +8,5 @@ scipy==1.18.1
 uvicorn==0.54.0
 spiff @ https://github.com/jgagneastro/SPIFF/archive/5252fc487549cb2fbef3245d0fba3dae6ca85e04.tar.gz
 scikit-learn==1.9.1
+
+astropy-healpix==2.0.1

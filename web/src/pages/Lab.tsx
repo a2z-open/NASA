@@ -226,8 +226,8 @@ function TrackPlot({ e }: { e: LabExperiment }) {
         {held.map((p, i) => <circle key={'h' + i} cx={sx(-p.xi)} cy={sy(p.eta)} r={2} fill="#5fd4a8" className="reveal-dot" style={{ animationDelay: `${Math.min(i * 8, 900)}ms` }} />)}
         {e.predicted_at_mean_epoch && (
           <g>
-            <path d={`M${sx(-e.predicted_at_mean_epoch.xi) - 8},${sy(e.predicted_at_mean_epoch.eta)}h16M${sx(-e.predicted_at_mean_epoch.xi)},${sy(e.predicted_at_mean_epoch.eta) - 8}v16`} stroke="#ffa269" strokeWidth={1.6} />
-            <text x={sx(-e.predicted_at_mean_epoch.xi) + 10} y={sy(e.predicted_at_mean_epoch.eta) - 10} className="chart__note" fill="#ffa269">locked prediction</text>
+            <path d={`M${sx(-e.predicted_at_mean_epoch.xi) - 8},${sy(e.predicted_at_mean_epoch.eta)}h16M${sx(-e.predicted_at_mean_epoch.xi)},${sy(e.predicted_at_mean_epoch.eta) - 8}v16`} stroke="#f5f5f7" strokeWidth={1.6} />
+            <text x={sx(-e.predicted_at_mean_epoch.xi) + 10} y={sy(e.predicted_at_mean_epoch.eta) - 10} className="chart__note" fill="#f5f5f7">locked prediction</text>
           </g>
         )}
       </svg>
@@ -278,12 +278,12 @@ function RevealSky({ e }: { e: LabExperiment }) {
   const meas = e.result?.held_out_measured?.weighted_mean_position;
   const pred = e.predicted_at_mean_epoch;
   const overlays: Overlays = { markers: [], ellipses: [] };
-  if (pred) overlays.ellipses!.push({ ra: pred.ra_deg, dec: pred.dec_deg, cov_arcsec2: pred.cov_arcsec2, nsigma: 3.44, color: '#ffa269', magnify: 30 });
+  if (pred) overlays.ellipses!.push({ ra: pred.ra_deg, dec: pred.dec_deg, cov_arcsec2: pred.cov_arcsec2, nsigma: 3.44, color: '#f5f5f7', magnify: 30 });
   if (meas) overlays.markers!.push({ ra: meas.ra_deg, dec: meas.dec_deg, color: '#5fd4a8', shape: 'dot', size: 9, label: 'measured' });
   if (P.stationary_null) overlays.markers!.push({ ra: P.stationary_null.ra_deg, dec: P.stationary_null.dec_deg, color: '#ff8a7a', shape: 'diamond', size: 7 });
   if (e.tangent_reference && e.predicted_track.length) {
     const ref = e.tangent_reference;
-    overlays.track = { points: e.predicted_track.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), label: '', color: 'rgba(255,178,126,0.75)' };
+    overlays.track = { points: e.predicted_track.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), label: '', color: 'rgba(245,245,247,0.75)' };
   }
   return (
     <div className="labsky">
@@ -298,7 +298,7 @@ function RevealSky({ e }: { e: LabExperiment }) {
         <button className="button button--ghost button--small" onClick={() => sky.current?.zoom(0.5)} aria-label="Zoom out">Zoom −</button>
         <button className="button button--ghost button--small" onClick={() => sky.current?.resetView()}>Fit</button>
       </div>
-      <p className="small"><span style={{ color: '#ffa269' }}>Orange ellipse</span>: locked prediction, 3.4σ region drawn 30× larger than true size; dashed line: fitted model (training) and its extrapolation; <span style={{ color: '#5fd4a8' }}>green dot</span>: measured held-out position; <span style={{ color: '#ff8a7a' }}>red diamond</span>: “stays here”.</p>
+      <p className="small"><span style={{ color: '#f5f5f7' }}>White ellipse</span>: locked prediction, 3.4σ region drawn 30× larger than true size; dashed line: fitted model (training) and its extrapolation; <span style={{ color: '#5fd4a8' }}>green dot</span>: measured held-out position; <span style={{ color: '#ff8a7a' }}>red diamond</span>: “stays here”.</p>
       <p className="small dim">The source moves about {num(e.result?.evaluations?.stationary_null?.residual_arcsec, 1)}″ between these visits — a third of a 6.15″ pixel. Ctrl/⌘ + scroll or the zoom buttons to zoom in on the source.</p>
     </div>
   );

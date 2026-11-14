@@ -7,9 +7,9 @@ export function DataAbout() {
       <PageHero
         title="What you are looking at"
         lede="Every sky image here is a real NASA SPHEREx observation. Nothing is simulated, and when something cannot be measured the app says so."
-        img="/img/spherex-assembly.webp"
-        alt="The SPHEREx space telescope and its cone-shaped shields in a clean room, with an engineer beside it"
-        caption="SPHEREx during final assembly, March 2024."
+        img="/img/spherex-orbit.webp"
+        alt="An illustration of the SPHEREx space telescope in orbit above Earth"
+        caption="SPHEREx in orbit, in an illustration by NASA/JPL-Caltech."
       />
 
       <div className="plain">

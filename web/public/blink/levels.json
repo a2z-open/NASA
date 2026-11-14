@@ -1,0 +1,44 @@
+[
+ {
+  "id": "makemake",
+  "title": "Makemake",
+  "what": "a dwarf planet",
+  "note": "Found in 2005. Twice as far as Pluto at this point in its orbit.",
+  "w": 300,
+  "h": 200,
+  "frames": [
+   {
+    "src": "/blink/makemake-a.png",
+    "x": 0.569369679222516,
+    "y": 0.5006297990530403,
+    "date": "28 Dec 2025, 02:37 UTC",
+    "wavelength_um": 0.91,
+    "obs_id": "2025W52_2A_0525_1",
+    "registered": true
+   },
+   {
+    "src": "/blink/makemake-b.png",
+    "x": 0.5239666943800677,
+    "y": 0.4393676660702664,
+    "date": "31 Dec 2025, 13:44 UTC",
+    "wavelength_um": 0.818,
+    "obs_id": "2026W01_1A_0533_1",
+    "registered": true
+   }
+  ],
+  "moved_arcsec": 112.7,
+  "hours": 83.1,
+  "distance_au": 52.7,
+  "arcsec_per_px": 6.15,
+  "streaks": [
+   {
+    "in": "b",
+    "x1": 0.3037037037037037,
+    "y1": 0.0,
+    "x2": 0.2115740740740741,
+    "y2": 1.0
+   }
+  ],
+  "source": "NASA SPHEREx Level 2 images (IRSA); positions from the PARALLAX blind search"
+ }
+]

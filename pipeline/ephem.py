@@ -78,3 +78,50 @@ def at(eph: dict, mjd):
     ra = np.unwrap(np.radians(eph['ra']))
     return (np.degrees(np.interp(mjd, eph['mjd'], ra)) % 360.0, np.interp(mjd, eph['mjd'], eph['dec']),
             np.interp(mjd, eph['mjd'], eph['r_au']), np.interp(mjd, eph['mjd'], eph['delta_au']))
+
+
+# ---------------------------------------------------------------------------
+# "Where is it today?" for the name search.  SIMBAD (the star catalogue behind the search box) only knows objects
+# outside the Solar System, so planets, the Sun, the Moon and small bodies are looked up here instead.
+# ---------------------------------------------------------------------------
+
+SOLAR = {
+    'sun': ('10', 'The Sun', 'our star'), 'the sun': ('10', 'The Sun', 'our star'),
+    'moon': ('301', 'The Moon', 'moon'), 'the moon': ('301', 'The Moon', 'moon'),
+    'mercury': ('199', 'Mercury', 'planet'), 'venus': ('299', 'Venus', 'planet'), 'mars': ('499', 'Mars', 'planet'),
+    'jupiter': ('599', 'Jupiter', 'planet'), 'saturn': ('699', 'Saturn', 'planet'), 'uranus': ('799', 'Uranus', 'planet'),
+    'neptune': ('899', 'Neptune', 'planet'), 'ceres': ('1;', 'Ceres', 'dwarf planet'), 'vesta': ('4;', 'Vesta', 'asteroid'),
+    'pallas': ('2;', 'Pallas', 'asteroid'), 'sedna': ('90377;', 'Sedna', 'distant world'),
+    'gonggong': ('225088;', 'Gonggong', 'dwarf planet'), 'arrokoth': ('486958;', 'Arrokoth', 'Kuiper belt object'),
+    'bennu': ('101955;', 'Bennu', 'asteroid'), 'apophis': ('99942;', 'Apophis', 'asteroid'),
+}
+SOLAR.update({k: (v['command'], v['title'], v['kind']) for k, v in BODIES.items()})
+
+
+def where_now(command: str) -> dict:
+    """Geocentric RA, Dec (deg) and distance (AU) of a Solar System body today, from JPL Horizons."""
+    from datetime import datetime, timedelta, timezone
+    day = datetime.now(timezone.utc).date()
+    params = {
+        'format': 'text', 'COMMAND': f"'{command}'", 'OBJ_DATA': 'NO', 'MAKE_EPHEM': 'YES', 'EPHEM_TYPE': 'OBSERVER',
+        'CENTER': "'500@399'", 'START_TIME': f"'{day}'", 'STOP_TIME': f"'{day + timedelta(days=1)}'", 'STEP_SIZE': "'1 d'",
+        'QUANTITIES': "'1,20'", 'ANG_FORMAT': 'DEG', 'CAL_FORMAT': 'JD', 'CSV_FORMAT': 'YES', 'EXTRA_PREC': 'YES',
+    }
+    key = re.sub(r'[^A-Za-z0-9]+', '_', f'now_{command}_{day}').strip('_')
+    path = CACHE / 'horizons' / f'{key}.json'
+    if path.is_file():
+        return json.loads(path.read_text())
+    r = requests.get(HORIZONS_URL, params=params, timeout=30, headers={'User-Agent': USER_AGENT})
+    r.raise_for_status()
+    text = r.text
+    if '$$SOE' not in text:
+        raise LookupError('Horizons found no single match for ' + command)
+    c = [x.strip() for x in text.split('$$SOE', 1)[1].strip().splitlines()[0].split(',')]
+    name = re.search(r'Target body name:\s*(.+?)\s{2,}', text)
+    out = {'mjd': _num(c[0]) - 2400000.5, 'ra': _num(c[3]), 'dec': _num(c[4]), 'delta_au': _num(c[5]),
+           'target': name.group(1).strip() if name else command}
+    if not (np.isfinite(out['ra']) and np.isfinite(out['dec'])):
+        raise LookupError('Horizons returned no position for ' + command)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(out))
+    return out

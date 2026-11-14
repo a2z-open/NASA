@@ -12,11 +12,11 @@ interface Props {
   onResolved?: (r: { ra: number; dec: number; target?: string; name?: string }) => void;
 }
 
-export async function resolveQuery(q: string): Promise<{ ra: number; dec: number; target?: string; name?: string }> {
+export async function resolveQuery(q: string): Promise<{ ra: number; dec: number; target?: string; name?: string; moves?: boolean }> {
   const coords = parseCoordinateString(q);
   if (coords) return coords;
   const r = await api.resolve(q);
-  return { ra: r.ra, dec: r.dec, target: r.target, name: r.name };
+  return { ra: r.ra, dec: r.dec, target: r.target, name: r.name ?? undefined, moves: r.moves };
 }
 
 export function SearchBox({ label, placeholder, large, fov, initial = '', onResolved }: Props) {

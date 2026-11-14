@@ -102,3 +102,14 @@ Retrieval date for all cached data: 2026-11-14 (UTC). Usage conditions: SPHEREx 
 by IRSA; Gaia data are public under ESA's terms; both require the citations above.
 
 PARALLAX is an independent hackathon project. It is not affiliated with or endorsed by NASA, JPL, Caltech, IPAC or ESA.
+
+## Added in the fourth session (cold-world spectra)
+
+| Source | Used for | How it is reached |
+|---|---|---|
+| **SPHEREx DR1 all-sky data cube** (SPHEREx Science Data Center; IRSA HiPS, order 5, 102 planes, MJy/sr) | A 102-colour spectrum at any position: an 11 × 11 pixel window per object, read with HTTP byte ranges (`pipeline/cubespec.py`). Also the SPHEREx layer of the sky map. | https://irsa.ipac.caltech.edu/data/hips/SPHEREx/spherex_allsky_cube |
+| **SIMBAD** (Wenger et al. 2000), TAP service at the CfA mirror | Lists of known M, L, T and Y dwarfs with spectral types (training), and of brown-dwarf candidates and fast red objects with no spectral type; bibliography of flagged objects. | https://simbad.cfa.harvard.edu/simbad/sim-tap |
+| **2MASS Point Source Catalog** (Skrutskie et al. 2006; VizieR II/246) and **AllWISE** (Cutri et al. 2013; VizieR II/328), CfA VizieR mirror | Where each object was around 2000 and in 2010.56, hence its motion and where to look in the cube. 2MASS J and K and WISE W1 and W2 also check the SPHEREx colours. Never model inputs. | https://vizier.cfa.harvard.edu |
+| **Best et al. 2020**, AJ 159, 257, table 1 (VizieR J/AJ/159/257) | Published spectral types, consulted only after the model's scores were locked, to vet what it flagged. | https://vizier.cfa.harvard.edu |
+| **JPL Horizons** (Giorgini et al. 1996) | Today's position of the Sun, Moon, planets, dwarf planets and asteroids for the search box (`pipeline/ephem.py`, `where_now`). | https://ssd.jpl.nasa.gov/api/horizons.api |
+| **HiPS previews of AllWISE, 2MASS, DSS2 and IRAS** (made by CDS, served by IRSA) | Thumbnails on the sky map's Layers tile. | https://irsa.ipac.caltech.edu/data/hips/CDS/ |

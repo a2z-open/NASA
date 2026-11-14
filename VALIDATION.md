@@ -297,3 +297,63 @@ Full tables: [docs/DISTANT_WORLDS.md](docs/DISTANT_WORLDS.md). Protocols: `valid
 - **Machine learning.** A machine-learning real/artefact model, trained on synthetic stars in real SPHEREx images and tested on the real detections of four dwarf planets it never saw, ranks them with AUC 0.87; signal-to-noise alone gives 0.88. It does not beat the simple rule yet, so it is not used in any result. Results in `validation/ml_realbogus.json`.
 - **What this does not show.** It does not show that SPHEREx can find Planet Nine: the predicted planet is about 40 times fainter than the faintest synthetic planet recovered. It does not show discovery power for unknown worlds either: every field was chosen because a known body is in it.
 <!-- DISTANT_SECTION:end -->
+
+<!-- COLDSPEC -->
+## 12. Cold-world spectra: reading spectral types from 102 colours (fourth session)
+
+**Question.** SPHEREx measures every source in 102 infrared colours. Can a model read a spectral type from that alone, and does it flag anything among objects that have no spectral type?
+
+**Data.** Spectra come from the SPHEREx DR1 all-sky data cube at IRSA (HEALPix tiles, 12.9″ pixels, 102 planes), read with HTTP byte ranges so that only an 11 × 11 pixel window per object is downloaded (`pipeline/cubespec.py`). Object lists and spectral types come from SIMBAD (2026-11-14). Positions in 2MASS and AllWISE (VizieR, CfA mirror) say where to look.
+
+| Set | From SIMBAD | Kept |
+|---|---:|---:|
+| Known T and Y dwarfs, J < 17.2 | 298 | 254 |
+| Known L dwarfs, J < 16.5 (36 per subtype) | 1,234 | 320 |
+| Known M6 to M9 dwarfs, moving over 0.1″/yr (60 per subtype) | 2,295 | 240 |
+| Known M3 to M5 dwarfs, moving over 0.2″/yr (30 per subtype) | 539 | 90 |
+| Brown-dwarf candidates with no spectral type | 751 | 720 |
+| Fast-moving red objects with no spectral type (over 0.2″/yr, J − K > 1) | 624 | 534 |
+
+Kept means: brighter limit J > 11 (SPHEREx saturates), more than 10° from the Galactic plane, and a usable spectral type for the known sets. 904 known objects, 1,254 unclassified. A spectrum was extracted for 2,056 of 2,158.
+
+**Is the photometry right?** Checked on known objects only, against catalogues the model never sees. SPHEREx's K/J flux ratio agrees with 2MASS's to 0.049 dex (about 12 %) for the 468 objects that pass the quality cuts, and 0.067 dex before the cuts. Its 4.6/3.4 µm ratio agrees with AllWISE's W2/W1 to 0.046 dex (median offset -0.049 dex, 466 objects). The cuts were placed where that agreement breaks down: source found within 0.5 pixel of where it was expected, no pixel brighter than 2 × the source within 3.2 pixels, profile misfit under 0.12, J-band signal-to-noise of at least 5. The absolute flux scale is not calibrated (at 1.28 µm it reads about 1.4 times the 2MASS J flux for M dwarfs); only the shape of each spectrum is used.
+
+**Model.** Gradient-boosted trees on 30 features that describe the shape of the spectrum only (22 normalised bands and 8 band differences); brightness is left out, and every training spectrum is also degraded to fainter levels, so that "faint" cannot stand in for "cold". Five-fold cross-validation, split by object, on 480 known dwarfs (257 M, 157 L, 66 T).
+
+| Held-out test | Type error (RMS, subtypes) | M | L | T | T dwarfs recognised | Warmer dwarfs called T |
+|---|---:|---:|---:|---:|---:|---:|
+| As observed | 1.49 | 0.84 | 1.84 | 2.33 | 59 of 66 | 0 of 414 |
+| Degraded to S/N 6 to 10 | 1.83 | 1.29 | 2.02 | 2.88 | 58 of 66 | 0 of 414 |
+
+A plain rule that uses only the depth of the 1.7 µm methane band separates T dwarfs with an AUC of 0.978; the model reaches 0.999. So most of the signal is the methane band itself; the model adds a little and gives a type.
+
+**Lock.** Model, cuts, feature list and decision rule were written to `validation/coldspec/protocol.json` and hashed into the ledger on 2026-11-14T23:00:14Z, before any unclassified object was scored. Rule: An unclassified object is a T-dwarf candidate if its SPHEREx spectrum passes the quality cuts, the classifier gives P(T/Y) >= 0.9, the regressor gives a type of T0 or later, and its features are not outliers (nearest known object closer than the 99th percentile of that distance among known objects).
+
+**Result.** Of 1,202 unclassified objects with a spectrum, 448 pass the quality cuts. 4 look unlike anything in the training set and get no answer. The model reads 314 as M, 125 as L and 5 as T. **5 meet the locked rule for a T-dwarf candidate.** The scores were hashed into the ledger before any vetting.
+
+| Object (SIMBAD name) | Model type | P(T) | J-band S/N | W1 − W2 | Published type | Verdict |
+|---|---|---:|---:|---:|---|---|
+| 2MASS J05541699-0008334 | T4.3 | 1.00 | 20 | 1.31 | T4.5 (PSO J088.5709-00.1430) | already typed in the literature |
+| 2MASS J08301554-1111101 | T2.8 | 1.00 | 18 | 1.2 | T3 (PSO J127.5648-11.1861) | already typed in the literature |
+| 2MASS J01374485+0908117 | T2.6 | 1.00 | 20 | 1.11 | T3.5 (PSO J024.4369+09.1360) | already typed in the literature |
+| PSO J005.6302-06.8669 | T0.6 | 1.00 | 26 | 0.78 | T3 (PSO J005.6302-06.8669) | already typed in the literature |
+| PSO J011.1793-03.7847 | T2.7 | 1.00 | 38 | 1.02 | T2 (PSO J011.1793-03.7847) | already typed in the literature |
+
+**Vetting against the literature (after the lock).** "No spectral type in SIMBAD" does not mean nobody has typed an object. Best et al. 2020, AJ 159, 257, table 1 (VizieR J/AJ/159/257), consulted after the scores were locked. 7 of the scored unclassified objects have a published type there. Of the 6 published T dwarfs among them, the model flagged 5; of the 1 published warmer dwarf(s), it flagged 0. Model type against published type: median error 0.72 subtypes, RMS 4.47 (the RMS is dominated by the one miss).
+
+| Object | Published | Model | Flagged |
+|---|---|---|---|
+| 2MASS J05541699-0008334 | T4.5 | T4.3 | yes |
+| 2MASS J01374485+0908117 | T3.5 | T2.6 | yes |
+| 2MASS J08301554-1111101 | T3 | T2.8 | yes |
+| PSO J005.6302-06.8669 | T3 | T0.6 | yes |
+| PSO J011.1793-03.7847 | T2 | T2.7 | yes |
+| 2MASS J04385515+0423001 | T2 | L0.5 | no |
+| ULAS J120357.45+001547.7 | L5.0 | L4.8 | no |
+
+The miss, 2MASS J04385515+0423001, was read as L0.5. Its SPHEREx signal is far stronger than its catalogue J magnitude allows, so the light is probably blended with a neighbour at 12.9″ per pixel. We count it as a miss.
+
+**Conclusion: 0 new candidates.** Every object the model flagged is a T dwarf that astronomers had already typed; SIMBAD simply does not carry the type. So this search found no new cold world. What it gives instead is a blind test: the model had never been told what these objects are, and the truth was looked up only after its answers were locked. No claim of discovery is made, and nothing has been sent to anyone.
+
+**Reproduce.** `python -m validation.coldspec lists | positions | extract | quality | train | lock | apply`, then `python -m validation.coldspec_after vet | check`, then `python -m validation.coldspec_md`. Files: `validation/coldspec/` (`objects.json`, `positions.json`, `spectra.npz`, `quality.json`, `cv.json`, `protocol.json`, `model.joblib`, `results.json`, `vetting.json`, `check_queue.json`).
+<!-- /COLDSPEC -->

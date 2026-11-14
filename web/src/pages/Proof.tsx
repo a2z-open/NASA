@@ -26,9 +26,9 @@ export function Proof() {
       <PageHero
         title="Don't take our word for it."
         lede="Neptune was found in 1846 right where the maths said it would be. We hold PARALLAX to the same kind of test: say first, look after."
-        img="/img/neptune.webp"
-        alt="Neptune, photographed by NASA's Voyager 2 in 1989"
-        caption="Neptune, from Voyager 2."
+        img="/img/pluto-horizon.webp"
+        alt="Pluto's mountains and hazy sky, backlit by the Sun, photographed by New Horizons in 2015"
+        caption="Pluto's horizon, from New Horizons. Pluto was found in 1930 by comparing two photos of the same sky."
       />
 
       <section className="band2" aria-labelledby="t1">

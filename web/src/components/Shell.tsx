@@ -4,29 +4,37 @@ import { Starfield } from './Starfield.tsx';
 
 const NAV = [
   { href: '/map', label: 'Sky map' },
-  { href: '/explore', label: 'Explore' },
-  { href: '/hunt', label: 'Planet X hunt' },
+  { href: '/check', label: 'Check' },
+  { href: '/hunt', label: 'Finds' },
   { href: '/proof', label: 'Proof' },
-  { href: '/about', label: 'About' },
 ];
 
-/** The mark: one dot seen twice. A ring where it was, a disc where it is now. */
+/** The mark: an orbit and one body displaced on it. One colour, so it works on any background. */
+export function Mark({ size = 22 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+      <defs>
+        <mask id="pm-cut"><rect width="32" height="32" fill="#fff" /><circle cx="23.8" cy="8.2" r="7.2" fill="#000" /></mask>
+      </defs>
+      <circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" strokeWidth="2.8" mask="url(#pm-cut)" />
+      <circle cx="23.8" cy="8.2" r="4.2" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function Wordmark() {
   return (
     <Link href="/" className="wordmark" aria-label="PARALLAX home">
-      <svg width="30" height="20" viewBox="0 0 30 20" aria-hidden="true">
-        <circle cx="10" cy="10" r="8.6" fill="none" stroke="currentColor" strokeWidth="1.8" opacity="0.55" />
-        <circle cx="20" cy="10" r="9.5" fill="var(--accent)" />
-      </svg>
+      <Mark />
       <span>PARALLAX</span>
     </Link>
   );
 }
 
-export function Header({ children }: { children?: ReactNode }) {
+export function Header({ children, overlay = false }: { children?: ReactNode; overlay?: boolean }) {
   const { path } = useLocation();
   return (
-    <header className="header">
+    <header className={`header${overlay ? ' header--overlay' : ''}`}>
       <div className="header__inner">
         <Wordmark />
         {children}
@@ -42,17 +50,20 @@ export function Header({ children }: { children?: ReactNode }) {
 
 export function Footer() {
   return (
-    <footer className="foot">
-      <div className="foot__inner">
-        <p className="foot__mark" aria-hidden="true">PARALLAX</p>
-        <div className="foot__cols">
-          <nav className="foot__nav" aria-label="Footer">
+    <footer className="foot4">
+      <div className="foot4__in">
+        <div>
+          <Wordmark />
+          <nav aria-label="Footer">
+            <Link href="/">Play</Link>
             {NAV.map(n => <Link key={n.href} href={n.href}>{n.label}</Link>)}
-            <Link href="/deck">Seven slides</Link>
+            <Link href="/explore">Images</Link>
+            <Link href="/about">Sources</Link>
           </nav>
-          <p>Sky images: NASA SPHEREx, from the NASA/IPAC Infrared Science Archive (<a href="https://doi.org/10.26131/IRSA678">DR1</a> and QR3). Star positions: ESA Gaia DR3.</p>
-          <p>Photographs: Pluto, NASA/JHUAPL/SwRI. Neptune, NASA/JPL. The WISE sky, NASA/JPL-Caltech/UCLA. SPHEREx views, NASA/JPL-Caltech; in assembly, NASA/JPL-Caltech/BAE Systems. WISE 0855 (artist's impression), NASA/JPL-Caltech/Penn State.</p>
-          <p>A NASA Space Apps Challenge 2026 project. Not affiliated with or endorsed by NASA. <Link href="/about">Sources and AI use</Link></p>
+        </div>
+        <div>
+          <p>Sky images: NASA SPHEREx, from the NASA/IPAC Infrared Science Archive (<a href="https://doi.org/10.26131/IRSA678">DR1</a> and QR3). Planet positions: NASA JPL Horizons. Star positions: ESA Gaia DR3. Photographs: NASA/JHUAPL/SwRI, NASA/JPL-Caltech.</p>
+          <p>Made for the NASA Space Apps Challenge 2026, Seattle. Not affiliated with or endorsed by NASA.</p>
         </div>
       </div>
     </footer>
@@ -76,7 +87,7 @@ export function PageHero({ title, lede, img, alt, caption, children }: { title: 
   );
 }
 
-export function Page({ children, wide = false, stars = true }: { children: ReactNode; wide?: boolean; stars?: boolean }) {
+export function Page({ children, wide = false, stars = false }: { children: ReactNode; wide?: boolean; stars?: boolean }) {
   return (
     <>
       {stars && <Starfield />}

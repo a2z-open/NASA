@@ -1,0 +1,128 @@
+{
+ "generated_utc": "2026-11-14T23:07:17+00:00",
+ "source": "Best et al. 2020, AJ 159, 257, table 1 (VizieR J/AJ/159/257), consulted after the scores were locked",
+ "n_unclassified_scored": 444,
+ "n_with_published_type": 7,
+ "type_rms_subtypes": 4.47,
+ "type_median_abs_subtypes": 0.72,
+ "published_T": 6,
+ "published_T_flagged": 5,
+ "published_not_T": 1,
+ "published_not_T_flagged": 0,
+ "candidates": [
+  {
+   "name": "2MASS J05541699-0008334",
+   "model_type": "T4.3",
+   "p_T": 1.0,
+   "published_type": "T4.5",
+   "published_name": "PSO J088.5709-00.1430",
+   "verdict": "already typed in the literature"
+  },
+  {
+   "name": "2MASS J08301554-1111101",
+   "model_type": "T2.8",
+   "p_T": 1.0,
+   "published_type": "T3",
+   "published_name": "PSO J127.5648-11.1861",
+   "verdict": "already typed in the literature"
+  },
+  {
+   "name": "2MASS J01374485+0908117",
+   "model_type": "T2.6",
+   "p_T": 1.0,
+   "published_type": "T3.5",
+   "published_name": "PSO J024.4369+09.1360",
+   "verdict": "already typed in the literature"
+  },
+  {
+   "name": "PSO J005.6302-06.8669",
+   "model_type": "T0.6",
+   "p_T": 0.999,
+   "published_type": "T3",
+   "published_name": "PSO J005.6302-06.8669",
+   "verdict": "already typed in the literature"
+  },
+  {
+   "name": "PSO J011.1793-03.7847",
+   "model_type": "T2.7",
+   "p_T": 0.999,
+   "published_type": "T2",
+   "published_name": "PSO J011.1793-03.7847",
+   "verdict": "already typed in the literature"
+  }
+ ],
+ "n_new_candidates": 0,
+ "matches": [
+  {
+   "name": "2MASS J05541699-0008334",
+   "published_name": "PSO J088.5709-00.1430",
+   "published_type": "T4.5",
+   "published_num": 24.5,
+   "model_type": "T4.3",
+   "model_num": 24.28,
+   "p_T": 1.0,
+   "flagged": true
+  },
+  {
+   "name": "2MASS J01374485+0908117",
+   "published_name": "PSO J024.4369+09.1360",
+   "published_type": "T3.5",
+   "published_num": 23.5,
+   "model_type": "T2.6",
+   "model_num": 22.57,
+   "p_T": 1.0,
+   "flagged": true
+  },
+  {
+   "name": "2MASS J08301554-1111101",
+   "published_name": "PSO J127.5648-11.1861",
+   "published_type": "T3",
+   "published_num": 23.0,
+   "model_type": "T2.8",
+   "model_num": 22.81,
+   "p_T": 1.0,
+   "flagged": true
+  },
+  {
+   "name": "PSO J005.6302-06.8669",
+   "published_name": "PSO J005.6302-06.8669",
+   "published_type": "T3",
+   "published_num": 23.0,
+   "model_type": "T0.6",
+   "model_num": 20.56,
+   "p_T": 0.999,
+   "flagged": true
+  },
+  {
+   "name": "PSO J011.1793-03.7847",
+   "published_name": "PSO J011.1793-03.7847",
+   "published_type": "T2",
+   "published_num": 22.0,
+   "model_type": "T2.7",
+   "model_num": 22.72,
+   "p_T": 0.999,
+   "flagged": true
+  },
+  {
+   "name": "2MASS J04385515+0423001",
+   "published_name": "PSO J069.7303+04.3834",
+   "published_type": "T2",
+   "published_num": 22.0,
+   "model_type": "L0.5",
+   "model_num": 10.5,
+   "p_T": 0.0,
+   "flagged": false
+  },
+  {
+   "name": "ULAS J120357.45+001547.7",
+   "published_name": "SDSSp J120358.19+001550.3",
+   "published_type": "L5.0",
+   "published_num": 15.0,
+   "model_type": "L4.8",
+   "model_num": 14.8,
+   "p_T": 0.0,
+   "flagged": false
+  }
+ ],
+ "statement": "Every object the model flagged turned out to have a published T-dwarf type that SIMBAD does not carry. No new candidate remains. This is a blind test the model passed, not a discovery."
+}

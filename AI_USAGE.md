@@ -51,3 +51,16 @@ reprojected for display. PARALLAX uses no NASA logos or mission branding.
 - No AI runs inside the app. The orbit fit, the linking and every threshold are fixed, readable code.
 - TEAM TODO: the idea, the direction and the approval of every claim must be the team's own. State in your own words what
   each member decided and checked. The official FAQ says AI must not supply the idea (see `docs/JUDGING_NOTES.md`).
+
+## Fourth session (14 Nov 2026): redesign, sky map, cold-world spectra, check a candidate
+
+- Claude Code (models Opus 5.5 and Fable 5.2) rewrote the website (monochrome design, home page, Google-Maps-style sky map),
+  fixed the name search for Solar System bodies, and wrote the cold-world spectral search (`pipeline/cubespec.py`,
+  `validation/coldspec.py`, `validation/coldspec_after.py`) and the "Check a candidate" page.
+- Machine learning in this session: gradient-boosted trees (scikit-learn) that read a spectral type from a SPHEREx spectrum.
+  It was trained on objects with published types, cross-validated by object, and hash-locked before it scored any unclassified
+  object. Its outputs are labelled as model readings everywhere. It found no new object; the vetting that showed this is in
+  VALIDATION.md, section 12.
+- No AI runs inside the app at request time. The page "Check a candidate" collects human opinions; it does not use a model to
+  judge them.
+- No large-language-model API is called by the pipeline or the app.

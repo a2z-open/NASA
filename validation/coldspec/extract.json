@@ -1,0 +1,11 @@
+{
+ "n_objects": 2158,
+ "n_spectra": 2056,
+ "failures": {
+  "too close to a tile edge": 87,
+  "too few valid planes": 13,
+  "nothing there": 2
+ },
+ "seconds": 36,
+ "source": "SPHEREx DR1 all-sky data cube (IRSA HiPS, order 5), read with HTTP byte ranges"
+}

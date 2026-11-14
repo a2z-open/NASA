@@ -48,7 +48,7 @@ function Axes({ w, h, xTicks, yTicks, sx, sy, xLabel, yLabel, xFmt, yFmt }: Fram
   );
 }
 
-const VISIT_COLORS = ['#8fb4ff', '#5fd4a8', '#f2c46b', '#ff9a76', '#d79bff', '#ff7aa8'];
+const VISIT_COLORS = ['#ffffff', '#a1a1a6', '#d1d1d6', '#6e6e73', '#e5e5ea', '#8e8e93'];
 
 export function visitColor(visit: string, visits: string[]): string {
   const i = Math.max(0, visits.indexOf(visit));
@@ -294,7 +294,7 @@ export function ResidualPlot({ cov, nsigma, points, measurementSigma }: { cov: n
         <text x={14} y={(M.t + h - M.b) / 2} textAnchor="middle" transform={`rotate(-90 14 ${(M.t + h - M.b) / 2})`} className="axes__label">Δδ (arcsec)</text>
         <ellipse cx={cx} cy={cy} rx={nsigma * Math.sqrt(l1) * s} ry={nsigma * Math.sqrt(l2) * s} transform={`rotate(${(ang * 180) / Math.PI} ${cx} ${cy})`} className="chart__ellipse" />
         <ellipse cx={cx} cy={cy} rx={Math.sqrt(l1) * s} ry={Math.sqrt(l2) * s} transform={`rotate(${(ang * 180) / Math.PI} ${cx} ${cy})`} className="chart__ellipse chart__ellipse--inner" />
-        <path d={`M${cx - 7},${cy}h14M${cx},${cy - 7}v14`} stroke="#ffa269" strokeWidth={1.5} />
+        <path d={`M${cx - 7},${cy}h14M${cx},${cy - 7}v14`} stroke="#f5f5f7" strokeWidth={1.5} />
         {points.map((p, i) => {
           const r = Math.hypot(p.dx, p.dy);
           const lim = extent * 0.86;

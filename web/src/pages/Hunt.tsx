@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, type HuntInjection, type HuntMover } from '../api.ts';
 import { Page, PageHero } from '../components/Shell.tsx';
 import { DistantWorlds, PlanetNineReach, VanishedPanel } from './Distant.tsx';
+import { ColdSpec } from './ColdSpec.tsx';
 import { paint } from '../components/FieldImage.tsx';
 import { Link } from '../router.tsx';
 
@@ -215,12 +216,13 @@ export function Hunt() {
       <PageHero
         title="The Planet X hunt"
         lede="Three blind searches. One finds distant worlds by their parallax. One looks for Planet Nine the same way. One finds cold neighbours of the Sun by their motion. None is told where to look."
-        img="/img/cold-dwarf.webp"
-        alt="An artist's impression of the brown dwarf WISE 0855 as a dim blue world against the Milky Way"
-        caption="WISE 0855, the coldest known brown dwarf, in an artist's impression. The search found it without being told."
+        img="/img/spherex-vela-wide.webp"
+        alt="Stars and dark dust clouds in the Vela Molecular Ridge, imaged in infrared by SPHEREx"
+        caption="The Vela Molecular Ridge, as NASA's SPHEREx sees it."
       />
 
       <DistantWorlds />
+      <ColdSpec />
       <PlanetNineReach />
       <VanishedPanel />
 

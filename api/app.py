@@ -26,6 +26,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 import requests
 
+from pipeline import ephem
 from pipeline.astrometry import CoordinateError, mjd_to_iso, parse_dec, parse_position, parse_ra, propagate, to_tangent
 from pipeline.spherex import CACHE, ROOT, ArchiveUnavailable, field_key, group_visits, search, fetch_many
 from pipeline.targets import ORDER, TARGETS
@@ -136,13 +137,31 @@ def resolve(q: str):
         return {'name': t.title, 'ra': float(p.ra[0]), 'dec': float(p.dec[0]), 'source': t.astrometry.source,
                 'epoch_note': 'catalogue astrometry propagated to 2026.0 (proper motion + parallax)', 'target': t.slug,
                 'pmra_masyr': t.astrometry.pmra_masyr, 'pmdec_masyr': t.astrometry.pmdec_masyr, 'parallax_mas': t.astrometry.parallax_mas}
+    # Planets, the Sun, the Moon, dwarf planets and asteroids move, so star catalogues do not list them: ask JPL Horizons.
+    if key in ephem.SOLAR:
+        command, title, kind = ephem.SOLAR[key]
+        try:
+            w = ephem.where_now(command)
+        except Exception as error:  # noqa: BLE001
+            raise HTTPException(503, f'Could not reach NASA JPL Horizons to find {title} ({type(error).__name__}). Try again.')
+        return {'name': title, 'ra': w['ra'], 'dec': w['dec'], 'source': 'JPL Horizons', 'kind': kind, 'moves': True,
+                'distance_au': w['delta_au'], 'epoch_note': f'where {title} is today; it moves, so this changes day by day'}
     try:
         r = requests.get('https://vizier.cfa.harvard.edu/viz-bin/nph-sesame/-oxp/SNV?' + requests.utils.quote(q), timeout=15,
                          headers={'User-Agent': 'PARALLAX/1.0 (research prototype)'})
         root = ET.fromstring(r.content)
         res = root.find('.//Resolver')
         if res is None or res.find('jradeg') is None:
-            raise HTTPException(404, f'Name "{q}" was not resolved (Sesame/SIMBAD via the CfA mirror).')
+            # Not a star or galaxy: it may be a numbered or named asteroid or comet-free small body.
+            if re.fullmatch(r"[A-Za-z0-9' \-]{2,40}", q):
+                try:
+                    w = ephem.where_now(f'{q};')
+                    return {'name': w['target'], 'ra': w['ra'], 'dec': w['dec'], 'source': 'JPL Horizons', 'kind': 'small body',
+                            'moves': True, 'distance_au': w['delta_au'],
+                            'epoch_note': 'where it is today; it moves, so this changes day by day'}
+                except Exception:  # noqa: BLE001
+                    pass
+            raise HTTPException(404, f'Couldn\'t find "{q}". Try a star like Vega, a planet like Mars, or coordinates.')
         ra, dec = float(res.findtext('jradeg')), float(res.findtext('jdedeg'))
         pmra = res.findtext('pm/pmRA')
         pmdec = res.findtext('pm/pmDE')
@@ -747,6 +766,89 @@ def vanished_results():
     d = read_json(p)
     return {k: d[k] for k in ('method', 'thresholds', 'n_fields', 'n_tested', 'counts', 'flagged')} | {
         'fields_without_catalogue': [f['field_id'] for f in d['fields'] if f['n_wise'] == 0]}
+
+
+@app.get('/api/coldspec')
+def coldspec_results():
+    """Cold-world spectra: a model that reads spectral types from SPHEREx's 102 colours (validation/coldspec.py)."""
+    base = ROOT / 'validation' / 'coldspec'
+    if not (base / 'cv.json').exists():
+        raise HTTPException(404, 'The cold-world spectral search has not been run yet (python -m validation.coldspec).')
+    out = {'cv': read_json(base / 'cv.json'), 'protocol': None, 'results': None, 'lists': None, 'vetting': None, 'quality': None}
+    if (base / 'vetting.json').exists():
+        out['vetting'] = read_json(base / 'vetting.json')
+    if (base / 'quality.json').exists():
+        q = read_json(base / 'quality.json')
+        out['quality'] = {k: q.get(k) for k in ('scatter_passing_cuts_dex', 'n_passing', 'wise_check')}
+    if (base / 'protocol.json').exists():
+        out['protocol'] = read_json(base / 'protocol.json')
+    if (base / 'results.json').exists():
+        r = dict(read_json(base / 'results.json'))
+        r.pop('typed', None)                      # the full list is in the file; the page needs the summary and the candidates
+        out['results'] = r
+    if (base / 'objects.json').exists():
+        o = read_json(base / 'objects.json')
+        out['lists'] = {'counts': o['counts'], 'generated_utc': o['generated_utc'], 'source': o['source']}
+    return out
+
+
+# ---------------------------------------------------------------------------
+# "Check a candidate": people look at a real SPHEREx spectrum and say whether the methane bands are dark.
+# Votes are kept on this server only (.parallax-cache/check/votes.jsonl): an answer, an optional first name, a time.
+# ---------------------------------------------------------------------------
+
+CHECK_QUEUE = ROOT / 'validation' / 'coldspec' / 'check_queue.json'
+CHECK_VOTES = CACHE / 'check' / 'votes.jsonl'
+CHECK_ANSWERS = ('dips', 'smooth', 'unsure')
+_votes_lock = threading.Lock()
+
+
+def _check_tallies() -> dict:
+    out: dict[str, dict] = {}
+    if CHECK_VOTES.is_file():
+        for line in CHECK_VOTES.read_text().splitlines():
+            try:
+                v = json.loads(line)
+            except ValueError:
+                continue
+            t = out.setdefault(v.get('id', ''), {'dips': 0, 'smooth': 0, 'unsure': 0, 'n': 0})
+            if v.get('answer') in CHECK_ANSWERS:
+                t[v['answer']] += 1
+                t['n'] += 1
+    return out
+
+
+@app.get('/api/check')
+def check_queue():
+    """The objects to check, with how people have voted so far.  Known answers are sent only after a vote."""
+    if not CHECK_QUEUE.exists():
+        raise HTTPException(404, 'The check queue has not been built yet (python -m validation.coldspec check).')
+    q = read_json(CHECK_QUEUE)
+    tallies = _check_tallies()
+    items = [{k: v for k, v in it.items() if k not in ('truth', 'truth_label', 'name', 'model')} | {'votes': tallies.get(it['id'], {'dips': 0, 'smooth': 0, 'unsure': 0, 'n': 0})['n']}
+             for it in q['items']]
+    return {'question': q['question'], 'reference': q['reference'], 'bands_um': q['bands_um'], 'note': q['note'], 'items': items,
+            'total_votes': sum(t['n'] for t in tallies.values())}
+
+
+@app.post('/api/check')
+async def check_vote(request: Request):
+    body = await _json_body(request)
+    if not CHECK_QUEUE.exists():
+        raise HTTPException(404, 'The check queue has not been built yet.')
+    item = next((it for it in read_json(CHECK_QUEUE)['items'] if it['id'] == str(body.get('id', ''))), None)
+    answer = body.get('answer')
+    if item is None or answer not in CHECK_ANSWERS:
+        raise HTTPException(400, 'Send {"id": an object in the queue, "answer": "dips" | "smooth" | "unsure"}.')
+    name = re.sub(r'[^\w .\-]', '', str(body.get('name') or ''))[:24].strip() or None
+    with _votes_lock:
+        CHECK_VOTES.parent.mkdir(parents=True, exist_ok=True)
+        with CHECK_VOTES.open('a') as f:
+            f.write(json.dumps({'id': item['id'], 'answer': answer, 'name': name, 'utc': now()}) + '\n')
+        tally = _check_tallies()[item['id']]
+    return {'id': item['id'], 'tally': tally, 'kind': item['kind'], 'name': item['name'], 'truth': item['truth'], 'truth_label': item['truth_label'],
+            'model': item['model'], 'flagged': bool(item.get('flagged')),
+            'agrees_with_known': (answer == item['truth']) if item['truth'] and answer != 'unsure' else None}
 
 
 @app.get('/api/ml')

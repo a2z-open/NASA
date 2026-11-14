@@ -201,3 +201,9 @@ CatWISE2020. *This publication makes use of data products from the Spectro-Photo
 Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the
 California Institute of Technology, and is funded by the National Aeronautics and Space Administration.* PARALLAX is
 not affiliated with or endorsed by NASA.
+
+## Cold-world spectra (fourth session)
+
+<!-- COLDSPEC_LINE -->
+- Cold-world spectra: the model reads types to ±1.5 subtypes and recognises 59 of 66 known T dwarfs with 0 false alarms; applied under a locked rule to 448 unclassified objects, it flagged 5: 5 are T dwarfs already typed in the literature (a blind test passed), 0 doubtful, 0 new candidates. It missed 1 of 6 published T dwarfs hidden in the list. See VALIDATION.md, section 12.
+<!-- /COLDSPEC_LINE -->

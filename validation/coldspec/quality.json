@@ -1,0 +1,157 @@
+{
+ "n": 766,
+ "what": "log10 of (SPHEREx K/J flux ratio) / (2MASS K/J flux ratio), known objects with J-band S/N above 8",
+ "median_dex": -0.044,
+ "scatter_all_dex": 0.067,
+ "scatter_passing_cuts_dex": 0.049,
+ "n_passing": 468,
+ "by_near_rival": [
+  {
+   "from": 0,
+   "to": 0.3,
+   "n": 341,
+   "scatter_dex": 0.047,
+   "percent_off_by_over_0.15_dex": 6
+  },
+  {
+   "from": 0.3,
+   "to": 0.6,
+   "n": 94,
+   "scatter_dex": 0.072,
+   "percent_off_by_over_0.15_dex": 14
+  },
+  {
+   "from": 0.6,
+   "to": 1,
+   "n": 61,
+   "scatter_dex": 0.074,
+   "percent_off_by_over_0.15_dex": 16
+  },
+  {
+   "from": 1,
+   "to": 2,
+   "n": 89,
+   "scatter_dex": 0.081,
+   "percent_off_by_over_0.15_dex": 16
+  },
+  {
+   "from": 2,
+   "to": 4,
+   "n": 56,
+   "scatter_dex": 0.103,
+   "percent_off_by_over_0.15_dex": 32
+  },
+  {
+   "from": 4,
+   "to": 10,
+   "n": 62,
+   "scatter_dex": 0.092,
+   "percent_off_by_over_0.15_dex": 31
+  },
+  {
+   "from": 10,
+   "to": 1000000000.0,
+   "n": 63,
+   "scatter_dex": 0.155,
+   "percent_off_by_over_0.15_dex": 40
+  }
+ ],
+ "by_resid": [
+  {
+   "from": 0,
+   "to": 0.05,
+   "n": 257,
+   "scatter_dex": 0.069,
+   "percent_off_by_over_0.15_dex": 12
+  },
+  {
+   "from": 0.05,
+   "to": 0.1,
+   "n": 325,
+   "scatter_dex": 0.047,
+   "percent_off_by_over_0.15_dex": 7
+  },
+  {
+   "from": 0.1,
+   "to": 0.12,
+   "n": 27,
+   "scatter_dex": 0.064,
+   "percent_off_by_over_0.15_dex": 19
+  },
+  {
+   "from": 0.12,
+   "to": 0.2,
+   "n": 61,
+   "scatter_dex": 0.102,
+   "percent_off_by_over_0.15_dex": 23
+  },
+  {
+   "from": 0.2,
+   "to": 0.35,
+   "n": 61,
+   "scatter_dex": 0.218,
+   "percent_off_by_over_0.15_dex": 51
+  },
+  {
+   "from": 0.35,
+   "to": 5,
+   "n": 35,
+   "scatter_dex": 0.167,
+   "percent_off_by_over_0.15_dex": 43
+  }
+ ],
+ "by_offset_pix": [
+  {
+   "from": 0,
+   "to": 0.3,
+   "n": 561,
+   "scatter_dex": 0.051,
+   "percent_off_by_over_0.15_dex": 6
+  },
+  {
+   "from": 0.3,
+   "to": 0.5,
+   "n": 75,
+   "scatter_dex": 0.092,
+   "percent_off_by_over_0.15_dex": 24
+  },
+  {
+   "from": 0.5,
+   "to": 0.6,
+   "n": 29,
+   "scatter_dex": 0.232,
+   "percent_off_by_over_0.15_dex": 38
+  },
+  {
+   "from": 0.6,
+   "to": 1.0,
+   "n": 68,
+   "scatter_dex": 0.237,
+   "percent_off_by_over_0.15_dex": 54
+  },
+  {
+   "from": 1.0,
+   "to": 1.5,
+   "n": 29,
+   "scatter_dex": 0.354,
+   "percent_off_by_over_0.15_dex": 66
+  }
+ ],
+ "cuts": {
+  "min_valid_fraction": 0.85,
+  "max_offset_pix": 0.5,
+  "min_snr_J": 5.0,
+  "max_near_rival": 2.0,
+  "max_resid": 0.12,
+  "J_ratio_range": [
+   0.6,
+   4.0
+  ]
+ },
+ "wise_check": {
+  "what": "log10 of (SPHEREx 4.6/3.4 micron flux ratio) / (AllWISE W2/W1 flux ratio), known objects that pass the cuts",
+  "n": 466,
+  "median_dex": -0.049,
+  "scatter_dex": 0.046
+ }
+}

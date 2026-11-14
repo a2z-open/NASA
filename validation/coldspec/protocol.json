@@ -1,0 +1,77 @@
+{
+ "locked_utc": "2026-11-14T23:00:14+00:00",
+ "cuts": {
+  "min_valid_fraction": 0.85,
+  "max_offset_pix": 0.5,
+  "min_snr_J": 5.0,
+  "max_near_rival": 2.0,
+  "max_resid": 0.12,
+  "J_ratio_range": [
+   0.6,
+   4.0
+  ]
+ },
+ "features": [
+  "f0.75-0.85",
+  "f0.85-0.95",
+  "f0.95-1.05",
+  "f1.05-1.15",
+  "f1.15-1.22",
+  "f1.22-1.34",
+  "f1.34-1.45",
+  "f1.45-1.52",
+  "f1.52-1.63",
+  "f1.63-1.78",
+  "f1.78-1.95",
+  "f1.95-2.05",
+  "f2.05-2.20",
+  "f2.20-2.40",
+  "f2.40-2.70",
+  "f2.70-3.10",
+  "f3.10-3.45",
+  "f3.45-3.80",
+  "f3.80-4.10",
+  "f4.10-4.40",
+  "f4.40-4.75",
+  "f4.75-5.00",
+  "ch4_H",
+  "h2o_J",
+  "ch4_K",
+  "K_over_J",
+  "f33_over_f45",
+  "f45_over_J",
+  "Y_over_J",
+  "z_over_J"
+ ],
+ "threshold_p_T": 0.9,
+ "rule": "An unclassified object is a T-dwarf candidate if its SPHEREx spectrum passes the quality cuts, the classifier gives P(T/Y) >= 0.9, the regressor gives a type of T0 or later, and its features are not outliers (nearest known object closer than the 99th percentile of that distance among known objects).",
+ "n_training_objects": 480,
+ "cross_validation": {
+  "held_out": {
+   "rms_subtypes": 1.4919386614535357,
+   "median_abs_subtypes": 0.6266002079506634,
+   "rms_M": 0.8411945111677084,
+   "rms_L": 1.836185671680463,
+   "rms_T": 2.3264937809873327,
+   "auc_T": 0.9987190748060313,
+   "T_found": 59,
+   "T_total": 66,
+   "false_T": 0,
+   "not_T_total": 414
+  },
+  "held_out_faint": {
+   "rms_subtypes": 1.8341896553336114,
+   "median_abs_subtypes": 0.901176875769008,
+   "rms_M": 1.2894866636795557,
+   "rms_L": 2.017663909779309,
+   "rms_T": 2.8824586926935365,
+   "auc_T": 0.9972551602986386,
+   "T_found": 58,
+   "T_total": 66,
+   "false_T": 0,
+   "not_T_total": 414
+  },
+  "baseline_methane_index_auc": 0.9776753037622603
+ },
+ "statement": "No unclassified object was scored by any model before this file was written."
+}

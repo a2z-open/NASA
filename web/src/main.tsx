@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import './theme.css';
 import { startReveal } from './reveal.ts';
 import { useLocation, Link } from './router.tsx';
 import { Home } from './pages/Home.tsx';
@@ -13,6 +14,7 @@ import { Deck } from './pages/Deck.tsx';
 import { Targets } from './pages/Targets.tsx';
 import { DataAbout } from './pages/DataAbout.tsx';
 import { SkyMap } from './pages/SkyMap.tsx';
+import { Check } from './pages/Check.tsx';
 import { Page } from './components/Shell.tsx';
 import { Component, useEffect, type ReactNode } from 'react';
 
@@ -29,7 +31,9 @@ class Boundary extends Component<{ children: ReactNode; resetKey: string }, { er
 }
 
 const TITLES: Record<string, string> = {
-  '/': 'PARALLAX · Find what moves in the infrared sky',
+  '/': 'PARALLAX · Spot what moves in space',
+  '/map': 'Sky map · PARALLAX',
+  '/check': 'Check a candidate · PARALLAX',
   '/explore': 'Explore · PARALLAX',
   '/hunt': 'Planet X hunt · PARALLAX',
   '/deck': 'PARALLAX in seven slides',
@@ -49,6 +53,7 @@ function App() {
   if (path === '/' || path === '') return <Home />;
   if (path.startsWith('/explore')) return <Explore />;
   if (path.startsWith('/map')) return <SkyMap />;
+  if (path.startsWith('/check')) return <Check />;
   if (path.startsWith('/investigation/')) return <InvestigationPage id={decodeURIComponent(path.slice('/investigation/'.length))} />;
   if (path.startsWith('/evidence/')) return <Evidence id={decodeURIComponent(path.slice('/evidence/'.length))} />;
   if (path.startsWith('/hunt')) return <Hunt />;

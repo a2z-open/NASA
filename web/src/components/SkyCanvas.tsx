@@ -380,7 +380,7 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
       // Hint
       if (hint && off) {
         const s = skyToScreen(hint);
-        ctx.strokeStyle = 'rgba(255, 162, 105, 0.9)';
+        ctx.strokeStyle = 'rgba(245, 245, 247, 0.9)';
         ctx.setLineDash([3, 3]);
         ctx.beginPath();
         ctx.arc(s.x, s.y, 16, 0, Math.PI * 2);
@@ -392,7 +392,7 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
         const ly = s.y + 34;
         ctx.fillStyle = 'rgba(4,6,10,0.8)';
         ctx.fillRect(lx - 6, ly - 13, w + 12, 19);
-        ctx.fillStyle = '#ffb27e';
+        ctx.fillStyle = '#ffffff';
         ctx.fillText(hint.text, lx, ly);
       }
       // Crosshair at field centre

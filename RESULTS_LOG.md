@@ -88,3 +88,9 @@ Negative controls and injection tests: see VALIDATION.md (appended when the runs
 | afternoon | **Eris found by shift-and-stack: 95.53 ± 0.07 AU; JPL says 95.52.** 147 exposures stacked, 11–13σ in each of three visits, median offset 1.6″, no other object. The distant-world test is now **2 of 4**. |
 | afternoon | **What disappeared since WISE** (`validation/vanished.py`): 945 bright CatWISE sources in the 25 hunt fields measured in SPHEREx's 3.8–5.0 µm stacks. First run: 30 flags, most of them debris within 2′ of Barnard's Star. Two rules were then added, after the fact and disclosed: skip entries WISE itself marks as artefacts (capital-letter flags), and skip the glare of stars that saturate SPHEREx. Final: the only sources gone from their WISE spots are 4 known brown dwarfs, each explained by its own SPHEREx motion run back to the WISE years. Nothing faded or vanished unexplained. The R Draconis field returned no WISE catalogue. |
 | afternoon | **Machine learning, tested** (`validation/ml_realbogus.py`): gradient-boosted trees trained on synthetic point sources in real SPHEREx exposures versus catalogue-free artefacts, tested leave-one-field-set-out. Synthetic versus artefacts: AUC 1.00. The honest test, the real detections of the four dwarf planets (never trained on): AUC 0.875, against 0.885 for signal-to-noise alone (better for Makemake and Haumea, worse for Eris and Pluto). Not used in any result. |
+
+## Cold-world spectra (14 Nov 2026)
+
+<!-- COLDSPEC_LINE -->
+- Cold-world spectra: the model reads types to ±1.5 subtypes and recognises 59 of 66 known T dwarfs with 0 false alarms; applied under a locked rule to 448 unclassified objects, it flagged 5: 5 are T dwarfs already typed in the literature (a blind test passed), 0 doubtful, 0 new candidates. It missed 1 of 6 published T dwarfs hidden in the list.
+<!-- /COLDSPEC_LINE -->

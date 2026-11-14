@@ -387,12 +387,12 @@ function HaloSection({ halo }: { halo: HaloVariability }) {
               ? <circle key={i} cx={sx(p.mjd)} cy={sy(p.relative)} r={2.6} fill={visitColor(p.visit, names)} fillOpacity={0.85} /> : null)}
             {vs.map(v => {
               const a = Date.parse(v.start_utc) / 86400000 + 40587, b = Date.parse(v.end_utc) / 86400000 + 40587;
-              return <line key={v.visit} x1={sx(a) - 4} x2={sx(b) + 4} y1={sy(v.ratio)} y2={sy(v.ratio)} stroke="#ffb454" strokeWidth={2} />;
+              return <line key={v.visit} x1={sx(a) - 4} x2={sx(b) + 4} y1={sy(v.ratio)} y2={sy(v.ratio)} stroke="#f5f5f7" strokeWidth={2} />;
             })}
             {vs.map(v => <text key={v.visit} x={sx(Date.parse(v.start_utc) / 86400000 + 40587)} y={h - 12} className="axes__tick">{monthYear(v.start_utc)}</text>)}
             <text x={14} y={(m.t + h - m.b) / 2} textAnchor="middle" transform={`rotate(-90 14 ${(m.t + h - m.b) / 2})`} className="axes__label">Brightness vs first visit</text>
           </svg>
-          <figcaption><span className="legend">Each dot is one image. Orange bars: the average of each visit.</span></figcaption>
+          <figcaption><span className="legend">Each dot is one image. White bars: the average of each visit.</span></figcaption>
         </figure>
       )}
       <table className="table">

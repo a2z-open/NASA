@@ -445,18 +445,18 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     if (m && m.track.length > 1) {
       const ref = m.models[m.reported_model ?? m.preferred_model]?.reference;
       if (ref) {
-        o.track = { points: m.track.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), label: '', color: 'rgba(255,178,126,0.9)' };
+        o.track = { points: m.track.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), label: '', color: 'rgba(245,245,247,0.9)' };
         o.measured = { points: m.points.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), color: 'rgba(143,180,255,0.55)' };
         if (epoch != null && m.track.length) {
           // model position at this frame's epoch (nearest track sample)
           let best = m.track[0];
           for (const p of m.track) if (Math.abs(p.mjd - epoch) < Math.abs(best.mjd - epoch)) best = p;
           const sp = fromTangent(best.xi, best.eta, ref.ra_deg, ref.dec_deg);
-          o.markers!.push({ ...sp, color: '#ffa269', shape: 'cross', size: 12 });
+          o.markers!.push({ ...sp, color: '#f5f5f7', shape: 'cross', size: 12 });
         }
       }
     }
-    if (selected && !(m && m.track.length > 1 && invId === curatedInvId)) o.markers!.push({ ...selected, color: '#ffa269', shape: 'ring', size: 11, label: invId ? 'selected' : undefined });
+    if (selected && !(m && m.track.length > 1 && invId === curatedInvId)) o.markers!.push({ ...selected, color: '#f5f5f7', shape: 'ring', size: 11, label: invId ? 'selected' : undefined });
     if (showWise && wise) {
       for (const w of wise) {
         o.markers!.push(w.mover

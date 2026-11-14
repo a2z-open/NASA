@@ -4,7 +4,7 @@ import { Link } from '../router.tsx';
 import { NA, date, dateTime, humanize, num, pm, shortHash } from '../lib/format.ts';
 
 const FIELD_COLORS: Record<string, string> = {
-  'epsilon-indi-b': '#8fb4ff', 'wise-0855': '#5fd4a8', 'rw-aurigae': '#f2c46b', 'r-draconis': '#ff9a76', 'barnards-star': '#d79bff',
+  'epsilon-indi-b': '#8fb4ff', 'wise-0855': '#5fd4a8', 'rw-aurigae': '#f2c46b', 'r-draconis': '#c7c7cc', 'barnards-star': '#d79bff',
 };
 const FIELD_NAMES: Record<string, string> = {
   'epsilon-indi-b': 'Epsilon Indi B field', 'wise-0855': 'WISE 0855 field', 'rw-aurigae': 'RW Aurigae field', 'r-draconis': 'R Draconis field', 'barnards-star': "Barnard's Star field",

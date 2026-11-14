@@ -204,3 +204,17 @@ Malformed JSON, a non-object body or a non-numeric field of view return 400.
 ## Jobs
 
 `GET /api/jobs/{job_id}` → `{ job_id, kind, status: "queued"|"running"|"done"|"failed", progress: {stage, done, total}, result_id, message }`
+
+## Cold-world spectra and "Check a candidate" (fourth session)
+
+- `GET /api/coldspec` → `{cv, protocol, results, vetting, quality, lists}`: the cross-validation of the spectral-type model, the locked
+  protocol, the scores of the unclassified objects (without the full per-object list), the literature vetting, and the photometry checks.
+  404 until `python -m validation.coldspec train` has run.
+- `GET /api/check` → `{question, reference, bands_um, items, total_votes, note}`. Each item has `id`, `kind` (`known` or `unknown`),
+  `spectrum` (`[{um, ujy, err}]`), `ra`, `dec`, `snr` and `votes`. Names, known answers and model readings are not sent until the visitor answers.
+- `POST /api/check` with `{"id": "...", "answer": "dips" | "smooth" | "unsure", "name": optional}` → the tally for that object, its name,
+  the known answer if there is one, the model's reading, and `agrees_with_known`. 400 for an unknown id or answer.
+  Votes are appended to `.parallax-cache/check/votes.jsonl` on the server: the object id, the answer, an optional first name
+  (letters, digits, spaces; 24 characters at most) and the time. Nothing else is stored.
+- `GET /api/resolve?q=` now also resolves Solar System bodies (Sun, Moon, planets, dwarf planets, numbered and named asteroids) through
+  JPL Horizons and returns `moves: true` with today's position.

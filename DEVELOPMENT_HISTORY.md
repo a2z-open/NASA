@@ -48,3 +48,12 @@ every entry an outside time-stamp.
 
 Built in this session: the distant-world search and its blind test, the Planet Nine mode, the Barnard's Star halo test on
 the previously sealed visit, the fixes from an independent audit, and the pages that show them.
+
+## Fourth session (Sat 14 Nov 2026, afternoon)
+
+Built in this session: the monochrome redesign (home page with the SPHEREx opening shot, the "spot what moves" game on real
+Makemake exposures, the distance diagram, the sky sphere), the sky map rebuilt as a map app, name search for Solar System bodies,
+the cold-world spectral search with its locked protocol and literature vetting (ledger entries 17 to 20), and the "Check a
+candidate" page. The spectral search found no new object: all five objects it flagged are T dwarfs already typed in the
+literature (VALIDATION.md, section 12). The earlier work was pushed to the private repository `a2z-open/NASA` at the team's
+request; this session's work is not committed yet.

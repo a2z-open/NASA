@@ -79,3 +79,7 @@ sites the team supplied were copied.
 - **scikit-learn 1.9.1** (BSD-3-Clause), used only by `validation/ml_realbogus.py`.
 - **JPL Horizons** (NASA/JPL) and **CatWISE2020** via NOIRLab Astro Data Lab, as listed in DATA_SOURCES.md.
 
+- **astropy-healpix 2.0.1** (BSD-3-Clause), used by `pipeline/cubespec.py` to find the HEALPix tile of a sky position.
+- **joblib** (BSD-3-Clause, installed with scikit-learn), used to store the locked model `validation/coldspec/model.joblib`.
+- Fonts: **Inter** and **Barlow** (SIL Open Font License 1.1), loaded from Google Fonts. On Apple devices the system font is used instead.
+- Home page photograph: SPHEREx in orbit, illustration by NASA/JPL-Caltech. Footer: Pluto's horizon, NASA/JHUAPL/SwRI.
