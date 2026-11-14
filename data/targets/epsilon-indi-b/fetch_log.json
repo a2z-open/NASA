@@ -1,0 +1,10 @@
+{
+ "ok": 337,
+ "failures": [
+  {
+   "product_id": "2025W17_4B_0447_1-D2",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W17_4B/l2b-v27-2026-196/2/level2_2025W17_4B_0447_1D2_spx_l2b-v27-2026-196.fits?center=331.0965521,-56.8006409&size=10.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W17_4B/l"
+  }
+ ],
+ "finished_utc": "2026-11-14T08:36:07+00:00"
+}

@@ -11,3 +11,4 @@ web/node_modules/
 output/
 .impeccable/review/
 .playwright-cli/
+logs/
