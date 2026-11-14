@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { api, cachedFrame, loadFrames, type Field, type Frame, type LabExperiment } from '../api.ts';
-import { Page } from '../components/Shell.tsx';
 import { SkyCanvas, type Overlays, type SkyCanvasHandle } from '../components/SkyCanvas.tsx';
 import { ResidualPlot, niceTicks, visitColor, type ResidualPoint } from '../components/Charts.tsx';
 import { Term } from '../components/Term.tsx';
@@ -12,20 +11,16 @@ import { Link } from '../router.tsx';
 
 type Guess = 'stays' | 'follows' | null;
 
-export function Lab() {
+/** The lock -> guess -> reveal experiments. Rendered inside the Proof page. */
+export function Experiments() {
   const lab = useAsync(() => api.lab(), []);
   const exps = lab.data?.experiments ?? [];
   return (
-    <Page>
-      <header className="page-head">
-        <p className="eyebrow">Discovery Lab</p>
-        <h1>Lock. Predict. Reveal.</h1>
-        <p className="muted lede">A motion model is only convincing if it predicts data it has never seen. Here the prediction was computed from earlier SPHEREx visits, hashed and committed to git before a single pixel of the held-out visit was downloaded. Then the new visit was measured with the same code.</p>
-      </header>
-      {lab.error && <p className="notice notice--bad">Experiments could not be loaded: {lab.error}</p>}
-      {lab.loading && <p className="muted">Loading experiments…</p>}
+    <>
+      {lab.error && <p className="notice notice--bad">The experiments could not be loaded: {lab.error}</p>}
+      {lab.loading && <p className="muted">Loading…</p>}
       {exps.map(e => <Experiment key={e.id} e={e} />)}
-    </Page>
+    </>
   );
 }
 
@@ -50,45 +45,18 @@ function Experiment({ e }: { e: LabExperiment }) {
         <p className="mono small dim">{e.id}</p>
       </div>
 
-      {/* Stage 1 */}
+      {/* Stage 2 */}
       <div className="stage">
         <div className="stage__n mono">1</div>
         <div className="stage__body">
-          <h3>Prediction locked</h3>
-          <div className="lock">
-            <dl className="kv">
-              <dt>Target</dt><dd>{P?.target?.title} <span className="dim small">({P?.target?.catalogue})</span></dd>
-              <dt>Training visits</dt><dd className="small">{trainingVisits.map(v => `${date(v.start_utc)} – ${date(v.end_utc)}`).join(' · ')} <span className="dim">({P?.training?.n_products} exposures, {P?.training?.n_usable_positions} usable positions)</span></dd>
-              <dt>Held-out visit</dt><dd className="small">{held?.visit ? `${date(held.visit.start_utc)} – ${date(held.visit.end_utc)}` : NA} · {held?.n_products} products · mean epoch {dateTime(held?.mean_epoch_utc)}</dd>
-              <dt>Predicted position</dt><dd className="mono">{primary ? `${formatRA(primary.ra_deg, 3)} ${formatDec(primary.dec_deg, 2)}` : NA}<br /><span className="small dim">{primary ? `${primary.ra_deg.toFixed(7)}°, ${primary.dec_deg.toFixed(7)}°` : ''}</span></dd>
-              <dt>Uncertainty (1σ)</dt><dd className="mono">{primary ? `${num(Math.sqrt(primary.cov_arcsec2[0][0]), 3)}″ (RA) × ${num(Math.sqrt(primary.cov_arcsec2[1][1]), 3)}″ (Dec)` : NA}</dd>
-              <dt>Model</dt><dd className="small">{P?.protocol?.primary_model}</dd>
-              <dt>From training alone</dt><dd className="mono small">μ = {pm(primary?.summary?.pm_total_masyr, primary?.summary?.pm_total_err_masyr, 0, 'mas/yr')} · ϖ = {pm(primary?.summary?.parallax_mas, primary?.summary?.parallax_err_mas, 0, 'mas')}</dd>
-              <dt>Locked</dt><dd className="mono small">{dateTime(P?.locked_utc)}</dd>
-              <dt>SHA-256</dt><dd className="mono small hash">{e.prediction_sha256}</dd>
-              <dt>Git commit</dt><dd className="mono small">{e.prediction_commit ? `${shortHash(e.prediction_commit.hash)} · ${e.prediction_commit.time}` : 'not committed'}</dd>
-            </dl>
-            <div className="criterion">
-              <p className="eyebrow">Pre-registered criterion (verbatim)</p>
-              <blockquote>{crit ?? NA}</blockquote>
-              <p className="small dim">Comparison predictions were locked at the same time: SPHEREx motion with catalogue parallax, full Gaia DR3 propagation (catalogue-assisted), and “stays here” (stationary null).</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stage 2 */}
-      <div className="stage">
-        <div className="stage__n mono">2</div>
-        <div className="stage__body">
-          <h3>Your call</h3>
-          <p className="muted">Before the new visit opens: where will the source be?</p>
+          <h3>Your guess</h3>
+          <p className="muted">New images of this star were sealed. Where will it be in them?</p>
           <div className="guess" role="radiogroup" aria-label="Your prediction">
             <button role="radio" aria-checked={guess === 'stays'} className={`guess__btn${guess === 'stays' ? ' is-on' : ''}`} onClick={() => !revealed && setGuess('stays')} disabled={revealed}>
-              <strong>Stays here</strong><span>It is a background star; the dot will be where it was last time.</span>
+              <strong>It stays put</strong><span>It is a distant background star.</span>
             </button>
             <button role="radio" aria-checked={guess === 'follows'} className={`guess__btn${guess === 'follows' ? ' is-on' : ''}`} onClick={() => !revealed && setGuess('follows')} disabled={revealed}>
-              <strong>Follows the track</strong><span>It is moving; it will be on the fitted motion + parallax path.</span>
+              <strong>It keeps moving</strong><span>It will be on the predicted path.</span>
             </button>
           </div>
         </div>
@@ -96,27 +64,28 @@ function Experiment({ e }: { e: LabExperiment }) {
 
       {/* Stage 3 */}
       <div className="stage">
-        <div className="stage__n mono">3</div>
+        <div className="stage__n mono">2</div>
         <div className="stage__body">
-          <h3>Reveal</h3>
-          {!canReveal && <p className="notice">This prediction is locked and the held-out visit has not been opened yet.</p>}
+          <h3>Open the sealed images</h3>
+          {!canReveal && <p className="notice">This prediction is locked. The sealed images have not been opened yet.</p>}
           {canReveal && !revealed && (
-            <button className="button button--primary button--reveal" onClick={() => setRevealed(true)}>Reveal the held-out visit</button>
+            <button className="button button--primary button--reveal" onClick={() => setRevealed(true)}>Open them</button>
           )}
           {canReveal && revealed && pe && (
             <div className="reveal">
               <div className={`verdict-banner verdict-banner--${pe.verdict === 'PASS' ? 'pass' : pe.verdict === 'FAIL' ? 'fail' : 'neutral'}`}>
                 <span className="verdict-banner__v">{pe.verdict}</span>
                 <span>
-                  The held-out source landed <strong className="mono">{num(pe.residual_arcsec, 3)}″</strong> from the locked prediction
-                  (<Term t="d²">d²</Term> = <span className="mono">{num(pe.mahalanobis_d2, 2)}</span>, threshold 11.83; ≈ {sig(pe.equivalent_sigma)}) across {pe.n_usable} usable held-out exposures.
+                  The star landed <strong className="mono">{num(pe.residual_arcsec, 3)}″</strong> from the locked prediction, inside the limit set in advance.
+                  {evals.stationary_null && <> “It stays put” missed by <strong className="mono">{num(evals.stationary_null.residual_arcsec, 2)}″</strong>.</>}
+                  <span className="small dim"> {pe.n_usable} new images; <Term t="d²">d²</Term> = {num(pe.mahalanobis_d2, 2)}, limit 11.83.</span>
                 </span>
               </div>
               {guess && (
                 <p className="guess-result">
-                  You chose <strong>{guess === 'stays' ? '“Stays here”' : '“Follows the track”'}</strong>.{' '}
+                  You guessed <strong>{guess === 'stays' ? '“it stays put”' : '“it keeps moving”'}</strong>.{' '}
                   {evals.stationary_null?.verdict === 'FAIL' && pe.verdict === 'PASS'
-                    ? (guess === 'follows' ? 'The source followed the track.' : `It moved: the “stays here” position missed by ${num(evals.stationary_null.residual_arcsec, 2)}″.`)
+                    ? (guess === 'follows' ? 'Right: it kept moving.' : `It moved. “Stays put” would have missed by ${num(evals.stationary_null.residual_arcsec, 2)}″.`)
                     : 'See the table below for how each prediction fared.'}
                 </p>
               )}
@@ -136,6 +105,8 @@ function Experiment({ e }: { e: LabExperiment }) {
                 </div>
               </div>
               <TrackPlot e={e} />
+              <details className="more">
+                <summary>All four locked predictions, compared</summary>
               <table className="table">
                 <thead><tr><th>Locked prediction</th><th>Kind</th><th>Residual</th><th>d²</th><th>Result</th></tr></thead>
                 <tbody>
@@ -159,8 +130,9 @@ function Experiment({ e }: { e: LabExperiment }) {
                 </tbody>
               </table>
               <p className="small">The Gaia DR3 propagation misses by {num(evals.catalog_full?.residual_arcsec, 2)}″ with only its tiny formal errors. Epsilon Indi B is an unresolved brown-dwarf binary (Gaia RUWE 4.3): its light centre moves with the orbit and differs between Gaia's optical band and SPHEREx's infrared, so a catalogue position is not a substitute for measuring the source in the same instrument.</p>
-              <details className="section">
-                <summary><h3>Protocol, disclosures and artefacts</h3></summary>
+              </details>
+              <details className="more">
+                <summary>Protocol and disclosures</summary>
                 <dl className="kv small">
                   <dt>Held-out rule</dt><dd>{P?.protocol?.held_out_rule}</dd>
                   <dt>Training rule</dt><dd>{P?.protocol?.training_rule}</dd>
@@ -176,6 +148,29 @@ function Experiment({ e }: { e: LabExperiment }) {
           )}
         </div>
       </div>
+      <details className="more">
+        <summary>How the prediction was locked</summary>
+        <p className="small muted" style={{ marginBottom: 12 }}>The prediction was computed from the earlier visits only, hashed, and committed to git before any image of the new visit was downloaded.</p>
+        <div className="lock">
+            <dl className="kv">
+              <dt>Target</dt><dd>{P?.target?.title} <span className="dim small">({P?.target?.catalogue})</span></dd>
+              <dt>Training visits</dt><dd className="small">{trainingVisits.map(v => `${date(v.start_utc)} – ${date(v.end_utc)}`).join(' · ')} <span className="dim">({P?.training?.n_products} exposures, {P?.training?.n_usable_positions} usable positions)</span></dd>
+              <dt>Held-out visit</dt><dd className="small">{held?.visit ? `${date(held.visit.start_utc)} – ${date(held.visit.end_utc)}` : NA} · {held?.n_products} products · mean epoch {dateTime(held?.mean_epoch_utc)}</dd>
+              <dt>Predicted position</dt><dd className="mono">{primary ? `${formatRA(primary.ra_deg, 3)} ${formatDec(primary.dec_deg, 2)}` : NA}<br /><span className="small dim">{primary ? `${primary.ra_deg.toFixed(7)}°, ${primary.dec_deg.toFixed(7)}°` : ''}</span></dd>
+              <dt>Uncertainty (1σ)</dt><dd className="mono">{primary ? `${num(Math.sqrt(primary.cov_arcsec2[0][0]), 3)}″ (RA) × ${num(Math.sqrt(primary.cov_arcsec2[1][1]), 3)}″ (Dec)` : NA}</dd>
+              <dt>Model</dt><dd className="small">{P?.protocol?.primary_model}</dd>
+              <dt>From training alone</dt><dd className="mono small">μ = {pm(primary?.summary?.pm_total_masyr, primary?.summary?.pm_total_err_masyr, 0, 'mas/yr')} · ϖ = {pm(primary?.summary?.parallax_mas, primary?.summary?.parallax_err_mas, 0, 'mas')}</dd>
+              <dt>Locked</dt><dd className="mono small">{dateTime(P?.locked_utc)}</dd>
+              <dt>SHA-256</dt><dd className="mono small hash">{e.prediction_sha256}</dd>
+              <dt>Git commit</dt><dd className="mono small">{e.prediction_commit ? `${shortHash(e.prediction_commit.hash)} · ${e.prediction_commit.time}` : 'not committed'}</dd>
+            </dl>
+            <div className="criterion">
+              <p className="eyebrow">Pre-registered criterion (verbatim)</p>
+              <blockquote>{crit ?? NA}</blockquote>
+              <p className="small dim">Comparison predictions were locked at the same time: SPHEREx motion with catalogue parallax, full Gaia DR3 propagation (catalogue-assisted), and “stays here” (stationary null).</p>
+            </div>
+        </div>
+      </details>
       <p className="small dim">Open this field in the <Link href={`/explore?field=${encodeURIComponent(e.field_id)}&inv=${encodeURIComponent(e.target)}`}>viewer</Link> · files: <code>validation/experiments/{e.target}/prediction.json</code>, <code>result.json</code>.</p>
     </section>
   );

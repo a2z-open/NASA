@@ -608,6 +608,39 @@ def lab():
 
 
 # ---------------------------------------------------------------------------
+# Planet X hunt (blind search results; see pipeline/hunt.py and validation/hunt_fields.py)
+# ---------------------------------------------------------------------------
+
+HUNT = ROOT / 'data' / 'hunt'
+
+
+@app.get('/api/hunt')
+def hunt_index():
+    p = HUNT / 'index.json'
+    if not p.exists():
+        raise HTTPException(404, 'The hunt has not been run yet (python -m validation.hunt_fields run all).')
+    return read_json(p)
+
+
+@app.get('/api/hunt/{field_id}')
+def hunt_field(field_id: str):
+    p = HUNT / field_id / 'hunt.json'
+    if not re.fullmatch(r'[\w.-]+', field_id) or not p.is_file():
+        raise HTTPException(404, 'No hunt result for this field.')
+    return read_json(p)
+
+
+@app.get('/files/hunt/{field_id}/frames/{name}')
+def hunt_frame(field_id: str, name: str):
+    if not re.fullmatch(r'[\w.-]+', field_id) or not re.fullmatch(r'[\w.-]+\.bin', name):
+        raise HTTPException(404)
+    p = HUNT / field_id / 'frames' / name
+    if not p.is_file():
+        raise HTTPException(404)
+    return FileResponse(p, media_type='application/octet-stream', headers={'Cache-Control': 'public, max-age=3600'})
+
+
+# ---------------------------------------------------------------------------
 # Static files
 # ---------------------------------------------------------------------------
 

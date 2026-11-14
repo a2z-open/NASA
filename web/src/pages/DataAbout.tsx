@@ -1,45 +1,42 @@
 import { Page } from '../components/Shell.tsx';
+import { Link } from '../router.tsx';
 
 export function DataAbout() {
   return (
     <Page>
       <header className="page-head">
-        <p className="eyebrow">Data &amp; About</p>
-        <h1>Where every number comes from</h1>
-        <p className="muted lede">PARALLAX measures real NASA SPHEREx observations. It never shows simulated images as observations, and missing measurements are shown as unavailable.</p>
+        <p className="eyebrow">About</p>
+        <h1>What you are looking at</h1>
+        <p className="lede">Every image here is a real NASA SPHEREx observation. Nothing is simulated, and when something cannot be measured the app says so.</p>
       </header>
-      <div className="prose">
-        <h2>NASA data used</h2>
+
+      <div className="plain">
+        <h3>How it works</h3>
+        <p>SPHEREx is a NASA space telescope that photographs the whole sky in 102 infrared colours, again and again. PARALLAX lines up every image of one patch of sky and plays them in order. Anything that shifts between images stands out.</p>
+        <p>Click a source and PARALLAX measures where it is in every image, fits how fast it moves and how far away it is, and builds its spectrum. The <Link href="/hunt">Planet X hunt</Link> does this for every source in a field at once.</p>
+
+        <h3>Data</h3>
         <ul className="bullets">
-          <li><strong>SPHEREx Data Release 1 Spectral Images</strong> — SPHEREx Science Team (2026), NASA/IPAC Infrared Science Archive. <a href="https://doi.org/10.26131/IRSA678">doi:10.26131/IRSA678</a>. Searched through the IRSA SIA2 collection <code>spherex_dr1</code>.</li>
-          <li><strong>SPHEREx Quick Release 3 Spectral Images</strong> — NASA/IPAC IRSA, SIA2 collection <code>spherex_qr3</code>; cited according to IRSA's SPHEREx data-release guidance.</li>
-          <li>Cutouts come from the IRSA cutout service (<code>?center=…&amp;size=…</code> on each Level 2 image). Each file's SHA-256, retrieval URL and time are recorded.</li>
-          <li>Archive: <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">IRSA SPHEREx</a> · <a href="https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-access/">data access documentation</a> · <a href="https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html">DR1 overview</a>.</li>
+          <li><strong>SPHEREx Data Release 1</strong> spectral images, SPHEREx Science Team (2026), NASA/IPAC Infrared Science Archive, <a href="https://doi.org/10.26131/IRSA678">doi:10.26131/IRSA678</a>, and <strong>Quick Release 3</strong>. Fetched live from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">IRSA</a>.</li>
+          <li><strong>Gaia DR3</strong> (Gaia Collaboration, Vallenari et al. 2023) for reference stars.</li>
+          <li><strong>CatWISE2020</strong> (Marocco et al. 2021) to check where a mover was ten years ago.</li>
+          <li><strong>SPIFF</strong> brown-dwarf templates (Gagné et al. 2026, <a href="https://arxiv.org/abs/2604.22012">arXiv:2604.22012</a>).</li>
+          <li><strong>Kirkpatrick et al. 2021</strong> for the motion of WISE 0855, and SIMBAD for object names.</li>
         </ul>
-        <p className="small">This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, funded by the National Aeronautics and Space Administration. See the DR1 documentation for the exact acknowledgment text.</p>
+        <p className="small muted">This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, funded by the National Aeronautics and Space Administration.</p>
 
-        <h2>Other catalogues and methods</h2>
+        <h3>Good to know</h3>
         <ul className="bullets">
-          <li><strong>Gaia DR3</strong> (Gaia Collaboration, Vallenari et al. 2023, A&amp;A 674, A1) — reference stars for registration, catalogue context and target astrometry. <a href="https://gea.esac.esa.int/archive/">ESA Gaia archive</a>.</li>
-          <li><strong>Kirkpatrick et al. 2021</strong>, ApJS 253, 7 — parallax and motion of WISE 0855−0714 (VizieR J/ApJS/253/7).</li>
-          <li><strong>SPIFF</strong> — Gagné et al. 2026, “A SPHEREx Pipeline and Spectral Library for Ultracool Dwarfs”, <a href="https://arxiv.org/abs/2604.22012">arXiv:2604.22012</a>; <a href="https://github.com/jgagneastro/SPIFF">github.com/jgagneastro/SPIFF</a> (MIT). PARALLAX uses SPIFF's 102-channel binning and template library for spectral typing. We did not invent SPIFF or its methods.</li>
-        </ul>
-
-        <h2>Software</h2>
-        <p>Python: Astropy, NumPy, SciPy, Photutils, FastAPI, SPIFF. Web: React, Vite, TypeScript; charts and the sky viewer are custom SVG/Canvas code.</p>
-
-        <h2>What is shown vs what is measured</h2>
-        <ul className="bullets">
-          <li>Viewer images are reprojected onto a common north-up grid for display. Positions, fluxes and spectra are measured on the original pixels with the release ePSF.</li>
-          <li>Fitted motion tracks are drawn dashed and labelled “fitted model”; they are never presented as observed frames.</li>
-          <li>Each SPHEREx exposure samples a different wavelength at each sky position. Brightness differences between exposures are only compared at matched wavelengths.</li>
+          <li>Images are resampled onto one north-up grid so they line up. Measurements use the original pixels.</li>
+          <li>Each SPHEREx image sees a slightly different colour. Brightness is only compared between images of the same colour.</li>
+          <li>A dashed line is always a fitted model, never an observation.</li>
         </ul>
 
-        <h2>AI disclosure</h2>
-        <p>AI tools assisted the team: Claude Code (Anthropic) wrote and tested much of the code and documentation under human direction; ChatGPT was used for research, planning and review. No AI model runs at runtime and no AI produced any measurement, classification or result: those come from deterministic, inspectable code on archive data. See <code>AI_USAGE.md</code> in the repository.</p>
+        <h3>AI use</h3>
+        <p>AI tools helped build this: Claude Code (Anthropic) wrote and tested much of the code and documents under the team's direction, and ChatGPT helped with research and planning. No AI runs inside the app. Every measurement comes from fixed code you can read.</p>
 
-        <h2>Not NASA</h2>
-        <p>PARALLAX is an independent NASA Space Apps Challenge 2026 project (Planet X and SPHEREx). It is not affiliated with or endorsed by NASA, JPL, Caltech or IPAC.</p>
+        <h3>Not NASA</h3>
+        <p>PARALLAX is an independent NASA Space Apps Challenge 2026 project for the challenge “Planet X and SPHEREx”. It is not affiliated with or endorsed by NASA, JPL, Caltech or IPAC.</p>
       </div>
     </Page>
   );

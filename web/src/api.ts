@@ -334,3 +334,48 @@ export async function loadFrames(urls: string[], dtype: string, onEach?: (url: s
   }
   await Promise.all(Array.from({ length: Math.min(concurrency, urls.length) }, worker));
 }
+
+// ---------------------------------------------------------------------------
+// Planet X hunt (blind search)
+// ---------------------------------------------------------------------------
+export interface HuntMover {
+  id: string; class: string; ra: number; dec: number; pm_arcsec_yr?: number | null; sigma?: number | null;
+  pm_over_error?: number | null; stack_snr: number; best_band: string; cold_only?: boolean; flags: string[];
+  truth_match?: string | null; n_native_positions?: number;
+  parallax_mas?: number | null; parallax_err_mas?: number | null;
+  gaia?: { source_id: string; g: number | null; pmra_masyr: number | null; pmdec_masyr: number | null } | null;
+  stack_motion?: { pm_arcsec_yr: number; pm_err_arcsec_yr: number; significance: number; n_visits: number } | null;
+  field_id?: string;
+}
+export interface HuntTruth {
+  name: string; catalogue_pm_arcsec_yr: number; spectral_type?: string | null; detected: boolean; recovered: boolean;
+  recovered_class: string | null; measured_pm_arcsec_yr: number | null; measured_sigma: number | null; separation_arcsec: number | null;
+  nearest_source: string | null; field_id?: string;
+}
+export interface HuntFieldRow {
+  field_id: string; title: string; kind: 'validation' | 'recovery' | 'control' | string; notes: string | null;
+  ra: number; dec: number; fov_arcmin: number; area_deg2: number; n_visits: number; baseline_days: number;
+  n_exposures: number; n_sources: number; n_motion_tested: number; counts: Record<string, number>;
+  depth_5sigma_ujy: Record<string, number>; truth: HuntTruth | null; movers: HuntMover[];
+}
+export interface HuntIndex {
+  generated_utc: string;
+  totals: { fields: number; area_deg2: number; exposures: number; sources: number; motion_tested: number };
+  classes: Record<string, number>;
+  recovery: { n_known: number; n_detected: number; n_recovered: number };
+  unexplained: HuntMover[];
+  thresholds: Record<string, number>;
+  fields: HuntFieldRow[];
+}
+export interface HuntStack {
+  id: string; visit: string; band: string; wavelength_range_um: [number, number]; n_exposures: number; time_utc: string;
+  data_url: string; stats: { median: number; sigma: number; p995: number };
+}
+export interface HuntField extends Omit<HuntFieldRow, 'movers' | 'n_visits'> {
+  grid: Grid; stacks: HuntStack[]; sources: (HuntMover & { motion_status: string; track?: { visit: string; ra: number; dec: number }[] })[];
+  visits: { id: string; start_utc: string; end_utc: string; n_exposures: number }[];
+}
+export const huntApi = {
+  index: () => request<HuntIndex>('/api/hunt'),
+  field: (id: string) => request<HuntField>(`/api/hunt/${encodeURIComponent(id)}`),
+};

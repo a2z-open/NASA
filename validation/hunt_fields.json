@@ -1,0 +1,345 @@
+{
+ "simp-0136": {
+  "query": "SIMP J013656.5+093347.3",
+  "ra": 24.23566892,
+  "dec": 9.56314221,
+  "pmra": 1238.244,
+  "pmdec": -16.156,
+  "parallax": 163.4478,
+  "spectral_type": "T2.0",
+  "name": "simp-0136",
+  "identifier": "SIMP J013656.5+093347.3",
+  "description": "free-floating planetary-mass object, T2.5",
+  "kind": "recovery",
+  "field_ra": 24.20624034661807,
+  "field_dec": 9.55451475901961,
+  "offset_arcmin": [
+   -1.74,
+   -0.52
+  ],
+  "resolved_utc": "2026-11-14T11:33:37+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "2mass-0939": {
+  "query": "2MASS J09393548-2448279",
+  "ra": 144.897874,
+  "dec": -24.807762,
+  "pmra": 558.1,
+  "pmdec": -1030.5,
+  "parallax": 196.0,
+  "spectral_type": "T8",
+  "name": "2mass-0939",
+  "identifier": "2MASS J09393548-2448279",
+  "description": "T8 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 144.94078835755892,
+  "field_dec": -24.872860039215688,
+  "offset_arcmin": [
+   2.34,
+   -3.91
+  ],
+  "resolved_utc": "2026-11-14T11:33:39+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "ugps-0722": {
+  "query": "UGPS J072227.51-054031.2",
+  "ra": 110.616275,
+  "dec": -5.67599361,
+  "pmra": -903.738,
+  "pmdec": 351.808,
+  "parallax": 242.8,
+  "spectral_type": "T9",
+  "name": "ugps-0722",
+  "identifier": "UGPS J072227.51-054031.2",
+  "description": "T9 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 110.59551964372302,
+  "field_dec": -5.682529557712418,
+  "offset_arcmin": [
+   -1.24,
+   -0.39
+  ],
+  "resolved_utc": "2026-11-14T11:33:41+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "denis-0255": {
+  "query": "DENIS J025503.3-470049",
+  "ra": 43.76538627,
+  "dec": -47.01426581,
+  "pmra": 1012.445,
+  "pmdec": -554.031,
+  "parallax": 205.4251,
+  "spectral_type": "L9",
+  "name": "denis-0255",
+  "identifier": "DENIS J025503.3-470049",
+  "description": "L9 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 43.7604015063668,
+  "field_dec": -47.008252738104574,
+  "offset_arcmin": [
+   -0.2,
+   0.36
+  ],
+  "resolved_utc": "2026-11-14T11:33:42+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "2mass-0348": {
+  "query": "2MASS J03480772-6022270",
+  "ra": 57.032171,
+  "dec": -60.374184,
+  "pmra": -279.7,
+  "pmdec": -768.5,
+  "parallax": 120.1,
+  "spectral_type": "T7",
+  "name": "2mass-0348",
+  "identifier": "2MASS J03480772-6022270",
+  "description": "T7 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 57.16491721949777,
+  "field_dec": -60.425164392156866,
+  "offset_arcmin": [
+   3.94,
+   -3.06
+  ],
+  "resolved_utc": "2026-11-14T11:33:44+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "luhman-16": {
+  "query": "WISE J104915.57-531906.1",
+  "ra": 162.328814,
+  "dec": -53.319466,
+  "pmra": -2767.502,
+  "pmdec": 356.856,
+  "parallax": 501.557,
+  "spectral_type": "L7.5+T0.5",
+  "name": "luhman-16",
+  "identifier": "WISE J104915.57-531906.1",
+  "description": "L7.5 + T0.5 binary, third-nearest system",
+  "kind": "recovery",
+  "field_ra": 162.25835059976598,
+  "field_dec": -53.37619802614379,
+  "offset_arcmin": [
+   -2.53,
+   -3.4
+  ],
+  "resolved_utc": "2026-11-14T11:33:45+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "2mass-0727": {
+  "query": "2MASSI J0727182+171001",
+  "ra": 111.826025,
+  "dec": 17.167002,
+  "pmra": 1046.0,
+  "pmdec": -767.0,
+  "parallax": 110.14,
+  "spectral_type": "T7.0",
+  "name": "2mass-0727",
+  "identifier": "2MASSI J0727182+171001",
+  "description": "T7 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 111.87992980752247,
+  "field_dec": 17.107132718954247,
+  "offset_arcmin": [
+   3.09,
+   -3.59
+  ],
+  "resolved_utc": "2026-11-14T11:33:46+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "2mass-1217": {
+  "query": "2MASS J12171110-0311131",
+  "ra": 184.296262,
+  "dec": -3.186993,
+  "pmra": -1054.0,
+  "pmdec": 76.0,
+  "parallax": 90.8,
+  "spectral_type": "T7.5",
+  "name": "2mass-1217",
+  "identifier": "2MASS J12171110-0311131",
+  "description": "T7.5 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 184.3368476451386,
+  "field_dec": -3.232744633986928,
+  "offset_arcmin": [
+   2.43,
+   -2.75
+  ],
+  "resolved_utc": "2026-11-14T11:33:48+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "2mass-0559": {
+  "query": "2MASS J05591914-1404488",
+  "ra": 89.8299469,
+  "dec": -14.08033525,
+  "pmra": 571.34,
+  "pmdec": -338.167,
+  "parallax": 95.2714,
+  "spectral_type": "T4.5",
+  "name": "2mass-0559",
+  "identifier": "2MASS J05591914-1404488",
+  "description": "T4.5 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 89.84962302528113,
+  "field_dec": -14.071184923202614,
+  "offset_arcmin": [
+   1.15,
+   0.55
+  ],
+  "resolved_utc": "2026-11-14T11:33:49+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "wise-1639": {
+  "query": "WISE J163940.83-684738.6",
+  "ra": 249.920156,
+  "dec": -68.794066,
+  "pmra": 579.09,
+  "pmdec": -3104.54,
+  "parallax": 202.3,
+  "spectral_type": "Y0pec",
+  "name": "wise-1639",
+  "identifier": "WISE J163940.83-684738.6",
+  "description": "Y0 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 249.74597060893032,
+  "field_dec": -68.80583070588236,
+  "offset_arcmin": [
+   -3.78,
+   -0.71
+  ],
+  "resolved_utc": "2026-11-14T11:33:50+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "control-cosmos": {
+  "name": "control-cosmos",
+  "kind": "control",
+  "description": "COSMOS field",
+  "field_ra": 150.119,
+  "field_dec": 2.206
+ },
+ "control-cdfs": {
+  "name": "control-cdfs",
+  "kind": "control",
+  "description": "Chandra Deep Field South",
+  "field_ra": 53.125,
+  "field_dec": -27.806
+ },
+ "control-goodsn": {
+  "name": "control-goodsn",
+  "kind": "control",
+  "description": "GOODS-North",
+  "field_ra": 189.229,
+  "field_dec": 62.238
+ },
+ "control-uds": {
+  "name": "control-uds",
+  "kind": "control",
+  "description": "UKIDSS Ultra Deep Survey field",
+  "field_ra": 34.4,
+  "field_dec": -5.2
+ },
+ "wise-1506": {
+  "query": "WISEP J150649.97+702736.0",
+  "ra": 226.71850231,
+  "dec": 70.45698647,
+  "pmra": -1194.179,
+  "pmdec": 1042.194,
+  "parallax": 193.9412,
+  "spectral_type": "T6",
+  "name": "wise-1506",
+  "identifier": "WISEP J150649.97+702736.0",
+  "description": "T6 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 226.81775845916124,
+  "field_dec": 70.46090803862745,
+  "offset_arcmin": [
+   1.99,
+   0.24
+  ],
+  "resolved_utc": "2026-11-14T11:34:31+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "wise-0254": {
+  "query": "WISEP J025409.45+022359.1",
+  "ra": 43.53286,
+  "dec": 2.398985,
+  "pmra": 2578.0,
+  "pmdec": 309.0,
+  "parallax": 185.0,
+  "spectral_type": "T8.0",
+  "name": "wise-0254",
+  "identifier": "WISEP J025409.45+022359.1",
+  "description": "T8 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 43.540448349990534,
+  "field_dec": 2.4034294444444444,
+  "offset_arcmin": [
+   0.45,
+   0.27
+  ],
+  "resolved_utc": "2026-11-14T11:34:31+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "wise-1405": {
+  "query": "WISEP J140518.40+553421.4",
+  "ra": 211.33853904,
+  "dec": 55.57191069,
+  "pmra": -2334.8,
+  "pmdec": 226.8,
+  "parallax": 158.2,
+  "spectral_type": "Y0(pec?)",
+  "name": "wise-1405",
+  "identifier": "WISEP J140518.40+553421.4",
+  "description": "Y0.5 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 211.34917465294916,
+  "field_dec": 55.56537474228758,
+  "offset_arcmin": [
+   0.36,
+   -0.39
+  ],
+  "resolved_utc": "2026-11-14T11:34:32+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "wise-0410": {
+  "query": "WISEP J041022.71+150248.5",
+  "ra": 62.59198383,
+  "dec": 15.05305111,
+  "pmra": 960.3,
+  "pmdec": -2219.4,
+  "parallax": 151.3,
+  "spectral_type": "Y0",
+  "name": "wise-0410",
+  "identifier": "WISEP J041022.71+150248.5",
+  "description": "Y0 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 62.540274834996815,
+  "field_dec": 15.115534770130719,
+  "offset_arcmin": [
+   -3.0,
+   3.75
+  ],
+  "resolved_utc": "2026-11-14T11:34:33+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ },
+ "wise-2056": {
+  "query": "WISEP J205628.90+145953.3",
+  "ra": 314.11796087,
+  "dec": 14.99661139,
+  "pmra": 825.8,
+  "pmdec": 528.8,
+  "parallax": 140.8,
+  "spectral_type": "Y0",
+  "name": "wise-2056",
+  "identifier": "WISEP J205628.90+145953.3",
+  "description": "Y0 brown dwarf",
+  "kind": "recovery",
+  "field_ra": 314.11335971543866,
+  "field_dec": 15.05020616124183,
+  "offset_arcmin": [
+   -0.27,
+   3.22
+  ],
+  "resolved_utc": "2026-11-14T11:34:33+00:00",
+  "resolver": "CDS Sesame / SIMBAD via the CfA mirror"
+ }
+}

@@ -1,8 +1,5 @@
-import { Fragment } from 'react';
-import { api, type ValidationReport, type ValidationTarget } from '../api.ts';
-import { Page } from '../components/Shell.tsx';
+import type { ValidationReport, ValidationTarget } from '../api.ts';
 import { niceTicks } from '../components/Charts.tsx';
-import { useAsync } from '../hooks.ts';
 import { Link } from '../router.tsx';
 import { NA, date, dateTime, humanize, num, pm, shortHash } from '../lib/format.ts';
 
@@ -30,7 +27,7 @@ function flagSummary(t: ValidationTarget): string {
   return parts.slice(0, 4).join(' · ') || 'none';
 }
 
-function TargetsTable({ targets }: { targets: ValidationTarget[] }) {
+export function TargetsTable({ targets }: { targets: ValidationTarget[] }) {
   return (
     <div className="table-wrap">
       <table className="table vtable">
@@ -76,7 +73,7 @@ const MODEL_LABELS: [string, string, string][] = [
   ['stationary_null', '“Stays here” (stationary)', 'null'],
 ];
 
-function ExperimentCard({ e }: { e: ValidationReport['experiments'][number] }) {
+export function ExperimentCard({ e }: { e: ValidationReport['experiments'][number] }) {
   return (
     <div className="vcard">
       <div className="vcard__head">
@@ -111,12 +108,12 @@ function ExperimentCard({ e }: { e: ValidationReport['experiments'][number] }) {
           </tbody>
         </table>
       </div>
-      <p className="small dim">Locked {dateTime(e.locked_utc)} · SHA-256 <span className="mono">{shortHash(e.prediction_sha256, 16)}…</span> · <Link href="/lab">Replay the reveal in the Discovery Lab →</Link></p>
+      <p className="small dim">Locked {dateTime(e.locked_utc)} · SHA-256 <span className="mono">{shortHash(e.prediction_sha256, 16)}…</span> · </p>
     </div>
   );
 }
 
-function ControlsScatter({ results, sigma }: { results: ValidationReport['negative_controls']['results']; sigma: number }) {
+export function ControlsScatter({ results, sigma }: { results: ValidationReport['negative_controls']['results']; sigma: number }) {
   const pts = results.filter(r => r.pm_total != null && r.pm_total_err != null && Number.isFinite(r.pm_total) && Number.isFinite(r.pm_total_err));
   if (!pts.length) return null;
   const w = 460, h = 320, m = { l: 58, r: 14, t: 14, b: 42 };
@@ -149,7 +146,7 @@ const OUTCOME_LABEL: Record<string, string> = {
   recovered: 'Recovered', missed: 'Missed', correctly_stationary: 'Correctly stationary', false_positive: 'False positive', not_detected: 'Not detected',
 };
 
-function InjectionGrid({ inj }: { inj: NonNullable<ValidationReport['injections']> }) {
+export function InjectionGrid({ inj }: { inj: NonNullable<ValidationReport['injections']> }) {
   const cell = (pmv: number, f: number) => inj.results.find(r => r.injected_pm_masyr === pmv && r.injected_flux_ujy === f);
   return (
     <div className="inj">
@@ -182,7 +179,7 @@ function InjectionGrid({ inj }: { inj: NonNullable<ValidationReport['injections'
   );
 }
 
-const THRESHOLD_LABELS: Record<string, string> = {
+export const THRESHOLD_LABELS: Record<string, string> = {
   motion_equivalent_sigma: 'Motion: stationary model rejected at ≥ (σ)',
   motion_pm_over_error: 'Motion: |μ| / σ_μ ≥',
   position_snr_min: 'Usable position: S/N ≥',
@@ -192,105 +189,3 @@ const THRESHOLD_LABELS: Record<string, string> = {
   template_max_reduced_chi2: 'Template accepted if reduced χ² <',
 };
 
-export function Method() {
-  const v = useAsync(() => api.validation(), []);
-  const d = v.data;
-  const nc = d?.negative_controls;
-  return (
-    <Page>
-      <header className="page-head">
-        <p className="eyebrow">Methodology &amp; validation</p>
-        <h1>How PARALLAX decides what it can say</h1>
-        <p className="muted lede">Every result comes from deterministic code applied to native SPHEREx pixels. Thresholds are fixed in code before results are evaluated, and failures are reported alongside successes.</p>
-      </header>
-
-      <section className="method-steps">
-        <ol className="steps steps--compact">
-          <li><span className="steps__n mono">01</span><h3>Retrieve</h3><p>IRSA SIA2 search of DR1 and QR3, de-duplicated per exposure and detector; cutouts with SHA-256 provenance.</p></li>
-          <li><span className="steps__n mono">02</span><h3>Register</h3><p>Gaia DR3 stars, moved to each exposure's epoch (proper motion + parallax), fix a per-exposure shift of the SPHEREx WCS.</p></li>
-          <li><span className="steps__n mono">03</span><h3>Measure</h3><p>Release ePSF fits on native pixels give positions and fluxes; saturated or hard-flagged cores are excluded, not forced.</p></li>
-          <li><span className="steps__n mono">04</span><h3>Fit motion</h3><p>Weighted tangent-plane fits: stationary, linear, linear + parallax. Errors scale by √χ²ᵣ when the fit is worse than the errors claim.</p></li>
-          <li><span className="steps__n mono">05</span><h3>Follow the light</h3><p>Forced photometry on the fitted track, wavelength from the spectral WCS at that pixel, binned into 102 channels; SPIFF templates.</p></li>
-          <li><span className="steps__n mono">06</span><h3>Weigh hypotheses</h3><p>Stationary, moving, variable, blended, artifact, solar-system, insufficient: each marked supported, disfavoured, possible or not testable.</p></li>
-        </ol>
-      </section>
-
-      <section className="validation">
-        <h2>Validation report</h2>
-        {v.loading && <p className="muted">Loading validation results…</p>}
-        {v.error && (
-          <div className="notice">
-            <p><strong>The validation report has not been generated yet.</strong></p>
-            <p className="small">The benchmark is produced by a backend script; nothing is shown in the meantime rather than placeholder numbers. The held-out experiment is in the <Link href="/lab">Discovery Lab</Link>.</p>
-          </div>
-        )}
-        {d && (
-          <>
-            <p className="small dim">Generated {dateTime(d.generated_utc)} from <code>validation/validation_results.json</code>.</p>
-
-            <section className="vsec">
-              <h3>1 · The five NASA targets</h3>
-              <p className="small muted">Every target was run through the same pipeline. Saturated targets are reported as inconclusive rather than forced.</p>
-              <TargetsTable targets={d.targets} />
-            </section>
-
-            {d.extra_targets && d.extra_targets.length > 0 && (
-              <section className="vsec">
-                <h3>Additional validation target</h3>
-                <p className="small muted">Not one of NASA's five targets: a faint, unsaturated, fast-moving T8 brown dwarf added to test the same pipeline and protocol on a second source with a published spectral type.</p>
-                <TargetsTable targets={d.extra_targets} />
-              </section>
-            )}
-
-            {d.experiments.length > 0 && (
-              <section className="vsec">
-                <h3>2 · Independent held-out predictions ({d.experiments.length})</h3>
-                {d.experiments.map(e => <ExperimentCard key={e.experiment} e={e} />)}
-              </section>
-            )}
-
-            {nc && (
-              <section className="vsec">
-                <h3>3 · Negative controls: stars that should not move</h3>
-                <p className="small muted">{nc.description}</p>
-                <div className="vnc">
-                  <div className="vnums vnums--4">
-                    <div><span className="vnums__n mono">{nc.n_controls}</span><span>control stars</span></div>
-                    <div><span className="vnums__n mono">{nc.n_measured}</span><span>measured ({nc.n_insufficient} insufficient)</span></div>
-                    <div><span className={`vnums__n mono ${nc.false_positives === 0 ? 'is-ok' : 'is-bad'}`}>{nc.false_positives}</span><span>false “moving” detections</span></div>
-                    <div><span className="vnums__n mono">{num(nc.pull_std, 2)}</span><span>spread of pulls (σ of (μ − μ_Gaia)/σ_μ)</span></div>
-                  </div>
-                  <p className="small">Pulls ≈ N(0, 1) mean the error bars are honest: a spread near 1 says the quoted uncertainties match the real scatter (median |pull| {num(nc.pull_median_abs, 2)}).</p>
-                  <ControlsScatter results={nc.results} sigma={nc.thresholds?.pm_over_error ?? 5} />
-                </div>
-              </section>
-            )}
-
-            {d.injections && (
-              <section className="vsec">
-                <h3>4 · Synthetic injections</h3>
-                <InjectionGrid inj={d.injections} />
-              </section>
-            )}
-
-            <div className="vsplit">
-              <section className="vsec">
-                <h3>Thresholds (fixed before evaluation)</h3>
-                <dl className="kv small">
-                  {Object.entries(d.thresholds).filter(([k]) => k !== 'note').map(([k, val]) => (
-                    <Fragment key={k}><dt>{THRESHOLD_LABELS[k] ?? humanize(k)}</dt><dd className="mono">{String(val)}</dd></Fragment>
-                  ))}
-                </dl>
-                {typeof d.thresholds.note === 'string' && <p className="small dim">{d.thresholds.note}</p>}
-              </section>
-              <section className="vsec">
-                <h3>Limitations</h3>
-                <ul className="bullets small">{d.limitations.map((l, i) => <li key={i}>{l}</li>)}</ul>
-              </section>
-            </div>
-          </>
-        )}
-      </section>
-    </Page>
-  );
-}

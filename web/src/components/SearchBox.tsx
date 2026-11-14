@@ -27,7 +27,7 @@ export function SearchBox({ label, placeholder, large, fov, initial = '', onReso
   async function submit(e: FormEvent) {
     e.preventDefault();
     const text = q.trim();
-    if (!text) { setError('Enter an object name or coordinates.'); return; }
+    if (!text) { setError('Type a name or coordinates first.'); return; }
     setBusy(true);
     setError(null);
     try {
@@ -36,7 +36,7 @@ export function SearchBox({ label, placeholder, large, fov, initial = '', onReso
       else if (r.target) navigate(`/explore?target=${r.target}`);
       else navigate(`/explore?ra=${r.ra.toFixed(6)}&dec=${r.dec.toFixed(6)}&fov=${fov ?? 6}`);
     } catch (err) {
-      setError((err as Error).message || 'Could not resolve that name.');
+      setError((err as Error).message || 'That name was not found. Try coordinates instead.');
     } finally {
       setBusy(false);
     }
@@ -55,9 +55,9 @@ export function SearchBox({ label, placeholder, large, fov, initial = '', onReso
         aria-invalid={!!error}
         aria-describedby={error ? 'search-error' : undefined}
       />
-      <button className="button button--primary" type="submit" disabled={busy}>{busy ? 'Resolving…' : label}</button>
+      <button className="button button--primary" type="submit" disabled={busy}>{busy ? 'Looking…' : label}</button>
       {error && <p id="search-error" className="search__error" role="alert">{error}</p>}
-      {large && !error && <p className="search__hint">Decimal degrees or sexagesimal (22h04m23s −56d48m02s). Names resolve via Sesame / Gaia.</p>}
+      {large && !error && <p className="search__hint">Any star name works, or RA and Dec in degrees or hours.</p>}
     </form>
   );
 }

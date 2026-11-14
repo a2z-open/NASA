@@ -41,9 +41,9 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
   if (inv.status === 'processing') {
     return (
       <div className="inv inv--processing" aria-busy="true">
-        <p className="eyebrow">Investigation in progress</p>
+        <p className="eyebrow">Measuring</p>
         <h2>{inv.title}</h2>
-        <p className="muted">{inv.message ?? 'Measuring this source in every available exposure on native pixels…'}</p>
+        <p className="muted">{inv.message ?? 'Measuring this source in every image…'}</p>
         {inv.progress && <Progress {...inv.progress} />}
       </div>
     );
@@ -51,9 +51,9 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
   if (inv.status === 'failed') {
     return (
       <div className="inv">
-        <p className="eyebrow">Investigation could not finish</p>
+        <p className="eyebrow">Could not measure this</p>
         <h2>{inv.title}</h2>
-        <p className="notice notice--bad">{inv.message ?? 'The analysis failed. No result is shown rather than a guessed one.'}</p>
+        <p className="notice notice--bad">{inv.message ?? 'The measurement failed, so no result is shown.'}</p>
       </div>
     );
   }
@@ -61,7 +61,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
   return (
     <article className={`inv${compact ? ' inv--compact' : ''}`}>
       <header className="inv__head">
-        <p className="eyebrow">{inv.kind === 'curated' ? 'NASA challenge target · precomputed on real SPHEREx data' : 'Your selection · measured on demand'}</p>
+        <p className="eyebrow">{inv.kind === 'curated' ? 'NASA test target' : 'Your pick'}</p>
         <h2>{inv.title}</h2>
         <p className="mono dim small">{formatRA(inv.source.ra)} {formatDec(inv.source.dec)} · {inv.source.ra.toFixed(5)}°, {inv.source.dec.toFixed(5)}° (ICRS)</p>
       </header>
@@ -79,12 +79,12 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
       )}
 
       <div className="stats">
-        <Stat label="Exposures" value={obs ? `${obs.n_usable_positions} / ${obs.n_total}` : NA} hint="usable positions / exposures examined" />
+        <Stat label="Images used" value={obs ? `${obs.n_usable_positions} / ${obs.n_total}` : NA} hint="usable positions / exposures examined" />
         <Stat label="Dates" value={obs?.date_range ? `${date(obs.date_range[0])} → ${date(obs.date_range[1])}` : NA} />
-        <Stat label="Wavelengths" value={obs?.wavelength_coverage_um ? `${obs.wavelength_coverage_um[0].toFixed(2)}–${obs.wavelength_coverage_um[1].toFixed(2)} µm` : NA} />
-        <Stat label={<Term t="proper motion">Proper motion</Term>} value={pref?.pm_total_masyr != null ? pm(pref.pm_total_masyr, pref.pm_total_err_masyr, 0, 'mas/yr') : NA} />
+        <Stat label="Colours" value={obs?.wavelength_coverage_um ? `${obs.wavelength_coverage_um[0].toFixed(2)}–${obs.wavelength_coverage_um[1].toFixed(2)} µm` : NA} />
+        <Stat label={<Term t="proper motion">Speed across the sky</Term>} value={pref?.pm_total_masyr != null ? pm(pref.pm_total_masyr, pref.pm_total_err_masyr, 0, 'mas/yr') : NA} />
         <Stat label={<Term t="parallax">Parallax</Term>} value={pref?.parallax_mas != null ? pm(pref.parallax_mas, pref.parallax_err_mas, 0, 'mas') : NA} />
-        <Stat label="Template" value={tmpl?.best && (tmpl.status === 'matched' || tmpl.status === 'poor_fit') ? `${tmpl.best.spectral_type}${tmpl.status === 'poor_fit' ? ' (poor fit)' : ''}` : tmpl ? humanize(tmpl.status) : NA} />
+        <Stat label="Best match" value={tmpl?.best && (tmpl.status === 'matched' || tmpl.status === 'poor_fit') ? `${tmpl.best.spectral_type}${tmpl.status === 'poor_fit' ? ' (poor fit)' : ''}` : tmpl ? humanize(tmpl.status) : NA} />
       </div>
 
       <div className="inv__actions">
@@ -95,7 +95,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {m && (
         <details className="section" open>
-          <summary><h3>Motion</h3><span className={`tag tag--${m.status}`}>{humanize(m.status)}</span></summary>
+          <summary><h3>Is it moving?</h3><span className={`tag tag--${m.status}`}>{humanize(m.status)}</span></summary>
           {m.points.length > 0 && <MotionPlot motion={m} />}
           <div className="table-wrap"><table className="table">
             <thead><tr><th>Model</th><th>μα cos δ (mas/yr)</th><th>μδ (mas/yr)</th><th>Parallax (mas)</th><th><Term t="reduced chi-square">χ²ᵣ</Term></th><th>N</th></tr></thead>
@@ -131,7 +131,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {inv.spectrum && (
         <details className="section" open>
-          <summary><h3>Spectrum</h3><span className={`tag tag--${inv.spectrum.status}`}>{humanize(inv.spectrum.status)}</span></summary>
+          <summary><h3>What kind of object is it?</h3><span className={`tag tag--${inv.spectrum.status}`}>{humanize(inv.spectrum.status)}</span></summary>
           <p className="small muted">{inv.spectrum.method}</p>
           {inv.spectrum.binned.some(b => b.flux_ujy != null) ? (
             <>
@@ -161,7 +161,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {inv.cold_search && (
         <details className="section" open>
-          <summary><h3>Cold-object test</h3><span className="tag">forced photometry on the predicted track</span></summary>
+          <summary><h3>Is it a cold world?</h3><span className="tag">measured where it should be</span></summary>
           <p className="small muted">{inv.cold_search.method}</p>
           <div className="table-wrap">
             <table className="table">
@@ -186,8 +186,8 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {inv.demonstration && (
         <section className="demo" aria-label="Wavelength comparison demonstration">
-          <p className="eyebrow">Demonstration on a real comparison star</p>
-          <h3>Naive vs wavelength-matched, shown on a real comparison star</h3>
+          <p className="eyebrow">A real comparison star</p>
+          <h3>Why colour matters, shown on an ordinary star nearby</h3>
           <p className="small">{inv.demonstration.why}</p>
           <div className="demo__cols">
             <div className="demo__col">
@@ -209,16 +209,16 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {inv.variability && (
         <details className="section" open={inv.variability.status === 'variable' || (!compact && inv.variability.status !== 'insufficient')}>
-          <summary><h3>Brightness change</h3><span className={`tag tag--${inv.variability.status}`}>{humanize(inv.variability.status)}</span></summary>
+          <summary><h3>Does its brightness change?</h3><span className={`tag tag--${inv.variability.status}`}>{humanize(inv.variability.status)}</span></summary>
           <div className="compare">
             <div>
-              <h4>Naive: compare frames as they come</h4>
+              <h4>The wrong way: compare any two images</h4>
               <p className="small muted">{inv.variability.naive?.description ?? 'SPHEREx sees each source at a different wavelength in every exposure, so a raw sequence mixes spectral shape with time.'}</p>
               {inv.variability.naive?.max_ratio != null && <p className="small mono">Apparent max/min ratio: {num(inv.variability.naive.max_ratio, 2)}×{inv.variability.naive.max_ratio_basis ? <span className="dim"> ({inv.variability.naive.max_ratio_basis})</span> : null}</p>}
               <NaiveLightCurve variability={inv.variability} />
             </div>
             <div>
-              <h4>Wavelength-matched: compare like with like</h4>
+              <h4>The right way: compare the same colour</h4>
               <p className="small muted">{inv.variability.matched?.description ?? 'Only exposures at the same wavelength are compared between visits.'}</p>
               {inv.variability.matched?.median_log_ratio != null && (
                 <p className="small mono">Median matched change: {num((10 ** inv.variability.matched.median_log_ratio - 1) * 100, 1)}%{inv.variability.matched.chi2_reduced != null ? ` · χ²ᵣ of constancy ${num(inv.variability.matched.chi2_reduced, 1)}` : ''}</p>
@@ -245,7 +245,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {inv.hypotheses?.length > 0 && (
         <details className="section" open>
-          <summary><h3>Competing explanations</h3></summary>
+          <summary><h3>What else could it be?</h3></summary>
           <ul className="hyps">
             {inv.hypotheses.map(h => (
               <li key={h.id} className={`hyp hyp--${h.status}`}>
@@ -258,21 +258,21 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
       )}
 
       {inv.limitations?.length > 0 && (
-        <details className="section" open={!compact}>
-          <summary><h3>Limitations</h3></summary>
+        <details className="section">
+          <summary><h3>What we can't say</h3></summary>
           <ul className="bullets">{inv.limitations.map((l, i) => <li key={i}>{l}</li>)}</ul>
         </details>
       )}
       {inv.follow_up?.length > 0 && (
         <details className="section">
-          <summary><h3>Recommended follow-up</h3></summary>
+          <summary><h3>What to check next</h3></summary>
           <ul className="bullets">{inv.follow_up.map((l, i) => <li key={i}>{l}</li>)}</ul>
         </details>
       )}
 
       {inv.detections.length > 0 && (
         <details className="section">
-          <summary><h3>Detections</h3><span className="tag">{inv.detections.length} exposures</span></summary>
+          <summary><h3>Every measurement</h3><span className="tag">{inv.detections.length} exposures</span></summary>
           <div className="table-wrap">
             <table className="table table--dense">
               <thead><tr><th>Time (UTC)</th><th>Visit</th><th>Det.</th><th>λ (µm)</th><th>S/N</th><th>σ pos (″)</th><th>Flux (follow)</th><th>Flux (fixed)</th><th>Outcome</th><th>Flags</th></tr></thead>
@@ -301,7 +301,7 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
 
       {inv.provenance && (
         <details className="section">
-          <summary><h3>Provenance</h3></summary>
+          <summary><h3>Where the data came from</h3></summary>
           <p className="small">{inv.provenance.n_files} native SPHEREx cutouts with SHA-256 checksums. <a href={inv.provenance.manifest_url}>Machine-readable manifest</a>.</p>
           <ProvList title="Datasets" items={inv.provenance.datasets} />
           <ProvList title="Catalogues" items={inv.provenance.catalogs} />

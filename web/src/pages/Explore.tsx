@@ -18,11 +18,11 @@ import { NA, dateTime, num, um } from '../lib/format.ts';
 
 type Mode = 'animate' | 'blink' | 'difference' | 'stack' | 'spectral';
 const MODES: { id: Mode; label: string; hint: string }[] = [
-  { id: 'animate', label: 'Time', hint: 'Play exposures in observation order' },
-  { id: 'blink', label: 'Blink', hint: 'Alternate two exposures (A/B)' },
-  { id: 'difference', label: 'Difference', hint: 'B minus A: movers leave a dark/bright pair' },
-  { id: 'stack', label: 'Stack', hint: 'Mean of all exposures in the current filter' },
-  { id: 'spectral', label: 'Spectral', hint: 'Order exposures by wavelength instead of time' },
+  { id: 'animate', label: 'Play', hint: 'Play the images in the order they were taken' },
+  { id: 'blink', label: 'Blink', hint: 'Flip between two dates. Anything that jumps has moved' },
+  { id: 'difference', label: 'Subtract', hint: 'Later minus earlier. A mover leaves a dark spot next to a bright one' },
+  { id: 'stack', label: 'Add', hint: 'Add all the images together to see fainter things' },
+  { id: 'spectral', label: 'Colour', hint: 'Order the images by infrared colour instead of time' },
 ];
 
 const STACK_ORDER = (id: string) => ({ 'stack-short': 0, 'stack-long': 1, 'stack-mid': 2 } as Record<string, number>)[id] ?? 3;
@@ -132,9 +132,9 @@ function ExploreSearch({ fov }: { fov: number }) {
   return (
     <form className="topsearch" onSubmit={go} role="search">
       <label className="visually-hidden" htmlFor="topq">Object name or coordinates</label>
-      <input id="topq" value={q} onChange={e => setQ(e.target.value)} placeholder="Name or RA Dec (decimal or 22h04m23s −56d48m)" autoComplete="off" spellCheck={false} aria-invalid={!!err} />
+      <input id="topq" value={q} onChange={e => setQ(e.target.value)} placeholder="A name or coordinates" autoComplete="off" spellCheck={false} aria-invalid={!!err} />
       <label className="topsearch__fov" title="Field of view for new queries (arcmin). Larger fields mean bigger downloads.">
-        <span>FOV</span>
+        <span>Width</span>
         <input type="number" min={2} max={30} step={1} value={f} onChange={e => setF(e.target.value)} aria-label="Field of view in arcminutes" />
         <span>′</span>
       </label>
@@ -149,8 +149,8 @@ function ExploreIdle({ targets }: { targets: Target[] | null }) {
     <main id="main" className="page"><div className="page__inner">
       <div className="idle">
         <p className="eyebrow">Explore</p>
-        <h1>Choose a patch of sky</h1>
-        <p className="muted">Enter a name or coordinates above, or open one of the NASA test targets. Any position SPHEREx has observed works: PARALLAX queries the IRSA archive live, downloads cutouts and aligns them.</p>
+        <h1>Pick a patch of sky</h1>
+        <p className="muted">Type a name or coordinates above. Or start with one of NASA's test targets.</p>
         <div className="idle__targets">
           {targets?.map(t => (
             <Link key={t.slug} href={`/explore?target=${t.slug}`} className="idle__target">
@@ -158,7 +158,7 @@ function ExploreIdle({ targets }: { targets: Target[] | null }) {
             </Link>
           ))}
         </div>
-        <p className="small dim">Example arbitrary field: <Link href="/explore?ra=270.0&dec=-23.5&fov=6">RA 270.0°, Dec −23.5° (Galactic bulge)</Link> · <Link href="/explore?ra=10.6847&dec=41.269&fov=8">M31 nucleus</Link></p>
+        <p className="small dim">Or try anywhere: <Link href="/explore?ra=270.0&dec=-23.5&fov=6">the centre of the Milky Way</Link> · <Link href="/explore?ra=10.6847&dec=41.269&fov=8">the Andromeda galaxy</Link></p>
       </div>
     </div></main>
   );
@@ -438,7 +438,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     return o;
   }, [field, trackSource, showTrack, current?.mjd, composed, selected, invId, curatedInvId]);
 
-  const hint = targetHere && !invId && field?.kind === 'curated' ? { ...targetHere, text: `${target?.title} — click to investigate` } : null;
+  const hint = targetHere && !invId && field?.kind === 'curated' ? { ...targetHere, text: `${target?.title} · click to measure` } : null;
 
   async function share() {
     try {
@@ -490,11 +490,11 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       <div className="ws__bar">
         <div className="ws__title">
           <h1>{field?.title ?? target?.title ?? (field && Number.isFinite(field.ra) ? `${formatRA(field.ra, 1)} ${formatDec(field.dec, 0)}` : 'Opening field')}</h1>
-          {field && Number.isFinite(field.ra) && <p className="mono small dim">{field.ra.toFixed(5)}°, {field.dec.toFixed(5)}° · {num(field.fov_arcmin, 0)}′ field · {allFrames.length} exposures</p>}
+          {field && Number.isFinite(field.ra) && <p className="mono small dim">{allFrames.length} images · {num(field.fov_arcmin, 0)}′ wide · {field.ra.toFixed(5)}°, {field.dec.toFixed(5)}°</p>}
         </div>
         <div className="ws__bar-right">
           <DataStatePill state={state} progress={field?.progress} />
-          <button className="button button--ghost button--small" onClick={share}>{copied ? 'Link copied' : 'Share link'}</button>
+          <button className="button button--ghost button--small" onClick={share}>{copied ? 'Link copied' : 'Share'}</button>
           <button className="button button--ghost button--small ws__panel-toggle" onClick={() => setPanelOpen(o => !o)} aria-expanded={panelOpen}>{panelOpen ? 'Hide controls' : 'Controls'}</button>
         </div>
       </div>
@@ -502,7 +502,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       {field?.message && state !== 'processing' && allFrames.length > 0 && <p className="ws__note small" role="status">{field.message}</p>}
       {mode === 'blink' && frameA && frameB && matched && field?.kind === 'curated' && (
         <p className="ws__hintbar small" role="status">
-          Blinking the earliest and latest exposures at the same wavelength ({um(frameA.wavelength_um, 2)}, {Math.round((frameB.mjd - frameA.mjd) / 30.44)} months apart). Background stars stay put; <strong>the dot that jumps is moving</strong>. Dashed line = fitted motion model. Press <kbd>B</kbd> to stop blinking, or click the source.
+          Flipping between {frameA.time_utc.slice(0, 7)} and {frameB.time_utc.slice(0, 7)}. Stars stay put. <strong>The dot that jumps is moving.</strong> Click it to measure it.
         </p>
       )}
       <div className="ws__body">
@@ -520,8 +520,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               hint={hint}
               onPick={pick}
               emptyMessage={emptyMessage}
-              caption={`${mode === 'stack' ? `Stack of ${composed?.n ?? 0} exposures · reprojected display` : mode === 'difference' ? 'Difference B − A · reprojected display' : 'Reprojected display · measurements use native pixels'}${overlays.track ? ' · dashed = fitted motion model, + = model position at this epoch' : ''}`}
-              ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}. Click a source to investigate it.`}
+              caption={`${mode === 'stack' ? `${composed?.n ?? 0} images added together` : mode === 'difference' ? 'Later image minus earlier image' : 'Aligned for viewing. Measurements use the original pixels.'}${overlays.track ? ' Dashed line: fitted path (a model, not an observation).' : ''}`}
+              ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}. Click a source to measure it.`}
             />
           ) : (
             <div className="sky"><div className="sky__message" data-loading={emptyMessage?.loading ? 'true' : 'false'}>
@@ -578,7 +578,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
         {/* Control panel */}
         <aside className="ws__panel" aria-label="Viewer controls" hidden={!panelOpen}>
           <div className="panel-sec">
-            <h2 className="panel-h">Display mode</h2>
+            <p className="panel-tip"><strong>Click any dot</strong> in the image to measure how it moves.</p>
+            <h2 className="panel-h">View</h2>
             <div className="seg" role="radiogroup" aria-label="Display mode">
               {MODES.map(m => (
                 <button key={m.id} role="radio" aria-checked={mode === m.id} className={`seg__btn${mode === m.id ? ' is-on' : ''}`} onClick={() => { setMode(m.id); if (m.id === 'stack' || m.id === 'difference') setPlaying(false); }} title={m.hint}>{m.label}</button>
@@ -589,13 +590,15 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               <div className="ab">
                 <div className="ab__row"><span className="ab__tag">A</span><span className="mono small">{frameA ? `${frameA.time_utc.slice(0, 10)} · ${um(frameA.wavelength_um)}` : NA}</span><button className="button button--ghost button--tiny" onClick={() => current && setAId(current.id)}>Use current</button></div>
                 <div className="ab__row"><span className="ab__tag">B</span><span className="mono small">{frameB ? `${frameB.time_utc.slice(0, 10)} · ${um(frameB.wavelength_um)}` : NA}</span><button className="button button--ghost button--tiny" onClick={() => current && setBId(current.id)}>Use current</button></div>
-                <button className="button button--ghost button--small" onClick={() => { if (!autoMatchedPair()) alert('No wavelength-matched pair in the current filter.'); }}>Pick earliest ↔ latest at matched wavelength</button>
+                <button className="button button--ghost button--small" onClick={() => { if (!autoMatchedPair()) alert('No two images of the same colour were found.'); }}>Use the first and last dates</button>
               </div>
             )}
           </div>
 
+          <details className="panel-more">
+          <summary>More controls</summary>
           <div className="panel-sec">
-            <h2 className="panel-h">Detectors &amp; wavelength</h2>
+            <h2 className="panel-h">Infrared colour</h2>
             <div className="dets">
               {[1, 2, 3, 4, 5, 6].map(d => {
                 const on = !dets || dets.includes(d);
@@ -623,14 +626,14 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
                 if (!current?.wavelength_um) return;
                 const hw = Math.max(current.bandwidth_um ?? 0.02, 0.01);
                 setDets(null); setWmin(+(current.wavelength_um - hw).toFixed(3)); setWmax(+(current.wavelength_um + hw).toFixed(3));
-              }}>Match current wavelength</button>
+              }}>Only this colour</button>
               <button className="button button--ghost button--small" onClick={() => { setDets(null); setWmin(null); setWmax(null); }}>All</button>
             </div>
-            <p className="small dim">{frames.length} of {allFrames.length} exposures shown. <Term t="wavelength-matched">Why wavelength matters</Term></p>
+            <p className="small dim">{frames.length} of {allFrames.length} images shown. <Term t="wavelength-matched">Why wavelength matters</Term></p>
           </div>
 
           <div className="panel-sec">
-            <h2 className="panel-h">Image</h2>
+            <h2 className="panel-h">Brightness and overlays</h2>
             <div className="ctl-grid">
               <label>Stretch
                 <select value={stretch} onChange={e => setStretch(e.target.value as StretchKind)}>
@@ -650,11 +653,11 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               </label>
             </div>
             <div className="checks">
-              <label><input type="checkbox" checked={showTrack} onChange={e => setShowTrack(e.target.checked)} disabled={!trackSource?.motion} /> Fitted motion track (model, not an observation)</label>
-              <label><input type="checkbox" checked={showCatalog} onChange={e => setShowCatalog(e.target.checked)} /> Gaia DR3 stars (moved to frame epoch)</label>
-              <label><input type="checkbox" checked={showGrid} onChange={e => setShowGrid(e.target.checked)} /> RA/Dec grid</label>
+              <label><input type="checkbox" checked={showTrack} onChange={e => setShowTrack(e.target.checked)} disabled={!trackSource?.motion} /> Fitted path (a model)</label>
+              <label><input type="checkbox" checked={showCatalog} onChange={e => setShowCatalog(e.target.checked)} /> Known stars (Gaia)</label>
+              <label><input type="checkbox" checked={showGrid} onChange={e => setShowGrid(e.target.checked)} /> Coordinate grid</label>
               <label><input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} /> Smooth pixels</label>
-              <label><input type="checkbox" checked={independent} onChange={e => setIndependent(e.target.checked)} /> Scale each frame independently</label>
+              <label><input type="checkbox" checked={independent} onChange={e => setIndependent(e.target.checked)} /> Rescale every image on its own</label>
             </div>
             <div className="row-btns">
               <button className="button button--ghost button--small" onClick={() => canvasRef.current?.zoom(1.4)} aria-label="Zoom in">Zoom +</button>
@@ -665,7 +668,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
 
           {shownFrame && (
             <div className="panel-sec">
-              <h2 className="panel-h">This exposure</h2>
+              <h2 className="panel-h">This image</h2>
               <dl className="kv">
                 <dt>Product</dt><dd className="mono small">{shownFrame.id}</dd>
                 <dt>Observed</dt><dd className="mono small">{dateTime(shownFrame.time_utc)}</dd>
@@ -680,7 +683,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
 
           {field?.stacks && field.stacks.length > 0 && (
             <div className="panel-sec">
-              <h2 className="panel-h">Co-moving stacks</h2>
+              <h2 className="panel-h">Images added along the source's path</h2>
               <p className="small dim">{field.stacks[0].note}</p>
               <div className="stacks">
                 {field.stacks.slice().sort((a, b) => STACK_ORDER(a.id) - STACK_ORDER(b.id)).map(s => (
@@ -696,7 +699,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
 
           {field?.archive && (
             <div className="panel-sec">
-              <h2 className="panel-h">Archive</h2>
+              <h2 className="panel-h">Where the data comes from</h2>
               <ul className="visits">
                 {field.archive.visits.map(v => (
                   <li key={v.id}><span>{v.id}</span><span className="mono small">{v.start_utc.slice(0, 10)} → {v.end_utc.slice(0, 10)}</span><span className="mono small dim">{v.n_products} · {(v.releases ?? []).join('/')}</span>{v.sealed && <span className="badge badge--warn">sealed</span>}</li>
@@ -705,14 +708,15 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               <p className="small dim">{field.archive.n_products} products from {(field.archive.collections ?? []).join(', ')} (IRSA SIA2), queried {field.archive.queried_utc?.slice(0, 16).replace('T', ' ')} UTC.</p>
             </div>
           )}
-          <p className="small dim panel-keys">Keys: space play · ←/→ step · B blink · D difference · +/− zoom · 0 fit · click a source to investigate.</p>
+          </details>
+          <p className="small dim panel-keys">Keys: space plays · ← → step · B blinks · + − zoom</p>
         </aside>
 
         {/* Investigation drawer */}
         {(invId || invError) && (
           <aside className="drawer" aria-label="Investigation">
             <div className="drawer__bar">
-              <span className="eyebrow">Investigate</span>
+              <span className="eyebrow">Measurement</span>
               <div className="row-btns">
                 {invId && investigation?.status === 'ready' && <Link className="button button--ghost button--small" href={`/investigation/${encodeURIComponent(invId)}`}>Full page</Link>}
                 <button className="button button--ghost button--small" onClick={() => { setInvId(null); setInvError(null); }} aria-label="Close investigation (Esc)">Close</button>
@@ -721,7 +725,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
             <div className="drawer__body">
               {invError && <p className="notice notice--bad">{invError}</p>}
               {inv.error && <p className="notice notice--bad">{inv.error}</p>}
-              {!investigation && inv.loading && <div className="inv inv--processing"><p className="eyebrow">Opening investigation</p><Progress stage="loading" done={0} total={0} /></div>}
+              {!investigation && inv.loading && <div className="inv inv--processing"><p className="eyebrow">Measuring</p><Progress stage="loading" done={0} total={0} /></div>}
               {investigation && <InvestigationView inv={investigation} compact />}
             </div>
           </aside>
