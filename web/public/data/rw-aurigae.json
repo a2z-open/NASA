@@ -1,0 +1,39 @@
+{
+  "ra": 76.95654,
+  "dec": 30.40144,
+  "status": "no_usable_frames",
+  "source": "cache",
+  "comparison_status": "unverified",
+  "message": "IRSA lists 335 detector products in 3 candidate visits. Candidate coverage only for this field.",
+  "frames": [],
+  "title": "RW Aurigae",
+  "field_of_view_arcmin": 10,
+  "coverage": {
+    "rows": {
+      "spherex_dr1": 226,
+      "spherex_qr3": 109
+    },
+    "visits": [
+      {
+        "id": "visit-1",
+        "detector_products": 112,
+        "start_utc": "2025-09-01T10:04:17.501Z",
+        "end_utc": "2025-09-20T05:36:04.896Z"
+      },
+      {
+        "id": "visit-2",
+        "detector_products": 114,
+        "start_utc": "2026-02-20T17:16:14.822Z",
+        "end_utc": "2026-03-12T00:04:55.402Z"
+      },
+      {
+        "id": "visit-3",
+        "detector_products": 109,
+        "start_utc": "2026-09-02T02:19:55.402Z",
+        "end_utc": "2026-09-16T21:32:00.586Z"
+      }
+    ],
+    "target_resolution": "coverage_only"
+  },
+  "coordinate_source": "https://vsx.aavso.org/index.php?oid=3777&view=detail.top (J2000; coverage only)"
+}

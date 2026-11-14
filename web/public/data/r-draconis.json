@@ -1,0 +1,39 @@
+{
+  "ra": 248.1676108,
+  "dec": 66.7549794,
+  "status": "no_usable_frames",
+  "source": "cache",
+  "comparison_status": "unverified",
+  "message": "IRSA lists 539 detector products in 3 candidate visits. Candidate coverage only for this field.",
+  "frames": [],
+  "title": "R Draconis",
+  "field_of_view_arcmin": 10,
+  "coverage": {
+    "rows": {
+      "spherex_dr1": 413,
+      "spherex_qr3": 126
+    },
+    "visits": [
+      {
+        "id": "visit-1",
+        "detector_products": 153,
+        "start_utc": "2025-05-16T22:56:23.626Z",
+        "end_utc": "2025-07-22T14:37:45.293Z"
+      },
+      {
+        "id": "visit-2",
+        "detector_products": 212,
+        "start_utc": "2025-10-17T14:44:53.491Z",
+        "end_utc": "2026-01-13T09:58:58.771Z"
+      },
+      {
+        "id": "visit-3",
+        "detector_products": 174,
+        "start_utc": "2026-04-22T07:56:42.893Z",
+        "end_utc": "2026-07-16T20:59:22.502Z"
+      }
+    ],
+    "target_resolution": "coverage_only"
+  },
+  "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-id?Ident=R+Dra (ICRS/J2000; coverage only)"
+}

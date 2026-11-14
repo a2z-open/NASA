@@ -1,0 +1,39 @@
+{
+  "ra": 133.7951292,
+  "dec": -7.2451472,
+  "status": "no_usable_frames",
+  "source": "cache",
+  "comparison_status": "unverified",
+  "message": "IRSA lists 258 detector products in 3 candidate visits. Candidate coverage only for this field.",
+  "frames": [],
+  "title": "WISE 0855",
+  "field_of_view_arcmin": 10,
+  "coverage": {
+    "rows": {
+      "spherex_dr1": 258,
+      "spherex_qr3": 0
+    },
+    "visits": [
+      {
+        "id": "visit-1",
+        "detector_products": 30,
+        "start_utc": "2025-05-05T16:48:02.419Z",
+        "end_utc": "2025-05-06T12:28:46.790Z"
+      },
+      {
+        "id": "visit-2",
+        "detector_products": 128,
+        "start_utc": "2025-10-31T17:20:39.293Z",
+        "end_utc": "2025-12-13T08:51:59.443Z"
+      },
+      {
+        "id": "visit-3",
+        "detector_products": 100,
+        "start_utc": "2026-04-21T04:45:01.411Z",
+        "end_utc": "2026-05-14T06:55:30.720Z"
+      }
+    ],
+    "target_resolution": "coverage_only"
+  },
+  "coordinate_source": "NASA Space Apps Planet X and SPHEREx brief (reference coordinate; coverage only)"
+}

@@ -1,0 +1,657 @@
+{
+  "scope": "Detector 6, first two Barnard’s Star visit groups only. The third visit is excluded.",
+  "calibration": {
+    "url": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/spectral_wcs/cal-swcs-v5-2026-191/6/spectral_wcs_D6_spx_cal-swcs-v5-2026-191.fits",
+    "sha256": "19195d253892883586aa2183cb66238b32f6032ade62d490b36b85b0dd18f212",
+    "original_source_file": "spectral_wcs_6_v3.0.fits",
+    "native_sampling": "Nearest full-detector CWAVE and CBAND pixel reached by spatial SIP WCS. Cutout calibration source and detector checked against both native maps."
+  },
+  "catalog_seed": {
+    "catalog": "Gaia DR3",
+    "source_id": "4472832130942575872",
+    "epoch_jyear": 2016.0,
+    "ra_deg": 269.44850252543836,
+    "dec_deg": 4.739420051112412,
+    "pm_ra_cosdec_mas_per_year": -801.5509783684709,
+    "pm_dec_mas_per_year": 10362.394206546573
+  },
+  "method": {
+    "propagation": "Linear tangent-plane proper motion to MJD-AVG, without observer parallax. This seeds wavelength sampling and is not a centroid measurement.",
+    "overlap": "Intersection length of central wavelength ± half bandwidth divided by wider width. Top-hat approximation, not a measured response-function overlap, flux match or science acceptance.",
+    "candidate_cutoff": 0.8,
+    "nearest_core_clean": "Only SOURCE/FULLSAMPLE may be present at the nearest seed pixel. This is a pixel diagnostic, not an ePSF acceptance test."
+  },
+  "full_parent_header_screen": {
+    "payload": "First 34,560 bytes of each early D5 cloud MEF. Parsed native IMAGE header only and used its WCS plus the native map. No held-out image or header read outside the earlier two visits.",
+    "headers_count": 41,
+    "eligible_parent_interior_count": 38,
+    "candidate_pairs_at_cutoff": [
+      {
+        "overlap": 0.9430804293655697,
+        "first_id": "2025W33_2C_0321_1-D6",
+        "second_id": "2026W12_2A_0520_4-D6"
+      },
+      {
+        "overlap": 0.9401652350755322,
+        "first_id": "2025W33_2C_0321_2-D6",
+        "second_id": "2026W12_2A_0324_1-D6"
+      },
+      {
+        "overlap": 0.9026613064469682,
+        "first_id": "2025W35_1A_0484_2-D6",
+        "second_id": "2026W19_1A_0403_1-D6"
+      },
+      {
+        "overlap": 0.8921889450523812,
+        "first_id": "2025W35_1A_0008_3-D6",
+        "second_id": "2026W19_1A_0046_1-D6"
+      },
+      {
+        "overlap": 0.884897423587061,
+        "first_id": "2025W34_2B_0030_1-D6",
+        "second_id": "2026W12_1A_0598_2-D6"
+      },
+      {
+        "overlap": 0.880432666055113,
+        "first_id": "2025W35_1A_0484_1-D6",
+        "second_id": "2026W19_1A_0326_1-D6"
+      },
+      {
+        "overlap": 0.8730980552689759,
+        "first_id": "2025W35_1A_0484_2-D6",
+        "second_id": "2026W12_2A_0520_3-D6"
+      },
+      {
+        "overlap": 0.871589495915833,
+        "first_id": "2025W35_1A_0484_1-D6",
+        "second_id": "2026W12_2A_0520_2-D6"
+      },
+      {
+        "overlap": 0.8695703404594035,
+        "first_id": "2025W35_1A_0008_4-D6",
+        "second_id": "2026W12_2A_0520_1-D6"
+      },
+      {
+        "overlap": 0.8689828153589155,
+        "first_id": "2025W35_1A_0008_4-D6",
+        "second_id": "2026W19_1A_0216_1-D6"
+      },
+      {
+        "overlap": 0.8673073293408932,
+        "first_id": "2025W34_2B_0030_4-D6",
+        "second_id": "2026W12_1A_0610_1-D6"
+      },
+      {
+        "overlap": 0.8666168144290707,
+        "first_id": "2025W35_1A_0008_3-D6",
+        "second_id": "2026W12_1A_0610_4-D6"
+      },
+      {
+        "overlap": 0.8660243805505236,
+        "first_id": "2025W34_2B_0030_3-D6",
+        "second_id": "2026W12_1A_0598_4-D6"
+      },
+      {
+        "overlap": 0.8652541441200647,
+        "first_id": "2025W34_2B_0030_2-D6",
+        "second_id": "2026W12_1A_0598_3-D6"
+      },
+      {
+        "overlap": 0.8638087807970546,
+        "first_id": "2025W35_1A_0008_2-D6",
+        "second_id": "2026W12_1A_0610_3-D6"
+      },
+      {
+        "overlap": 0.855469110952178,
+        "first_id": "2025W35_1A_0008_1-D6",
+        "second_id": "2026W12_1A_0610_2-D6"
+      }
+    ]
+  },
+  "cutout_checked": [
+    {
+      "id": "2025W33_2C_0321_1-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60902.865380738,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "4ffb9a395e33bbb9aabedad67c96c70c5c1f6f23984298de79841d716dcd0be2",
+      "cutout_shape": [
+        98,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4463527641657,
+      "sample_sky_dec_deg": 4.767115872159377,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        1627,
+        268
+      ],
+      "wavelength_um": 4.927926064,
+      "bandwidth_um": 0.037074473,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W33_2C_0321_2-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60902.866872983,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "3530811053945afffae5a07a912566616dd64bb29e41d5ff4f0e1587dfeae221",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44635276325283,
+      "sample_sky_dec_deg": 4.76711588391938,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        1627,
+        153
+      ],
+      "wavelength_um": 4.964339733,
+      "bandwidth_um": 0.038628832,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W34_2B_0030_1-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60908.639855842,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "1cb4919da9b2c244d81f2ef55917e24e87a5f6f8ec7146d75ac96a99b2b73b43",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4463492317381,
+      "sample_sky_dec_deg": 4.767161379325703,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        761,
+        1412
+      ],
+      "wavelength_um": 4.580334187,
+      "bandwidth_um": 0.036786985,
+      "nearest_core_flags": 69206021,
+      "nearest_core_flag_names": [
+        "TRANSIENT",
+        "SUR_ERROR",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W34_2B_0030_2-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60908.641348099,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "8c66cc3be8f5bad3bf2d1a612e203c91bce8424fa8bd29da3cad669caae73399",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4463492308252,
+      "sample_sky_dec_deg": 4.767161391085801,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        762,
+        1297
+      ],
+      "wavelength_um": 4.613790512,
+      "bandwidth_um": 0.036934949,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W34_2B_0030_3-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60908.642840356,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "22595a24fa2c99a0a9ec3deb4b4aceffa4d2a13168206e841f755ec6c9547823",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44634922991236,
+      "sample_sky_dec_deg": 4.767161402845896,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        762,
+        1182
+      ],
+      "wavelength_um": 4.647469044,
+      "bandwidth_um": 0.036882021,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W34_2B_0030_4-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60908.644332613,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "a948a2b7bb4082238a0e031ebe075738451ccfa09378ba21a51d24cf1ab610f4",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4463492289995,
+      "sample_sky_dec_deg": 4.767161414605993,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        762,
+        1067
+      ],
+      "wavelength_um": 4.681497097,
+      "bandwidth_um": 0.036810245,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W35_1A_0008_1-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60912.035090796,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "2aed933841fb4c5b15b42ccb8b16227c78b37313105bd58a429696b4d6e36df0",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44634715476604,
+      "sample_sky_dec_deg": 4.767188136306888,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        758,
+        953
+      ],
+      "wavelength_um": 4.715982437,
+      "bandwidth_um": 0.035808206,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W35_1A_0008_2-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60912.036583053,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "cc60b3162e1d8fc962fab8090d3027c40dfc6d64c5ba93a8abd5a45aa0e4480e",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44634715385325,
+      "sample_sky_dec_deg": 4.767188148066985,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        758,
+        838
+      ],
+      "wavelength_um": 4.750119686,
+      "bandwidth_um": 0.034585193,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W35_1A_0008_3-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60912.03807531,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "162e4bdbf6c9ec2240440ae6cf302e4519c01e2c3e51f4fbed7ea7d8bd23ca0f",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44634715294035,
+      "sample_sky_dec_deg": 4.767188159827083,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        758,
+        723
+      ],
+      "wavelength_um": 4.784832478,
+      "bandwidth_um": 0.036245719,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W35_1A_0008_4-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60912.039567567,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "9614e49ed95c3bf75b6ae4f75b57faca4aa34aa12d37c8b63144fe8c064c45ce",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4463471520275,
+      "sample_sky_dec_deg": 4.76718817158718,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        758,
+        608
+      ],
+      "wavelength_um": 4.818662643,
+      "bandwidth_um": 0.035939559,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2025W35_1A_0484_2-D6",
+      "fit_visit": 1,
+      "mjd_avg": 60914.484751305,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "f9e68ada06cbf36fcbf5d5328be08c5f9f23d637b395ec9e9ed09e8257d2caf3",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44634565623164,
+      "sample_sky_dec_deg": 4.76720744145691,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        755,
+        378
+      ],
+      "wavelength_um": 4.889706612,
+      "bandwidth_um": 0.037748061,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_1A_0598_2-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61118.311389719,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "aef4c793cb4e2ce843bc68767510d2423c6a756aadf40608d22049c09ea37529",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4462209687669,
+      "sample_sky_dec_deg": 4.768813747224787,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        468,
+        1411
+      ],
+      "wavelength_um": 4.584078312,
+      "bandwidth_um": 0.035806682,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_1A_0610_1-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61118.377706224,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "c8575fc3cca3c6f3f01cb81bdff71808d249b5572f18004a4098ab9f5f77095a",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44622092819884,
+      "sample_sky_dec_deg": 4.768814269848251,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        465,
+        1067
+      ],
+      "wavelength_um": 4.686215878,
+      "bandwidth_um": 0.036478907,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_1A_0610_2-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61118.379198469,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "ea0dfa3e4e0b86109704fd25c17b49280995e4d49833e8a525ce75e610db2487",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.446220927286,
+      "sample_sky_dec_deg": 4.768814281608253,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        464,
+        952
+      ],
+      "wavelength_um": 4.720716476,
+      "bandwidth_um": 0.037049811,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_1A_0610_4-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61118.382182983,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "885d3c84489957b6d4384b2bf2b0b0bc4c4130308abc10cd6fc02a3c25399f9c",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4462209254603,
+      "sample_sky_dec_deg": 4.768814305128447,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        461,
+        722
+      ],
+      "wavelength_um": 4.789241791,
+      "bandwidth_um": 0.037405666,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_2A_0324_1-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61120.279264777,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "51e5ec632714f3c0887cbf19080981384f5b14b7c3cd1eab21c4058a49551c4a",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4462197649501,
+      "sample_sky_dec_deg": 4.7688292555462635,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        456,
+        147
+      ],
+      "wavelength_um": 4.966436863,
+      "bandwidth_um": 0.038200397,
+      "nearest_core_flags": 2097154,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_2A_0520_1-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61121.364791062,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "0ea6f4c679511aa755d97f2f3e5c4ef3adfdb7dd120b180698d0b5d115c0fc51",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44621910089637,
+      "sample_sky_dec_deg": 4.768837810302078,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        461,
+        608
+      ],
+      "wavelength_um": 4.823143005,
+      "bandwidth_um": 0.036500271,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W12_2A_0520_4-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61121.369267844,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "a2565218bfa1fa249985794ef89c5203ff627254efb95185fab2aca9ea33edee",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.4462190981577,
+      "sample_sky_dec_deg": 4.768837845582456,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        457,
+        262
+      ],
+      "wavelength_um": 4.929705143,
+      "bandwidth_um": 0.03782193,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    },
+    {
+      "id": "2026W19_1A_0046_1-D6",
+      "fit_visit": 2,
+      "mjd_avg": 61164.133799766,
+      "calibration_source": "spectral_wcs_6_v3.0.fits",
+      "cutout_sha256": "4d706fd79c14cf16f378251897268439e6093f2215737b4cf49d9f53c841f76c",
+      "cutout_shape": [
+        97,
+        97
+      ],
+      "sample_sky_ra_deg": 269.44619293761036,
+      "sample_sky_dec_deg": 4.769174861951999,
+      "sample_parent_detector_pixel_xy_zero_based": [
+        458,
+        724
+      ],
+      "wavelength_um": 4.788377285,
+      "bandwidth_um": 0.037170991,
+      "nearest_core_flags": 69206018,
+      "nearest_core_flag_names": [
+        "OVERFLOW",
+        "SOURCE",
+        "BLOOM"
+      ],
+      "nearest_core_clean": false
+    }
+  ],
+  "cutout_verified_pairs_at_cutoff": [
+    {
+      "first_id": "2025W33_2C_0321_1-D6",
+      "second_id": "2026W12_2A_0520_4-D6",
+      "fraction": 0.94308044,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W33_2C_0321_2-D6",
+      "second_id": "2026W12_2A_0324_1-D6",
+      "fraction": 0.94016522,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W35_1A_0008_3-D6",
+      "second_id": "2026W19_1A_0046_1-D6",
+      "fraction": 0.89218897,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W34_2B_0030_1-D6",
+      "second_id": "2026W12_1A_0598_2-D6",
+      "fraction": 0.88489743,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W35_1A_0008_4-D6",
+      "second_id": "2026W12_2A_0520_1-D6",
+      "fraction": 0.86957034,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W34_2B_0030_4-D6",
+      "second_id": "2026W12_1A_0610_1-D6",
+      "fraction": 0.86730732,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W35_1A_0008_3-D6",
+      "second_id": "2026W12_1A_0610_4-D6",
+      "fraction": 0.86661682,
+      "both_nearest_cores_clean": false
+    },
+    {
+      "first_id": "2025W35_1A_0008_1-D6",
+      "second_id": "2026W12_1A_0610_2-D6",
+      "fraction": 0.85546913,
+      "both_nearest_cores_clean": false
+    }
+  ]
+}

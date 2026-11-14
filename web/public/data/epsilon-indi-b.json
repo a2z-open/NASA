@@ -1,0 +1,45 @@
+{
+  "ra": 331.0441466,
+  "dec": -56.7828442,
+  "status": "no_usable_frames",
+  "source": "cache",
+  "comparison_status": "unverified",
+  "message": "IRSA lists 465 detector products in 4 candidate visits. Candidate coverage only for this field.",
+  "frames": [],
+  "title": "Epsilon Indi B",
+  "field_of_view_arcmin": 10,
+  "coverage": {
+    "rows": {
+      "spherex_dr1": 345,
+      "spherex_qr3": 120
+    },
+    "visits": [
+      {
+        "id": "visit-1",
+        "detector_products": 124,
+        "start_utc": "2025-04-24T20:31:57.101Z",
+        "end_utc": "2025-06-10T04:35:14.842Z"
+      },
+      {
+        "id": "visit-2",
+        "detector_products": 147,
+        "start_utc": "2025-09-28T23:08:19.190Z",
+        "end_utc": "2025-11-12T20:36:49.219Z"
+      },
+      {
+        "id": "visit-3",
+        "detector_products": 74,
+        "start_utc": "2026-04-18T20:16:29.856Z",
+        "end_utc": "2026-05-04T02:50:19.565Z"
+      },
+      {
+        "id": "visit-4",
+        "detector_products": 120,
+        "start_utc": "2026-09-22T05:26:44.678Z",
+        "end_utc": "2026-10-02T11:30:20.851Z"
+      }
+    ],
+    "target_resolution": "coverage_only"
+  },
+  "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-id?Ident=Epsilon+Indi+B (ICRS/J2000; coverage only)"
+}

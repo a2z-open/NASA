@@ -1,0 +1,77 @@
+{
+  "ra": 269.4463,
+  "dec": 4.7685,
+  "status": "ready",
+  "source": "cache",
+  "comparison_status": "unverified",
+  "message": "Barnard’s core failed quality checks in the saved frames. The reserved visit stays sealed.",
+  "frames": [
+    {
+      "id": "2025W35_1A_0146_4-D5",
+      "visit_id": "visit-1",
+      "time_utc": "2025-08-25T17:15:46.618Z",
+      "detector": "D5",
+      "release": "DR1",
+      "processing_version": "l2b-v27-2026-230",
+      "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/5/level2_2025W35_1A_0146_4D5_spx_l2b-v27-2026-230.fits",
+      "display_url": "/data/barnards-star/2025W35_1A_0146_4-D5.png",
+      "wavelength_um": 4.406604290008545,
+      "bandwidth_um": 0.03784264996647835,
+      "calibration_id": "spectral_wcs_5_v3.0.fits",
+      "wavelength_verified": true,
+      "sample_center": {
+        "ra": 269.44634673622016,
+        "dec": 4.767193528302913
+      }
+    },
+    {
+      "id": "2026W11_2A_0550_2-D5",
+      "visit_id": "visit-2",
+      "time_utc": "2026-03-15T07:20:59.971Z",
+      "detector": "D5",
+      "release": "DR1",
+      "processing_version": "l2b-v27-2026-234",
+      "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W11_2A/l2b-v27-2026-234/5/level2_2026W11_2A_0550_2D5_spx_l2b-v27-2026-234.fits",
+      "display_url": "/data/barnards-star/2026W11_2A_0550_2-D5.png",
+      "wavelength_um": 4.406793594360352,
+      "bandwidth_um": 0.03723295405507088,
+      "calibration_id": "spectral_wcs_5_v3.0.fits",
+      "wavelength_verified": true,
+      "sample_center": {
+        "ra": 269.4462234188485,
+        "dec": 4.768782183737392
+      }
+    }
+  ],
+  "title": "Barnard\u2019s Star",
+  "field_of_view_arcmin": 10,
+  "coordinate_source": "Fixed field near Gaia DR3 source 4472832130942575872 propagated to the SPHEREx era.",
+  "coverage": {
+    "rows": {
+      "spherex_dr1": 239,
+      "spherex_qr3": 119
+    },
+    "visits": [
+      {
+        "id": "visit-1",
+        "detector_products": 118,
+        "start_utc": "2025-08-15T20:45:11.376Z",
+        "end_utc": "2025-10-01T06:24:50.141Z"
+      },
+      {
+        "id": "visit-2",
+        "detector_products": 121,
+        "start_utc": "2026-03-11T02:11:37.219Z",
+        "end_utc": "2026-05-05T02:01:23.866Z"
+      },
+      {
+        "id": "visit-3",
+        "detector_products": 119,
+        "start_utc": "2026-08-16T15:08:22.157Z",
+        "end_utc": "2026-09-22T15:06:16.099Z"
+      }
+    ]
+  },
+  "reserved_visit_count": 1,
+  "approximate_top_hat_overlap": 0.9838886570589652
+}
