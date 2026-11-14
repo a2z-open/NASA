@@ -1,0 +1,94 @@
+{
+ "classification": "Independent held-out recovery (SPHEREx-only motion model; catalogue used to identify the source and register frames)",
+ "code_commit": "ef75c768c17cb39ffa44392e1b9ee1b8cd63eaae",
+ "evaluations": {
+  "catalog_full": {
+   "equivalent_sigma": 32.55756234968381,
+   "heldout_scatter_chi2r": 0.7392064894398372,
+   "mahalanobis_d2": 1067.4143505748195,
+   "mean_residual_arcsec": {
+    "ddec": -0.5327705171584448,
+    "dra_cosdec": 0.17632597782018072
+   },
+   "measurement_sigma_arcsec": 0.01714774057648601,
+   "n_usable": 111,
+   "prediction_sigma_arcsec": 0.000999999999999999,
+   "residual_arcsec": 0.5611909429129444,
+   "verdict": "FAIL"
+  },
+  "catalog_parallax": {
+   "equivalent_sigma": 2.1163547534916143,
+   "heldout_scatter_chi2r": 0.7398255000386444,
+   "mahalanobis_d2": 6.7443659671130884,
+   "mean_residual_arcsec": {
+    "ddec": -0.08135238183978213,
+    "dra_cosdec": 0.021203918567319388
+   },
+   "measurement_sigma_arcsec": 0.01714774057648601,
+   "n_usable": 111,
+   "prediction_sigma_arcsec": 0.027457486681397913,
+   "residual_arcsec": 0.08407030506436398,
+   "verdict": "PASS"
+  },
+  "primary": {
+   "equivalent_sigma": 1.7028972346631184,
+   "heldout_scatter_chi2r": 0.7404420622971357,
+   "mahalanobis_d2": 4.847533508013646,
+   "mean_residual_arcsec": {
+    "ddec": -0.06215579444267888,
+    "dra_cosdec": 0.035833927695346914
+   },
+   "measurement_sigma_arcsec": 0.01714774057648601,
+   "n_usable": 111,
+   "prediction_sigma_arcsec": 0.028286580662075324,
+   "residual_arcsec": 0.07174547481810892,
+   "verdict": "PASS"
+  },
+  "stationary_null": {
+   "equivalent_sigma": 99.0,
+   "heldout_scatter_chi2r": 0.7702694263084124,
+   "mahalanobis_d2": 5669.617411492416,
+   "mean_residual_arcsec": {
+    "ddec": -1.4489494493710628,
+    "dra_cosdec": 1.3109190499267058
+   },
+   "measurement_sigma_arcsec": 0.01714774057648601,
+   "n_usable": 111,
+   "prediction_sigma_arcsec": 0.019477231818461893,
+   "residual_arcsec": 1.9539609162655847,
+   "verdict": "FAIL"
+  }
+ },
+ "experiment": "epsilon-indi-b-heldout-v1",
+ "held_out_measured": {
+  "n_downloaded": 112,
+  "n_products": 120,
+  "n_usable": 111,
+  "quality": {
+   "flag_counts_near_source": {
+    "DICHROIC": 2,
+    "HALO": 14,
+    "NONFUNC": 3,
+    "OVERFLOW": 1,
+    "PERSIST": 1,
+    "SOURCE": 112,
+    "SUR_ERROR": 4,
+    "TRANSIENT": 6
+   },
+   "n_observations": 112,
+   "outcomes": {
+    "ok": 111,
+    "saturation_flag_near_core": 1
+   }
+  },
+  "weighted_mean_position": {
+   "dec_deg": -56.801373072523404,
+   "mean_mjd": 61312.27476390013,
+   "ra_deg": 331.0981670017274
+  }
+ },
+ "prediction_commit": "ef75c768c17cb39ffa44392e1b9ee1b8cd63eaae 2026-11-14T00:37:57-08:00",
+ "prediction_sha256": "c902006d2cb11e96db29bace24b4a2f8111ae4d0cc84ccd744563203c95798d5",
+ "primary_verdict": "PASS",
+ "revealed_utc": "2026-11-14T08:39:41+00:00"
+}
