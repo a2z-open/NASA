@@ -57,12 +57,16 @@ EXPECT_SNR = 6.0          # an absence only counts if the source should have rea
 MIN_COVER = 3             # exposures per stack pixel
 CANDIDATE_PM_MIN = 0.2    # arcsec / yr: slower drifts are reported but not listed as candidates
 CHROMATIC_SIGMA = 4.0
+MIN_STACK_EXPOSURES = 8   # a stack-only candidate needs at least this many exposures in its band, in every visit it was seen
+BRIGHT_NEIGHBOUR_SNR = 100.0   # ... and must not sit within BRIGHT_NEIGHBOUR_ARCSEC of a source this bright
+BRIGHT_NEIGHBOUR_ARCSEC = 20.0
 MIN_PER_VISIT = 4         # a visit counts for a source only if it was measured in at least this many exposures
 MAX_PARALLAX_MAS = 800.0  # the nearest star has 768 mas; anything larger is a fit gone wrong
 MAX_MODEL_CHI2R = 4.0
 BRIGHT_STAR = [(7.0, 90.0), (9.5, 45.0), (11.5, 25.0)]   # (Gaia G limit, exclusion radius in arcsec)
 SAT_GROW = 4              # native pixels (about 25 arcsec) around any saturated pixel
 BLOCKING_FLAGS = ('colour_dependent_motion', 'poor_model_fit', 'near_bright_star', 'near_saturated_star', 'near_edge', 'unphysical_parallax',
+                  'beside_bright_source',
                   'motion_explained_by_colour', 'depends_on_one_visit', 'negative_parallax')
 
 HUNT_DATA = ROOT / 'data' / 'hunt'
@@ -641,13 +645,15 @@ def stack_motion(o):
             'chi2': chi2, 'dof': int(dof)}
 
 
-def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
+def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd, gaia_pos=None, stack_ok=True, beside_bright=False):
     # A visit with only one to three usable positions has too much leverage on a motion fit: drop it for this source.
     per_visit = {}
     for r in usable_positions(rows):
         per_visit.setdefault(visit_of(r['mjd'], visits_doc), []).append(r)
     thin = sorted(v for v, rr in per_visit.items() if len(rr) < MIN_PER_VISIT)
     rows = [r for r in rows if visit_of(r['mjd'], visits_doc) not in thin]
+    if len(per_visit) - len(thin) < 2:
+        rows = []          # motion needs at least two well-sampled visits; one visit spans only days
     motion, usable = analyse_motion(rows, visits_doc)
     x, y = object_xy(o, epoch_mjd)
     ra, dec = (float(v) for v in grid_wcs.pixel_to_world_values(x, y))
@@ -700,7 +706,7 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
 
     # --- identification (after the motion test) ---
     if gaia:
-        gra, gdec = gaia_positions(gaia, epoch_mjd)
+        gra, gdec = gaia_pos if gaia_pos is not None else gaia_positions(gaia, epoch_mjd)
         d = np.hypot((gra - ra) * math.cos(math.radians(dec)), gdec - dec) * 3600
         j = int(np.argmin(d))
         if d[j] <= 4.0:
@@ -716,6 +722,10 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
                 break
     if o.get('near_saturation'):
         doc['flags'].append('near_saturated_star')
+    if o['linked_orphans'] and beside_bright:
+        doc['flags'].append('beside_bright_source')       # peaks in the wings of a very bright source shift between visits
+    if o['linked_orphans'] and not stack_ok:
+        doc['flags'].append('too_few_exposures_in_stack')
     edge = 15.0 / GRID_ARCSEC
     if not (edge <= x <= n_grid - 1 - edge and edge <= y <= n_grid - 1 - edge):
         doc['flags'].append('near_edge')
@@ -740,7 +750,8 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd):
     elif sig_ok:
         doc['class'] = 'slow_drift'
     elif sm and sm['significance'] >= 5 and sm['pm_arcsec_yr'] >= CANDIDATE_PM_MIN and len(usable) < 6 \
-            and not any(f in doc['flags'] for f in ('near_bright_star', 'near_saturated_star', 'near_edge')) and 'gaia' not in doc:
+            and not any(f in doc['flags'] for f in ('near_bright_star', 'near_saturated_star', 'near_edge', 'beside_bright_source',
+                                                     'too_few_exposures_in_stack')) and 'gaia' not in doc:
         doc['class'] = 'stack_candidate' if sm['n_visits'] >= 3 and sm['chi2'] <= 4 * max(sm['dof'], 1) else 'two_visit_candidate'
     elif doc['motion_status'] == 'insufficient':
         doc['class'] = 'intermittent' if o['intermittent'] else 'too_faint'
@@ -885,11 +896,19 @@ def apply_external(doc, ext):
 # Driver
 # ---------------------------------------------------------------------------
 
-def score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, *, external=True, truth=None, injections=None):
+def score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, *, external=True, truth=None, injections=None, band_counts=None):
     """Stages 4-5: motion test, vetting, catalogue checks and scoring against truth, from the stage-3 measurements."""
     sources = []
+    gaia_pos = gaia_positions(gaia, epoch) if gaia else None     # once per field, not once per source
+    pos = np.array([object_xy(o, epoch) for o in objs]) if objs else np.zeros((0, 2))
+    snr = np.array([o['best_snr'] for o in objs])
     for k, o in enumerate(objs):
-        doc, motion = classify(o, rows[k], visits_doc, gaia, gw, n, epoch)
+        sep = np.hypot(pos[:, 0] - pos[k, 0], pos[:, 1] - pos[k, 1]) * GRID_ARCSEC
+        beside = bool(((sep > 0.5) & (sep < BRIGHT_NEIGHBOUR_ARCSEC) & (snr >= BRIGHT_NEIGHBOUR_SNR) & (snr > snr[k])).any())
+        stack_ok = True
+        if band_counts is not None:
+            stack_ok = all((band_counts[v].get(o['best_band'], 0) >= MIN_STACK_EXPOSURES) for v in o['visits_detected'] if v < len(band_counts))
+        doc, motion = classify(o, rows[k], visits_doc, gaia, gw, n, epoch, gaia_pos=gaia_pos, stack_ok=stack_ok, beside_bright=beside)
         doc['id'] = f's{k + 1:04d}'
         doc['track'] = [{'visit': f'visit-{vi + 1}', 'ra': float(a), 'dec': float(b)} for vi, (a, b) in
                         zip(o['visits_detected'] if len(o['visits_detected']) == len(o['knots_x']) else range(len(o['knots_x'])),
@@ -937,21 +956,31 @@ def score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, *, external=True, 
     truth_doc = None
     if truth:
         from .astrometry import propagate
-        p = propagate(truth['ra'], truth['dec'], truth['epoch_mjd'], truth['pmra'], truth['pmdec'], truth.get('parallax', 0.0), [epoch])
-        tra, tdec = float(p.ra[0]), float(p.dec[0])
+        # SIMBAD positions are given either at J2000.0 or at the discovery survey's epoch, and it does not say which.
+        # Both are tried; a match still needs a mover with the catalogue's speed within 15 arcsec.
+        epochs = [truth['epoch_mjd']] + list(truth.get('epoch_alternatives') or [])
+        cands = []
+        for ep in epochs:
+            p = propagate(truth['ra'], truth['dec'], ep, truth['pmra'], truth['pmdec'], truth.get('parallax', 0.0), [epoch])
+            cands.append((float(p.ra[0]), float(p.dec[0]), ep))
         cat_pm = math.hypot(truth['pmra'], truth['pmdec']) / 1000
         movers = ('candidate', 'known_mover', 'stack_candidate', 'two_visit_candidate')
-        best, bsep, bscore = None, None, -1
-        for s_ in sources:
+        best, bsep, bscore, bepoch = None, None, -1, None
+        for s_, (tra, tdec, tep) in ((s_, c) for c in cands for s_ in sources):
             sep = math.hypot((s_['ra'] - tra) * math.cos(math.radians(tdec)), s_['dec'] - tdec) * 3600
             if sep > 15.0:
                 continue
             pm_s = s_.get('pm_arcsec_yr') if s_['class'] != 'stack_candidate' else s_['stack_motion']['pm_arcsec_yr']
             e_pm = math.hypot(s_.get('pmra_err_masyr') or 0, s_.get('pmdec_err_masyr') or 0) / 1000
-            agrees = bool(pm_s and abs(pm_s - cat_pm) <= max(0.35, 0.3 * cat_pm, 3 * e_pm))
+            # When no parallax could be fitted (fewer than three visits), the straight-line motion also contains the
+            # object's parallax shift between the visits: up to 2 * parallax over the baseline.
+            allow = 0.0
+            if s_.get('model') != 'linear_parallax' and truth.get('parallax') and (s_.get('baseline_days') or 0) > 30:
+                allow = 2 * truth['parallax'] / 1000 / (s_['baseline_days'] / JULIAN_YEAR_DAYS)
+            agrees = bool(pm_s and abs(pm_s - cat_pm) <= max(0.35, 0.3 * cat_pm, 3 * e_pm) + allow)
             score = (2 if (s_['class'] in movers and agrees) else 1 if sep <= 5.0 else 0) * 100 - sep
             if score > bscore:
-                best, bsep, bscore = s_, sep, score
+                best, bsep, bscore, bepoch = s_, sep, score, tep
         found = best is not None and bscore > 0
         pm_meas = None
         if found:
@@ -962,7 +991,10 @@ def score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, *, external=True, 
                      'separation_arcsec': round(bsep, 2) if found else None,
                      'recovered': bool(found and bscore >= 100),
                      'recovered_class': best['class'] if found else None,
-                     'measured_pm_arcsec_yr': pm_meas, 'measured_sigma': best.get('sigma') if found else None}
+                     'measured_pm_arcsec_yr': pm_meas, 'measured_sigma': best.get('sigma') if found else None,
+                     'parallax_fitted': bool(found and best.get('model') == 'linear_parallax'),
+                     'catalogue_position_epoch_mjd': bepoch,
+                     'catalogue_parallax_mas': truth.get('parallax')}
         if found:
             best['truth_match'] = truth['name']
 
@@ -1001,8 +1033,9 @@ def run_field(name, files, ra0, dec0, fov, *, title=None, workers=8, truth=None,
         cache = HUNT_CACHE / name / 'stage3.pkl'
         cache.parent.mkdir(parents=True, exist_ok=True)
         cache.write_bytes(pickle.dumps({'objs': objs, 'rows': rows, 'visits_doc': visits_doc, 'epoch': epoch, 'ra0': ra0, 'dec0': dec0, 'fov': fov}))
+    band_counts = [{b: d['n'] for b, d in v['bands'].items()} for v in visits]
     sources, truth_doc, inj_doc, counts, tested = score_sources(objs, rows, visits_doc, gaia, gw, n, epoch, external=external,
-                                                               truth=truth, injections=injections)
+                                                               truth=truth, injections=injections, band_counts=band_counts)
     # depth: median 5-sigma point-source limit of each visit's stacks
     depth = {}
     for v in visits:
@@ -1060,6 +1093,8 @@ def thresholds():
     return {'seed_snr': SEED_SNR, 'motion_sigma': MOTION_SIGMA, 'pm_over_error': MOTION_PM_SNR,
             'candidate_pm_min_arcsec_yr': CANDIDATE_PM_MIN, 'v_max_arcsec_yr': V_MAX, 'chromatic_sigma': CHROMATIC_SIGMA,
             'max_model_chi2r': MAX_MODEL_CHI2R, 'min_positions_per_visit': MIN_PER_VISIT, 'max_parallax_mas': MAX_PARALLAX_MAS,
+            'min_stack_exposures': MIN_STACK_EXPOSURES, 'bright_neighbour_snr': BRIGHT_NEIGHBOUR_SNR,
+            'bright_neighbour_arcsec': BRIGHT_NEIGHBOUR_ARCSEC,
             'saturation_grow_native_px': SAT_GROW}
 
 
@@ -1072,7 +1107,7 @@ def rescore(name, *, truth=None, gaia=None, external=True, out_dir=None, log=pri
         gaia = json.loads((HUNT_CACHE / name / 'gaia_field.json').read_text())
     gw, n = display_wcs(st['ra0'], st['dec0'], st['fov'], GRID_ARCSEC)
     sources, truth_doc, _, counts, tested = score_sources(st['objs'], st['rows'], st['visits_doc'], gaia, gw, n, st['epoch'],
-                                                          external=external, truth=truth)
+                                                          external=external, truth=truth, band_counts=[v['bands'] for v in doc['visits']])
     doc.update({'sources': sources, 'counts': counts, 'n_sources': len(sources), 'n_motion_tested': len(tested), 'truth': truth_doc,
                 'thresholds': thresholds(), 'generated_utc': datetime.now(timezone.utc).isoformat(timespec='seconds')})
     (out_dir / 'hunt.json').write_text(json.dumps(doc, indent=1, default=float))

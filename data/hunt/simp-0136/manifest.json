@@ -1,0 +1,32 @@
+{
+ "field": "simp-0136",
+ "ra": 24.20624034661807,
+ "dec": 9.55451475901961,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:36:11+00:00",
+ "n_products_available": 321,
+ "n_requested": 126,
+ "n_downloaded": 126,
+ "failures": [],
+ "selection": "per visit: up to 8 x D2, 16 x D5, 24 x D6, evenly spaced in time",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-07-12T06:17:15.936Z",
+   "end_utc": "2025-08-03T01:42:49.046Z",
+   "n_products": 107
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-12-26T23:29:19.162Z",
+   "end_utc": "2026-01-18T07:40:43.766Z",
+   "n_products": 108
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-07-14T06:32:36.269Z",
+   "end_utc": "2026-07-24T17:24:49.075Z",
+   "n_products": 106
+  }
+ ]
+}

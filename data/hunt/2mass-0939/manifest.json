@@ -1,0 +1,32 @@
+{
+ "field": "2mass-0939",
+ "ra": 144.94078835755892,
+ "dec": -24.872860039215688,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:40:36+00:00",
+ "n_products_available": 296,
+ "n_requested": 67,
+ "n_downloaded": 67,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-04-26T07:50:12.019Z",
+   "end_utc": "2025-06-07T04:14:22.560Z",
+   "n_products": 139
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-11-17T21:36:58.838Z",
+   "end_utc": "2025-12-12T23:05:04.445Z",
+   "n_products": 127
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-05-09T22:38:47.126Z",
+   "end_utc": "2026-06-08T00:02:17.290Z",
+   "n_products": 30
+  }
+ ]
+}

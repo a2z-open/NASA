@@ -13,6 +13,7 @@ const FIELD_NAMES: Record<string, string> = {
 function statusTone(s: string): string {
   const t = s.toLowerCase();
   if (t.startsWith('recovered')) return 'supported';
+  if (t.startsWith('detected: brightness')) return 'supported';
   if (t.startsWith('detected')) return 'tentative';
   if (t.startsWith('inconclusive')) return 'untestable';
   if (t.startsWith('not')) return 'not_supported';

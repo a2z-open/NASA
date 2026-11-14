@@ -165,7 +165,7 @@ def run(which, names=None, workers=10, rescore=False):
                 continue
             f = hunt.curated_field(slug)
             try:
-                if rescore and (hunt.HUNT_CACHE / slug / 'stage3.pkl').is_file():
+                if rescore and (hunt.HUNT_CACHE / slug / 'stage3.pkl').is_file() and (hunt.HUNT_DATA / slug / 'hunt.json').is_file():
                     hunt.rescore(slug, truth=f['truth'], gaia=f['gaia'])
                     continue
                 hunt.run_field(f['name'], f['files'], f['ra'], f['dec'], f['fov'], title=f['title'], workers=workers,
@@ -183,11 +183,13 @@ def run(which, names=None, workers=10, rescore=False):
                 continue
             truth = None
             if f['kind'] == 'recovery':
-                truth = {'name': f['identifier'], 'ra': f['ra'], 'dec': f['dec'], 'epoch_mjd': 51544.5, 'pmra': f['pmra'],
+                truth = {'name': f['identifier'], 'ra': f['ra'], 'dec': f['dec'], 'epoch_mjd': 51544.5, 'epoch_alternatives': [55400.0],
+                         'pmra': f['pmra'],
                          'pmdec': f['pmdec'], 'parallax': f.get('parallax', 0.0), 'spectral_type': f.get('spectral_type'),
                          'source': 'SIMBAD via Sesame (' + f.get('position_ref', 'ref. not given') + ')'}
             try:
-                if rescore and (hunt.HUNT_CACHE / name / 'stage3.pkl').is_file():
+                if rescore and (hunt.HUNT_CACHE / name / 'stage3.pkl').is_file() and (hunt.HUNT_DATA / name / 'hunt.json').is_file() \
+                        and json.loads((hunt.HUNT_DATA / name / 'hunt.json').read_text())['grid'].get('dtype') == 'float16':
                     hunt.rescore(name, truth=truth)
                     continue
                 hunt.run_field(name, files, f['field_ra'], f['field_dec'], FOV_ARCMIN, title=f.get('identifier') or f['description'],
@@ -196,13 +198,29 @@ def run(which, names=None, workers=10, rescore=False):
                 print(f'{name}: FAILED {error!r}', flush=True)
 
 
+FRIENDLY = {
+    'simp-0136': 'SIMP 0136', '2mass-0939': '2MASS 0939−2448', 'ugps-0722': 'UGPS 0722−05', 'wise-1506': 'WISE 1506+7027',
+    'wise-0254': 'WISE 0254+0223', 'denis-0255': 'DENIS 0255−4700', '2mass-0348': '2MASS 0348−6022', 'luhman-16': 'Luhman 16',
+    '2mass-0727': '2MASS 0727+1710', '2mass-1217': '2MASS 1217−0311', '2mass-0559': '2MASS 0559−1404', 'wise-1639': 'WISE 1639−6847',
+    'wise-1405': 'WISE 1405+5534', 'wise-0410': 'WISE 0410+1502', 'wise-2056': 'WISE 2056+1459', 'j0415-0935': '2MASS 0415−0935',
+    'control-cosmos': 'COSMOS field', 'control-cdfs': 'Chandra Deep Field South', 'control-goodsn': 'GOODS-North',
+    'control-uds': 'UKIDSS Ultra Deep Survey field',
+}
+NOTES = {'epsilon-indi-b': 'NASA test target: a pair of brown dwarfs', 'wise-0855': 'NASA test target: the coldest known brown dwarf',
+         'barnards-star': 'NASA test target: saturated', 'rw-aurigae': 'NASA test target: variable star, saturated',
+         'r-draconis': 'NASA test target: variable star, saturated', 'j0415-0935': 'T8 brown dwarf (our extra test target)',
+         'control-cosmos': 'blank control field', 'control-cdfs': 'blank control field', 'control-goodsn': 'blank control field',
+         'control-uds': 'blank control field'}
+
+
 def index():
     rows, totals = [], {'fields': 0, 'area_deg2': 0.0, 'exposures': 0, 'sources': 0, 'motion_tested': 0}
     classes = {}
     for path in sorted(hunt.HUNT_DATA.glob('*/hunt.json')):
         d = json.loads(path.read_text())
         movers = [s for s in d['sources'] if s['class'] in ('candidate', 'stack_candidate', 'two_visit_candidate', 'known_mover', 'suspect')]
-        rows.append({'field_id': d['field_id'], 'title': d['title'], 'kind': d['kind'], 'notes': d.get('notes'), 'ra': d['ra'], 'dec': d['dec'],
+        rows.append({'field_id': d['field_id'], 'title': FRIENDLY.get(d['field_id'], d['title']), 'kind': d['kind'],
+                     'notes': NOTES.get(d['field_id'], d.get('notes')), 'ra': d['ra'], 'dec': d['dec'],
                      'fov_arcmin': d['fov_arcmin'], 'area_deg2': d['area_deg2'], 'n_visits': len(d['visits']),
                      'baseline_days': d['baseline_days'], 'n_exposures': d['n_exposures'], 'n_sources': d['n_sources'],
                      'n_motion_tested': d['n_motion_tested'], 'counts': d['counts'], 'depth_5sigma_ujy': d['depth_5sigma_ujy'],
@@ -217,7 +235,8 @@ def index():
         totals['motion_tested'] += d['n_motion_tested']
         for k, v in d['counts'].items():
             classes[k] = classes.get(k, 0) + v
-    truths = [r['truth'] | {'field_id': r['field_id']} for r in rows if r.get('truth')]
+    # "known fast movers": catalogue motion of at least 0.2 arcsec/yr (the candidate floor). RW Aur and R Dra are not movers.
+    truths = [r['truth'] | {'field_id': r['field_id']} for r in rows if r.get('truth') and r['truth']['catalogue_pm_arcsec_yr'] >= 0.2]
     doc = {'generated_utc': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'totals': totals | {'area_deg2': round(totals['area_deg2'], 3)},
            'classes': classes,
            'recovery': {'n_known': len(truths), 'n_detected': sum(1 for t in truths if t['detected']),

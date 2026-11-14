@@ -1,0 +1,32 @@
+{
+ "field": "denis-0255",
+ "ra": 43.7604015063668,
+ "dec": -47.008252738104574,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:43:01+00:00",
+ "n_products_available": 401,
+ "n_requested": 90,
+ "n_downloaded": 90,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-06-20T13:50:14.179Z",
+   "end_utc": "2025-07-09T12:48:07.488Z",
+   "n_products": 133
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-12-10T23:14:42.029Z",
+   "end_utc": "2026-01-01T10:11:04.531Z",
+   "n_products": 133
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-06-21T02:43:12.662Z",
+   "end_utc": "2026-07-08T15:03:29.347Z",
+   "n_products": 135
+  }
+ ]
+}

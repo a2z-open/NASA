@@ -171,15 +171,15 @@ fixed in code before the final run; several were added after earlier runs expose
 
 | | |
 |---|---|
-| Fields | {{HUNT_FIELDS}} ({{HUNT_AREA}} square degrees): the 5 NASA target fields and J0415−0935, 15 recovery fields around known cold brown dwarfs, and 4 blank control fields |
-| SPHEREx exposures | {{HUNT_EXPOSURES}} |
-| Sources found / motion-tested | {{HUNT_SOURCES}} / {{HUNT_TESTED}} |
-| Known fast movers in the fields | {{HUNT_KNOWN}} |
-| Detected | {{HUNT_DETECTED}} |
-| **Found as movers, blind** | **{{HUNT_RECOVERED}}** |
-| Movers no catalogue explains | **{{HUNT_UNEXPLAINED}}** |
-| False alarms caught by the vetting | {{HUNT_SUSPECT}} |
-| Median single-visit 5σ depth at 3.8–5.0 µm | {{HUNT_DEPTH}} µJy |
+| Fields | 25 (2.3 square degrees): the 5 NASA target fields and J0415−0935, 15 recovery fields around known cold brown dwarfs, and 4 blank control fields |
+| SPHEREx exposures | 2,891 |
+| Sources found / motion-tested | 8,718 / 5,195 |
+| Known fast movers in the fields | 19 |
+| Detected | 17 |
+| **Found as movers, blind** | **13** |
+| Movers no catalogue explains | **0** |
+| False alarms caught by the vetting | 8 |
+| Median single-visit 5σ depth at 3.8–5.0 µm | 141 µJy |
 
 For the recovery fields the catalogue position was used only to choose the field (offset by a pseudo-random amount of
 up to 4′) and, after the search, to score it.
@@ -198,12 +198,13 @@ Sixteen cold point sources (no flux below 3.8 µm) were added to the real exposu
 | not moving | too faint | still (correct) | still (correct) | still (correct) |
 | 1″/yr | too faint | seen, motion not proven | seen, motion not proven | found (1.14″/yr) |
 | 3″/yr | too faint | seen, motion not proven | found (2.55″/yr) | found (3.31″/yr) |
-| 8″/yr | seen, motion not proven | found (9.06″/yr) | found (8.46″/yr) | found (8.05″/yr) |
+| 8″/yr | seen, motion not proven | seen, motion not proven | found (8.46″/yr) | found (8.05″/yr) |
 
-6 of 12 moving injections were found, 0 of 4 stationary injections were called movers, and the search reported no
-other mover in that field. WISE 0855 (about 350 µJy in this band, 8.15″/yr) sits at the edge of this limit, which is
-consistent with it being found. A twin of WISE 0855 much farther away than WISE 0855 itself would not be confirmed with
-three visits.
+5 of 12 moving injections were found, 0 of 4 stationary injections were called movers, and the search reported no
+other mover in that field. This field's first visit has only 5 long-wavelength exposures, so it is a hard case: with
+the rule that a visit needs at least 4 positions per source, a 300 µJy source is seen but its motion is not proven.
+WISE 0855 (about 350 µJy in this band, 8.15″/yr) was found in its own field, which has 36–44 long-wavelength exposures
+in two of its visits. Cold sources fainter than a few hundred µJy are seen but not confirmed as movers.
 
 ## 7. The saturated variable stars, from their halo (experimental)
 
@@ -217,7 +218,7 @@ solves ln H = S(wavelength bin) + V(visit). Only wavelength bins observed in at 
 | RW Aurigae (T Tauri) | 3–5 | 107 | 0.83 ± 0.05 (3.1σ) | **0.64 ± 0.04 (6.4σ)** | variable |
 | Barnard's Star (control: saturated, not a large-amplitude variable) | 5–8 | 61 | 1.04 ± 0.03 (1.5σ) | not available (sealed) | not variable |
 
-{{HALO_SENTENCE}}
+Of 6 other bright stars measured the same way (11 visit comparisons), 0 were flagged variable; their median change was 3 % and the largest 8 %.
 
 Caveats: the ring differs between stars; the method assumes the wing profile at a fixed wavelength does not change
 between visits; R Draconis's visits each span two to three months, during which a Mira changes, so "visit 1" is an
@@ -255,7 +256,7 @@ Git times are self-reported until the commit is pushed.
 ## Limitations
 
 - The validation set is small: five named targets plus one extra target, two held-out experiments, 33 measured controls, 16 targeted and
-  16 blind synthetic scenarios, and {{HUNT_FIELDS}} hunt fields. It does not establish full-sky completeness or false-positive rates.
+  16 blind synthetic scenarios, and 25 hunt fields. It does not establish full-sky completeness or false-positive rates.
 - The hunt's recovery fields were chosen because a known mover is there; they measure completeness, not a discovery rate.
 - The controls are moderately bright, isolated stars. Crowded fields, nebulosity and faint sources near the detection limit are under-represented.
 - Three of the five NASA targets saturate SPHEREx; the release ePSF cannot model their wings.

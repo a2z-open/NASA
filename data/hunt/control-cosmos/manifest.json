@@ -1,0 +1,32 @@
+{
+ "field": "control-cosmos",
+ "ra": 150.119,
+ "dec": 2.206,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:37:18+00:00",
+ "n_products_available": 212,
+ "n_requested": 69,
+ "n_downloaded": 69,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-04-25T00:42:57.398Z",
+   "end_utc": "2025-05-19T21:33:24.307Z",
+   "n_products": 26
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-11-17T00:27:55.987Z",
+   "end_utc": "2025-11-26T19:10:16.406Z",
+   "n_products": 109
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-05-03T23:01:20.755Z",
+   "end_utc": "2026-05-26T08:46:24.816Z",
+   "n_products": 77
+  }
+ ]
+}

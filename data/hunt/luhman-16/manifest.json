@@ -1,0 +1,32 @@
+{
+ "field": "luhman-16",
+ "ra": 162.25835059976598,
+ "dec": -53.37619802614379,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:37:33+00:00",
+ "n_products_available": 453,
+ "n_requested": 90,
+ "n_downloaded": 90,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-05-30T05:37:19.632Z",
+   "end_utc": "2025-07-19T21:59:17.434Z",
+   "n_products": 127
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-12-21T20:24:03.974Z",
+   "end_utc": "2026-02-03T00:42:55.238Z",
+   "n_products": 145
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-05-24T09:40:02.438Z",
+   "end_utc": "2026-07-21T10:39:51.754Z",
+   "n_products": 181
+  }
+ ]
+}

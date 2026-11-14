@@ -1,0 +1,8259 @@
+{
+ "field_id": "r-draconis",
+ "title": "R Draconis",
+ "kind": "validation",
+ "ra": 248.16723353659302,
+ "dec": 66.7550235246947,
+ "fov_arcmin": 10.0,
+ "area_deg2": 0.0278,
+ "notes": null,
+ "grid": {
+  "nx": 195,
+  "ny": 195,
+  "pixel_arcsec": 3.075,
+  "ra0": 248.16723353659302,
+  "dec0": 66.7550235246947,
+  "projection": "TAN",
+  "orientation": "north-up east-left",
+  "dtype": "float16",
+  "row0": "north",
+  "note": "display stacks; the search used the full-resolution arrays"
+ },
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-05-16T22:57:21.196Z",
+   "end_utc": "2025-07-22T14:36:47.720Z",
+   "mjd_mid": 60840.155830529504,
+   "n_exposures": 34,
+   "bands": {
+    "short": 18,
+    "mid": 6,
+    "cold": 10
+   }
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-10-17T14:45:51.024Z",
+   "end_utc": "2026-01-13T09:58:01.215Z",
+   "mjd_mid": 61015.562482097506,
+   "n_exposures": 36,
+   "bands": {
+    "short": 18,
+    "mid": 6,
+    "cold": 12
+   }
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-04-22T07:57:40.431Z",
+   "end_utc": "2026-07-16T20:58:24.971Z",
+   "mjd_mid": 61212.6234171095,
+   "n_exposures": 34,
+   "bands": {
+    "short": 18,
+    "mid": 5,
+    "cold": 11
+   }
+  }
+ ],
+ "baseline_days": 425.9,
+ "n_exposures": 104,
+ "n_unreadable": 0,
+ "n_gaia": 105,
+ "n_detections": 328,
+ "n_sources": 118,
+ "n_sources_before_cap": 118,
+ "n_motion_tested": 52,
+ "counts": {
+  "static": 52,
+  "too_faint": 38,
+  "intermittent": 28
+ },
+ "depth_5sigma_ujy": {
+  "short": 187.4,
+  "mid": 300.8,
+  "cold": 365.1
+ },
+ "truth": {
+  "name": "R Draconis",
+  "catalogue_pm_arcsec_yr": 0.022,
+  "source": "Gaia DR3 1648328016354496384",
+  "spectral_type": null,
+  "w2_mag": null,
+  "detected": false,
+  "nearest_source": null,
+  "separation_arcsec": null,
+  "recovered": false,
+  "recovered_class": null,
+  "measured_pm_arcsec_yr": null,
+  "measured_sigma": null,
+  "parallax_fitted": false,
+  "catalogue_position_epoch_mjd": null,
+  "catalogue_parallax_mas": 1.2509180143740992
+ },
+ "injections": null,
+ "thresholds": {
+  "seed_snr": 5.0,
+  "motion_sigma": 5.0,
+  "pm_over_error": 5.0,
+  "candidate_pm_min_arcsec_yr": 0.2,
+  "v_max_arcsec_yr": 15.0,
+  "chromatic_sigma": 4.0,
+  "max_model_chi2r": 4.0,
+  "min_positions_per_visit": 4,
+  "max_parallax_mas": 800.0,
+  "min_stack_exposures": 8,
+  "bright_neighbour_snr": 100.0,
+  "bright_neighbour_arcsec": 20.0,
+  "saturation_grow_native_px": 4
+ },
+ "stacks": [
+  {
+   "id": "visit-1-cold",
+   "visit": "visit-1",
+   "band": "cold",
+   "wavelength_range_um": [
+    3.82,
+    5.0
+   ],
+   "n_exposures": 10,
+   "mjd": 60840.155830529504,
+   "time_utc": "2025-06-14T03:44:23.758Z",
+   "data_url": "/files/hunt/r-draconis/frames/visit-1-cold.bin",
+   "stats": {
+    "median": 0.00116481923032552,
+    "sigma": 0.021341226994991302,
+    "p995": 24.782432556152344
+   }
+  },
+  {
+   "id": "visit-1-short",
+   "visit": "visit-1",
+   "band": "short",
+   "wavelength_range_um": [
+    0.75,
+    2.42
+   ],
+   "n_exposures": 18,
+   "mjd": 60840.155830529504,
+   "time_utc": "2025-06-14T03:44:23.758Z",
+   "data_url": "/files/hunt/r-draconis/frames/visit-1-short.bin",
+   "stats": {
+    "median": 0.0018228580011054873,
+    "sigma": 0.016278700903058052,
+    "p995": 8.111096382141113
+   }
+  },
+  {
+   "id": "visit-2-cold",
+   "visit": "visit-2",
+   "band": "cold",
+   "wavelength_range_um": [
+    3.82,
+    5.0
+   ],
+   "n_exposures": 12,
+   "mjd": 61015.562482097506,
+   "time_utc": "2025-12-06T13:29:58.453Z",
+   "data_url": "/files/hunt/r-draconis/frames/visit-2-cold.bin",
+   "stats": {
+    "median": 0.0002630534872878343,
+    "sigma": 0.018825767561793327,
+    "p995": 20.419050216674805
+   }
+  },
+  {
+   "id": "visit-2-short",
+   "visit": "visit-2",
+   "band": "short",
+   "wavelength_range_um": [
+    0.75,
+    2.42
+   ],
+   "n_exposures": 18,
+   "mjd": 61015.562482097506,
+   "time_utc": "2025-12-06T13:29:58.453Z",
+   "data_url": "/files/hunt/r-draconis/frames/visit-2-short.bin",
+   "stats": {
+    "median": 0.00013221855624578893,
+    "sigma": 0.011236858554184437,
+    "p995": 2.506526470184326
+   }
+  },
+  {
+   "id": "visit-3-cold",
+   "visit": "visit-3",
+   "band": "cold",
+   "wavelength_range_um": [
+    3.82,
+    5.0
+   ],
+   "n_exposures": 11,
+   "mjd": 61212.6234171095,
+   "time_utc": "2026-06-21T14:57:43.238Z",
+   "data_url": "/files/hunt/r-draconis/frames/visit-3-cold.bin",
+   "stats": {
+    "median": -0.00045150474761612713,
+    "sigma": 0.016331635415554047,
+    "p995": 17.638986587524414
+   }
+  },
+  {
+   "id": "visit-3-short",
+   "visit": "visit-3",
+   "band": "short",
+   "wavelength_range_um": [
+    0.75,
+    2.42
+   ],
+   "n_exposures": 18,
+   "mjd": 61212.6234171095,
+   "time_utc": "2026-06-21T14:57:43.238Z",
+   "data_url": "/files/hunt/r-draconis/frames/visit-3-short.bin",
+   "stats": {
+    "median": -7.45062789064832e-06,
+    "sigma": 0.011267355643212795,
+    "p995": 3.9398257732391357
+   }
+  }
+ ],
+ "sources": [
+  {
+   "ra": 248.0601290332869,
+   "dec": 66.79865269957138,
+   "best_band": "short",
+   "stack_snr": 7.8,
+   "det_snr": {
+    "short": 7.8,
+    "mid": 4.5,
+    "cold": 3.4
+   },
+   "forced_snr": {
+    "short": 7.8,
+    "mid": 4.5,
+    "cold": 3.4
+   },
+   "flux_ujy": {
+    "short": 316.3,
+    "mid": 267.5,
+    "cold": 181.6
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 36,
+   "n_native_visits": 3,
+   "motion_status": "tentative",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 9.97,
+   "pm_over_error": 1.77,
+   "pm_arcsec_yr": 1.4724,
+   "pmra_masyr": -1102.7038157551162,
+   "pmdec_masyr": -975.6951020566355,
+   "pmra_err_masyr": 816.3262439604532,
+   "pmdec_err_masyr": 846.7231772462379,
+   "parallax_mas": -805.9519359537168,
+   "parallax_err_mas": 347.0820869657218,
+   "chi2r": 10.481203306236646,
+   "baseline_days": 422.11753725699964,
+   "class": "static",
+   "id": "s0043",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.06024087026915,
+     "dec": 66.79854751158197
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.05886426785818,
+     "dec": 66.7974961534294
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.0601290332869,
+     "dec": 66.79865269957138
+    },
+    {
+     "visit": "visit-4",
+     "ra": 248.05935303257434,
+     "dec": 66.7975984206492
+    },
+    {
+     "visit": "visit-5",
+     "ra": 248.05920176674732,
+     "dec": 66.79811702220704
+    }
+   ]
+  },
+  {
+   "ra": 248.27377210549756,
+   "dec": 66.71451045431793,
+   "best_band": "short",
+   "stack_snr": 6.1,
+   "det_snr": {
+    "short": 6.1
+   },
+   "forced_snr": {
+    "short": 6.1,
+    "mid": 2.5,
+    "cold": 1.0
+   },
+   "flux_ujy": {
+    "short": 229.6,
+    "mid": 136.5,
+    "cold": -6.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 18,
+   "n_native_visits": 2,
+   "motion_status": "tentative",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 7.17,
+   "pm_over_error": 3.46,
+   "pm_arcsec_yr": 2.9981,
+   "pmra_masyr": 2874.520362211336,
+   "pmdec_masyr": -851.7406996584317,
+   "pmra_err_masyr": 865.730515715572,
+   "pmdec_err_masyr": 865.730515715572,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 4.658549750215767,
+   "baseline_days": 266.75814987299964,
+   "class": "static",
+   "id": "s0055",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.2742190920816,
+     "dec": 66.71456768759839
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.27377210549756,
+     "dec": 66.71451045431793
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.27394549914996,
+     "dec": 66.71459119709709
+    }
+   ]
+  },
+  {
+   "ra": 248.06194208067146,
+   "dec": 66.70738793740081,
+   "best_band": "short",
+   "stack_snr": 5.9,
+   "det_snr": {
+    "short": 5.9,
+    "mid": 4.7,
+    "cold": 3.4
+   },
+   "forced_snr": {
+    "short": 5.9,
+    "mid": 4.0,
+    "cold": 2.7
+   },
+   "flux_ujy": {
+    "short": 207.0,
+    "mid": 212.0,
+    "cold": 132.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 29,
+   "n_native_visits": 3,
+   "motion_status": "tentative",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 5.04,
+   "pm_over_error": 1.86,
+   "pm_arcsec_yr": 1.1649,
+   "pmra_masyr": -762.8420530962119,
+   "pmdec_masyr": -880.3656858037743,
+   "pmra_err_masyr": 598.9870895961294,
+   "pmdec_err_masyr": 647.4027115819034,
+   "parallax_mas": 608.4236736557252,
+   "parallax_err_mas": 273.3939343463068,
+   "chi2r": 4.797830134939799,
+   "baseline_days": 401.5994789469987,
+   "class": "static",
+   "id": "s0051",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.06232637020122,
+     "dec": 66.70759573468816
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.06194208067146,
+     "dec": 66.70738793740081
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.061923951731,
+     "dec": 66.70752061791602
+    }
+   ]
+  },
+  {
+   "ra": 248.14837502683918,
+   "dec": 66.7624931089356,
+   "best_band": "cold",
+   "stack_snr": 143.8,
+   "det_snr": {
+    "short": 55.1,
+    "cold": 143.8
+   },
+   "forced_snr": {
+    "short": 82.3,
+    "cold": 143.8
+   },
+   "flux_ujy": {
+    "short": 24333.1,
+    "mid": null,
+    "cold": 86968.1
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 8,
+   "n_native_visits": 2,
+   "motion_status": "tentative",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 3.39,
+   "pm_over_error": 2.17,
+   "pm_arcsec_yr": 3.4269,
+   "pmra_masyr": 1976.4728002678044,
+   "pmdec_masyr": 2799.495636770246,
+   "pmra_err_masyr": 1577.2433066316046,
+   "pmdec_err_masyr": 1577.2433066316046,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 3.0739455451858206,
+   "baseline_days": 216.11269434000133,
+   "stack_motion": {
+    "pm_arcsec_yr": 9.572271148006429,
+    "pm_err_arcsec_yr": 1.7341110887746016,
+    "significance": 5.51998727761473,
+    "pmra_arcsec_yr": 9.423820419260943,
+    "pmdec_arcsec_yr": -1.6792806901994755,
+    "n_visits": 2,
+    "chi2": 3.084360528386036e-05,
+    "dof": 0
+   },
+   "class": "static",
+   "id": "s0084",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1451885322099,
+     "dec": 66.76271671156884
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.14837502683918,
+     "dec": 66.7624931089356
+    }
+   ]
+  },
+  {
+   "ra": 248.2266225826552,
+   "dec": 66.81833009852933,
+   "best_band": "short",
+   "stack_snr": 6.6,
+   "det_snr": {
+    "short": 6.6,
+    "mid": 4.8,
+    "cold": 3.8
+   },
+   "forced_snr": {
+    "short": 6.6,
+    "mid": 4.8,
+    "cold": 3.8
+   },
+   "flux_ujy": {
+    "short": 259.8,
+    "mid": 293.4,
+    "cold": 224.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 33,
+   "n_native_visits": 3,
+   "motion_status": "tentative",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 3.32,
+   "pm_over_error": 0.39,
+   "pm_arcsec_yr": 0.2712,
+   "pmra_masyr": 216.42027574326863,
+   "pmdec_masyr": -163.3623318332855,
+   "pmra_err_masyr": 683.8394886856913,
+   "pmdec_err_masyr": 708.3410093633671,
+   "parallax_mas": 453.2990494283743,
+   "parallax_err_mas": 308.7082612579599,
+   "chi2r": 7.355797349058464,
+   "baseline_days": 422.1790612729965,
+   "class": "static",
+   "id": "s0052",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.22642496010607,
+     "dec": 66.81836951569801
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.2266225826552,
+     "dec": 66.81833009852933
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.22613767581373,
+     "dec": 66.81833708478406
+    }
+   ]
+  },
+  {
+   "ra": 248.22917526709765,
+   "dec": 66.79165776855214,
+   "best_band": "short",
+   "stack_snr": 49.2,
+   "det_snr": {
+    "short": 49.2,
+    "mid": 18.3,
+    "cold": 16.3
+   },
+   "forced_snr": {
+    "short": 49.2,
+    "mid": 18.3,
+    "cold": 16.1
+   },
+   "flux_ujy": {
+    "short": 4352.2,
+    "mid": 2180.8,
+    "cold": 1254.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 84,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 2.0,
+   "pm_over_error": 0.24,
+   "pm_arcsec_yr": 0.0463,
+   "pmra_masyr": 17.063845835982555,
+   "pmdec_masyr": 43.0624170222925,
+   "pmra_err_masyr": 194.15418369325064,
+   "pmdec_err_masyr": 196.8561718059302,
+   "parallax_mas": -117.26602904553198,
+   "parallax_err_mas": 89.46589676575161,
+   "chi2r": 4.644515063142078,
+   "baseline_days": 425.9159125579972,
+   "gaia": {
+    "source_id": "1648328359951193216",
+    "g": 15.710808,
+    "sep_arcsec": 2.58,
+    "pmra_masyr": 4.067177459760082,
+    "pmdec_masyr": 11.358624844322776,
+    "parallax_mas": 1.312552268799465,
+    "ruwe": 1.1693498
+   },
+   "class": "static",
+   "id": "s0009",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.22902628789473,
+     "dec": 66.79172516501706
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.22917526709765,
+     "dec": 66.79165776855214
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.22928683962124,
+     "dec": 66.79168300059142
+    }
+   ]
+  },
+  {
+   "ra": 248.16022535000755,
+   "dec": 66.67984968450885,
+   "best_band": "short",
+   "stack_snr": 23.7,
+   "det_snr": {
+    "short": 23.7,
+    "mid": 8.9,
+    "cold": 5.1
+   },
+   "forced_snr": {
+    "short": 23.7,
+    "mid": 8.9,
+    "cold": 5.1
+   },
+   "flux_ujy": {
+    "short": 1164.6,
+    "mid": 624.0,
+    "cold": 277.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 59,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.95,
+   "pm_over_error": 1.3,
+   "pm_arcsec_yr": 0.1102,
+   "pmra_masyr": 26.31969294670882,
+   "pmdec_masyr": -106.98448855350716,
+   "pmra_err_masyr": 84.81549337674463,
+   "pmdec_err_masyr": 84.77490466700527,
+   "parallax_mas": -94.59099959508558,
+   "parallax_err_mas": 38.48266599474663,
+   "chi2r": 0.5554868858658873,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648326435805836800",
+    "g": 16.46012,
+    "sep_arcsec": 0.04,
+    "pmra_masyr": 0.4131246548316425,
+    "pmdec_masyr": 5.646044773534033,
+    "parallax_mas": 0.9856000641939087,
+    "ruwe": 1.0028845
+   },
+   "class": "static",
+   "id": "s0011",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1601874621728,
+     "dec": 66.67985546800502
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.16022535000755,
+     "dec": 66.67984968450885
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.16017598845423,
+     "dec": 66.67984121450431
+    }
+   ]
+  },
+  {
+   "ra": 248.25412909847608,
+   "dec": 66.67972424708596,
+   "best_band": "short",
+   "stack_snr": 42.8,
+   "det_snr": {
+    "short": 42.8,
+    "mid": 20.5,
+    "cold": 13.5
+   },
+   "forced_snr": {
+    "short": 42.8,
+    "mid": 20.5,
+    "cold": 13.5
+   },
+   "flux_ujy": {
+    "short": 2882.5,
+    "mid": 1846.3,
+    "cold": 770.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 36,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.86,
+   "pm_over_error": 2.45,
+   "pm_arcsec_yr": 0.3377,
+   "pmra_masyr": -205.37923234508293,
+   "pmdec_masyr": 268.0591508800776,
+   "pmra_err_masyr": 137.6571137002283,
+   "pmdec_err_masyr": 138.04022568612442,
+   "parallax_mas": -38.33098620551911,
+   "parallax_err_mas": 44.321874946167036,
+   "chi2r": 0.286595061437438,
+   "baseline_days": 391.90507549799804,
+   "gaia": {
+    "source_id": "1636317260569843840",
+    "g": 15.649478,
+    "sep_arcsec": 0.19,
+    "pmra_masyr": -11.773810771856109,
+    "pmdec_masyr": 15.697419542421793,
+    "parallax_mas": 2.1019895930565253,
+    "ruwe": 1.061402
+   },
+   "class": "static",
+   "id": "s0010",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.2543257100845,
+     "dec": 66.67979775700678
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.25412909847608,
+     "dec": 66.67972424708596
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.2541737402501,
+     "dec": 66.67981005129228
+    }
+   ]
+  },
+  {
+   "ra": 248.00987336970354,
+   "dec": 66.81682182301968,
+   "best_band": "short",
+   "stack_snr": 84.6,
+   "det_snr": {
+    "short": 84.6,
+    "cold": 39.1
+   },
+   "forced_snr": {
+    "short": 84.6,
+    "cold": 39.1
+   },
+   "flux_ujy": {
+    "short": 19572.6,
+    "mid": null,
+    "cold": 5582.3
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 21,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.83,
+   "pm_over_error": 1.84,
+   "pm_arcsec_yr": 0.1421,
+   "pmra_masyr": 5.676006147357169,
+   "pmdec_masyr": 142.00693954313928,
+   "pmra_err_masyr": 73.41242303939522,
+   "pmdec_err_masyr": 77.19718155486005,
+   "parallax_mas": 45.04820199594085,
+   "parallax_err_mas": 39.19247268080681,
+   "chi2r": 1.0665586025792964,
+   "baseline_days": 379.66592587899504,
+   "gaia": {
+    "source_id": "1648331929067468544",
+    "g": 13.272738,
+    "sep_arcsec": 0.22,
+    "pmra_masyr": 8.824274873475233,
+    "pmdec_masyr": 64.24076145178802,
+    "parallax_mas": 4.070056856551404,
+    "ruwe": 0.984491
+   },
+   "class": "static",
+   "id": "s0003",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.00990630316437,
+     "dec": 66.81690935402267
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.00987336970354,
+     "dec": 66.81682182301968
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.00977380832427,
+     "dec": 66.81689840609856
+    }
+   ]
+  },
+  {
+   "ra": 248.0308421166189,
+   "dec": 66.74152020563845,
+   "best_band": "short",
+   "stack_snr": 14.0,
+   "det_snr": {
+    "short": 14.0,
+    "mid": 4.7
+   },
+   "forced_snr": {
+    "short": 14.0,
+    "mid": 4.7,
+    "cold": 2.3
+   },
+   "flux_ujy": {
+    "short": 665.3,
+    "mid": 278.9,
+    "cold": 81.1
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 43,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.83,
+   "pm_over_error": 2.27,
+   "pm_arcsec_yr": 0.3797,
+   "pmra_masyr": -360.7990834903216,
+   "pmdec_masyr": 118.25233009924303,
+   "pmra_err_masyr": 166.56005612559304,
+   "pmdec_err_masyr": 175.22920926739965,
+   "parallax_mas": 80.314520779063,
+   "parallax_err_mas": 74.19052581930428,
+   "chi2r": 0.6568630372285734,
+   "baseline_days": 422.18055351800285,
+   "gaia": {
+    "source_id": "1648327844555103872",
+    "g": 16.651487,
+    "sep_arcsec": 0.29,
+    "pmra_masyr": -0.3581218501887522,
+    "pmdec_masyr": -5.016654596230608,
+    "parallax_mas": 0.434091215575276,
+    "ruwe": 1.0539714
+   },
+   "class": "static",
+   "id": "s0023",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.0308479895882,
+     "dec": 66.7415626111783
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.0308421166189,
+     "dec": 66.74152020563845
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.0307243868396,
+     "dec": 66.74159662330214
+    }
+   ]
+  },
+  {
+   "ra": 248.36103211006716,
+   "dec": 66.7892647918852,
+   "best_band": "short",
+   "stack_snr": 16.7,
+   "det_snr": {
+    "short": 16.7,
+    "mid": 8.1,
+    "cold": 4.8
+   },
+   "forced_snr": {
+    "short": 16.7,
+    "mid": 8.1,
+    "cold": 4.5
+   },
+   "flux_ujy": {
+    "short": 811.4,
+    "mid": 501.2,
+    "cold": 254.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 21,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.63,
+   "pm_over_error": 2.09,
+   "pm_arcsec_yr": 0.4095,
+   "pmra_masyr": -351.04283845634956,
+   "pmdec_masyr": 210.79109517502542,
+   "pmra_err_masyr": 196.30651810024204,
+   "pmdec_err_masyr": 195.6745570423558,
+   "parallax_mas": 103.45111716641095,
+   "parallax_err_mas": 72.23677979964711,
+   "chi2r": 0.9788240152271779,
+   "baseline_days": 391.90507549799804,
+   "gaia": {
+    "source_id": "1648328871050874624",
+    "g": 18.002378,
+    "sep_arcsec": 0.78,
+    "pmra_masyr": 5.697005724432329,
+    "pmdec_masyr": 3.587114752390217,
+    "parallax_mas": 1.2223212227634193,
+    "ruwe": 1.0293031
+   },
+   "class": "static",
+   "id": "s0017",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.36103749355667,
+     "dec": 66.78940792618258
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.36103211006716,
+     "dec": 66.7892647918852
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.3611043708801,
+     "dec": 66.78941634783227
+    }
+   ]
+  },
+  {
+   "ra": 248.0296390017536,
+   "dec": 66.73666409682032,
+   "best_band": "short",
+   "stack_snr": 9.3,
+   "det_snr": {
+    "short": 9.3,
+    "mid": 4.7
+   },
+   "forced_snr": {
+    "short": 9.3,
+    "mid": 4.5,
+    "cold": 2.5
+   },
+   "flux_ujy": {
+    "short": 375.8,
+    "mid": 258.2,
+    "cold": 93.6
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 40,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.62,
+   "pm_over_error": 1.2,
+   "pm_arcsec_yr": 0.2632,
+   "pmra_masyr": -215.8674990183917,
+   "pmdec_masyr": -150.62986261483474,
+   "pmra_err_masyr": 211.12163941364258,
+   "pmdec_err_masyr": 234.53455697851976,
+   "parallax_mas": 209.95546449901744,
+   "parallax_err_mas": 95.26081822003,
+   "chi2r": 0.8375853115502869,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648327771539210624",
+    "g": 18.025028,
+    "sep_arcsec": 0.24,
+    "pmra_masyr": 3.150428755556809,
+    "pmdec_masyr": -3.9925097408490533,
+    "parallax_mas": 0.7945513476051375,
+    "ruwe": 1.0429497
+   },
+   "class": "static",
+   "id": "s0035",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.02971245361783,
+     "dec": 66.73686494729705
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.0296390017536,
+     "dec": 66.73666409682032
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.02936356513513,
+     "dec": 66.73670421159856
+    }
+   ]
+  },
+  {
+   "ra": 248.24667863867566,
+   "dec": 66.70122402898954,
+   "best_band": "short",
+   "stack_snr": 63.6,
+   "det_snr": {
+    "short": 63.6,
+    "mid": 23.7,
+    "cold": 16.8
+   },
+   "forced_snr": {
+    "short": 63.6,
+    "mid": 23.2,
+    "cold": 16.7
+   },
+   "flux_ujy": {
+    "short": 5517.7,
+    "mid": 2562.3,
+    "cold": 1181.6
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 99,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.6,
+   "pm_over_error": 0.51,
+   "pm_arcsec_yr": 0.1924,
+   "pmra_masyr": 164.38951793435996,
+   "pmdec_masyr": -99.96314708648585,
+   "pmra_err_masyr": 373.9678570969596,
+   "pmdec_err_masyr": 374.2285250542317,
+   "parallax_mas": 110.62770389693839,
+   "parallax_err_mas": 170.63315323939315,
+   "chi2r": 9.08879250577893,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1636317329289320832",
+    "g": 14.441298,
+    "sep_arcsec": 3.31,
+    "pmra_masyr": -7.055561253235879,
+    "pmdec_masyr": 1.5235687750511837,
+    "parallax_mas": 0.3332210053488457,
+    "ruwe": 0.91260594
+   },
+   "class": "static",
+   "id": "s0005",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.24659666880618,
+     "dec": 66.70138780213789
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.24667863867566,
+     "dec": 66.70122402898954
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.2464469531403,
+     "dec": 66.70129077358374
+    }
+   ]
+  },
+  {
+   "ra": 247.97905531901986,
+   "dec": 66.78248449494299,
+   "best_band": "short",
+   "stack_snr": 10.9,
+   "det_snr": {
+    "short": 10.9,
+    "mid": 4.3
+   },
+   "forced_snr": {
+    "short": 10.9,
+    "mid": 4.3,
+    "cold": 1.0
+   },
+   "flux_ujy": {
+    "short": 407.2,
+    "mid": 235.0,
+    "cold": 61.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 39,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.52,
+   "pm_over_error": 1.93,
+   "pm_arcsec_yr": 0.307,
+   "pmra_masyr": 40.95685255689328,
+   "pmdec_masyr": -304.292433942873,
+   "pmra_err_masyr": 156.5210772307833,
+   "pmdec_err_masyr": 159.13582283933272,
+   "parallax_mas": -69.07978512083575,
+   "parallax_err_mas": 71.61860296266761,
+   "chi2r": 0.7196254856872366,
+   "baseline_days": 405.39934649300267,
+   "gaia": {
+    "source_id": "1648331143090683904",
+    "g": 17.776733,
+    "sep_arcsec": 0.17,
+    "pmra_masyr": 2.312549519174663,
+    "pmdec_masyr": -11.83922472857429,
+    "parallax_mas": 0.6798967305251925,
+    "ruwe": 0.96835464
+   },
+   "class": "static",
+   "id": "s0031",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 247.97892175956673,
+     "dec": 66.78248515142693
+    },
+    {
+     "visit": "visit-2",
+     "ra": 247.97905531901986,
+     "dec": 66.78248449494299
+    },
+    {
+     "visit": "visit-3",
+     "ra": 247.97879320014795,
+     "dec": 66.78249915274903
+    }
+   ]
+  },
+  {
+   "ra": 248.01916446806655,
+   "dec": 66.80408191530655,
+   "best_band": "short",
+   "stack_snr": 5.2,
+   "det_snr": {
+    "short": 5.2
+   },
+   "forced_snr": {
+    "short": 5.2,
+    "mid": 1.5,
+    "cold": 0.4
+   },
+   "flux_ujy": {
+    "short": 186.9,
+    "mid": 77.2,
+    "cold": 26.4
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 23,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.48,
+   "pm_over_error": 1.66,
+   "pm_arcsec_yr": 0.6244,
+   "pmra_masyr": 159.53336092539757,
+   "pmdec_masyr": 603.7032362049144,
+   "pmra_err_masyr": 364.92506111776544,
+   "pmdec_err_masyr": 377.4837388387547,
+   "parallax_mas": 108.3717734378561,
+   "parallax_err_mas": 146.64551537985986,
+   "chi2r": 1.324118755742662,
+   "baseline_days": 394.93787730299664,
+   "class": "static",
+   "id": "s0060",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.01894730879647,
+     "dec": 66.80411205688554
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.01916446806655,
+     "dec": 66.80408191530655
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.0189837443028,
+     "dec": 66.80427719580723
+    }
+   ]
+  },
+  {
+   "ra": 247.98029133514106,
+   "dec": 66.79771971127036,
+   "best_band": "short",
+   "stack_snr": 21.6,
+   "det_snr": {
+    "short": 21.6,
+    "mid": 7.1,
+    "cold": 4.3
+   },
+   "forced_snr": {
+    "short": 21.6,
+    "mid": 7.1,
+    "cold": 4.3
+   },
+   "flux_ujy": {
+    "short": 1291.2,
+    "mid": null,
+    "cold": 280.1
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 16,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 1.38,
+   "pm_over_error": 1.89,
+   "pm_arcsec_yr": 0.4111,
+   "pmra_masyr": -189.91015485773187,
+   "pmdec_masyr": -364.61514041770505,
+   "pmra_err_masyr": 217.53068528580428,
+   "pmdec_err_masyr": 217.53068528580428,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 0.8768372089800948,
+   "baseline_days": 216.720938749997,
+   "gaia": {
+    "source_id": "1648331899004229376",
+    "g": 16.568645,
+    "sep_arcsec": 0.07,
+    "pmra_masyr": -6.171283271478254,
+    "pmdec_masyr": -6.299332155211459,
+    "parallax_mas": 0.6267709473140247,
+    "ruwe": 3.0320308
+   },
+   "class": "static",
+   "id": "s0013",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 247.98037997862647,
+     "dec": 66.79770329601085
+    },
+    {
+     "visit": "visit-2",
+     "ra": 247.98029133514106,
+     "dec": 66.79771971127036
+    },
+    {
+     "visit": "visit-3",
+     "ra": 247.98032498115,
+     "dec": 66.79779266942052
+    }
+   ]
+  },
+  {
+   "ra": 248.1146857236606,
+   "dec": 66.80546791217887,
+   "best_band": "short",
+   "stack_snr": 8.3,
+   "det_snr": {
+    "short": 8.3
+   },
+   "forced_snr": {
+    "short": 8.3,
+    "mid": 2.4,
+    "cold": 1.2
+   },
+   "flux_ujy": {
+    "short": 361.4,
+    "mid": 150.8,
+    "cold": 86.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 25,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.33,
+   "pm_over_error": 1.74,
+   "pm_arcsec_yr": 0.5852,
+   "pmra_masyr": -41.605466393236156,
+   "pmdec_masyr": 583.7353660339531,
+   "pmra_err_masyr": 281.33911208241705,
+   "pmdec_err_masyr": 337.50042986364247,
+   "parallax_mas": 25.08720915058166,
+   "parallax_err_mas": 143.4993512221055,
+   "chi2r": 0.5641660787097585,
+   "baseline_days": 399.2856156709968,
+   "gaia": {
+    "source_id": "1648331310592302720",
+    "g": 17.601109,
+    "sep_arcsec": 0.46,
+    "pmra_masyr": -6.299722681522314,
+    "pmdec_masyr": -20.514355352372966,
+    "parallax_mas": 0.40443694637264327,
+    "ruwe": 1.026256
+   },
+   "class": "static",
+   "id": "s0045",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.11444343545833,
+     "dec": 66.80549215630192
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.1146857236606,
+     "dec": 66.80546791217887
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1144512484023,
+     "dec": 66.80556165256955
+    }
+   ]
+  },
+  {
+   "ra": 248.17939185580425,
+   "dec": 66.80800747203419,
+   "best_band": "short",
+   "stack_snr": 6.5,
+   "det_snr": {
+    "short": 6.5
+   },
+   "forced_snr": {
+    "short": 6.5,
+    "mid": 2.7,
+    "cold": 0.8
+   },
+   "flux_ujy": {
+    "short": 274.0,
+    "mid": 140.6,
+    "cold": 32.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 11,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 1.3,
+   "pm_over_error": 1.81,
+   "pm_arcsec_yr": 1.1511,
+   "pmra_masyr": -705.1414003743524,
+   "pmdec_masyr": -909.7970813273445,
+   "pmra_err_masyr": 635.7707688506378,
+   "pmdec_err_masyr": 635.7707688506378,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 0.8458291622831431,
+   "baseline_days": 268.4588586919999,
+   "gaia": {
+    "source_id": "1648331383608166400",
+    "g": 18.3004,
+    "sep_arcsec": 0.09,
+    "pmra_masyr": -4.223914093294442,
+    "pmdec_masyr": -5.409132227439945,
+    "parallax_mas": 0.3116391641201009,
+    "ruwe": 1.1625603
+   },
+   "class": "static",
+   "id": "s0050",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.17968043234112,
+     "dec": 66.8080252274257
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.17939185580425,
+     "dec": 66.80800747203419
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.17896559818013,
+     "dec": 66.80804119275274
+    }
+   ]
+  },
+  {
+   "ra": 248.34913746644608,
+   "dec": 66.76687208490647,
+   "best_band": "short",
+   "stack_snr": 9.8,
+   "det_snr": {
+    "short": 9.8,
+    "mid": 3.1
+   },
+   "forced_snr": {
+    "short": 9.8,
+    "mid": 3.1,
+    "cold": 0.9
+   },
+   "flux_ujy": {
+    "short": 403.0,
+    "mid": 167.2,
+    "cold": 57.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 56,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.1,
+   "pm_over_error": 1.07,
+   "pm_arcsec_yr": 0.1758,
+   "pmra_masyr": -125.94604311686363,
+   "pmdec_masyr": -122.68051590184074,
+   "pmra_err_masyr": 163.63114992583763,
+   "pmdec_err_masyr": 163.9304831239044,
+   "parallax_mas": -114.56128094080243,
+   "parallax_err_mas": 72.80458524630647,
+   "chi2r": 0.6035982445113015,
+   "baseline_days": 422.11753725699964,
+   "gaia": {
+    "source_id": "1648328566109635328",
+    "g": 17.209986,
+    "sep_arcsec": 0.3,
+    "pmra_masyr": -7.640216007175085,
+    "pmdec_masyr": -5.082199633966842,
+    "parallax_mas": 0.41552460970148536,
+    "ruwe": 1.0398875
+   },
+   "class": "static",
+   "id": "s0037",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.3490872059878,
+     "dec": 66.76687037492934
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.34913746644608,
+     "dec": 66.76687208490647
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.3490950696259,
+     "dec": 66.76686138473073
+    }
+   ]
+  },
+  {
+   "ra": 248.198272905824,
+   "dec": 66.69021984171748,
+   "best_band": "short",
+   "stack_snr": 6.9,
+   "det_snr": {
+    "short": 6.9,
+    "mid": 4.7,
+    "cold": 3.8
+   },
+   "forced_snr": {
+    "short": 6.9,
+    "mid": 4.7,
+    "cold": 3.5
+   },
+   "flux_ujy": {
+    "short": 246.0,
+    "mid": 265.7,
+    "cold": 236.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 49,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 1.02,
+   "pm_over_error": 1.16,
+   "pm_arcsec_yr": 0.3114,
+   "pmra_masyr": 277.73452253765174,
+   "pmdec_masyr": 140.78561623565253,
+   "pmra_err_masyr": 266.78819897529377,
+   "pmdec_err_masyr": 270.4664668904942,
+   "parallax_mas": -136.38558494670704,
+   "parallax_err_mas": 113.81330009510265,
+   "chi2r": 1.4382876349096891,
+   "baseline_days": 425.9174048030036,
+   "class": "static",
+   "id": "s0048",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1987244927255,
+     "dec": 66.69014392307122
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.198272905824,
+     "dec": 66.69021984171748
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1987182414484,
+     "dec": 66.69023206072191
+    }
+   ]
+  },
+  {
+   "ra": 248.2156842957289,
+   "dec": 66.67991313587446,
+   "best_band": "short",
+   "stack_snr": 5.9,
+   "det_snr": {
+    "short": 5.9
+   },
+   "forced_snr": {
+    "short": 5.9,
+    "mid": 2.8,
+    "cold": 1.3
+   },
+   "flux_ujy": {
+    "short": 196.9,
+    "mid": 142.6,
+    "cold": 51.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 24,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.97,
+   "pm_over_error": 1.33,
+   "pm_arcsec_yr": 0.4702,
+   "pmra_masyr": 169.22332685131684,
+   "pmdec_masyr": -438.73067543892984,
+   "pmra_err_masyr": 350.755337431777,
+   "pmdec_err_masyr": 353.6460961334137,
+   "parallax_mas": -150.4573793551528,
+   "parallax_err_mas": 157.698678742132,
+   "chi2r": 1.1191242865273268,
+   "baseline_days": 425.9174048030036,
+   "class": "static",
+   "id": "s0053",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.21542396672876,
+     "dec": 66.68001786370417
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.2156842957289,
+     "dec": 66.67991313587446
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.21551187774043,
+     "dec": 66.67998554700903
+    }
+   ]
+  },
+  {
+   "ra": 248.19104432165176,
+   "dec": 66.79811522661898,
+   "best_band": "short",
+   "stack_snr": 7.0,
+   "det_snr": {
+    "short": 7.0,
+    "mid": 3.3
+   },
+   "forced_snr": {
+    "short": 7.0,
+    "mid": 3.3,
+    "cold": 2.1
+   },
+   "flux_ujy": {
+    "short": 329.1,
+    "mid": 252.6,
+    "cold": 181.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 8,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.89,
+   "pm_over_error": 1.26,
+   "pm_arcsec_yr": 1.0367,
+   "pmra_masyr": 860.1696569007432,
+   "pmdec_masyr": -578.6205825652291,
+   "pmra_err_masyr": 819.7603034509012,
+   "pmdec_err_masyr": 819.7603034509012,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 1.237998821590021,
+   "baseline_days": 268.4588586919999,
+   "class": "static",
+   "id": "s0044",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1911322795557,
+     "dec": 66.7980547158337
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.19104432165176,
+     "dec": 66.79811522661898
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.19078630875157,
+     "dec": 66.79811140644627
+    }
+   ]
+  },
+  {
+   "ra": 248.10449776671663,
+   "dec": 66.69815610828985,
+   "best_band": "short",
+   "stack_snr": 21.4,
+   "det_snr": {
+    "short": 21.4,
+    "mid": 9.7,
+    "cold": 5.5
+   },
+   "forced_snr": {
+    "short": 21.4,
+    "mid": 9.5,
+    "cold": 5.5
+   },
+   "flux_ujy": {
+    "short": 1021.2,
+    "mid": 629.3,
+    "cold": 390.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 80,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.85,
+   "pm_over_error": 1.58,
+   "pm_arcsec_yr": 0.1431,
+   "pmra_masyr": 115.45640366788999,
+   "pmdec_masyr": -84.5544380947242,
+   "pmra_err_masyr": 89.93534039642091,
+   "pmdec_err_masyr": 91.53488082439648,
+   "parallax_mas": 37.80669931632492,
+   "parallax_err_mas": 41.763527880347674,
+   "chi2r": 0.43934527628354275,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648326710683741440",
+    "g": 17.225698,
+    "sep_arcsec": 0.29,
+    "pmra_masyr": 17.232256849182473,
+    "pmdec_masyr": -10.86941587482343,
+    "parallax_mas": 1.7195640428889316,
+    "ruwe": 1.0543275
+   },
+   "class": "static",
+   "id": "s0014",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.10437029332707,
+     "dec": 66.69821346682869
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.10449776671663,
+     "dec": 66.69815610828985
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.10455553050247,
+     "dec": 66.6982758857615
+    }
+   ]
+  },
+  {
+   "ra": 248.1591750877302,
+   "dec": 66.69800464543141,
+   "best_band": "short",
+   "stack_snr": 8.5,
+   "det_snr": {
+    "short": 8.5,
+    "mid": 3.8
+   },
+   "forced_snr": {
+    "short": 8.5,
+    "mid": 3.8,
+    "cold": 2.0
+   },
+   "flux_ujy": {
+    "short": 367.5,
+    "mid": 184.7,
+    "cold": 118.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 39,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.8,
+   "pm_over_error": 0.29,
+   "pm_arcsec_yr": 0.0684,
+   "pmra_masyr": 43.05355673889301,
+   "pmdec_masyr": -53.14004044894933,
+   "pmra_err_masyr": 229.33338941757796,
+   "pmdec_err_masyr": 238.98798466010885,
+   "parallax_mas": 186.4411911138723,
+   "parallax_err_mas": 112.67775368298977,
+   "chi2r": 0.7666345056764224,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648326878185997312",
+    "g": 18.337166,
+    "sep_arcsec": 0.51,
+    "pmra_masyr": -6.299532175576402,
+    "pmdec_masyr": 0.6604918748321874,
+    "parallax_mas": 0.7555498416771868,
+    "ruwe": 1.0031875
+   },
+   "class": "static",
+   "id": "s0041",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1594217201545,
+     "dec": 66.69804256349232
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.1591750877302,
+     "dec": 66.69800464543141
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.15934512627868,
+     "dec": 66.69811387760446
+    }
+   ]
+  },
+  {
+   "ra": 248.01008034468109,
+   "dec": 66.78548105785171,
+   "best_band": "short",
+   "stack_snr": 85.5,
+   "det_snr": {
+    "short": 85.5,
+    "mid": 33.4,
+    "cold": 28.8
+   },
+   "forced_snr": {
+    "short": 85.5,
+    "mid": 33.4,
+    "cold": 28.8
+   },
+   "flux_ujy": {
+    "short": 10097.4,
+    "mid": 4569.1,
+    "cold": 2288.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 93,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.66,
+   "pm_over_error": 1.51,
+   "pm_arcsec_yr": 0.0712,
+   "pmra_masyr": 3.917367550405097,
+   "pmdec_masyr": -71.10216091159604,
+   "pmra_err_masyr": 46.86601436961754,
+   "pmdec_err_masyr": 47.02520638642595,
+   "parallax_mas": 0.8267631335787187,
+   "parallax_err_mas": 21.49768596218172,
+   "chi2r": 0.39614734230167303,
+   "baseline_days": 425.9159125579972,
+   "gaia": {
+    "source_id": "1648331074370509952",
+    "g": 13.639153,
+    "sep_arcsec": 0.18,
+    "pmra_masyr": -3.242072611300392,
+    "pmdec_masyr": 5.768922654454757,
+    "parallax_mas": 0.9730611986227314,
+    "ruwe": 0.9047951
+   },
+   "class": "static",
+   "id": "s0002",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.0101535591872,
+     "dec": 66.78559130349915
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.01008034468109,
+     "dec": 66.78548105785171
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.01024304840433,
+     "dec": 66.78557226184186
+    }
+   ]
+  },
+  {
+   "ra": 248.28712510079876,
+   "dec": 66.73282024696577,
+   "best_band": "short",
+   "stack_snr": 13.3,
+   "det_snr": {
+    "short": 13.3,
+    "mid": 8.0,
+    "cold": 6.1
+   },
+   "forced_snr": {
+    "short": 13.3,
+    "mid": 7.4,
+    "cold": 6.1
+   },
+   "flux_ujy": {
+    "short": 676.6,
+    "mid": 524.1,
+    "cold": 387.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 52,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.66,
+   "pm_over_error": 1.46,
+   "pm_arcsec_yr": 0.271,
+   "pmra_masyr": 178.68770358591647,
+   "pmdec_masyr": -203.69080638831335,
+   "pmra_err_masyr": 181.02852343701412,
+   "pmdec_err_masyr": 189.05295493764854,
+   "parallax_mas": 29.461743072176574,
+   "parallax_err_mas": 83.85312173370781,
+   "chi2r": 1.0887947657858537,
+   "baseline_days": 422.11753725699964,
+   "gaia": {
+    "source_id": "1648326981265230848",
+    "g": 17.730268,
+    "sep_arcsec": 1.65,
+    "pmra_masyr": -2.6679004257189716,
+    "pmdec_masyr": -1.3771353722568347,
+    "parallax_mas": 0.22031922071916854,
+    "ruwe": 1.0381994
+   },
+   "class": "static",
+   "id": "s0022",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.28734246450603,
+     "dec": 66.73286193927626
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.28712510079876,
+     "dec": 66.73282024696577
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.28726989541948,
+     "dec": 66.7328175016202
+    }
+   ]
+  },
+  {
+   "ra": 248.1126693038329,
+   "dec": 66.68015750828236,
+   "best_band": "short",
+   "stack_snr": 11.3,
+   "det_snr": {
+    "short": 11.3,
+    "mid": 5.8,
+    "cold": 3.1
+   },
+   "forced_snr": {
+    "short": 11.3,
+    "mid": 5.3,
+    "cold": 2.8
+   },
+   "flux_ujy": {
+    "short": 417.6,
+    "mid": 275.9,
+    "cold": 160.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 40,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.63,
+   "pm_over_error": 1.16,
+   "pm_arcsec_yr": 0.2029,
+   "pmra_masyr": -123.25299570740121,
+   "pmdec_masyr": 161.126847808314,
+   "pmra_err_masyr": 174.22703406937273,
+   "pmdec_err_masyr": 174.22646424498578,
+   "parallax_mas": -67.85297803344875,
+   "parallax_err_mas": 80.26975659781343,
+   "chi2r": 1.1933142783090493,
+   "baseline_days": 405.39934649300267,
+   "gaia": {
+    "source_id": "1648326470166267392",
+    "g": 18.078213,
+    "sep_arcsec": 0.52,
+    "pmra_masyr": -8.941774628718981,
+    "pmdec_masyr": -13.703252838602024,
+    "parallax_mas": 0.7926169751704457,
+    "ruwe": 1.0773336
+   },
+   "class": "static",
+   "id": "s0028",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.11288968873845,
+     "dec": 66.68022288807472
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.1126693038329,
+     "dec": 66.68015750828236
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.11240587642536,
+     "dec": 66.68025214675039
+    }
+   ]
+  },
+  {
+   "ra": 248.26851685399598,
+   "dec": 66.79877736992762,
+   "best_band": "short",
+   "stack_snr": 9.3,
+   "det_snr": {
+    "short": 9.3,
+    "mid": 4.9,
+    "cold": 4.0
+   },
+   "forced_snr": {
+    "short": 9.3,
+    "mid": 4.9,
+    "cold": 4.0
+   },
+   "flux_ujy": {
+    "short": 403.2,
+    "mid": 359.5,
+    "cold": 238.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 42,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.63,
+   "pm_over_error": 1.44,
+   "pm_arcsec_yr": 0.3292,
+   "pmra_masyr": 183.6004535932354,
+   "pmdec_masyr": -273.26911137627906,
+   "pmra_err_masyr": 222.5683667370561,
+   "pmdec_err_masyr": 230.8706032935668,
+   "parallax_mas": 43.370738444762026,
+   "parallax_err_mas": 102.69277291314421,
+   "chi2r": 1.069098495545718,
+   "baseline_days": 422.11753725699964,
+   "class": "static",
+   "id": "s0034",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.2684883372304,
+     "dec": 66.79883870131818
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.26851685399598,
+     "dec": 66.79877736992762
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.26839466176892,
+     "dec": 66.79885825541582
+    }
+   ]
+  },
+  {
+   "ra": 247.98665459701428,
+   "dec": 66.75080219516488,
+   "best_band": "short",
+   "stack_snr": 10.3,
+   "det_snr": {
+    "short": 10.3,
+    "mid": 3.5
+   },
+   "forced_snr": {
+    "short": 10.3,
+    "mid": 3.2,
+    "cold": 2.4
+   },
+   "flux_ujy": {
+    "short": 388.7,
+    "mid": 154.9,
+    "cold": 158.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 49,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.62,
+   "pm_over_error": 0.28,
+   "pm_arcsec_yr": 0.0541,
+   "pmra_masyr": -42.82829723202258,
+   "pmdec_masyr": -33.03470894068701,
+   "pmra_err_masyr": 189.76700398963396,
+   "pmdec_err_masyr": 202.11461917897233,
+   "parallax_mas": 120.19377511316198,
+   "parallax_err_mas": 84.7358477980985,
+   "chi2r": 0.5514278569262845,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648330692116979200",
+    "g": 17.480541,
+    "sep_arcsec": 0.41,
+    "pmra_masyr": -0.9414942183851549,
+    "pmdec_masyr": 0.5650830218328272,
+    "parallax_mas": 0.38171757061701633,
+    "ruwe": 1.0417593
+   },
+   "class": "static",
+   "id": "s0038",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 247.98665605642753,
+     "dec": 66.75089163276954
+    },
+    {
+     "visit": "visit-2",
+     "ra": 247.98665459701428,
+     "dec": 66.75080219516488
+    },
+    {
+     "visit": "visit-3",
+     "ra": 247.98668346015145,
+     "dec": 66.75098829127037
+    }
+   ]
+  },
+  {
+   "ra": 248.06131512429238,
+   "dec": 66.77326823676955,
+   "best_band": "short",
+   "stack_snr": 9.8,
+   "det_snr": {
+    "short": 9.8,
+    "mid": 3.6,
+    "cold": 3.0
+   },
+   "forced_snr": {
+    "short": 9.8,
+    "mid": 3.6,
+    "cold": 2.9
+   },
+   "flux_ujy": {
+    "short": 427.0,
+    "mid": 244.0,
+    "cold": 218.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 16,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.59,
+   "pm_over_error": 1.09,
+   "pm_arcsec_yr": 0.4916,
+   "pmra_masyr": 323.4839382639911,
+   "pmdec_masyr": -370.1695062370832,
+   "pmra_err_masyr": 451.9253290420974,
+   "pmdec_err_masyr": 451.9253290420974,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 0.6599684203302173,
+   "baseline_days": 268.4588586919999,
+   "gaia": {
+    "source_id": "1648330829555947136",
+    "g": 18.09753,
+    "sep_arcsec": 0.33,
+    "pmra_masyr": -5.6478485159666185,
+    "pmdec_masyr": -39.26026407115073,
+    "parallax_mas": 1.0987472897384722,
+    "ruwe": 0.98749405
+   },
+   "class": "static",
+   "id": "s0036",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.0618281142757,
+     "dec": 66.77317444925683
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.06131512429238,
+     "dec": 66.77326823676955
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.0616669370777,
+     "dec": 66.77335163128528
+    }
+   ]
+  },
+  {
+   "ra": 248.0226117694261,
+   "dec": 66.75875192707522,
+   "best_band": "short",
+   "stack_snr": 11.8,
+   "det_snr": {
+    "short": 11.8,
+    "mid": 3.8
+   },
+   "forced_snr": {
+    "short": 11.8,
+    "mid": 3.7,
+    "cold": 1.3
+   },
+   "flux_ujy": {
+    "short": 502.5,
+    "mid": 207.1,
+    "cold": 47.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 36,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.57,
+   "pm_over_error": 0.35,
+   "pm_arcsec_yr": 0.084,
+   "pmra_masyr": 24.11466819968011,
+   "pmdec_masyr": 80.50954123211295,
+   "pmra_err_masyr": 229.54941899184593,
+   "pmdec_err_masyr": 242.75590637243118,
+   "parallax_mas": 120.36464743535376,
+   "parallax_err_mas": 101.24082146252704,
+   "chi2r": 0.5530349588288835,
+   "baseline_days": 405.39934649300267,
+   "gaia": {
+    "source_id": "1648330799492603264",
+    "g": 17.097956,
+    "sep_arcsec": 0.63,
+    "pmra_masyr": -4.10522754915152,
+    "pmdec_masyr": 0.023644258577931714,
+    "parallax_mas": 0.0997468454816992,
+    "ruwe": 0.99801064
+   },
+   "class": "static",
+   "id": "s0032",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.02277946920088,
+     "dec": 66.75887574420224
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.0226117694261,
+     "dec": 66.75875192707522
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.02254807369408,
+     "dec": 66.75894044130435
+    }
+   ]
+  },
+  {
+   "ra": 248.1523546837685,
+   "dec": 66.81178266274428,
+   "best_band": "short",
+   "stack_snr": 16.6,
+   "det_snr": {
+    "short": 16.6,
+    "mid": 6.9,
+    "cold": 5.4
+   },
+   "forced_snr": {
+    "short": 16.6,
+    "mid": 6.9,
+    "cold": 5.0
+   },
+   "flux_ujy": {
+    "short": 821.1,
+    "mid": 524.9,
+    "cold": 289.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 62,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.56,
+   "pm_over_error": 0.36,
+   "pm_arcsec_yr": 0.0435,
+   "pmra_masyr": 43.4371710779621,
+   "pmdec_masyr": 1.6359807494422496,
+   "pmra_err_masyr": 120.19212292807083,
+   "pmdec_err_masyr": 124.71330571138668,
+   "parallax_mas": -70.99364248399401,
+   "parallax_err_mas": 54.1660990185343,
+   "chi2r": 0.3394969591490706,
+   "baseline_days": 422.11753725699964,
+   "gaia": {
+    "source_id": "1648331417967903488",
+    "g": 17.365046,
+    "sep_arcsec": 0.12,
+    "pmra_masyr": -35.41733985964304,
+    "pmdec_masyr": -38.28060279218729,
+    "parallax_mas": 1.4709019875000369,
+    "ruwe": 0.9791805
+   },
+   "class": "static",
+   "id": "s0020",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.15231185854245,
+     "dec": 66.81184263848995
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.1523546837685,
+     "dec": 66.81178266274428
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.152356280359,
+     "dec": 66.81173874381244
+    }
+   ]
+  },
+  {
+   "ra": 248.0814729659414,
+   "dec": 66.70081544455536,
+   "best_band": "short",
+   "stack_snr": 11.6,
+   "det_snr": {
+    "short": 11.6,
+    "mid": 4.5
+   },
+   "forced_snr": {
+    "short": 11.6,
+    "mid": 4.4,
+    "cold": 2.2
+   },
+   "flux_ujy": {
+    "short": 460.0,
+    "mid": 236.2,
+    "cold": 117.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 61,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.55,
+   "pm_over_error": 1.18,
+   "pm_arcsec_yr": 0.1685,
+   "pmra_masyr": 15.218210696032527,
+   "pmdec_masyr": -167.8238142432779,
+   "pmra_err_masyr": 140.90937909795005,
+   "pmdec_err_masyr": 143.42093522209507,
+   "parallax_mas": 58.41608902710064,
+   "parallax_err_mas": 61.12656107653619,
+   "chi2r": 0.5517954267234739,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648326745043478016",
+    "g": 17.67003,
+    "sep_arcsec": 0.26,
+    "pmra_masyr": -1.5924304158210698,
+    "pmdec_masyr": -8.820151555847957,
+    "parallax_mas": 0.7299785385184376,
+    "ruwe": 0.9731706
+   },
+   "class": "static",
+   "id": "s0027",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.0814948500719,
+     "dec": 66.70078638829281
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.0814729659414,
+     "dec": 66.70081544455536
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.08175111328282,
+     "dec": 66.70077878358437
+    }
+   ]
+  },
+  {
+   "ra": 248.21309474604195,
+   "dec": 66.70537711888561,
+   "best_band": "short",
+   "stack_snr": 150.2,
+   "det_snr": {
+    "short": 150.2,
+    "mid": 55.9,
+    "cold": 44.0
+   },
+   "forced_snr": {
+    "short": 150.2,
+    "mid": 55.9,
+    "cold": 44.0
+   },
+   "flux_ujy": {
+    "short": 27053.5,
+    "mid": 10905.4,
+    "cold": 4923.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 102,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.48,
+   "pm_over_error": 1.28,
+   "pm_arcsec_yr": 0.0489,
+   "pmra_masyr": -33.254014357295155,
+   "pmdec_masyr": 35.81369360103128,
+   "pmra_err_masyr": 38.08229825238837,
+   "pmdec_err_masyr": 38.2062380121874,
+   "parallax_mas": 3.864889234330552,
+   "parallax_err_mas": 19.423003768537647,
+   "chi2r": 0.5326993352079383,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648326843826192768",
+    "g": 12.515624,
+    "sep_arcsec": 0.17,
+    "pmra_masyr": -3.6806475589343055,
+    "pmdec_masyr": 2.296311229555666,
+    "parallax_mas": 1.7444826212879039,
+    "ruwe": 1.1200857
+   },
+   "class": "static",
+   "id": "s0001",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.2131103850447,
+     "dec": 66.70543442185352
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.21309474604195,
+     "dec": 66.70537711888561
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.21307105686557,
+     "dec": 66.70547564045177
+    }
+   ]
+  },
+  {
+   "ra": 248.25625145864998,
+   "dec": 66.69842635530537,
+   "best_band": "short",
+   "stack_snr": 54.1,
+   "det_snr": {
+    "short": 54.1,
+    "mid": 19.7,
+    "cold": 9.9
+   },
+   "forced_snr": {
+    "short": 54.1,
+    "mid": 19.7,
+    "cold": 11.8
+   },
+   "flux_ujy": {
+    "short": 4179.7,
+    "mid": 1736.4,
+    "cold": 829.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 81,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.42,
+   "pm_over_error": 0.47,
+   "pm_arcsec_yr": 0.0698,
+   "pmra_masyr": -53.37088072612612,
+   "pmdec_masyr": 44.940699437549185,
+   "pmra_err_masyr": 147.1429406226018,
+   "pmdec_err_masyr": 147.17250977198717,
+   "parallax_mas": -78.20978513293306,
+   "parallax_err_mas": 68.1308794013774,
+   "chi2r": 0.16117356317696244,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1636317329289320960",
+    "g": 14.550319,
+    "sep_arcsec": 0.97,
+    "pmra_masyr": -29.035404692499686,
+    "pmdec_masyr": -16.81587195538858,
+    "parallax_mas": 1.070232848993971,
+    "ruwe": 1.0581349
+   },
+   "class": "static",
+   "id": "s0008",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.25646815442173,
+     "dec": 66.69844820646902
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.25625145864998,
+     "dec": 66.69842635530537
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.25642102007416,
+     "dec": 66.69847569699809
+    }
+   ]
+  },
+  {
+   "ra": 248.1878782697696,
+   "dec": 66.7819321964068,
+   "best_band": "short",
+   "stack_snr": 21.0,
+   "det_snr": {
+    "short": 21.0
+   },
+   "forced_snr": {
+    "short": 21.0,
+    "mid": 9.4,
+    "cold": 7.7
+   },
+   "flux_ujy": {
+    "short": 2538.7,
+    "mid": 1675.5,
+    "cold": 1143.9
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 11,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.42,
+   "pm_over_error": 0.88,
+   "pm_arcsec_yr": 0.3519,
+   "pmra_masyr": -273.7691669926048,
+   "pmdec_masyr": -221.07286934557132,
+   "pmra_err_masyr": 397.71399324916143,
+   "pmdec_err_masyr": 397.71399324916143,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 0.4174394056862177,
+   "baseline_days": 268.4588586919999,
+   "gaia": {
+    "source_id": "1648328325591451776",
+    "g": 15.431207,
+    "sep_arcsec": 0.54,
+    "pmra_masyr": -0.8037988363895434,
+    "pmdec_masyr": -9.282035576536483,
+    "parallax_mas": 0.46635914741181633,
+    "ruwe": 1.0169806
+   },
+   "class": "static",
+   "id": "s0099",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1878782697696,
+     "dec": 66.7819321964068
+    }
+   ]
+  },
+  {
+   "ra": 248.33425770171328,
+   "dec": 66.80531764328217,
+   "best_band": "short",
+   "stack_snr": 10.6,
+   "det_snr": {
+    "short": 10.6,
+    "mid": 3.7
+   },
+   "forced_snr": {
+    "short": 10.6,
+    "mid": 3.7,
+    "cold": 2.8
+   },
+   "flux_ujy": {
+    "short": 464.2,
+    "mid": 214.7,
+    "cold": 133.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 21,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.42,
+   "pm_over_error": 1.17,
+   "pm_arcsec_yr": 0.2334,
+   "pmra_masyr": -65.8961332501543,
+   "pmdec_masyr": 223.88665731607293,
+   "pmra_err_masyr": 197.12724361194074,
+   "pmdec_err_masyr": 199.61537166010643,
+   "parallax_mas": -69.98534317714909,
+   "parallax_err_mas": 111.04373445422429,
+   "chi2r": 0.8883291462058022,
+   "baseline_days": 386.32299255699763,
+   "gaia": {
+    "source_id": "1648329695684603904",
+    "g": 17.475224,
+    "sep_arcsec": 0.73,
+    "pmra_masyr": -1.5209628550385903,
+    "pmdec_masyr": 4.264924681547253,
+    "parallax_mas": 0.45324458496530123,
+    "ruwe": 1.0276141
+   },
+   "class": "static",
+   "id": "s0030",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.33417785548667,
+     "dec": 66.80534536154516
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.33425770171328,
+     "dec": 66.80531764328217
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.33411097770363,
+     "dec": 66.80537965670683
+    }
+   ]
+  },
+  {
+   "ra": 248.21976644675775,
+   "dec": 66.72665835956317,
+   "best_band": "short",
+   "stack_snr": 77.5,
+   "det_snr": {
+    "short": 77.5,
+    "mid": 27.2,
+    "cold": 19.9
+   },
+   "forced_snr": {
+    "short": 77.5,
+    "mid": 27.2,
+    "cold": 19.9
+   },
+   "flux_ujy": {
+    "short": 8947.3,
+    "mid": 3787.1,
+    "cold": 1853.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 74,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.39,
+   "pm_over_error": 0.8,
+   "pm_arcsec_yr": 0.0692,
+   "pmra_masyr": -67.58979441205068,
+   "pmdec_masyr": 14.693185751433518,
+   "pmra_err_masyr": 85.81276410274155,
+   "pmdec_err_masyr": 89.23765071344731,
+   "parallax_mas": -36.45723180342219,
+   "parallax_err_mas": 40.0659904363042,
+   "chi2r": 0.33876744106564705,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648327226079824640",
+    "g": 13.752996,
+    "sep_arcsec": 0.18,
+    "pmra_masyr": -0.41529292007097096,
+    "pmdec_masyr": -3.9070391767340262,
+    "parallax_mas": 0.9533800235159786,
+    "ruwe": 1.0002909
+   },
+   "class": "static",
+   "id": "s0004",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.21988801664048,
+     "dec": 66.7267738280049
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.21976644675775,
+     "dec": 66.72665835956317
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.21964264199042,
+     "dec": 66.72673780535158
+    }
+   ]
+  },
+  {
+   "ra": 248.32551710619197,
+   "dec": 66.8262062044585,
+   "best_band": "short",
+   "stack_snr": 7.3,
+   "det_snr": {
+    "short": 7.3,
+    "cold": 3.4
+   },
+   "forced_snr": {
+    "short": 7.3,
+    "cold": 3.4
+   },
+   "flux_ujy": {
+    "short": 457.2,
+    "mid": null,
+    "cold": 237.3
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 11,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.37,
+   "pm_over_error": 0.6,
+   "pm_arcsec_yr": 0.3839,
+   "pmra_masyr": -324.6312911796257,
+   "pmdec_masyr": 204.99349338380284,
+   "pmra_err_masyr": 643.840617459739,
+   "pmdec_err_masyr": 643.840617459739,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 1.8876558691569407,
+   "baseline_days": 216.720938749997,
+   "class": "static",
+   "id": "s0057",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.32558638517511,
+     "dec": 66.8262383514562
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.32551710619197,
+     "dec": 66.8262062044585
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.32549077690626,
+     "dec": 66.8263494168759
+    }
+   ]
+  },
+  {
+   "ra": 248.28179507494463,
+   "dec": 66.72477336716769,
+   "best_band": "short",
+   "stack_snr": 5.7,
+   "det_snr": {
+    "short": 5.7,
+    "mid": 3.3
+   },
+   "forced_snr": {
+    "short": 5.7,
+    "mid": 3.3,
+    "cold": 1.5
+   },
+   "flux_ujy": {
+    "short": 241.7,
+    "mid": 127.1,
+    "cold": 29.6
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 15,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.26,
+   "pm_over_error": 0.67,
+   "pm_arcsec_yr": 0.2994,
+   "pmra_masyr": 293.20682149532564,
+   "pmdec_masyr": -60.61825983945095,
+   "pmra_err_masyr": 444.6185635272886,
+   "pmdec_err_masyr": 444.6185635272886,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 0.6924543357999773,
+   "baseline_days": 267.0334886799974,
+   "class": "static",
+   "id": "s0049",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.2818010457028,
+     "dec": 66.72479992433921
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.28179507494463,
+     "dec": 66.72477336716769
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.2816609685428,
+     "dec": 66.72476952501614
+    }
+   ]
+  },
+  {
+   "ra": 247.96769791393888,
+   "dec": 66.76656396953487,
+   "best_band": "mid",
+   "stack_snr": 5.1,
+   "det_snr": {
+    "short": 4.6,
+    "mid": 5.1
+   },
+   "forced_snr": {
+    "short": 4.6,
+    "mid": 5.1,
+    "cold": 2.3
+   },
+   "flux_ujy": {
+    "short": 126.2,
+    "mid": 259.6,
+    "cold": 128.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 15,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [
+    "near_edge"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.21,
+   "pm_over_error": 0.91,
+   "pm_arcsec_yr": 0.4472,
+   "pmra_masyr": 406.65093694856665,
+   "pmdec_masyr": 186.04597047265182,
+   "pmra_err_masyr": 493.78279489329816,
+   "pmdec_err_masyr": 472.34712066834635,
+   "parallax_mas": -94.84690713278587,
+   "parallax_err_mas": 184.49330363416797,
+   "chi2r": 0.7815580335794999,
+   "baseline_days": 422.1790612729965,
+   "class": "static",
+   "id": "s0061",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 247.96804349024083,
+     "dec": 66.7665583686609
+    },
+    {
+     "visit": "visit-2",
+     "ra": 247.96769791393888,
+     "dec": 66.76656396953487
+    },
+    {
+     "visit": "visit-3",
+     "ra": 247.9676473630225,
+     "dec": 66.76666865148
+    }
+   ]
+  },
+  {
+   "ra": 248.29361031250343,
+   "dec": 66.77085468088849,
+   "best_band": "short",
+   "stack_snr": 20.8,
+   "det_snr": {
+    "short": 20.8,
+    "mid": 6.3
+   },
+   "forced_snr": {
+    "short": 20.8,
+    "mid": 6.2,
+    "cold": 2.9
+   },
+   "flux_ujy": {
+    "short": 1183.2,
+    "mid": 418.3,
+    "cold": 237.4
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 51,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.19,
+   "pm_over_error": 0.89,
+   "pm_arcsec_yr": 0.1089,
+   "pmra_masyr": 107.38842639068193,
+   "pmdec_masyr": 17.91207492198728,
+   "pmra_err_masyr": 121.90556719930291,
+   "pmdec_err_masyr": 126.18530367434275,
+   "parallax_mas": 1.9196160009894943,
+   "parallax_err_mas": 55.27757982954187,
+   "chi2r": 0.5848224738574164,
+   "baseline_days": 422.11753725699964,
+   "gaia": {
+    "source_id": "1648328806627794688",
+    "g": 15.976971,
+    "sep_arcsec": 0.46,
+    "pmra_masyr": -1.79966596477985,
+    "pmdec_masyr": -2.4970236829964807,
+    "parallax_mas": 0.47248274447672123,
+    "ruwe": 1.0216293
+   },
+   "class": "static",
+   "id": "s0016",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.29396449746326,
+     "dec": 66.77090510290053
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.29361031250343,
+     "dec": 66.77085468088849
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.29397722194506,
+     "dec": 66.7708182519801
+    }
+   ]
+  },
+  {
+   "ra": 248.3142436369127,
+   "dec": 66.72566920063954,
+   "best_band": "short",
+   "stack_snr": 13.3,
+   "det_snr": {
+    "short": 13.3,
+    "mid": 3.8
+   },
+   "forced_snr": {
+    "short": 13.3,
+    "mid": 3.8,
+    "cold": 2.3
+   },
+   "flux_ujy": {
+    "short": 598.3,
+    "mid": 221.2,
+    "cold": 56.4
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 62,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.14,
+   "pm_over_error": 0.39,
+   "pm_arcsec_yr": 0.053,
+   "pmra_masyr": 34.20125261505817,
+   "pmdec_masyr": -40.52427439770277,
+   "pmra_err_masyr": 135.31432725221865,
+   "pmdec_err_masyr": 138.05377670318123,
+   "parallax_mas": -35.58345293624995,
+   "parallax_err_mas": 57.870335118199016,
+   "chi2r": 0.6437042760802669,
+   "baseline_days": 422.11753725699964,
+   "gaia": {
+    "source_id": "1636318841117809792",
+    "g": 16.775564,
+    "sep_arcsec": 0.12,
+    "pmra_masyr": -9.044447153466233,
+    "pmdec_masyr": 0.7391790190014177,
+    "parallax_mas": 0.5228841088702321,
+    "ruwe": 0.9007233
+   },
+   "class": "static",
+   "id": "s0026",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.31405805898103,
+     "dec": 66.725689934992
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.3142436369127,
+     "dec": 66.72566920063954
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.3141883846226,
+     "dec": 66.72563604780616
+    }
+   ]
+  },
+  {
+   "ra": 248.23839796347298,
+   "dec": 66.77691215816122,
+   "best_band": "short",
+   "stack_snr": 53.8,
+   "det_snr": {
+    "short": 53.8,
+    "mid": 15.9,
+    "cold": 12.5
+   },
+   "forced_snr": {
+    "short": 53.8,
+    "mid": 15.9,
+    "cold": 12.5
+   },
+   "flux_ujy": {
+    "short": 5178.6,
+    "mid": 1802.7,
+    "cold": 1179.1
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 52,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.13,
+   "pm_over_error": 0.37,
+   "pm_arcsec_yr": 0.0451,
+   "pmra_masyr": 3.039545646332086,
+   "pmdec_masyr": 45.010609052982524,
+   "pmra_err_masyr": 109.07474071904875,
+   "pmdec_err_masyr": 120.9691580229815,
+   "parallax_mas": 22.529151697171464,
+   "parallax_err_mas": 51.24650733316798,
+   "chi2r": 0.3384012873214958,
+   "baseline_days": 422.11753725699964,
+   "gaia": {
+    "source_id": "1648328085073287040",
+    "g": 14.204461,
+    "sep_arcsec": 0.14,
+    "pmra_masyr": -1.2311874833536707,
+    "pmdec_masyr": 3.8996422477803963,
+    "parallax_mas": 0.8488341314919459,
+    "ruwe": 1.0067291
+   },
+   "class": "static",
+   "id": "s0007",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.23825192663185,
+     "dec": 66.77698763380576
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.23839796347298,
+     "dec": 66.77691215816122
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.23826854301674,
+     "dec": 66.77698692954542
+    }
+   ]
+  },
+  {
+   "ra": 248.0565750698767,
+   "dec": 66.82972311569611,
+   "best_band": "short",
+   "stack_snr": 7.2,
+   "det_snr": {
+    "short": 7.2,
+    "mid": 3.7
+   },
+   "forced_snr": {
+    "short": 7.2,
+    "mid": 3.6,
+    "cold": 2.4
+   },
+   "flux_ujy": {
+    "short": 338.5,
+    "mid": null,
+    "cold": 128.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 12,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-3"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.11,
+   "pm_over_error": 0.41,
+   "pm_arcsec_yr": 0.3478,
+   "pmra_masyr": 93.23332287329289,
+   "pmdec_masyr": -335.1154371057665,
+   "pmra_err_masyr": 854.9746295068046,
+   "pmdec_err_masyr": 854.9746295068046,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 1.1057863433481596,
+   "baseline_days": 156.70561345999886,
+   "class": "static",
+   "id": "s0046",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.05655850006286,
+     "dec": 66.82955011870573
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.0565750698767,
+     "dec": 66.82972311569611
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.05684480805658,
+     "dec": 66.82987703322138
+    }
+   ]
+  },
+  {
+   "ra": 248.1950411049789,
+   "dec": 66.77812527563458,
+   "best_band": "short",
+   "stack_snr": 60.9,
+   "det_snr": {
+    "short": 60.9,
+    "mid": 21.5,
+    "cold": 18.7
+   },
+   "forced_snr": {
+    "short": 60.9,
+    "mid": 21.5,
+    "cold": 19.6
+   },
+   "flux_ujy": {
+    "short": 7178.9,
+    "mid": 3449.1,
+    "cold": 3053.3
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 27,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.1,
+   "pm_over_error": 0.7,
+   "pm_arcsec_yr": 0.1423,
+   "pmra_masyr": -89.79214312006404,
+   "pmdec_masyr": -110.43589251072932,
+   "pmra_err_masyr": 181.02030006081182,
+   "pmdec_err_masyr": 215.22439606027478,
+   "parallax_mas": 23.455175065269707,
+   "parallax_err_mas": 89.42716737043659,
+   "chi2r": 0.32305625668890015,
+   "baseline_days": 399.2856156709968,
+   "gaia": {
+    "source_id": "1648328119433021824",
+    "g": 14.294922,
+    "sep_arcsec": 0.35,
+    "pmra_masyr": -64.11210806691514,
+    "pmdec_masyr": 21.488156615570254,
+    "parallax_mas": 1.7518745508887714,
+    "ruwe": 2.4476047
+   },
+   "class": "static",
+   "id": "s0006",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.19503035268798,
+     "dec": 66.77812745072389
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.1950411049789,
+     "dec": 66.77812527563458
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.19517384816257,
+     "dec": 66.77819252777043
+    }
+   ]
+  },
+  {
+   "ra": 248.28417133399395,
+   "dec": 66.83211690150758,
+   "best_band": "short",
+   "stack_snr": 11.3,
+   "det_snr": {
+    "short": 11.3
+   },
+   "forced_snr": {
+    "short": 11.3,
+    "cold": 2.3
+   },
+   "flux_ujy": {
+    "short": 668.8,
+    "mid": null,
+    "cold": 126.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 10,
+   "n_native_visits": 2,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "model": "linear",
+   "sigma": 0.1,
+   "pm_over_error": 0.4,
+   "pm_arcsec_yr": 0.1464,
+   "pmra_masyr": -12.505059301141811,
+   "pmdec_masyr": -145.8472750420077,
+   "pmra_err_masyr": 364.7486216623439,
+   "pmdec_err_masyr": 364.7486216623439,
+   "parallax_mas": null,
+   "parallax_err_mas": null,
+   "chi2r": 0.5618409221507678,
+   "baseline_days": 204.9704447799959,
+   "gaia": {
+    "source_id": "1648329940499167488",
+    "g": 17.20674,
+    "sep_arcsec": 0.3,
+    "pmra_masyr": -7.838120451875267,
+    "pmdec_masyr": 5.323082189223762,
+    "parallax_mas": 0.7093957160920654,
+    "ruwe": 1.0336373
+   },
+   "class": "static",
+   "id": "s0029",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.28397048108152,
+     "dec": 66.83227050338935
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.28417133399395,
+     "dec": 66.83211690150758
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.28408745236015,
+     "dec": 66.83210441798062
+    }
+   ]
+  },
+  {
+   "ra": 248.33750956207865,
+   "dec": 66.77920453434332,
+   "best_band": "short",
+   "stack_snr": 5.1,
+   "det_snr": {
+    "short": 5.1
+   },
+   "forced_snr": {
+    "short": 5.1,
+    "mid": 1.2,
+    "cold": 1.0
+   },
+   "flux_ujy": {
+    "short": 201.1,
+    "mid": 65.8,
+    "cold": 71.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 28,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.04,
+   "pm_over_error": 0.33,
+   "pm_arcsec_yr": 0.1148,
+   "pmra_masyr": 22.643251073669052,
+   "pmdec_masyr": 112.51609913326766,
+   "pmra_err_masyr": 331.45988954443266,
+   "pmdec_err_masyr": 353.14676561858613,
+   "parallax_mas": -71.09350774891836,
+   "parallax_err_mas": 149.80193171726705,
+   "chi2r": 0.8778737950533101,
+   "baseline_days": 401.5994789469987,
+   "gaia": {
+    "source_id": "1648328767971654272",
+    "g": 18.129541,
+    "sep_arcsec": 0.18,
+    "pmra_masyr": 0.009322944752433227,
+    "pmdec_masyr": -7.159835969715809,
+    "parallax_mas": 0.40325401254564924,
+    "ruwe": 0.9844362
+   },
+   "class": "static",
+   "id": "s0059",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.3373014987815,
+     "dec": 66.77917860151872
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.33750956207865,
+     "dec": 66.77920453434332
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.33722593175216,
+     "dec": 66.77921757468174
+    }
+   ]
+  },
+  {
+   "ra": 248.05285199773797,
+   "dec": 66.75703105595466,
+   "best_band": "short",
+   "stack_snr": 13.0,
+   "det_snr": {
+    "short": 13.0,
+    "mid": 6.6,
+    "cold": 3.2
+   },
+   "forced_snr": {
+    "short": 13.0,
+    "mid": 6.6,
+    "cold": 3.2
+   },
+   "flux_ujy": {
+    "short": 610.8,
+    "mid": 477.4,
+    "cold": 257.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 29,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.02,
+   "pm_over_error": 0.36,
+   "pm_arcsec_yr": 0.0915,
+   "pmra_masyr": -90.36914367126052,
+   "pmdec_masyr": 14.544112032135116,
+   "pmra_err_masyr": 250.82367087663448,
+   "pmdec_err_masyr": 291.68011662673086,
+   "parallax_mas": 2.5274902692425627,
+   "parallax_err_mas": 114.61389429008099,
+   "chi2r": 0.6289344044921148,
+   "baseline_days": 403.08548321700073,
+   "gaia": {
+    "source_id": "1648327878914843776",
+    "g": 17.836786,
+    "sep_arcsec": 0.11,
+    "pmra_masyr": -5.074364164453497,
+    "pmdec_masyr": -4.800827436928687,
+    "parallax_mas": 1.1927970175091016,
+    "ruwe": 1.1402845
+   },
+   "class": "static",
+   "id": "s0025",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.05293330316016,
+     "dec": 66.75703697317323
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.05285199773797,
+     "dec": 66.75703105595466
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.05262796699324,
+     "dec": 66.75701299783164
+    }
+   ]
+  },
+  {
+   "ra": 247.9912978210019,
+   "dec": 66.73814874266759,
+   "best_band": "short",
+   "stack_snr": 21.2,
+   "det_snr": {
+    "short": 21.2,
+    "mid": 7.3,
+    "cold": 3.4
+   },
+   "forced_snr": {
+    "short": 21.2,
+    "mid": 7.3,
+    "cold": 3.2
+   },
+   "flux_ujy": {
+    "short": 1028.1,
+    "mid": 457.9,
+    "cold": 190.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 70,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.01,
+   "pm_over_error": 0.31,
+   "pm_arcsec_yr": 0.0278,
+   "pmra_masyr": -20.085278452707104,
+   "pmdec_masyr": -19.204785907870964,
+   "pmra_err_masyr": 88.8978315309491,
+   "pmdec_err_masyr": 89.6612472832928,
+   "parallax_mas": 7.866485218329961,
+   "parallax_err_mas": 40.32544682879282,
+   "chi2r": 1.0210639156297339,
+   "baseline_days": 425.9174048030036,
+   "gaia": {
+    "source_id": "1648327741475885824",
+    "g": 16.272404,
+    "sep_arcsec": 0.11,
+    "pmra_masyr": -2.3049265737184514,
+    "pmdec_masyr": -2.1574569935226835,
+    "parallax_mas": 0.44199581112321895,
+    "ruwe": 1.0282803
+   },
+   "class": "static",
+   "id": "s0015",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 247.99145666142883,
+     "dec": 66.73827850132028
+    },
+    {
+     "visit": "visit-2",
+     "ra": 247.9912978210019,
+     "dec": 66.73814874266759
+    },
+    {
+     "visit": "visit-3",
+     "ra": 247.99149019077026,
+     "dec": 66.73823043397817
+    }
+   ]
+  },
+  {
+   "ra": 248.18029648963528,
+   "dec": 66.76276262108819,
+   "best_band": "cold",
+   "stack_snr": 168.5,
+   "det_snr": {
+    "cold": 168.5
+   },
+   "forced_snr": {
+    "short": 72.5,
+    "cold": 168.5
+   },
+   "flux_ujy": {
+    "short": 16337.5,
+    "mid": null,
+    "cold": 99822.9
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": true,
+   "class": "too_faint",
+   "id": "s0066",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.18029648963528,
+     "dec": 66.76276262108819
+    }
+   ]
+  },
+  {
+   "ra": 248.14559190585393,
+   "dec": 66.75355571311403,
+   "best_band": "cold",
+   "stack_snr": 163.3,
+   "det_snr": {
+    "cold": 163.3
+   },
+   "forced_snr": {
+    "short": 54.9,
+    "cold": 163.3
+   },
+   "flux_ujy": {
+    "short": 12544.8,
+    "mid": null,
+    "cold": 113956.2
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": true,
+   "class": "too_faint",
+   "id": "s0067",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.14559190585393,
+     "dec": 66.75355571311403
+    }
+   ]
+  },
+  {
+   "ra": 248.18884478308038,
+   "dec": 66.75224167856713,
+   "best_band": "cold",
+   "stack_snr": 161.2,
+   "det_snr": {
+    "cold": 161.2
+   },
+   "forced_snr": {
+    "short": 59.2,
+    "cold": 161.2
+   },
+   "flux_ujy": {
+    "short": 12382.7,
+    "mid": null,
+    "cold": 100127.1
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": true,
+   "class": "too_faint",
+   "id": "s0068",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.18884478308038,
+     "dec": 66.75224167856713
+    }
+   ]
+  },
+  {
+   "ra": 248.16569862590381,
+   "dec": 66.74599208626374,
+   "best_band": "cold",
+   "stack_snr": 157.6,
+   "det_snr": {
+    "cold": 157.6
+   },
+   "forced_snr": {
+    "short": 57.3,
+    "cold": 157.6
+   },
+   "flux_ujy": {
+    "short": 10106.0,
+    "mid": null,
+    "cold": 70802.8
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": true,
+   "class": "too_faint",
+   "id": "s0069",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.16569862590381,
+     "dec": 66.74599208626374
+    }
+   ]
+  },
+  {
+   "ra": 248.19294609322586,
+   "dec": 66.75087098847838,
+   "best_band": "cold",
+   "stack_snr": 157.2,
+   "det_snr": {
+    "cold": 157.2
+   },
+   "forced_snr": {
+    "short": 76.9,
+    "cold": 157.2
+   },
+   "flux_ujy": {
+    "short": 26726.3,
+    "mid": null,
+    "cold": 102551.2
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0090",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.19294609322586,
+     "dec": 66.75087098847838
+    }
+   ]
+  },
+  {
+   "ra": 248.15123673101746,
+   "dec": 66.74818938141777,
+   "best_band": "cold",
+   "stack_snr": 153.1,
+   "det_snr": {
+    "cold": 153.1
+   },
+   "forced_snr": {
+    "short": 59.2,
+    "cold": 153.1
+   },
+   "flux_ujy": {
+    "short": 11609.0,
+    "mid": null,
+    "cold": 86412.9
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": true,
+   "class": "too_faint",
+   "id": "s0070",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.15123673101746,
+     "dec": 66.74818938141777
+    }
+   ]
+  },
+  {
+   "ra": 248.14087083958796,
+   "dec": 66.75348644332303,
+   "best_band": "cold",
+   "stack_snr": 151.8,
+   "det_snr": {
+    "cold": 151.8
+   },
+   "forced_snr": {
+    "short": 79.2,
+    "cold": 151.8
+   },
+   "flux_ujy": {
+    "short": 25223.0,
+    "mid": null,
+    "cold": 104289.4
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": true,
+   "stack_motion": {
+    "pm_arcsec_yr": 5.621970492312788,
+    "pm_err_arcsec_yr": 1.73305324749875,
+    "significance": 3.2439687011502762,
+    "pmra_arcsec_yr": 5.240855542427963,
+    "pmdec_arcsec_yr": 2.034695407140291,
+    "n_visits": 2,
+    "chi2": 2.9842893375288148e-05,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0078",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.13909980618755,
+     "dec": 66.75321471028532
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.14087083958796,
+     "dec": 66.75348644332303
+    }
+   ]
+  },
+  {
+   "ra": 248.1954269401371,
+   "dec": 66.75736887931761,
+   "best_band": "cold",
+   "stack_snr": 150.8,
+   "det_snr": {
+    "cold": 150.8
+   },
+   "forced_snr": {
+    "short": 81.2,
+    "cold": 150.8
+   },
+   "flux_ujy": {
+    "short": 24847.7,
+    "mid": null,
+    "cold": 93475.5
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0091",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1954269401371,
+     "dec": 66.75736887931761
+    }
+   ]
+  },
+  {
+   "ra": 248.18436631071333,
+   "dec": 66.76438417525989,
+   "best_band": "cold",
+   "stack_snr": 148.8,
+   "det_snr": {
+    "cold": 148.8
+   },
+   "forced_snr": {
+    "short": 80.2,
+    "cold": 148.8
+   },
+   "flux_ujy": {
+    "short": 24095.2,
+    "mid": null,
+    "cold": 93915.0
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0092",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.18436631071333,
+     "dec": 66.76438417525989
+    }
+   ]
+  },
+  {
+   "ra": 248.15143550850377,
+   "dec": 66.74621614989748,
+   "best_band": "cold",
+   "stack_snr": 145.9,
+   "det_snr": {
+    "short": 68.0,
+    "cold": 145.9
+   },
+   "forced_snr": {
+    "short": 68.0,
+    "cold": 145.9
+   },
+   "flux_ujy": {
+    "short": 7801.7,
+    "mid": null,
+    "cold": 96591.8
+   },
+   "visits_detected": [
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-1"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0100",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.15143550850377,
+     "dec": 66.74621614989748
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.15198556249257,
+     "dec": 66.74573349819862
+    }
+   ]
+  },
+  {
+   "ra": 248.15499525340456,
+   "dec": 66.74519065863818,
+   "best_band": "cold",
+   "stack_snr": 145.8,
+   "det_snr": {
+    "cold": 145.8
+   },
+   "forced_snr": {
+    "short": 75.3,
+    "cold": 145.8
+   },
+   "flux_ujy": {
+    "short": 21041.5,
+    "mid": null,
+    "cold": 85955.3
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0093",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.15499525340456,
+     "dec": 66.74519065863818
+    }
+   ]
+  },
+  {
+   "ra": 248.19320441702243,
+   "dec": 66.75443078592171,
+   "best_band": "cold",
+   "stack_snr": 143.1,
+   "det_snr": {
+    "cold": 143.1
+   },
+   "forced_snr": {
+    "short": 50.2,
+    "cold": 143.1
+   },
+   "flux_ujy": {
+    "short": 5860.0,
+    "mid": null,
+    "cold": 91392.0
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0101",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.19320441702243,
+     "dec": 66.75443078592171
+    }
+   ]
+  },
+  {
+   "ra": 248.16591639062528,
+   "dec": 66.76612768573435,
+   "best_band": "cold",
+   "stack_snr": 142.4,
+   "det_snr": {
+    "short": 83.7,
+    "cold": 142.4
+   },
+   "forced_snr": {
+    "short": 81.0,
+    "cold": 142.4
+   },
+   "flux_ujy": {
+    "short": 26099.3,
+    "mid": null,
+    "cold": 96684.1
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0094",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.16591639062528,
+     "dec": 66.76612768573435
+    }
+   ]
+  },
+  {
+   "ra": 248.16944187870973,
+   "dec": 66.74387980367635,
+   "best_band": "cold",
+   "stack_snr": 141.5,
+   "det_snr": {
+    "short": 58.3,
+    "cold": 141.5
+   },
+   "forced_snr": {
+    "short": 78.0,
+    "cold": 141.5
+   },
+   "flux_ujy": {
+    "short": 22138.0,
+    "mid": null,
+    "cold": 83816.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0095",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.17084203435283,
+     "dec": 66.7438801486357
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.16944187870973,
+     "dec": 66.74387980367635
+    }
+   ]
+  },
+  {
+   "ra": 248.14366659502883,
+   "dec": 66.75024023423848,
+   "best_band": "cold",
+   "stack_snr": 138.5,
+   "det_snr": {
+    "cold": 138.5
+   },
+   "forced_snr": {
+    "short": 52.5,
+    "cold": 138.5
+   },
+   "flux_ujy": {
+    "short": 5948.7,
+    "mid": null,
+    "cold": 82825.0
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0102",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.14366659502883,
+     "dec": 66.75024023423848
+    }
+   ]
+  },
+  {
+   "ra": 248.15895448552675,
+   "dec": 66.76498086296642,
+   "best_band": "cold",
+   "stack_snr": 136.3,
+   "det_snr": {
+    "cold": 136.3
+   },
+   "forced_snr": {
+    "short": 50.5,
+    "cold": 136.3
+   },
+   "flux_ujy": {
+    "short": 5445.1,
+    "mid": null,
+    "cold": 71312.8
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-3"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0103",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.15895448552675,
+     "dec": 66.76498086296642
+    }
+   ]
+  },
+  {
+   "ra": 248.17744229477148,
+   "dec": 66.76543087411923,
+   "best_band": "cold",
+   "stack_snr": 132.1,
+   "det_snr": {
+    "cold": 132.1
+   },
+   "forced_snr": {
+    "short": 50.7,
+    "cold": 132.1
+   },
+   "flux_ujy": {
+    "short": 5616.7,
+    "mid": null,
+    "cold": 68942.5
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": true,
+   "class": "intermittent",
+   "id": "s0104",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.17744229477148,
+     "dec": 66.76543087411923
+    }
+   ]
+  },
+  {
+   "ra": 248.18907626209625,
+   "dec": 66.74802630735323,
+   "best_band": "cold",
+   "stack_snr": 130.8,
+   "det_snr": {
+    "short": 82.8,
+    "cold": 130.8
+   },
+   "forced_snr": {
+    "short": 82.8,
+    "cold": 146.7
+   },
+   "flux_ujy": {
+    "short": 5501.5,
+    "mid": null,
+    "cold": 72593.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 14.364914603874892,
+    "pm_err_arcsec_yr": 1.743614146663402,
+    "significance": 8.238585716549581,
+    "pmra_arcsec_yr": -13.031721567998371,
+    "pmdec_arcsec_yr": -6.043592023853382,
+    "n_visits": 2,
+    "chi2": 0.004449715887176381,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0087",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1934809801219,
+     "dec": 66.74883190032074
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.18907626209625,
+     "dec": 66.74802630735323
+    }
+   ]
+  },
+  {
+   "ra": 248.1551152108446,
+   "dec": 66.76493979366646,
+   "best_band": "short",
+   "stack_snr": 91.2,
+   "det_snr": {
+    "short": 91.2
+   },
+   "forced_snr": {
+    "short": 91.2,
+    "cold": 137.0
+   },
+   "flux_ujy": {
+    "short": 27866.8,
+    "mid": null,
+    "cold": 80346.4
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 5.19656608870932,
+    "pm_err_arcsec_yr": 0.8243797875366944,
+    "significance": 6.303606865759082,
+    "pmra_arcsec_yr": 2.8954325026238896,
+    "pmdec_arcsec_yr": -4.315178992472136,
+    "n_visits": 2,
+    "chi2": 0.0016806203274454014,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0076",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.15413578998977,
+     "dec": 66.76551538144479
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.15621548839346,
+     "dec": 66.76429314124428
+    }
+   ]
+  },
+  {
+   "ra": 248.19582484011693,
+   "dec": 66.75552559883924,
+   "best_band": "short",
+   "stack_snr": 88.1,
+   "det_snr": {
+    "short": 88.1
+   },
+   "forced_snr": {
+    "short": 88.1,
+    "cold": 150.1
+   },
+   "flux_ujy": {
+    "short": 24410.5,
+    "mid": null,
+    "cold": 73896.3
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 6.097470487399212,
+    "pm_err_arcsec_yr": 0.827500654930282,
+    "significance": 7.368538563770601,
+    "pmra_arcsec_yr": -6.007830433945374,
+    "pmdec_arcsec_yr": 1.041690847451453,
+    "n_visits": 2,
+    "chi2": 0.007625838576479339,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0081",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.19785568643982,
+     "dec": 66.75538623801066
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.19354325452213,
+     "dec": 66.7556821328915
+    }
+   ]
+  },
+  {
+   "ra": 248.13816702120224,
+   "dec": 66.752744859184,
+   "best_band": "short",
+   "stack_snr": 87.9,
+   "det_snr": {
+    "short": 87.9
+   },
+   "forced_snr": {
+    "short": 87.9,
+    "cold": 140.9
+   },
+   "flux_ujy": {
+    "short": 24597.9,
+    "mid": null,
+    "cold": 67915.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 9.890490129472466,
+    "pm_err_arcsec_yr": 0.8271685727992633,
+    "significance": 11.957042922945629,
+    "pmra_arcsec_yr": 3.323721362215153,
+    "pmdec_arcsec_yr": 9.315292336129174,
+    "n_visits": 2,
+    "chi2": 0.016903111825128825,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0086",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1370450735261,
+     "dec": 66.75150184890299
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.13942761062822,
+     "dec": 66.7541413119417
+    }
+   ]
+  },
+  {
+   "ra": 248.18496876756743,
+   "dec": 66.76421507749822,
+   "best_band": "short",
+   "stack_snr": 83.9,
+   "det_snr": {
+    "short": 83.9
+   },
+   "forced_snr": {
+    "short": 83.9,
+    "cold": 158.3
+   },
+   "flux_ujy": {
+    "short": 21642.0,
+    "mid": null,
+    "cold": 62053.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 9.00478795088311,
+    "pm_err_arcsec_yr": 0.8265069028549142,
+    "significance": 10.89499424599944,
+    "pmra_arcsec_yr": -3.088040303218395,
+    "pmdec_arcsec_yr": -8.458735905918122,
+    "n_visits": 2,
+    "chi2": 0.004214183328843636,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0082",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.18601383738795,
+     "dec": 66.7653433857253
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.18379479623468,
+     "dec": 66.76294746923037
+    }
+   ]
+  },
+  {
+   "ra": 248.1654238020204,
+   "dec": 66.74189408165181,
+   "best_band": "short",
+   "stack_snr": 82.9,
+   "det_snr": {
+    "short": 82.9,
+    "mid": 51.9
+   },
+   "forced_snr": {
+    "short": 82.9,
+    "mid": 51.9,
+    "cold": 131.6
+   },
+   "flux_ujy": {
+    "short": 20362.9,
+    "mid": null,
+    "cold": 63627.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 14.654925164094708,
+    "pm_err_arcsec_yr": 0.8400078045329682,
+    "significance": 17.44617738670015,
+    "pmra_arcsec_yr": 10.897698711375124,
+    "pmdec_arcsec_yr": -9.798315894137586,
+    "n_visits": 2,
+    "chi2": 0.4423468050489577,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0088",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1617366173668,
+     "dec": 66.74320298374889
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1695657090438,
+     "dec": 66.74042349045902
+    }
+   ]
+  },
+  {
+   "ra": 248.17636911279988,
+   "dec": 66.74463576159427,
+   "best_band": "short",
+   "stack_snr": 82.8,
+   "det_snr": {
+    "short": 82.8
+   },
+   "forced_snr": {
+    "short": 82.8,
+    "cold": 145.4
+   },
+   "flux_ujy": {
+    "short": 21914.6,
+    "mid": null,
+    "cold": 72934.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 5.654102802090879,
+    "pm_err_arcsec_yr": 0.8278576532306865,
+    "significance": 6.829800727245722,
+    "pmra_arcsec_yr": -1.275279612507894,
+    "pmdec_arcsec_yr": 5.5084063399983165,
+    "n_visits": 2,
+    "chi2": 0.0031889564505314097,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0079",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1767997291812,
+     "dec": 66.74390086870272
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1758853053465,
+     "dec": 66.74546137700942
+    }
+   ]
+  },
+  {
+   "ra": 248.18560610958875,
+   "dec": 66.74526665878875,
+   "best_band": "short",
+   "stack_snr": 82.3,
+   "det_snr": {
+    "short": 82.3
+   },
+   "forced_snr": {
+    "short": 82.3,
+    "cold": 134.4
+   },
+   "flux_ujy": {
+    "short": 22273.9,
+    "mid": null,
+    "cold": 72277.0
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0096",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.18560610958875,
+     "dec": 66.74526665878875
+    }
+   ]
+  },
+  {
+   "ra": 248.13985868349945,
+   "dec": 66.75942283415176,
+   "best_band": "short",
+   "stack_snr": 79.5,
+   "det_snr": {
+    "short": 79.5
+   },
+   "forced_snr": {
+    "short": 79.5,
+    "cold": 133.5
+   },
+   "flux_ujy": {
+    "short": 22589.4,
+    "mid": null,
+    "cold": 77512.3
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star",
+    "beside_bright_source"
+   ],
+   "visits_too_thin": [
+    "visit-3"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 4.734245628211446,
+    "pm_err_arcsec_yr": 0.8277857595637842,
+    "significance": 5.719167759911982,
+    "pmra_arcsec_yr": 4.469634521864585,
+    "pmdec_arcsec_yr": -1.5605924865881964,
+    "n_visits": 2,
+    "chi2": 0.0007622596644156591,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0075",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.13834736311168,
+     "dec": 66.75963075182646
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1415565487931,
+     "dec": 66.75918923140478
+    }
+   ]
+  },
+  {
+   "ra": 248.1703198645672,
+   "dec": 66.76536148755456,
+   "best_band": "short",
+   "stack_snr": 77.5,
+   "det_snr": {
+    "short": 77.5
+   },
+   "forced_snr": {
+    "short": 77.5,
+    "cold": 150.1
+   },
+   "flux_ujy": {
+    "short": 13271.5,
+    "mid": null,
+    "cold": 56806.5
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-2"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0115",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.1703198645672,
+     "dec": 66.76536148755456
+    }
+   ]
+  },
+  {
+   "ra": 248.1343960265526,
+   "dec": 66.75960273349273,
+   "best_band": "mid",
+   "stack_snr": 77.2,
+   "det_snr": {
+    "mid": 77.2
+   },
+   "forced_snr": {
+    "short": 43.0,
+    "mid": 77.2,
+    "cold": 95.3
+   },
+   "flux_ujy": {
+    "short": 4023.9,
+    "mid": 28747.5,
+    "cold": 28290.4
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0062",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.1343960265526,
+     "dec": 66.75960273349273
+    }
+   ]
+  },
+  {
+   "ra": 248.15489916678877,
+   "dec": 66.74155927954034,
+   "best_band": "mid",
+   "stack_snr": 76.3,
+   "det_snr": {
+    "mid": 76.3
+   },
+   "forced_snr": {
+    "short": 41.4,
+    "mid": 76.3,
+    "cold": 85.0
+   },
+   "flux_ujy": {
+    "short": 3721.7,
+    "mid": 25786.9,
+    "cold": 25025.3
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0105",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.15489916678877,
+     "dec": 66.74155927954034
+    }
+   ]
+  },
+  {
+   "ra": 248.20201271067054,
+   "dec": 66.75065416362183,
+   "best_band": "mid",
+   "stack_snr": 70.3,
+   "det_snr": {
+    "mid": 70.3
+   },
+   "forced_snr": {
+    "short": 37.0,
+    "mid": 70.3,
+    "cold": 85.9
+   },
+   "flux_ujy": {
+    "short": 3272.1,
+    "mid": 23427.1,
+    "cold": 25219.4
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0106",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.20201271067054,
+     "dec": 66.75065416362183
+    }
+   ]
+  },
+  {
+   "ra": 248.2043605722503,
+   "dec": 66.75663424780869,
+   "best_band": "mid",
+   "stack_snr": 68.6,
+   "det_snr": {
+    "mid": 68.6
+   },
+   "forced_snr": {
+    "short": 61.8,
+    "mid": 68.6,
+    "cold": 87.8
+   },
+   "flux_ujy": {
+    "short": 3141.8,
+    "mid": 21113.7,
+    "cold": 23211.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 8.092115171319827,
+    "pm_err_arcsec_yr": 0.8439498835405913,
+    "significance": 9.58838353928231,
+    "pmra_arcsec_yr": -7.281224793309013,
+    "pmdec_arcsec_yr": -3.530735540253142,
+    "n_visits": 3,
+    "chi2": 2.8031224578602667,
+    "dof": 2
+   },
+   "class": "too_faint",
+   "id": "s0074",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.2071221117342,
+     "dec": 66.7570790242357
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.20379221824635,
+     "dec": 66.75668288856019
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.20186370207728,
+     "dec": 66.7560826972574
+    }
+   ]
+  },
+  {
+   "ra": 248.1630548028154,
+   "dec": 66.7694188292159,
+   "best_band": "mid",
+   "stack_snr": 68.2,
+   "det_snr": {
+    "mid": 68.2
+   },
+   "forced_snr": {
+    "short": 43.8,
+    "mid": 68.2,
+    "cold": 74.7
+   },
+   "flux_ujy": {
+    "short": 2525.8,
+    "mid": 22794.5,
+    "cold": 21537.9
+   },
+   "visits_detected": [
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 9.188567699976252,
+    "pm_err_arcsec_yr": 1.5963819920965083,
+    "significance": 5.755870302639171,
+    "pmra_arcsec_yr": 9.12879755429323,
+    "pmdec_arcsec_yr": 1.0463420042112368,
+    "n_visits": 2,
+    "chi2": 0.012063817788268134,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0083",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.1630548028154,
+     "dec": 66.7694188292159
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.16652461767822,
+     "dec": 66.76957575273623
+    }
+   ]
+  },
+  {
+   "ra": 248.17667481805273,
+   "dec": 66.76868990915199,
+   "best_band": "mid",
+   "stack_snr": 68.1,
+   "det_snr": {
+    "mid": 68.1
+   },
+   "forced_snr": {
+    "short": 59.4,
+    "mid": 68.1,
+    "cold": 90.0
+   },
+   "flux_ujy": {
+    "short": 3233.1,
+    "mid": 25916.9,
+    "cold": 28368.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 17.721239047468853,
+    "pm_err_arcsec_yr": 1.7892519546151218,
+    "significance": 9.904272565839277,
+    "pmra_arcsec_yr": 10.388694468340892,
+    "pmdec_arcsec_yr": -14.356787266690207,
+    "n_visits": 2,
+    "chi2": 0.019252412397363368,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0089",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.17316118041222,
+     "dec": 66.77060564013514
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.17667481805273,
+     "dec": 66.76868990915199
+    }
+   ]
+  },
+  {
+   "ra": 248.19300792559068,
+   "dec": 66.74432638802713,
+   "best_band": "mid",
+   "stack_snr": 68.0,
+   "det_snr": {
+    "mid": 68.0
+   },
+   "forced_snr": {
+    "short": 59.9,
+    "mid": 68.0,
+    "cold": 82.3
+   },
+   "flux_ujy": {
+    "short": 12510.0,
+    "mid": 36937.7,
+    "cold": 25164.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [
+    "visit-3"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 11.270428732586334,
+    "pm_err_arcsec_yr": 0.8397801653832665,
+    "significance": 13.420689362724628,
+    "pmra_arcsec_yr": 3.2641742621728667,
+    "pmdec_arcsec_yr": 10.787387552251742,
+    "n_visits": 3,
+    "chi2": 2.6610510398737746,
+    "dof": 2
+   },
+   "class": "too_faint",
+   "id": "s0073",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.19198035799573,
+     "dec": 66.74300072236844
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.19286182359747,
+     "dec": 66.74411085449276
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.19431814791858,
+     "dec": 66.74604531137881
+    }
+   ]
+  },
+  {
+   "ra": 248.1935111741028,
+   "dec": 66.75353585421608,
+   "best_band": "short",
+   "stack_snr": 67.1,
+   "det_snr": {
+    "short": 67.1
+   },
+   "forced_snr": {
+    "short": 67.1,
+    "cold": 145.7
+   },
+   "flux_ujy": {
+    "short": 10859.2,
+    "mid": null,
+    "cold": 56406.3
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-2"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0116",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.1935111741028,
+     "dec": 66.75353585421608
+    }
+   ]
+  },
+  {
+   "ra": 248.1467824360127,
+   "dec": 66.76823906591933,
+   "best_band": "mid",
+   "stack_snr": 67.0,
+   "det_snr": {
+    "mid": 67.0
+   },
+   "forced_snr": {
+    "short": 61.6,
+    "mid": 67.0,
+    "cold": 88.1
+   },
+   "flux_ujy": {
+    "short": 13369.7,
+    "mid": 42209.4,
+    "cold": 29761.5
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0097",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1467824360127,
+     "dec": 66.76823906591933
+    }
+   ]
+  },
+  {
+   "ra": 248.19785380329915,
+   "dec": 66.76364393699153,
+   "best_band": "mid",
+   "stack_snr": 67.0,
+   "det_snr": {
+    "mid": 67.0
+   },
+   "forced_snr": {
+    "short": 65.8,
+    "mid": 67.0,
+    "cold": 95.3
+   },
+   "flux_ujy": {
+    "short": 13933.0,
+    "mid": 38145.1,
+    "cold": 33632.4
+   },
+   "visits_detected": [
+    "visit-1"
+   ],
+   "missing_visits": [
+    "visit-2",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0098",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.19785380329915,
+     "dec": 66.76364393699153
+    }
+   ]
+  },
+  {
+   "ra": 248.14906746940812,
+   "dec": 66.76735975655312,
+   "best_band": "mid",
+   "stack_snr": 66.7,
+   "det_snr": {
+    "mid": 66.7
+   },
+   "forced_snr": {
+    "short": 54.4,
+    "mid": 66.7,
+    "cold": 84.4
+   },
+   "flux_ujy": {
+    "short": 6426.4,
+    "mid": 31205.2,
+    "cold": 17785.1
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0071",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.14906746940812,
+     "dec": 66.76735975655312
+    }
+   ]
+  },
+  {
+   "ra": 248.13915436043675,
+   "dec": 66.74531955399036,
+   "best_band": "mid",
+   "stack_snr": 65.6,
+   "det_snr": {
+    "mid": 65.6
+   },
+   "forced_snr": {
+    "short": 52.2,
+    "mid": 65.6,
+    "cold": 84.7
+   },
+   "flux_ujy": {
+    "short": 10042.2,
+    "mid": 32011.0,
+    "cold": 23412.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 5.272338156247537,
+    "pm_err_arcsec_yr": 0.8412922637665343,
+    "significance": 6.266951906395582,
+    "pmra_arcsec_yr": 5.14529887931051,
+    "pmdec_arcsec_yr": 1.1504125679032216,
+    "n_visits": 2,
+    "chi2": 0.0013315997896890118,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0077",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.13741602248484,
+     "dec": 66.74516576603106
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1411073254141,
+     "dec": 66.74549230454548
+    }
+   ]
+  },
+  {
+   "ra": 248.1442089183342,
+   "dec": 66.74927946489268,
+   "best_band": "short",
+   "stack_snr": 65.4,
+   "det_snr": {
+    "short": 65.4
+   },
+   "forced_snr": {
+    "short": 65.4,
+    "cold": 133.6
+   },
+   "flux_ujy": {
+    "short": 9800.7,
+    "mid": null,
+    "cold": 39979.4
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-2"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0117",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.1442089183342,
+     "dec": 66.74927946489268
+    }
+   ]
+  },
+  {
+   "ra": 248.18915328342692,
+   "dec": 66.76460795297079,
+   "best_band": "mid",
+   "stack_snr": 63.8,
+   "det_snr": {
+    "mid": 63.8
+   },
+   "forced_snr": {
+    "short": 60.8,
+    "mid": 63.8,
+    "cold": 103.7
+   },
+   "flux_ujy": {
+    "short": 8132.8,
+    "mid": 34053.4,
+    "cold": 26590.2
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0072",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.18915328342692,
+     "dec": 66.76460795297079
+    }
+   ]
+  },
+  {
+   "ra": 248.15421974824778,
+   "dec": 66.7463818992302,
+   "best_band": "short",
+   "stack_snr": 62.0,
+   "det_snr": {
+    "short": 62.0
+   },
+   "forced_snr": {
+    "short": 62.0,
+    "cold": 138.9
+   },
+   "flux_ujy": {
+    "short": 9425.0,
+    "mid": null,
+    "cold": 115460.8
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0107",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.15421974824778,
+     "dec": 66.7463818992302
+    }
+   ]
+  },
+  {
+   "ra": 248.15065633948552,
+   "dec": 66.74134956964939,
+   "best_band": "mid",
+   "stack_snr": 61.5,
+   "det_snr": {
+    "mid": 61.5
+   },
+   "forced_snr": {
+    "short": 53.2,
+    "mid": 61.5,
+    "cold": 67.2
+   },
+   "flux_ujy": {
+    "short": 9704.7,
+    "mid": 28859.8,
+    "cold": 20945.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "beside_bright_source",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 9.723489214147369,
+    "pm_err_arcsec_yr": 0.8439002239320234,
+    "significance": 11.522083936466169,
+    "pmra_arcsec_yr": -6.746476412580865,
+    "pmdec_arcsec_yr": 7.00223525112733,
+    "n_visits": 2,
+    "chi2": 0.0006593923923511123,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0085",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.1529359877462,
+     "dec": 66.74041569506528
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.14809505808228,
+     "dec": 66.74239869357184
+    }
+   ]
+  },
+  {
+   "ra": 248.13634198844724,
+   "dec": 66.74821095058566,
+   "best_band": "mid",
+   "stack_snr": 61.5,
+   "det_snr": {
+    "mid": 61.5
+   },
+   "forced_snr": {
+    "short": 53.7,
+    "mid": 61.5,
+    "cold": 83.3
+   },
+   "flux_ujy": {
+    "short": 6318.3,
+    "mid": 29729.4,
+    "cold": 17751.3
+   },
+   "visits_detected": [
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-2"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0118",
+   "track": [
+    {
+     "visit": "visit-3",
+     "ra": 248.13634198844724,
+     "dec": 66.74821095058566
+    }
+   ]
+  },
+  {
+   "ra": 248.12689445086488,
+   "dec": 66.75619799524752,
+   "best_band": "mid",
+   "stack_snr": 57.8,
+   "det_snr": {
+    "mid": 57.8
+   },
+   "forced_snr": {
+    "short": 50.1,
+    "mid": 57.8,
+    "cold": 72.0
+   },
+   "flux_ujy": {
+    "short": 9357.3,
+    "mid": 27328.4,
+    "cold": 21055.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": true,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "too_few_exposures_in_stack"
+   ],
+   "visits_too_thin": [
+    "visit-1"
+   ],
+   "cold_only": false,
+   "stack_motion": {
+    "pm_arcsec_yr": 5.909465282889022,
+    "pm_err_arcsec_yr": 0.8521584924508051,
+    "significance": 6.934702095021572,
+    "pmra_arcsec_yr": 3.2988143369429457,
+    "pmdec_arcsec_yr": -4.90301987555122,
+    "n_visits": 2,
+    "chi2": 0.006199045342882086,
+    "dof": 0
+   },
+   "class": "too_faint",
+   "id": "s0080",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.12577812766227,
+     "dec": 66.75685184982959
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.12814851553165,
+     "dec": 66.7554634116681
+    }
+   ]
+  },
+  {
+   "ra": 248.14366874911406,
+   "dec": 66.75722364472847,
+   "best_band": "short",
+   "stack_snr": 56.8,
+   "det_snr": {
+    "short": 56.8
+   },
+   "forced_snr": {
+    "short": 56.8,
+    "cold": 127.2
+   },
+   "flux_ujy": {
+    "short": 7655.5,
+    "mid": null,
+    "cold": 94996.5
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0108",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.14366874911406,
+     "dec": 66.75722364472847
+    }
+   ]
+  },
+  {
+   "ra": 248.18496899318995,
+   "dec": 66.7662729999191,
+   "best_band": "short",
+   "stack_snr": 56.8,
+   "det_snr": {
+    "short": 56.8
+   },
+   "forced_snr": {
+    "short": 56.8,
+    "mid": 59.5,
+    "cold": 110.9
+   },
+   "flux_ujy": {
+    "short": 6502.9,
+    "mid": 32018.1,
+    "cold": 38474.0
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "gaia": {
+    "source_id": "1648328119433021184",
+    "g": 16.17584,
+    "sep_arcsec": 2.42,
+    "pmra_masyr": 4.667948429784618,
+    "pmdec_masyr": -0.8032307620447546,
+    "parallax_mas": 1.1150296084316254,
+    "ruwe": 1.0146898
+   },
+   "class": "intermittent",
+   "id": "s0109",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.18496899318995,
+     "dec": 66.7662729999191
+    }
+   ]
+  },
+  {
+   "ra": 248.1895501051893,
+   "dec": 66.75955155708799,
+   "best_band": "short",
+   "stack_snr": 52.9,
+   "det_snr": {
+    "short": 52.9
+   },
+   "forced_snr": {
+    "short": 52.9,
+    "cold": 119.2
+   },
+   "flux_ujy": {
+    "short": 6634.0,
+    "mid": null,
+    "cold": 109860.7
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0110",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.1895501051893,
+     "dec": 66.75955155708799
+    }
+   ]
+  },
+  {
+   "ra": 248.19006815707695,
+   "dec": 66.74970053992331,
+   "best_band": "short",
+   "stack_snr": 50.7,
+   "det_snr": {
+    "short": 50.7
+   },
+   "forced_snr": {
+    "short": 50.7,
+    "cold": 126.8
+   },
+   "flux_ujy": {
+    "short": 5849.3,
+    "mid": null,
+    "cold": 79145.0
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-1",
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star",
+    "near_saturated_star"
+   ],
+   "visits_too_thin": [
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0111",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.19006815707695,
+     "dec": 66.74970053992331
+    }
+   ]
+  },
+  {
+   "ra": 248.21640958459506,
+   "dec": 66.75370858638284,
+   "best_band": "short",
+   "stack_snr": 33.1,
+   "det_snr": {
+    "short": 33.1
+   },
+   "forced_snr": {
+    "short": 33.1,
+    "mid": 37.5,
+    "cold": 34.5
+   },
+   "flux_ujy": {
+    "short": 2804.7,
+    "mid": 7063.3,
+    "cold": 6853.2
+   },
+   "visits_detected": [
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-1"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0112",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.21640958459506,
+     "dec": 66.75370858638284
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.21607854367178,
+     "dec": 66.75358801625895
+    }
+   ]
+  },
+  {
+   "ra": 248.01318331967084,
+   "dec": 66.81658938538122,
+   "best_band": "mid",
+   "stack_snr": 22.6,
+   "det_snr": {
+    "mid": 22.6
+   },
+   "forced_snr": {
+    "short": 49.2,
+    "mid": 22.6,
+    "cold": 22.9
+   },
+   "flux_ujy": {
+    "short": 6864.4,
+    "mid": 3595.3,
+    "cold": 3231.1
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0063",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.01318331967084,
+     "dec": 66.81658938538122
+    }
+   ]
+  },
+  {
+   "ra": 248.34614387893143,
+   "dec": 66.81903557289326,
+   "best_band": "short",
+   "stack_snr": 21.1,
+   "det_snr": {
+    "short": 21.1,
+    "cold": 11.8
+   },
+   "forced_snr": {
+    "short": 21.1,
+    "cold": 11.5
+   },
+   "flux_ujy": {
+    "short": 2373.9,
+    "mid": null,
+    "cold": 949.7
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "gaia": {
+    "source_id": "1648329798763825408",
+    "g": 16.937262,
+    "sep_arcsec": 0.23,
+    "pmra_masyr": 6.633906762183124,
+    "pmdec_masyr": -13.81369204047822,
+    "parallax_mas": 2.965765922161239,
+    "ruwe": 1.0070522
+   },
+   "class": "too_faint",
+   "id": "s0012",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.3462072608658,
+     "dec": 66.81915602357702
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.34614387893143,
+     "dec": 66.81903557289326
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.3460106622137,
+     "dec": 66.8191236216295
+    }
+   ]
+  },
+  {
+   "ra": 248.14730308030414,
+   "dec": 66.77642800721652,
+   "best_band": "short",
+   "stack_snr": 15.7,
+   "det_snr": {
+    "short": 15.7
+   },
+   "forced_snr": {
+    "short": 15.7,
+    "mid": 19.7,
+    "cold": 13.0
+   },
+   "flux_ujy": {
+    "short": 1129.3,
+    "mid": 3016.3,
+    "cold": 1933.6
+   },
+   "visits_detected": [
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [
+    "visit-1"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [
+    "near_bright_star"
+   ],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "gaia": {
+    "source_id": "1648328222512233088",
+    "g": 16.829962,
+    "sep_arcsec": 1.48,
+    "pmra_masyr": -5.023004778153979,
+    "pmdec_masyr": 4.30763871927863,
+    "parallax_mas": 0.31093089702100263,
+    "ruwe": 1.0310836
+   },
+   "class": "intermittent",
+   "id": "s0113",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.14730308030414,
+     "dec": 66.77642800721652
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.14739565769005,
+     "dec": 66.77629168234671
+    }
+   ]
+  },
+  {
+   "ra": 248.30908224751565,
+   "dec": 66.70212763455976,
+   "best_band": "short",
+   "stack_snr": 15.3,
+   "det_snr": {
+    "short": 15.3,
+    "mid": 9.2,
+    "cold": 6.8
+   },
+   "forced_snr": {
+    "short": 15.3,
+    "mid": 9.2,
+    "cold": 6.6
+   },
+   "flux_ujy": {
+    "short": 722.3,
+    "mid": 532.9,
+    "cold": 393.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 47,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.0,
+   "pm_over_error": 1.59,
+   "pm_arcsec_yr": 0.3118,
+   "pmra_masyr": 69.1350806273235,
+   "pmdec_masyr": 304.08486713687313,
+   "pmra_err_masyr": 195.70063694412997,
+   "pmdec_err_masyr": 196.05039143695444,
+   "parallax_mas": 150.5298049453358,
+   "parallax_err_mas": 81.96529226123292,
+   "chi2r": 1.7975398542420153,
+   "baseline_days": 386.32299255699763,
+   "gaia": {
+    "source_id": "1636317294930255232",
+    "g": 18.356655,
+    "sep_arcsec": 0.68,
+    "pmra_masyr": -0.7015045385567107,
+    "pmdec_masyr": 0.011770131803315754,
+    "parallax_mas": 2.498843411110332,
+    "ruwe": 1.0378326
+   },
+   "class": "static",
+   "id": "s0018",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.30917243665783,
+     "dec": 66.70221443013548
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.30908224751565,
+     "dec": 66.70212763455976
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.3089483730992,
+     "dec": 66.7022799326586
+    }
+   ]
+  },
+  {
+   "ra": 248.23982801381473,
+   "dec": 66.76031928263029,
+   "best_band": "short",
+   "stack_snr": 14.6,
+   "det_snr": {
+    "short": 14.6,
+    "mid": 10.8,
+    "cold": 10.2
+   },
+   "forced_snr": {
+    "short": 14.6,
+    "mid": 10.5,
+    "cold": 9.7
+   },
+   "flux_ujy": {
+    "short": 1013.8,
+    "mid": 1353.4,
+    "cold": 884.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0019",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.23971711788505,
+     "dec": 66.76024758430458
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.23982801381473,
+     "dec": 66.76031928263029
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.23993434079978,
+     "dec": 66.76046813285775
+    }
+   ]
+  },
+  {
+   "ra": 248.2266927617173,
+   "dec": 66.73192499546471,
+   "best_band": "short",
+   "stack_snr": 14.0,
+   "det_snr": {
+    "short": 14.0,
+    "mid": 7.1,
+    "cold": 5.4
+   },
+   "forced_snr": {
+    "short": 14.0,
+    "mid": 6.7,
+    "cold": 5.9
+   },
+   "flux_ujy": {
+    "short": 848.8,
+    "mid": 632.3,
+    "cold": 429.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "gaia": {
+    "source_id": "1648327221783398016",
+    "g": 17.91254,
+    "sep_arcsec": 2.64,
+    "pmra_masyr": 0.13615546495961284,
+    "pmdec_masyr": 5.579537890134184,
+    "parallax_mas": 1.5010735045041201,
+    "ruwe": 1.0618415
+   },
+   "class": "too_faint",
+   "id": "s0021",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.22723095644858,
+     "dec": 66.73199117628823
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.2266927617173,
+     "dec": 66.73192499546471
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.22892936671457,
+     "dec": 66.73234234788698
+    },
+    {
+     "visit": "visit-4",
+     "ra": 248.22712657842047,
+     "dec": 66.73201178726363
+    }
+   ]
+  },
+  {
+   "ra": 248.10290979500616,
+   "dec": 66.75921254585118,
+   "best_band": "short",
+   "stack_snr": 10.3,
+   "det_snr": {
+    "short": 10.3
+   },
+   "forced_snr": {
+    "short": 10.3,
+    "mid": 9.1,
+    "cold": 10.5
+   },
+   "flux_ujy": {
+    "short": 601.2,
+    "mid": 1106.7,
+    "cold": 1353.0
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [
+    "visit-3"
+   ],
+   "linked_orphans": false,
+   "intermittent": true,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "intermittent",
+   "id": "s0114",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.10290979500616,
+     "dec": 66.75921254585118
+    }
+   ]
+  },
+  {
+   "ra": 248.13148445187306,
+   "dec": 66.78072742884947,
+   "best_band": "short",
+   "stack_snr": 9.6,
+   "det_snr": {
+    "short": 9.6
+   },
+   "forced_snr": {
+    "short": 9.6,
+    "mid": 7.8,
+    "cold": 6.7
+   },
+   "flux_ujy": {
+    "short": 972.1,
+    "mid": 1303.7,
+    "cold": 947.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0024",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.13210977278652,
+     "dec": 66.78050401850628
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.13148445187306,
+     "dec": 66.78072742884947
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.131262727634,
+     "dec": 66.78055199574023
+    }
+   ]
+  },
+  {
+   "ra": 248.00525920525365,
+   "dec": 66.82640659029016,
+   "best_band": "short",
+   "stack_snr": 8.7,
+   "det_snr": {
+    "short": 8.7
+   },
+   "forced_snr": {
+    "short": 8.7,
+    "cold": 1.9
+   },
+   "flux_ujy": {
+    "short": 624.9,
+    "mid": null,
+    "cold": 125.2
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "gaia": {
+    "source_id": "1648332002083446656",
+    "g": 16.761274,
+    "sep_arcsec": 0.6,
+    "pmra_masyr": -3.1635004983610933,
+    "pmdec_masyr": -1.3864270904356335,
+    "parallax_mas": 0.4158070166788753,
+    "ruwe": 0.96958655
+   },
+   "class": "too_faint",
+   "id": "s0039",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.00543733674203,
+     "dec": 66.82659539368031
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.00525920525365,
+     "dec": 66.82640659029016
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.00589751888316,
+     "dec": 66.82654533443582
+    }
+   ]
+  },
+  {
+   "ra": 248.17208042836057,
+   "dec": 66.685924314595,
+   "best_band": "short",
+   "stack_snr": 8.7,
+   "det_snr": {
+    "short": 8.7,
+    "mid": 4.0
+   },
+   "forced_snr": {
+    "short": 8.7,
+    "mid": 4.0,
+    "cold": 1.7
+   },
+   "flux_ujy": {
+    "short": 318.5,
+    "mid": 211.8,
+    "cold": 126.8
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 31,
+   "n_native_visits": 3,
+   "motion_status": "not_significant",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "model": "linear_parallax",
+   "sigma": 0.0,
+   "pm_over_error": 0.87,
+   "pm_arcsec_yr": 0.301,
+   "pmra_masyr": 237.21912469200097,
+   "pmdec_masyr": 185.22695069734573,
+   "pmra_err_masyr": 343.4681709546139,
+   "pmdec_err_masyr": 346.25553806136725,
+   "parallax_mas": 49.63164993957509,
+   "parallax_err_mas": 149.9543244644693,
+   "chi2r": 1.1469326685818282,
+   "baseline_days": 425.9174048030036,
+   "class": "static",
+   "id": "s0040",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.17169970934052,
+     "dec": 66.68591806299419
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.17208042836057,
+     "dec": 66.685924314595
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1716918912913,
+     "dec": 66.68588777748481
+    }
+   ]
+  },
+  {
+   "ra": 248.08371048142993,
+   "dec": 66.74450944507855,
+   "best_band": "short",
+   "stack_snr": 8.0,
+   "det_snr": {
+    "short": 8.0,
+    "mid": 5.2
+   },
+   "forced_snr": {
+    "short": 8.0,
+    "mid": 5.2,
+    "cold": 4.8
+   },
+   "flux_ujy": {
+    "short": 389.6,
+    "mid": 438.2,
+    "cold": 257.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0033",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.08403969345244,
+     "dec": 66.74435930048807
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.08371048142993,
+     "dec": 66.74450944507855
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.083655486913,
+     "dec": 66.74452379800134
+    }
+   ]
+  },
+  {
+   "ra": 248.24695417121217,
+   "dec": 66.77005528235709,
+   "best_band": "short",
+   "stack_snr": 6.1,
+   "det_snr": {
+    "short": 6.1,
+    "mid": 5.7,
+    "cold": 4.2
+   },
+   "forced_snr": {
+    "short": 6.1,
+    "mid": 5.7,
+    "cold": 4.2
+   },
+   "flux_ujy": {
+    "short": 506.4,
+    "mid": 349.8,
+    "cold": 484.6
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0042",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.24747245989525,
+     "dec": 66.77018953788175
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.24695417121217,
+     "dec": 66.77005528235709
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.24737749541626,
+     "dec": 66.77018711970575
+    }
+   ]
+  },
+  {
+   "ra": 248.07375861443222,
+   "dec": 66.79374843087015,
+   "best_band": "short",
+   "stack_snr": 5.6,
+   "det_snr": {
+    "short": 5.6
+   },
+   "forced_snr": {
+    "short": 5.6,
+    "mid": 1.8,
+    "cold": 1.4
+   },
+   "flux_ujy": {
+    "short": 225.7,
+    "mid": 120.2,
+    "cold": 87.5
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-1",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0058",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.07355954567356,
+     "dec": 66.79377969575063
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.07375861443222,
+     "dec": 66.79374843087015
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.0735698403124,
+     "dec": 66.79379196378228
+    }
+   ]
+  },
+  {
+   "ra": 248.21612713331103,
+   "dec": 66.80429910941425,
+   "best_band": "short",
+   "stack_snr": 5.5,
+   "det_snr": {
+    "short": 5.5,
+    "mid": 3.1
+   },
+   "forced_snr": {
+    "short": 5.5,
+    "mid": 3.1,
+    "cold": 2.4
+   },
+   "flux_ujy": {
+    "short": 226.3,
+    "mid": 244.8,
+    "cold": 143.0
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2",
+    "visit-3"
+   ],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0054",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.21651737910184,
+     "dec": 66.80441896476565
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.21612713331103,
+     "dec": 66.80429910941425
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.2160657941998,
+     "dec": 66.80442833908957
+    }
+   ]
+  },
+  {
+   "ra": 248.18928752464453,
+   "dec": 66.71887132284841,
+   "best_band": "short",
+   "stack_snr": 5.4,
+   "det_snr": {
+    "short": 5.4
+   },
+   "forced_snr": {
+    "short": 5.4,
+    "mid": 3.0,
+    "cold": 2.7
+   },
+   "flux_ujy": {
+    "short": 248.1,
+    "mid": 278.6,
+    "cold": 247.9
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [
+    "visit-2"
+   ],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0056",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.18901311048742,
+     "dec": 66.71896911361733
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.18928752464453,
+     "dec": 66.71887132284841
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.1887274581073,
+     "dec": 66.71894073121516
+    }
+   ]
+  },
+  {
+   "ra": 248.3384071034989,
+   "dec": 66.6775189046541,
+   "best_band": "short",
+   "stack_snr": 5.4,
+   "det_snr": {
+    "short": 5.4,
+    "mid": 4.4
+   },
+   "forced_snr": {
+    "short": 5.4,
+    "mid": 4.4
+   },
+   "flux_ujy": {
+    "short": 420.8,
+    "mid": 524.7,
+    "cold": null
+   },
+   "visits_detected": [
+    "visit-2"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0064",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.3384071034989,
+     "dec": 66.6775189046541
+    }
+   ]
+  },
+  {
+   "ra": 248.07524714760893,
+   "dec": 66.7573504149778,
+   "best_band": "short",
+   "stack_snr": 5.2,
+   "det_snr": {
+    "short": 5.2,
+    "mid": 5.2
+   },
+   "forced_snr": {
+    "short": 5.2,
+    "mid": 5.2,
+    "cold": 3.5
+   },
+   "flux_ujy": {
+    "short": 263.6,
+    "mid": 492.4,
+    "cold": 140.6
+   },
+   "visits_detected": [
+    "visit-1",
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0047",
+   "track": [
+    {
+     "visit": "visit-1",
+     "ra": 248.0756232007083,
+     "dec": 66.75727168480502
+    },
+    {
+     "visit": "visit-2",
+     "ra": 248.07524714760893,
+     "dec": 66.7573504149778
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.07529230675883,
+     "dec": 66.75724224935044
+    }
+   ]
+  },
+  {
+   "ra": 248.23189681642026,
+   "dec": 66.73978362005768,
+   "best_band": "short",
+   "stack_snr": 5.1,
+   "det_snr": {
+    "short": 5.1
+   },
+   "forced_snr": {
+    "short": 5.1,
+    "mid": 3.9,
+    "cold": 5.3
+   },
+   "flux_ujy": {
+    "short": 265.8,
+    "mid": 408.0,
+    "cold": 491.1
+   },
+   "visits_detected": [
+    "visit-2",
+    "visit-3"
+   ],
+   "missing_visits": [],
+   "linked_orphans": false,
+   "intermittent": false,
+   "n_native_positions": 0,
+   "n_native_visits": 0,
+   "motion_status": "insufficient",
+   "flags": [],
+   "visits_too_thin": [],
+   "cold_only": false,
+   "class": "too_faint",
+   "id": "s0065",
+   "track": [
+    {
+     "visit": "visit-2",
+     "ra": 248.23189681642026,
+     "dec": 66.73978362005768
+    },
+    {
+     "visit": "visit-3",
+     "ra": 248.23373879479297,
+     "dec": 66.73979094683361
+    }
+   ]
+  }
+ ],
+ "exposures": [
+  {
+   "id": "2025W20_2D_0243_1-D3",
+   "mjd": 60811.956495321,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "452bf2da5e1f53a80e1da171b06422d0e0ea2469c0bca8e098a51ff7b6ef72d8",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W20_2D/l2b-v27-2026-198/3/level2_2025W20_2D_0243_1D3_spx_l2b-v27-2026-198.fits"
+  },
+  {
+   "id": "2025W20_2D_0243_1-D6",
+   "mjd": 60811.956495333,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "3e428cefe79881fa414822309a14aa59d516eed23ad6b408f79b39bdb527ca9c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W20_2D/l2b-v27-2026-198/6/level2_2025W20_2D_0243_1D6_spx_l2b-v27-2026-198.fits"
+  },
+  {
+   "id": "2025W21_1B_0329_1-D3",
+   "mjd": 60815.693346606,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "7b87bf4f8885df0cae8af1d337a7be3cdf2e4544df202a4fa8e3e895ba4f3cef",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W21_1B/l2b-v27-2026-199/3/level2_2025W21_1B_0329_1D3_spx_l2b-v27-2026-199.fits"
+  },
+  {
+   "id": "2025W21_1B_0329_1-D6",
+   "mjd": 60815.693346606,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "67d620ca8c72614bd669498a6e037b621eb8a89edc785ea3d37581be4b70a968",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W21_1B/l2b-v27-2026-199/6/level2_2025W21_1B_0329_1D6_spx_l2b-v27-2026-199.fits"
+  },
+  {
+   "id": "2025W23_1C_0021_3-D6",
+   "mjd": 60828.129857983,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "e2d4888f2dcba4a6bb30b51ab5f0e8c14e9d3cc1f01f861a8770f581468a9c87",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W23_1C/l2b-v27-2026-200/6/level2_2025W23_1C_0021_3D6_spx_l2b-v27-2026-200.fits"
+  },
+  {
+   "id": "2025W23_1C_0021_4-D3",
+   "mjd": 60828.131350229,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "4accdfb902a7809a1d244ce151208508a6cbbe7f0921e9bdbb68a91dcc28e82a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W23_1C/l2b-v27-2026-200/3/level2_2025W23_1C_0021_4D3_spx_l2b-v27-2026-200.fits"
+  },
+  {
+   "id": "2025W23_2B_0206_1-D1",
+   "mjd": 60832.474553631,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "a60a59b0ba6476dc0a548a07175d31a4d4617894cff6dcb7cfabf5b63ff8d991",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W23_2B/l2b-v27-2026-201/1/level2_2025W23_2B_0206_1D1_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W23_2B_0206_1-D4",
+   "mjd": 60832.474553631,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "12f8d6fa81acec64b66e30ece5cf06aa5fb9b21e52bec7e1af6ac7ac68a9b50a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W23_2B/l2b-v27-2026-201/4/level2_2025W23_2B_0206_1D4_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W23_2B_0696_1-D2",
+   "mjd": 60834.788416907,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "57c25e55df451e4b707146f57ba1f40fe0f933e9ee6a83546c5fdfc3336cf230",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W23_2B/l2b-v27-2026-201/2/level2_2025W23_2B_0696_1D2_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W23_2B_0696_1-D5",
+   "mjd": 60834.788416907,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "2e0b073b4f9bc4718e2946ebc948fff687c8083fee855364bf4bcc710d8266a6",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W23_2B/l2b-v27-2026-201/5/level2_2025W23_2B_0696_1D5_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W24_1A_0123_3-D2",
+   "mjd": 60835.538771617,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "bb2357107caae1bc69109a6aae6d9cefa5bdbd7d6b1f9e9647c23861a8dfae1e",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/2/level2_2025W24_1A_0123_3D2_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W24_1A_0457_1-D3",
+   "mjd": 60837.302597497,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "e1dbe898061748af8f1a1a98655b8bcf11202f9027cb7ff01dc7e6e669d47db6",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0457_1D3_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W24_1A_0457_1-D6",
+   "mjd": 60837.302597497,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "295f1cb355954c476905b02fc793c4128d9f6b4f33962818135a6976f18eef1c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/6/level2_2025W24_1A_0457_1D6_spx_l2b-v27-2026-201.fits"
+  },
+  {
+   "id": "2025W24_2D_0033_1-D3",
+   "mjd": 60838.660903435,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "98669627615df7832d06d9786047f8b4fec7ce80da6e5cc28c974d8c9c21f26d",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/3/level2_2025W24_2D_0033_1D3_spx_l2b-v27-2026-202.fits"
+  },
+  {
+   "id": "2025W24_2D_0033_1-D6",
+   "mjd": 60838.660903435,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "ce297629c0b3a2b67826b266d08c2489fb54294a29d98a6026f7cc6a84e3f459",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/6/level2_2025W24_2D_0033_1D6_spx_l2b-v27-2026-202.fits"
+  },
+  {
+   "id": "2025W24_2D_0074_1-D6",
+   "mjd": 60838.865128979,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "523a72b48fb274a69835b0eb528dd9557db63ba73c0afd565e89c1f9191d4d07",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/6/level2_2025W24_2D_0074_1D6_spx_l2b-v27-2026-202.fits"
+  },
+  {
+   "id": "2025W24_2D_0074_1-D3",
+   "mjd": 60838.86512899,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "6daa5dbb02ad225604d6be278001768da80cd525f36d752e405e0381c526d3c6",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/3/level2_2025W24_2D_0074_1D3_spx_l2b-v27-2026-202.fits"
+  },
+  {
+   "id": "2025W24_2D_0534_1-D5",
+   "mjd": 60841.446532069,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "3d2a542ca13d33e0786d0b73a50a6bb2dcd096cc82b6a91b11608f3635ff6cd5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/5/level2_2025W24_2D_0534_1D5_spx_l2b-v27-2026-202.fits"
+  },
+  {
+   "id": "2025W24_2D_0534_2-D2",
+   "mjd": 60841.448024326,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "65d2ce55d6a3ba78bb65ccc9982a6012b2e4272ff2e793d841364765cad47e46",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/2/level2_2025W24_2D_0534_2D2_spx_l2b-v27-2026-202.fits"
+  },
+  {
+   "id": "2025W26_1A_0506_2-D2",
+   "mjd": 60851.570388307,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "df214dbf9e141d17641b7cb95bbfe9ab6d71e51ea94cadd89ebb934dc3ce33da",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W26_1A/l2b-v27-2026-213/2/level2_2025W26_1A_0506_2D2_spx_l2b-v27-2026-213.fits"
+  },
+  {
+   "id": "2025W26_1A_0506_2-D5",
+   "mjd": 60851.570388319,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "58e6e21f1d88783158271be71998d27883bff631b9756265859304854af96a4f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W26_1A/l2b-v27-2026-213/5/level2_2025W26_1A_0506_2D5_spx_l2b-v27-2026-213.fits"
+  },
+  {
+   "id": "2025W27_1A_0331_2-D5",
+   "mjd": 60857.683920113,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "66f50feabc828bf0dbc23a97ff057bb306b2c8673f946acc24f0c02a179dad3c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/5/level2_2025W27_1A_0331_2D5_spx_l2b-v27-2026-214.fits"
+  },
+  {
+   "id": "2025W27_1A_0331_3-D2",
+   "mjd": 60857.685412381,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "ab2aed5eb42e6bcdf088dc74384d26f77ddd26a9d3b33571b85e272492a4deea",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0331_3D2_spx_l2b-v27-2026-214.fits"
+  },
+  {
+   "id": "2025W27_1A_0555_4-D2",
+   "mjd": 60858.909718446,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "ad2f08e04e0f0198aeec8ccc8d7e7bb9f220b1b09110b62e1403c5d648247e5c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0555_4D2_spx_l2b-v27-2026-214.fits"
+  },
+  {
+   "id": "2025W27_2A_0243_1-D4",
+   "mjd": 60860.540859418,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "66911bc9e1083b71a80af6498195317ae7fd679fd4910d92b33aef8a108893a5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_2A/l2b-v27-2026-215/4/level2_2025W27_2A_0243_1D4_spx_l2b-v27-2026-215.fits"
+  },
+  {
+   "id": "2025W27_2A_0243_1-D1",
+   "mjd": 60860.54085943,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "6417c82e58368d15b95356568ac1cbb84f6fa32407f848a2d850774e818abffa",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_2A/l2b-v27-2026-215/1/level2_2025W27_2A_0243_1D1_spx_l2b-v27-2026-215.fits"
+  },
+  {
+   "id": "2025W28_1B_0100_1-D1",
+   "mjd": 60863.457737578,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "51a8b71b2e390bd2d0dad1222b739bc6bc37db7f1f5ef523a9eaa5b2b3a2980e",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_1B/l2b-v27-2026-215/1/level2_2025W28_1B_0100_1D1_spx_l2b-v27-2026-215.fits"
+  },
+  {
+   "id": "2025W29_1A_0141_2-D4",
+   "mjd": 60870.728199002,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "fbb5271ccd936fd3c3a2e82bcb3dad86b545320f4c7c9eccd71dadf289ad070f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W29_1A/l2b-v27-2026-217/4/level2_2025W29_1A_0141_2D4_spx_l2b-v27-2026-217.fits"
+  },
+  {
+   "id": "2025W29_1A_0676_2-D1",
+   "mjd": 60873.445932682,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "435b8cccc05ca1215a560fb74efe6231070b1c02c676ef174c45365db6d2ed8d",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W29_1A/l2b-v27-2026-217/1/level2_2025W29_1A_0676_2D1_spx_l2b-v27-2026-217.fits"
+  },
+  {
+   "id": "2025W29_1A_0676_2-D4",
+   "mjd": 60873.445932682,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "af03d67f6570d7d241389f2730443795d9043dd6a27ee64cbc626a1f44aa9de5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W29_1A/l2b-v27-2026-217/4/level2_2025W29_1A_0676_2D4_spx_l2b-v27-2026-217.fits"
+  },
+  {
+   "id": "2025W29_2A_0288_2-D1",
+   "mjd": 60874.668675587,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "ed2d13af04ac0870f6d04ba68139a77f9d20b7472a5b39a69b37f8178de7f56a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W29_2A/l2b-v27-2026-219/1/level2_2025W29_2A_0288_2D1_spx_l2b-v27-2026-219.fits"
+  },
+  {
+   "id": "2025W29_2A_0288_2-D4",
+   "mjd": 60874.668675587,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "d0944c3dac4f363c81ec32ac050a941b46106e4bbd2658a9acd0af6d91dcc16f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W29_2A/l2b-v27-2026-219/4/level2_2025W29_2A_0288_2D4_spx_l2b-v27-2026-219.fits"
+  },
+  {
+   "id": "2025W30_1B_0289_1-D1",
+   "mjd": 60878.608885645,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "872dc32c5e076485fdbda49c74db04d07c4cab8cbb401a5b0ce98fcb7ef11f6d",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W30_1B/l2b-v27-2026-220/1/level2_2025W30_1B_0289_1D1_spx_l2b-v27-2026-220.fits"
+  },
+  {
+   "id": "2025W30_1B_0289_1-D4",
+   "mjd": 60878.608885645,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "bd83b942e456741724b2dea28c4c94c0fab30f220324371109c7f66007ecaf3f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W30_1B/l2b-v27-2026-220/4/level2_2025W30_1B_0289_1D4_spx_l2b-v27-2026-220.fits"
+  },
+  {
+   "id": "2025W42_2A_0244_1-D1",
+   "mjd": 60965.615173886,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "01564615099f8687ed6befdf9da2318882ba297d06ea0c70313c7b39cdf3dacc",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W42_2A/l2b-v27-2026-243/1/level2_2025W42_2A_0244_1D1_spx_l2b-v27-2026-243.fits"
+  },
+  {
+   "id": "2025W42_2A_0244_1-D4",
+   "mjd": 60965.615173886,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "bf218161b2b9d7e30a14ccd17a1f89e6f3e8af4d13e62501d9d39605db752c75",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W42_2A/l2b-v27-2026-243/4/level2_2025W42_2A_0244_1D4_spx_l2b-v27-2026-243.fits"
+  },
+  {
+   "id": "2025W42_2A_0526_2-D1",
+   "mjd": 60967.040543898,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "09f1104ad03eb3877a0ab39d6567643a7873c6a03d521f5693c17a9963256125",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W42_2A/l2b-v27-2026-243/1/level2_2025W42_2A_0526_2D1_spx_l2b-v27-2026-243.fits"
+  },
+  {
+   "id": "2025W42_2A_0526_2-D4",
+   "mjd": 60967.040543898,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "721ef87bdac8d67b2497e0e07b10c79cd1e0567bd7b90a4b4c842ea157482f7a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W42_2A/l2b-v27-2026-243/4/level2_2025W42_2A_0526_2D4_spx_l2b-v27-2026-243.fits"
+  },
+  {
+   "id": "2025W43_2A_0464_1-D4",
+   "mjd": 60973.558518087,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "e3e61ad0b391d39b54e884e2acdf8ab9365de4c5e175d0d3c69829f7c310096f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W43_2A/l2b-v27-2026-245/4/level2_2025W43_2A_0464_1D4_spx_l2b-v27-2026-245.fits"
+  },
+  {
+   "id": "2025W43_2A_0464_2-D1",
+   "mjd": 60973.560010356,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "bbcc285b7d0235257a6a3c8324151d9eb73610ecbbef570efa5593002ec1ed4f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W43_2A/l2b-v27-2026-245/1/level2_2025W43_2A_0464_2D1_spx_l2b-v27-2026-245.fits"
+  },
+  {
+   "id": "2025W45_1A_0638_3-D1",
+   "mjd": 60984.836963689,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "039cc868b5f0d1f0c537fab4a84d0567af717c58f58fd83bb7ac04b68effe905",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W45_1A/l2b-v27-2026-247/1/level2_2025W45_1A_0638_3D1_spx_l2b-v27-2026-247.fits"
+  },
+  {
+   "id": "2025W45_1A_0638_3-D4",
+   "mjd": 60984.836963689,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "a8e4e8b5d26da56cbb99564e1c714c525baeffc3eec0078939dfb7b2fdae7a49",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W45_1A/l2b-v27-2026-247/4/level2_2025W45_1A_0638_3D4_spx_l2b-v27-2026-247.fits"
+  },
+  {
+   "id": "2025W46_2A_0002_4-D4",
+   "mjd": 60992.511577844,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "e3b49d92d56ca3aae1b1794f2bc973d3e28422f1d31408087893fa222843cc43",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W46_2A/l2b-v27-2026-207/4/level2_2025W46_2A_0002_4D4_spx_l2b-v27-2026-207.fits"
+  },
+  {
+   "id": "2025W46_2A_0163_1-D1",
+   "mjd": 60993.253832555,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "dcd192f1dc421f2f16c7664f2627d21f10fe19581edadfd95087d36158235097",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W46_2A/l2b-v27-2026-207/1/level2_2025W46_2A_0163_1D1_spx_l2b-v27-2026-207.fits"
+  },
+  {
+   "id": "2025W47_1A_0388_1-D2",
+   "mjd": 60997.733404036,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "e6357e5921f10e8f9d86a0dd1b50d9bc3f707b9e95b4eb1daaf52dd1ab2ae713",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0388_1D2_spx_l2b-v27-2026-208.fits"
+  },
+  {
+   "id": "2025W47_1A_0388_1-D5",
+   "mjd": 60997.733404036,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "305b20bd295ea93c8b73b209c51550912b69ee2f5fa087534ed3b68f36ee846c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/5/level2_2025W47_1A_0388_1D5_spx_l2b-v27-2026-208.fits"
+  },
+  {
+   "id": "2025W47_2A_0033_1-D4",
+   "mjd": 60999.637503388,
+   "detector": 4,
+   "release": "DR1",
+   "sha256": "96f7dc20818bc047b3b5d5a65b82ae0b83a047b6378a9434e3842851551bfdae",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_2A/l2b-v27-2026-208/4/level2_2025W47_2A_0033_1D4_spx_l2b-v27-2026-208.fits"
+  },
+  {
+   "id": "2025W47_2A_0033_1-D1",
+   "mjd": 60999.6375034,
+   "detector": 1,
+   "release": "DR1",
+   "sha256": "96b2dd8da403fbb0c09c58f939ead9936356bbaa54bf6d4749984e908f474336",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_2A/l2b-v27-2026-208/1/level2_2025W47_2A_0033_1D1_spx_l2b-v27-2026-208.fits"
+  },
+  {
+   "id": "2025W48_2A_0693_2-D5",
+   "mjd": 61009.482405749,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "b87c248bb596e09115006425f9ac44e7c3ff014c25f55341f389a418105504e5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W48_2A/l2b-v27-2026-209/5/level2_2025W48_2A_0693_2D5_spx_l2b-v27-2026-209.fits"
+  },
+  {
+   "id": "2025W48_2A_0693_3-D2",
+   "mjd": 61009.483898006,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "389b492e73f092772dfbdfd6b4463c1852b4206d53a5401adeea21c6e3d6810e",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W48_2A/l2b-v27-2026-209/2/level2_2025W48_2A_0693_3D2_spx_l2b-v27-2026-209.fits"
+  },
+  {
+   "id": "2025W49_1A_0280_2-D2",
+   "mjd": 61011.247814175,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "3ed663102a046c5dcdcde6ff0b88f961fe9253abcc47c8d9e2f6ef262374c3ec",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W49_1A/l2b-v27-2026-209/2/level2_2025W49_1A_0280_2D2_spx_l2b-v27-2026-209.fits"
+  },
+  {
+   "id": "2025W49_1A_0280_2-D5",
+   "mjd": 61011.247814175,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "74fa4b36464d966805e51fd4c6bd571d8ed6031d998273546a44fdf0ff5f1366",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W49_1A/l2b-v27-2026-209/5/level2_2025W49_1A_0280_2D5_spx_l2b-v27-2026-209.fits"
+  },
+  {
+   "id": "2025W50_1A_0661_4-D5",
+   "mjd": 61019.87715002,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "48fc9308ec4a2f5b59ebc4cfab8a0b0dd49dd4d71d719bf2869d5cd85dcddc72",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W50_1A/l2b-v27-2026-209/5/level2_2025W50_1A_0661_4D5_spx_l2b-v27-2026-209.fits"
+  },
+  {
+   "id": "2025W50_2A_0214_3-D2",
+   "mjd": 61021.230891687,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "e662e227e467def4a19023185ed982032ac659a4be09ed02f19239a53debc3b2",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W50_2A/l2b-v27-2026-210/2/level2_2025W50_2A_0214_3D2_spx_l2b-v27-2026-210.fits"
+  },
+  {
+   "id": "2025W50_2A_0301_2-D2",
+   "mjd": 61021.500012786,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "b3f4c21b9b86a19b1e4311349f1aa2c4d9c50ea39998aa44d1bdd53df089898f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W50_2A/l2b-v27-2026-210/2/level2_2025W50_2A_0301_2D2_spx_l2b-v27-2026-210.fits"
+  },
+  {
+   "id": "2025W50_2A_0301_2-D5",
+   "mjd": 61021.500012786,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "bd15ab013052a43acab47f5f3a74909e12d7d15a60535e5d4ee65e8a3cea105b",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W50_2A/l2b-v27-2026-210/5/level2_2025W50_2A_0301_2D5_spx_l2b-v27-2026-210.fits"
+  },
+  {
+   "id": "2025W50_2A_0799_1-D2",
+   "mjd": 61023.73926553,
+   "detector": 2,
+   "release": "DR1",
+   "sha256": "ec24f80024197ac669649f495713bb9aa70b02a275d8af79998f5e237bb92272",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W50_2A/l2b-v27-2026-210/2/level2_2025W50_2A_0799_1D2_spx_l2b-v27-2026-210.fits"
+  },
+  {
+   "id": "2025W50_2A_0799_1-D5",
+   "mjd": 61023.73926553,
+   "detector": 5,
+   "release": "DR1",
+   "sha256": "249298be5c538ba342ae31025af77ead9b364d0821178a237ace9556a7cfb0b5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W50_2A/l2b-v27-2026-210/5/level2_2025W50_2A_0799_1D5_spx_l2b-v27-2026-210.fits"
+  },
+  {
+   "id": "2025W52_2A_0161_2-D6",
+   "mjd": 61035.218719245,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "d922acfb9ee7b19db95b4a03e10577f69c76a5fb5e7e3c6236c3aa8f7644e189",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W52_2A/l2b-v27-2026-211/6/level2_2025W52_2A_0161_2D6_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2025W52_2A_0161_2-D3",
+   "mjd": 61035.218719256,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "5e08626891c81386253d57c6b07528e3fb58e67507014402492a6f5faad426bf",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W52_2A/l2b-v27-2026-211/3/level2_2025W52_2A_0161_2D3_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2025W52_2A_0227_3-D3",
+   "mjd": 61035.559646143,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "d907b3aa16a26c31390575e4e04a8cd8dc57c80048e7208db044c2eca4b6474b",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W52_2A/l2b-v27-2026-211/3/level2_2025W52_2A_0227_3D3_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2025W52_2A_0227_3-D6",
+   "mjd": 61035.559646143,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "10b016827f4e96c07a45fcfad955193c01d388ecfa49e10225e695a413906e9c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W52_2A/l2b-v27-2026-211/6/level2_2025W52_2A_0227_3D6_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2026W01_1A_0257_3-D3",
+   "mjd": 61039.155713863,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "d63b2581737cd9bee435d9096ed3a71e6d37f81f4ed2a38bf72ad6a1c36c9f21",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W01_1A/l2b-v27-2026-211/3/level2_2026W01_1A_0257_3D3_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2026W01_1A_0257_3-D6",
+   "mjd": 61039.155713863,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "3fae06b81f7be0b00b3851e517373e960a6a1a492aa75f06a866df9e66e56b46",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W01_1A/l2b-v27-2026-211/6/level2_2026W01_1A_0257_3D6_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2026W01_1A_0656_1-D3",
+   "mjd": 61041.189710321,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "74f1f617a8abb0e2843046617e5e59d853d8d1e5b021026daaa0a4e72e913180",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W01_1A/l2b-v27-2026-211/3/level2_2026W01_1A_0656_1D3_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2026W01_1A_0656_1-D6",
+   "mjd": 61041.189710321,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "6cbb3c6e4bc2df097907a67ff194f8ce411afe61112598f43c44fded4d6339b5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W01_1A/l2b-v27-2026-211/6/level2_2026W01_1A_0656_1D6_spx_l2b-v27-2026-211.fits"
+  },
+  {
+   "id": "2026W01_2A_0426_2-D6",
+   "mjd": 61043.56946583,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "b2de6420c107f84dfb3b8a50d3c25e01ea3f14be48f7eb813eac47a2f0371682",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W01_2A/l2b-v27-2026-212/6/level2_2026W01_2A_0426_2D6_spx_l2b-v27-2026-212.fits"
+  },
+  {
+   "id": "2026W01_2A_0426_2-D3",
+   "mjd": 61043.569465842,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "8407e26583e33545a12e5ae33e4417c602ca848c842c33f9a22c8f60e44bfbee",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W01_2A/l2b-v27-2026-212/3/level2_2026W01_2A_0426_2D3_spx_l2b-v27-2026-212.fits"
+  },
+  {
+   "id": "2026W03_1A_0304_4-D3",
+   "mjd": 61053.415291837,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "cd930e7a849d62faaacf071d18b2d3545b76675a2d0bc77798142c9506f7207c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W03_1A/l2b-v27-2026-214/3/level2_2026W03_1A_0304_4D3_spx_l2b-v27-2026-214.fits"
+  },
+  {
+   "id": "2026W03_1A_0304_4-D6",
+   "mjd": 61053.415291837,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "f487a5eaeea788b2735782d5aed6aab96deb69735dcfcc074c9b46ba0e3dbd0b",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W03_1A/l2b-v27-2026-214/6/level2_2026W03_1A_0304_4D6_spx_l2b-v27-2026-214.fits"
+  },
+  {
+   "id": "2026W17_1B_0434_1-D3",
+   "mjd": 61152.331717948,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "c664beb60b784c16b93212643323be0b68dced72015542017b6edfaeb5f46fe6",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W17_1B/l2b-v27-2026-242/3/level2_2026W17_1B_0434_1D3_spx_l2b-v27-2026-242.fits"
+  },
+  {
+   "id": "2026W17_1B_0434_1-D6",
+   "mjd": 61152.33171796,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "fdec7f110233c0c9286dea9562ddf571c81c79bce8456442ce799ef53b6845b9",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W17_1B/l2b-v27-2026-242/6/level2_2026W17_1B_0434_1D6_spx_l2b-v27-2026-242.fits"
+  },
+  {
+   "id": "2026W17_2A_0255_2-D3",
+   "mjd": 61154.640555506,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "6c5f9f2887ab7cb089a5f86de8d59c6f1db000f790d8c14a0bf57cd91c6f1f43",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W17_2A/l2b-v27-2026-243/3/level2_2026W17_2A_0255_2D3_spx_l2b-v27-2026-243.fits"
+  },
+  {
+   "id": "2026W17_2A_0255_2-D6",
+   "mjd": 61154.640555506,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "c07e6f787ff4db6499c67c9e7c9b80860c7f6ced4269e5a8cf070019257ebdf8",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W17_2A/l2b-v27-2026-243/6/level2_2026W17_2A_0255_2D6_spx_l2b-v27-2026-243.fits"
+  },
+  {
+   "id": "2026W19_2A_1339_2-D3",
+   "mjd": 61170.939512462,
+   "detector": 3,
+   "release": "DR1",
+   "sha256": "ac347add3c19e7d137733a651179799bb8b4b19277d9fe831579258a0c4f0ad8",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W19_2A/l2b-v27-2026-245/3/level2_2026W19_2A_1339_2D3_spx_l2b-v27-2026-245.fits"
+  },
+  {
+   "id": "2026W20_1A_0101_1-D6",
+   "mjd": 61171.27571399,
+   "detector": 6,
+   "release": "DR1",
+   "sha256": "c44392bfffc5505d63f6226dff49a8f76d0c8192d2f0c69612faa54a69753aec",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W20_1A/l2b-v27-2026-246/6/level2_2026W20_1A_0101_1D6_spx_l2b-v27-2026-246.fits"
+  },
+  {
+   "id": "2026W20_2A_0294_4-D3",
+   "mjd": 61176.367394546,
+   "detector": 3,
+   "release": "QR3",
+   "sha256": "ffeab296b3a96bde7b8de83e06997baff9254a9a3370d145136987ee00589803",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W20_2A/l2b-v27-2026-267/3/level2_2026W20_2A_0294_4D3_spx_l2b-v27-2026-267.fits"
+  },
+  {
+   "id": "2026W20_2A_0294_4-D6",
+   "mjd": 61176.367394546,
+   "detector": 6,
+   "release": "QR3",
+   "sha256": "ad3bff20e463c97102f101f07f214ecfeceb70c156d1e2fe0c4c89a3aa1cdee2",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W20_2A/l2b-v27-2026-267/6/level2_2026W20_2A_0294_4D6_spx_l2b-v27-2026-267.fits"
+  },
+  {
+   "id": "2026W21_2A_0325_4-D3",
+   "mjd": 61183.495648041,
+   "detector": 3,
+   "release": "QR3",
+   "sha256": "8b8e3ba31f6a9fcce72b1aeff4d4592c728e8905e9be9aa786e72ca24031258d",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W21_2A/l2b-v27-2026-268/3/level2_2026W21_2A_0325_4D3_spx_l2b-v27-2026-268.fits"
+  },
+  {
+   "id": "2026W21_2A_0325_4-D6",
+   "mjd": 61183.495648041,
+   "detector": 6,
+   "release": "QR3",
+   "sha256": "2de8f69676c1123b31a738afb414ab99fad21bdb08f8225d165a612e1e4ba773",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W21_2A/l2b-v27-2026-268/6/level2_2026W21_2A_0325_4D6_spx_l2b-v27-2026-268.fits"
+  },
+  {
+   "id": "2026W24_2B_0242_4-D6",
+   "mjd": 61203.861570807,
+   "detector": 6,
+   "release": "QR3",
+   "sha256": "f7e3c266950e865d0736ec368e1950523d20de295f323318a6ab5d141e26dea7",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W24_2B/l2b-v27-2026-272/6/level2_2026W24_2B_0242_4D6_spx_l2b-v27-2026-272.fits"
+  },
+  {
+   "id": "2026W24_2B_0242_4-D3",
+   "mjd": 61203.861570819,
+   "detector": 3,
+   "release": "QR3",
+   "sha256": "9e54d17154045a997a4d1acf0696c84fadd62223e8d704d1500cfeed6bfbf22f",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W24_2B/l2b-v27-2026-272/3/level2_2026W24_2B_0242_4D3_spx_l2b-v27-2026-272.fits"
+  },
+  {
+   "id": "2026W25_2A_0573_1-D2",
+   "mjd": 61212.143088608,
+   "detector": 2,
+   "release": "QR3",
+   "sha256": "b888a318ab91add931dd8f996bbfe1c430166276bafbebaf6126d85441619279",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W25_2A/l2b-v27-2026-273/2/level2_2026W25_2A_0573_1D2_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W25_2A_0573_1-D5",
+   "mjd": 61212.14308862,
+   "detector": 5,
+   "release": "QR3",
+   "sha256": "12c6f28c4bd6806eea6ddfabd11ff952851d3daa402996d4fdfee84ed6cc956d",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W25_2A/l2b-v27-2026-273/5/level2_2026W25_2A_0573_1D5_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W25_2A_0661_1-D2",
+   "mjd": 61212.618940356,
+   "detector": 2,
+   "release": "QR3",
+   "sha256": "a09a6997eec69a02e8f8732481af96cee503c602afa1286fd85b1a898102c7d0",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W25_2A/l2b-v27-2026-273/2/level2_2026W25_2A_0661_1D2_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W25_2A_0661_1-D5",
+   "mjd": 61212.618940356,
+   "detector": 5,
+   "release": "QR3",
+   "sha256": "7a80842d7da07a0fd880c41b74f4ca4963673a467209efde365b30c459cac3c5",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W25_2A/l2b-v27-2026-273/5/level2_2026W25_2A_0661_1D5_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W25_2A_0661_4-D5",
+   "mjd": 61212.623417104,
+   "detector": 5,
+   "release": "QR3",
+   "sha256": "5bfe04d16c667affd4ecfe5495aef1219f3b4728851b488bd8e76e28429053ac",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W25_2A/l2b-v27-2026-273/5/level2_2026W25_2A_0661_4D5_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W25_2A_0661_4-D2",
+   "mjd": 61212.623417115,
+   "detector": 2,
+   "release": "QR3",
+   "sha256": "32c97e8a25f137df6bc9b50866f0a4aa50e18418dfb089b52780bb0c954229c6",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W25_2A/l2b-v27-2026-273/2/level2_2026W25_2A_0661_4D2_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W26_1A_0047_2-D5",
+   "mjd": 61213.231209013,
+   "detector": 5,
+   "release": "QR3",
+   "sha256": "6c6485729ae7a0527c1d2c5162b9f543cd25c1fc0d13e7b6b2da975ec9c16f9e",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W26_1A/l2b-v27-2026-273/5/level2_2026W26_1A_0047_2D5_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W26_1A_0047_2-D2",
+   "mjd": 61213.231209025,
+   "detector": 2,
+   "release": "QR3",
+   "sha256": "0b92f937a70d895c25e39f0e20faa78b8ded10da238c703130a2ad5ec98a3489",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W26_1A/l2b-v27-2026-273/2/level2_2026W26_1A_0047_2D2_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W26_1A_0274_3-D5",
+   "mjd": 61214.250507891,
+   "detector": 5,
+   "release": "QR3",
+   "sha256": "7a8213a4cf536e3a37ddb0d07e2d75b1d9dcdbe017f8136df50358fa8340ecec",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W26_1A/l2b-v27-2026-273/5/level2_2026W26_1A_0274_3D5_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W26_1A_0274_3-D2",
+   "mjd": 61214.250507902,
+   "detector": 2,
+   "release": "QR3",
+   "sha256": "5bb68af2dafe00271403102c1098046b993d721c41856956e22e657941e4d83c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W26_1A/l2b-v27-2026-273/2/level2_2026W26_1A_0274_3D2_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W26_1A_0324_3-D2",
+   "mjd": 61214.454342786,
+   "detector": 2,
+   "release": "QR3",
+   "sha256": "cca5da91b2d94ecdb2419c6201df8b4ab9e70b628c7fb17b799a03c2e3f47856",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W26_1A/l2b-v27-2026-273/2/level2_2026W26_1A_0324_3D2_spx_l2b-v27-2026-273.fits"
+  },
+  {
+   "id": "2026W28_1A_0104_1-D1",
+   "mjd": 61227.485193712,
+   "detector": 1,
+   "release": "QR3",
+   "sha256": "148438ce110c0b0db88cd094b0a0517475d09264d8568ef7c55ef612350afab8",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_1A/l2b-v27-2026-275/1/level2_2026W28_1A_0104_1D1_spx_l2b-v27-2026-275.fits"
+  },
+  {
+   "id": "2026W28_1A_0104_1-D4",
+   "mjd": 61227.485193712,
+   "detector": 4,
+   "release": "QR3",
+   "sha256": "73e064795fa4509d0051bbcb768407f8720c2b28cb5b5cf3761df9b7d7edd8f1",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_1A/l2b-v27-2026-275/4/level2_2026W28_1A_0104_1D4_spx_l2b-v27-2026-275.fits"
+  },
+  {
+   "id": "2026W28_1A_0671_2-D1",
+   "mjd": 61229.72629421,
+   "detector": 1,
+   "release": "QR3",
+   "sha256": "63fadc3e48c946e23914ddc53a6fd90fa8b91b8857dfc26a7e459c65d024313a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_1A/l2b-v27-2026-275/1/level2_2026W28_1A_0671_2D1_spx_l2b-v27-2026-275.fits"
+  },
+  {
+   "id": "2026W28_2A_0364_2-D1",
+   "mjd": 61232.373323759,
+   "detector": 1,
+   "release": "QR3",
+   "sha256": "b1d130632949d3a2662b6f134f6b751f67ac9182f2517c9ea8e20e36cce7229c",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_2A/l2b-v27-2026-276/1/level2_2026W28_2A_0364_2D1_spx_l2b-v27-2026-276.fits"
+  },
+  {
+   "id": "2026W28_2A_0364_2-D4",
+   "mjd": 61232.373323759,
+   "detector": 4,
+   "release": "QR3",
+   "sha256": "c54e071bbf4f2922b3e1ef2eac6174c540be111fc17a1cee649f904e5dd8ec55",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_2A/l2b-v27-2026-276/4/level2_2026W28_2A_0364_2D4_spx_l2b-v27-2026-276.fits"
+  },
+  {
+   "id": "2026W28_2A_0376_2-D4",
+   "mjd": 61232.443459731,
+   "detector": 4,
+   "release": "QR3",
+   "sha256": "7d31d3e2ac464b72d51bb703d0720e62b0eb7b54772543390a507bea2a95887a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_2A/l2b-v27-2026-276/4/level2_2026W28_2A_0376_2D4_spx_l2b-v27-2026-276.fits"
+  },
+  {
+   "id": "2026W28_2A_0376_3-D1",
+   "mjd": 61232.444951999,
+   "detector": 1,
+   "release": "QR3",
+   "sha256": "3ae829f5bd68073d20059a4fc8f4552c4b5aeb706199df2e0e96b2c60129511a",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W28_2A/l2b-v27-2026-276/1/level2_2026W28_2A_0376_3D1_spx_l2b-v27-2026-276.fits"
+  },
+  {
+   "id": "2026W29_1A_0015_4-D1",
+   "mjd": 61234.074032578,
+   "detector": 1,
+   "release": "QR3",
+   "sha256": "a916ff27c5173cc04807aaa3d1a12b0831d47b999988bbb48dc984c1c433dbb8",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W29_1A/l2b-v27-2026-276/1/level2_2026W29_1A_0015_4D1_spx_l2b-v27-2026-276.fits"
+  },
+  {
+   "id": "2026W29_1A_0015_4-D4",
+   "mjd": 61234.074032578,
+   "detector": 4,
+   "release": "QR3",
+   "sha256": "fa3d77b818ea2c4fd763815b789a270ff1b4e3d1d6c83868c367be98e529f4b2",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W29_1A/l2b-v27-2026-276/4/level2_2026W29_1A_0015_4D4_spx_l2b-v27-2026-276.fits"
+  },
+  {
+   "id": "2026W29_2A_0079_2-D4",
+   "mjd": 61237.872407879,
+   "detector": 4,
+   "release": "QR3",
+   "sha256": "a0fde2d4564c2c9c793651691470c8ab6ea9cb1f6fd0e75be8e18a1bad0553bc",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W29_2A/l2b-v27-2026-277/4/level2_2026W29_2A_0079_2D4_spx_l2b-v27-2026-277.fits"
+  },
+  {
+   "id": "2026W29_2A_0079_3-D1",
+   "mjd": 61237.873900124,
+   "detector": 1,
+   "release": "QR3",
+   "sha256": "32119cb7f15ca328ae1ba32857808c573e0c985312fde5963143444c993d46d3",
+   "archive_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W29_2A/l2b-v27-2026-277/1/level2_2026W29_2A_0079_3D1_spx_l2b-v27-2026-277.fits"
+  }
+ ],
+ "runtime_s": 42.6,
+ "generated_utc": "2026-11-14T13:42:42+00:00"
+}

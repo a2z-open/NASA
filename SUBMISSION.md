@@ -60,11 +60,11 @@ One public web tool that does what the challenge asks, then goes further.
    passed too.
 2. **Predictions for data that does not exist yet.** Monthly positions for 2027 for both objects are locked in commit
    `bbfd25f`, with the date of the archive's newest image recorded.
-3. **The blind search.** {{HUNT_SENTENCE}}
+3. **The blind search.** Across 25 fields (2.3 square degrees, 2,891 exposures) the search tested **5,195 sources** for motion with no catalogue input. It found **13 of 19 known fast movers** on its own, including the free-floating planetary-mass object SIMP 0136, flagged **0 movers that no catalogue explains**, and rejected 8 false alarms with its vetting tests. Hidden synthetic cold sources were recovered down to 600 µJy at 3–8″/yr, with no stationary one called a mover.
 4. **Decade check.** Every mover is compared with Gaia 2016.0 and CatWISE2020. It rejected a convincing false alarm
    (1.39″/yr at 13σ) and confirmed the real movers.
 5. **Variable stars.** R Draconis 0.58 ± 0.03 and RW Aurigae 0.64 ± 0.04 of their first-visit brightness; the control
-   1.04 ± 0.03. {{HALO_SENTENCE}}
+   1.04 ± 0.03. Of 6 other bright stars measured the same way (11 visit comparisons), 0 were flagged variable; their median change was 3 % and the largest 8 %.
 6. **Controls.** 33 still stars measured: 0 flagged as moving; error bars behave as quoted (pull spread 0.93).
 7. **Solar-system check.** No known asteroid or comet within 60″ of any target at the sampled observation times.
 8. **Tests.** 69 Python tests and 12 web tests pass.
@@ -74,7 +74,7 @@ Mistakes found and fixed along the way are in RESULTS_LOG.md.
 ## How NASA data is used
 
 SPHEREx Spectral Images, DR1 (doi:10.26131/IRSA678) and QR3, from NASA/IPAC IRSA through its search and cutout
-services: 913 exposures for the five targets, {{HUNT_EXPOSURES}} for the hunt, and live queries for any other position.
+services: 913 exposures for the five targets, 2,891 for the hunt, and live queries for any other position.
 PARALLAX reads the image, variance, flags, the release ePSF and the per-pixel wavelength of every exposure. Gaia DR3
 registers each exposure. CatWISE2020 (WISE and NEOWISE) supplies the ten-year check and the WISE overlay. Each file's
 SHA-256 and archive URL are recorded. Full citations: DATA_SOURCES.md.

@@ -1,0 +1,26 @@
+{
+ "field": "ugps-0722",
+ "ra": 110.59551964372302,
+ "dec": -5.682529557712418,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:41:57+00:00",
+ "n_products_available": 257,
+ "n_requested": 60,
+ "n_downloaded": 60,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-10-07T09:52:21.245Z",
+   "end_utc": "2025-11-12T14:37:42.442Z",
+   "n_products": 128
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2026-03-27T15:01:02.726Z",
+   "end_utc": "2026-04-14T22:50:54.010Z",
+   "n_products": 129
+  }
+ ]
+}

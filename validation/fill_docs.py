@@ -24,7 +24,7 @@ def main():
                      f"**{t['motion_tested']:,} sources** for motion with no catalogue input. It found **{r['n_recovered']} of {r['n_known']} "
                      f"known fast movers** on its own" + (', including the free-floating planetary-mass object SIMP 0136' if simp else '') +
                      f", flagged **{unexpl} mover{'s' if unexpl != 1 else ''} that no catalogue explains**, and rejected {susp} false "
-                     f"alarm{'s' if susp != 1 else ''} with its vetting tests. Hidden synthetic cold sources were recovered down to 300 µJy at 8″/yr, "
+                     f"alarm{'s' if susp != 1 else ''} with its vetting tests. Hidden synthetic cold sources were recovered down to 600 µJy at 3–8″/yr, "
                      f"with no stationary one called a mover.")
     if cs['n_with_comparison']:
         halo_sentence = (f"Of {cs['n_with_comparison']} other bright stars measured the same way ({cs['n_comparisons']} visit comparisons), "

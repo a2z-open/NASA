@@ -1,0 +1,32 @@
+{
+ "field": "control-cdfs",
+ "ra": 53.125,
+ "dec": -27.806,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:38:49+00:00",
+ "n_products_available": 437,
+ "n_requested": 90,
+ "n_downloaded": 90,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-07-21T11:53:30.768Z",
+   "end_utc": "2025-08-15T23:20:23.482Z",
+   "n_products": 149
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2026-01-18T15:58:55.747Z",
+   "end_utc": "2026-02-07T05:20:01.709Z",
+   "n_products": 147
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-07-21T15:50:14.582Z",
+   "end_utc": "2026-09-04T22:37:46.474Z",
+   "n_products": 141
+  }
+ ]
+}

@@ -149,7 +149,7 @@ def analyse(rows, *, ring=None):
         n = int(sel.sum())
         scat = float(1.4826 * np.median(np.abs(resid[sel] - np.median(resid[sel])))) if n >= 3 else math.nan
         visits.append({'visit': f'visit-{v + 1}', 'n': n, 'start_utc': mjd_to_iso(float(mjd[vis == v].min())), 'end_utc': mjd_to_iso(float(mjd[vis == v].max())),
-                       'ln_ratio': float(V[v]), 'ratio': float(math.exp(V[v])), 'scatter': scat,
+                       'ln_ratio': float(V[v]), 'ratio': float(math.exp(V[v])), 'scatter': scat if math.isfinite(scat) else None,
                        'err': float(1.2533 * scat / math.sqrt(n)) if n >= 3 else None})
     e0 = visits[0]['err'] or 0.0
     for d in visits[1:]:

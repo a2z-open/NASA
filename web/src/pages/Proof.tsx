@@ -93,7 +93,7 @@ export function Proof() {
       {d && (
         <section className="band2" aria-labelledby="t4">
           <h2 className="test-h" id="t4"><span>Scorecard</span>NASA's five test targets</h2>
-          <p className="test-p">Three of the five are too bright for SPHEREx and saturate. We report that instead of forcing a number.</p>
+          <p className="test-p">Three of the five are too bright for SPHEREx and saturate. We say so, and measure the two variable stars from their halo instead.</p>
           <TargetsTable targets={d.targets} />
           {d.extra_targets && d.extra_targets.length > 0 && (
             <details className="more">

@@ -72,6 +72,10 @@ def benchmark(slugs=None):
             'verdicts': verdicts, 'headline': inv['summary']['headline'],
             'cold_search': inv.get('cold_search'),
         }
+        halo = inv.get('halo_variability') or {}
+        hv = [v for v in (halo.get('visits') or [])[1:] if v.get('sigma') is not None and v['n'] >= 5]
+        row['halo'] = {'status': halo.get('status'), 'ring_pixels': halo.get('ring_pixels'),
+                       'visits': [{'visit': v['visit'], 'ratio': v['ratio'], 'err': v['ratio'] * v['err_vs_first'], 'sigma': v['sigma']} for v in hv]} if halo else None
         row['recovery_status'] = recovery_status(slug, row)
         rows.append(row)
     return rows
@@ -80,8 +84,15 @@ def benchmark(slugs=None):
 def recovery_status(slug, r):
     if slug == 'epsilon-indi-b':
         return 'Recovered: motion, parallax and spectral type measured; held-out prediction passed' if r['motion_status'] == 'significant' else 'Not recovered'
+    halo = r.get('halo') or {}
+    hv = halo.get('visits') or []
     if slug == 'barnards-star':
-        return 'Inconclusive: saturated in every cached exposure (OVERFLOW at the core)'
+        steady = (f"; halo brightness steady ({hv[0]['ratio']:.2f} ± {hv[0]['err']:.2f} between visits)" if halo.get('status') == 'not_detected' and hv else '')
+        return 'Inconclusive for motion: saturated in every cached exposure (OVERFLOW at the core)' + steady
+    if halo.get('status') == 'variable' and hv:
+        big = max(hv, key=lambda v: abs(v['ratio'] - 1))
+        return (f"Detected: brightness {'fell' if big['ratio'] < 1 else 'rose'} to {big['ratio']:.2f} ± {big['err']:.2f} of its first-visit level "
+                f"({big['sigma']:.1f}σ), measured from the unsaturated halo at matched wavelength (experimental; the core is saturated)")
     if slug == 'j0415-0935':
         return ('Recovered: motion and parallax agree with the literature within 1 sigma; spectrum matches its published type (T8); '
                 'held-out prediction passed') if r['motion_status'] == 'significant' else 'Not recovered'

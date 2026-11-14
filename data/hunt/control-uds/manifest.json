@@ -1,0 +1,41 @@
+{
+ "field": "control-uds",
+ "ra": 34.4,
+ "dec": -5.2,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:43:52+00:00",
+ "n_products_available": 342,
+ "n_requested": 90,
+ "n_downloaded": 88,
+ "failures": [
+  {
+   "product_id": "2026W03_1A_0441_3-D6",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W03_1A/l2b-v27-2026-214/6/level2_2026W03_1A_0441_3D6_spx_l2b-v27-2026-214.fits?center=34.4000000,-5.2000000&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W03_1A/l2b"
+  },
+  {
+   "product_id": "2026W30_2A_0257_3-D6",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W30_2A/l2b-v27-2026-224/6/level2_2026W30_2A_0257_3D6_spx_l2b-v27-2026-224.fits?center=34.4000000,-5.2000000&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W30_2A/l2b"
+  }
+ ],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-07-15T10:50:53.232Z",
+   "end_utc": "2025-08-17T03:08:49.114Z",
+   "n_products": 116
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2026-01-10T12:17:51.619Z",
+   "end_utc": "2026-01-23T08:23:38.918Z",
+   "n_products": 110
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-07-15T21:34:26.342Z",
+   "end_utc": "2026-08-07T20:19:52.291Z",
+   "n_products": 116
+  }
+ ]
+}

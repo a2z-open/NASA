@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-14T09:30:57+00:00",
+ "generated_utc": "2026-11-14T12:47:39+00:00",
  "thresholds": {
   "motion_equivalent_sigma": 5.0,
   "motion_pm_over_error": 5.0,
@@ -115,6 +115,7 @@
    ],
    "headline": "Moves 4.63\u2033/yr across 434 SPHEREx exposures; spectrum matches a T3 template.",
    "cold_search": null,
+   "halo": null,
    "recovery_status": "Recovered: motion, parallax and spectral type measured; held-out prediction passed"
   },
   {
@@ -166,9 +167,24 @@
    "verdicts": [
     "Saturated: core measurements unreliable"
    ],
-   "headline": "Too bright: SPHEREx cores are saturated.",
+   "headline": "Too bright: SPHEREx cores are saturated; halo brightness steady within 4%.",
    "cold_search": null,
-   "recovery_status": "Inconclusive: saturated in every cached exposure (OVERFLOW at the core)"
+   "halo": {
+    "status": "not_detected",
+    "ring_pixels": [
+     5.0,
+     8.0
+    ],
+    "visits": [
+     {
+      "visit": "visit-2",
+      "ratio": 1.0411427495805243,
+      "err": 0.02760019225742855,
+      "sigma": 1.5209219529116822
+     }
+    ]
+   },
+   "recovery_status": "Inconclusive for motion: saturated in every cached exposure (OVERFLOW at the core); halo brightness steady (1.04 \u00b1 0.03 between visits)"
   },
   {
    "target": "WISE 0855-0714",
@@ -314,6 +330,7 @@
      }
     ]
    },
+   "halo": null,
    "recovery_status": "Detected only at 3.8\u20135.0 \u00b5m (forced photometry on the catalogue track, neighbour deblended); 10.1 \u00b1 1.1\u2033/yr motion from 12 high-S/N exposures"
   },
   {
@@ -369,12 +386,34 @@
    "variability_pairs": null,
    "naive_max_ratio": null,
    "verdicts": [
+    "Brightness changed between visits (measured from the unsaturated halo, experimental)",
     "Saturated: core measurements unreliable",
     "Blended source"
    ],
-   "headline": "Too bright: SPHEREx cores are saturated.",
+   "headline": "Faded by 36% between visits, measured from its unsaturated halo; its core is saturated.",
    "cold_search": null,
-   "recovery_status": "Inconclusive: saturated; variability not measurable"
+   "halo": {
+    "status": "variable",
+    "ring_pixels": [
+     3.0,
+     5.0
+    ],
+    "visits": [
+     {
+      "visit": "visit-2",
+      "ratio": 0.827922175230044,
+      "err": 0.049761178018439815,
+      "sigma": 3.1418390337999793
+     },
+     {
+      "visit": "visit-3",
+      "ratio": 0.6420872280791358,
+      "err": 0.0446994840850583,
+      "sigma": 6.363935212218265
+     }
+    ]
+   },
+   "recovery_status": "Detected: brightness fell to 0.64 \u00b1 0.04 of its first-visit level (6.4\u03c3), measured from the unsaturated halo at matched wavelength (experimental; the core is saturated)"
   },
   {
    "target": "R Draconis",
@@ -424,11 +463,33 @@
    "variability_pairs": null,
    "naive_max_ratio": null,
    "verdicts": [
+    "Brightness changed between visits (measured from the unsaturated halo, experimental)",
     "Saturated: core measurements unreliable"
    ],
-   "headline": "Too bright: SPHEREx cores are saturated.",
+   "headline": "Faded by 42% between visits, measured from its unsaturated halo; its core is saturated.",
    "cold_search": null,
-   "recovery_status": "Inconclusive: saturated; variability not measurable"
+   "halo": {
+    "status": "variable",
+    "ring_pixels": [
+     8.0,
+     12.0
+    ],
+    "visits": [
+     {
+      "visit": "visit-2",
+      "ratio": 0.8072547341794036,
+      "err": 0.03696786150998292,
+      "sigma": 4.675579042599647
+     },
+     {
+      "visit": "visit-3",
+      "ratio": 0.577095093016128,
+      "err": 0.025529069952675277,
+      "sigma": 12.427283908930407
+     }
+    ]
+   },
+   "recovery_status": "Detected: brightness fell to 0.58 \u00b1 0.03 of its first-visit level (12.4\u03c3), measured from the unsaturated halo at matched wavelength (experimental; the core is saturated)"
   }
  ],
  "extra_targets": [
@@ -525,6 +586,7 @@
    ],
    "headline": "Moves 2.24\u2033/yr across 240 SPHEREx exposures; spectrum matches a T8 template.",
    "cold_search": null,
+   "halo": null,
    "recovery_status": "Recovered: motion and parallax agree with the literature within 1 sigma; spectrum matches its published type (T8); held-out prediction passed"
   }
  ],

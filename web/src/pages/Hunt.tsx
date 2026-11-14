@@ -12,6 +12,8 @@ const FLAG_TEXT: Record<string, string> = {
   poor_model_fit: 'its positions do not follow a clean path',
   near_bright_star: 'it sits in the glare of a bright star',
   near_saturated_star: 'it sits next to a star so bright it saturates the detector',
+  beside_bright_source: 'it sits in the glare of a much brighter source',
+  too_few_exposures_in_stack: 'too few images went into the stack it was seen in',
   near_edge: 'it is too close to the edge of the images',
   motion_explained_by_colour: 'the shift is explained by colour, not motion',
   depends_on_one_visit: 'the motion depends on a single visit',
@@ -148,7 +150,7 @@ function FieldRow({ f }: { f: HuntFieldRow }) {
   return (
     <details className="hrow" onToggle={e => setOpen((e.target as HTMLDetailsElement).open)}>
       <summary>
-        <span className="hrow__name">{f.title}<small>{f.notes ?? (f.kind === 'validation' ? 'NASA test target field' : '')}</small></span>
+        <span className="hrow__name">{f.title}<small>{f.notes ?? ''}</small></span>
         <span className="hrow__result"><span className={`dot dot--${r.tone === 'hot' ? 'hot' : r.tone === 'ok' ? 'ok' : 'warn'}`} aria-hidden="true" />{r.text}</span>
         <span className="hrow__chev" aria-hidden="true">›</span>
       </summary>
@@ -174,6 +176,8 @@ function FieldRow({ f }: { f: HuntFieldRow }) {
                     {m.truth_match && <>This is {m.truth_match}. The search was not told it was here. </>}
                     {m.decade_confirmed && m.catalogued_as && <>{m.catalogued_as.startsWith('Gaia') ? 'Gaia' : 'WISE'} saw it years ago exactly where this motion says it should have been ({m.catalogued_as}). </>}
                     {m.cold_only && <>Visible only at 4–5 µm: a cold object. </>}
+                    {m.parallax_mas != null && m.parallax_err_mas != null && m.parallax_mas > 0 && m.parallax_mas / m.parallax_err_mas >= 3 && m.class !== 'suspect'
+                      && <>Its distance, measured from these images alone: about {(3261.6 / m.parallax_mas).toFixed(1)} light-years. </>}
                     {m.class === 'known_mover' && m.gaia && <>Gaia DR3 {m.gaia.source_id} moves the same way. </>}
                     {m.class === 'suspect' && why.length > 0 && <>Rejected because {why.join('; ')}. </>}
                     {!m.truth_match && !m.catalogued_as && ['candidate', 'stack_candidate', 'two_visit_candidate'].includes(m.class) && <>No catalogue we checked explains it. A candidate, not a discovery. </>}

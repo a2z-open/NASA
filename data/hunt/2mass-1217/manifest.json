@@ -1,0 +1,53 @@
+{
+ "field": "2mass-1217",
+ "ra": 184.3368476451386,
+ "dec": -3.232744633986928,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:44:40+00:00",
+ "n_products_available": 373,
+ "n_requested": 90,
+ "n_downloaded": 85,
+ "failures": [
+  {
+   "product_id": "2025W21_2C_0435_3-D5",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W21_2C/l2b-v27-2026-199/5/level2_2025W21_2C_0435_3D5_spx_l2b-v27-2026-199.fits?center=184.3368476,-3.2327446&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W21_2C/l2"
+  },
+  {
+   "product_id": "2025W21_2C_0435_1-D2",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W21_2C/l2b-v27-2026-199/2/level2_2025W21_2C_0435_1D2_spx_l2b-v27-2026-199.fits?center=184.3368476,-3.2327446&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W21_2C/l2"
+  },
+  {
+   "product_id": "2025W20_2D_0448_4-D6",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W20_2D/l2b-v27-2026-198/6/level2_2025W20_2D_0448_4D6_spx_l2b-v27-2026-198.fits?center=184.3368476,-3.2327446&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W20_2D/l2"
+  },
+  {
+   "product_id": "2025W22_1B_0588_1-D6",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2b-v27-2026-199/6/level2_2025W22_1B_0588_1D6_spx_l2b-v27-2026-199.fits?center=184.3368476,-3.2327446&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2"
+  },
+  {
+   "product_id": "2026W23_2A_0210_4-D5",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W23_2A/l2b-v27-2026-270/5/level2_2026W23_2A_0210_4D5_spx_l2b-v27-2026-270.fits?center=184.3368476,-3.2327446&size=20.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W23_2A/l2"
+  }
+ ],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-05-18T04:43:46.330Z",
+   "end_utc": "2025-07-06T09:17:35.290Z",
+   "n_products": 115
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-12-21T17:19:52.723Z",
+   "end_utc": "2026-01-02T06:20:24.979Z",
+   "n_products": 107
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-05-21T04:48:07.690Z",
+   "end_utc": "2026-06-25T15:18:32.486Z",
+   "n_products": 151
+  }
+ ]
+}

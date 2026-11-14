@@ -11,7 +11,7 @@ Re-check them before recording if anything is rebuilt.
 | 5–11 s | Type a name, press Search. Images play; switch to Blink, then Subtract. | "Pick any patch of sky. Watch it change." |
 | 11–17 s | Click the dot. The path, 4.6″ a year, the spectrum. | "Click a dot: its motion, distance and spectrum." |
 | 17–23 s | Proof page: press "Open them". PASS, 0.072″. | "We locked our prediction before the images existed. It landed 0.07″ away." |
-| 23–28 s | Planet X hunt: the tiles, then open one field and let it blink. | "A blind search found {{HUNT_RECOVERED}} of {{HUNT_KNOWN}} known movers by itself." |
+| 23–28 s | Planet X hunt: the tiles, then open one field and let it blink. | "A blind search found 13 of 19 known movers by itself." |
 | 28–30 s | Home page title. | "PARALLAX. Find what moves. Then prove it." |
 
 Use real recordings only. No mock-ups, no NASA logos.
@@ -46,9 +46,9 @@ known. Nothing at short wavelengths. At 4 to 5 microns, there it is."
 locked a prediction." Ask the room: stays put, or keeps moving? Press "Open them". "0.07 arcseconds. And we have locked
 new predictions for 2027, for images NASA has not taken yet."
 
-**2:35–3:20 Proof 2: the Planet X hunt.** Hunt page. "We gave the search {{HUNT_FIELDS}} patches of sky and nothing
-else. It tested {{HUNT_TESTED}} sources. It found {{HUNT_RECOVERED}} of {{HUNT_KNOWN}} known movers by itself, and
-{{HUNT_UNEXPLAINED}} it could not explain." Open a field and let it blink. "It also raised false alarms. One looked
+**2:35–3:20 Proof 2: the Planet X hunt.** Hunt page. "We gave the search 25 patches of sky and nothing
+else. It tested 5,195 sources. It found 13 of 19 known movers by itself, and
+0 it could not explain." Open a field and let it blink. "It also raised false alarms. One looked
 perfect: 13 sigma. Then we checked where Gaia saw that star in 2016. It had not moved. So now every mover must agree
 with the sky of ten years ago."
 
@@ -68,13 +68,13 @@ what moves. Then prove it."
 
 ## D. Likely judge questions (short answers)
 
-- **Did you find Planet X?** No, and we say so. {{HUNT_UNEXPLAINED}} movers remain unexplained after the checks. Planet
+- **Did you find Planet X?** No, and we say so. 0 movers remain unexplained after the checks. Planet
   Nine itself would move by arcminutes between SPHEREx visits and is expected to be too faint for one visit. What
   SPHEREx can find today is a cold neighbour like WISE 0855, and we showed the search finds that one blind.
-- **How do you know the blind search works?** Known movers were hidden in the fields. It found {{HUNT_RECOVERED}} of
-  {{HUNT_KNOWN}}. We also hid 16 fake cold sources in a blank field: it found the ones bright and fast enough, and called
+- **How do you know the blind search works?** Known movers were hidden in the fields. It found 13 of
+  19. We also hid 16 fake cold sources in a blank field: it found the ones bright and fast enough, and called
   none of the still ones movers.
-- **False alarms?** {{HUNT_SUSPECT}} sources passed the 5σ motion test and were then rejected: by colour, by dropping
+- **False alarms?** 8 sources passed the 5σ motion test and were then rejected: by colour, by dropping
   one visit, by sitting next to a saturated star, or by being in the same place in Gaia or WISE ten years ago. Separately,
   0 of 33 still stars were flagged.
 - **How is this different from Blink 3.0, Driftnet or WiseView?** They are good viewers and some search for movers.

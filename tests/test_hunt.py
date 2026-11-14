@@ -358,3 +358,29 @@ def test_near_saturation_blocks_a_candidate():
     o['near_saturation'] = True
     doc, _ = hunt.classify(o, rows, visits, [], gw, n, 60990.0)
     assert doc['class'] == 'suspect' and 'near_saturated_star' in doc['flags']
+
+
+def _stack_only_mover():
+    o = _object()
+    step = 8.0 * (180.0 / JULIAN_YEAR_DAYS) / hunt.GRID_ARCSEC
+    o.update({'linked_orphans': True, 'knots_x': [44.0, 44.0 - step, 44.0 - 2 * step], 'vx': -step / (180.0 / JULIAN_YEAR_DAYS), 'best_snr': 9.0,
+              'det_snr': {'short': 0, 'mid': 0, 'cold': 9.0}})
+    return o
+
+
+def test_a_faint_mover_seen_only_in_stacks_is_a_lower_tier_candidate():
+    from pipeline.frames import display_wcs
+    gw, n = display_wcs(150.0, -20.0, 5.0, hunt.GRID_ARCSEC)
+    visits = [{'id': f'visit-{k + 1}', 'mjd_start': a, 'mjd_end': b} for k, (a, b) in enumerate([(60800, 60815), (60980, 60995), (61160, 61175)])]
+    doc, _ = hunt.classify(_stack_only_mover(), [], visits, [], gw, n, 60990.0)
+    assert doc['class'] == 'stack_candidate' and abs(doc['stack_motion']['pm_arcsec_yr'] - 8.0) < 0.5
+
+
+def test_stack_only_movers_are_refused_beside_a_bright_source_or_in_thin_stacks():
+    from pipeline.frames import display_wcs
+    gw, n = display_wcs(150.0, -20.0, 5.0, hunt.GRID_ARCSEC)
+    visits = [{'id': f'visit-{k + 1}', 'mjd_start': a, 'mjd_end': b} for k, (a, b) in enumerate([(60800, 60815), (60980, 60995), (61160, 61175)])]
+    a, _ = hunt.classify(_stack_only_mover(), [], visits, [], gw, n, 60990.0, beside_bright=True)
+    b, _ = hunt.classify(_stack_only_mover(), [], visits, [], gw, n, 60990.0, stack_ok=False)
+    assert a['class'] not in ('stack_candidate', 'two_visit_candidate', 'candidate') and 'beside_bright_source' in a['flags']
+    assert b['class'] not in ('stack_candidate', 'two_visit_candidate', 'candidate') and 'too_few_exposures_in_stack' in b['flags']

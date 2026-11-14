@@ -1,0 +1,32 @@
+{
+ "field": "wise-1405",
+ "ra": 211.34917465294916,
+ "dec": 55.56537474228758,
+ "fov_arcmin": 20.0,
+ "queried_utc": "2026-11-14T11:39:47+00:00",
+ "n_products_available": 468,
+ "n_requested": 90,
+ "n_downloaded": 90,
+ "failures": [],
+ "selection": "per visit: up to 4 x D2, 10 x D5, 16 x D6, evenly spaced in time (simp-0136: an earlier, larger selection)",
+ "visits": [
+  {
+   "id": "visit-1",
+   "start_utc": "2025-05-02T00:18:20.822Z",
+   "end_utc": "2025-06-08T04:19:33.082Z",
+   "n_products": 158
+  },
+  {
+   "id": "visit-2",
+   "start_utc": "2025-11-26T01:36:23.530Z",
+   "end_utc": "2025-12-18T09:43:39.475Z",
+   "n_products": 150
+  },
+  {
+   "id": "visit-3",
+   "start_utc": "2026-05-15T03:29:47.702Z",
+   "end_utc": "2026-06-24T09:51:48.326Z",
+   "n_products": 160
+  }
+ ]
+}

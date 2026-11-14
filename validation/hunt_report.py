@@ -21,6 +21,8 @@ FLAG = {
     'poor_model_fit': 'positions do not follow a clean path',
     'near_bright_star': 'in the glare of a bright star',
     'near_saturated_star': 'next to a saturated star',
+    'beside_bright_source': 'in the wings of a much brighter source',
+    'too_few_exposures_in_stack': 'too few exposures in the stack',
     'near_edge': 'at the edge of the images',
     'motion_explained_by_colour': 'shift explained by colour, not motion',
     'depends_on_one_visit': 'motion depends on a single visit',
@@ -87,7 +89,7 @@ def main():
             continue
         m = next((m for m in f['movers'] if m.get('truth_match')), None)
         if tr['recovered']:
-            res = 'found blind'
+            res = 'found blind' if tr.get('parallax_fitted') else 'found blind (no parallax fit: speed includes parallax)'
         elif tr['detected']:
             res = f"seen, motion not confirmed ({tr.get('recovered_class')})"
         else:

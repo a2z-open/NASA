@@ -1,6 +1,6 @@
 {
  "label": "SYNTHETIC: these are not real sources",
- "generated_utc": "2026-11-14T12:25:50+00:00",
+ "generated_utc": "2026-11-14T13:46:20+00:00",
  "description": "Sixteen cold point sources (no flux below 3.8 um) were added to the real exposures of the blank field control-cosmos, from each exposure's own ePSF, and the blind search was run without being told where they are. Real background and read noise are present; source photon noise is not simulated.",
  "field": "control-cosmos",
  "n_exposures": 69,
@@ -45,7 +45,7 @@
    "class": "too_faint",
    "flags": [],
    "measured_pm_arcsec_yr": null,
-   "n_native_positions": 1,
+   "n_native_positions": 0,
    "stack_snr": 8.4,
    "outcome": "correctly_still"
   },
@@ -97,7 +97,7 @@
    "class": "too_faint",
    "flags": [],
    "measured_pm_arcsec_yr": null,
-   "n_native_positions": 4,
+   "n_native_positions": 0,
    "stack_snr": 9.5,
    "outcome": "seen_not_moving"
   },
@@ -149,7 +149,7 @@
    "class": "too_faint",
    "flags": [],
    "measured_pm_arcsec_yr": null,
-   "n_native_positions": 3,
+   "n_native_positions": 0,
    "stack_snr": 7.9,
    "outcome": "seen_not_moving"
   },
@@ -198,12 +198,14 @@
    "flux_ujy": 300.0,
    "min_um": 3.8,
    "detected": true,
-   "class": "candidate",
-   "flags": [],
-   "measured_pm_arcsec_yr": 9.0553,
-   "n_native_positions": 8,
+   "class": "too_faint",
+   "flags": [
+    "too_few_exposures_in_stack"
+   ],
+   "measured_pm_arcsec_yr": null,
+   "n_native_positions": 0,
    "stack_snr": 8.9,
-   "outcome": "recovered"
+   "outcome": "seen_not_moving"
   },
   {
    "index": 14,
@@ -212,7 +214,9 @@
    "min_um": 3.8,
    "detected": true,
    "class": "candidate",
-   "flags": [],
+   "flags": [
+    "too_few_exposures_in_stack"
+   ],
    "measured_pm_arcsec_yr": 8.4557,
    "n_native_positions": 34,
    "stack_snr": 18.4,
@@ -225,7 +229,9 @@
    "min_um": 3.8,
    "detected": true,
    "class": "candidate",
-   "flags": [],
+   "flags": [
+    "too_few_exposures_in_stack"
+   ],
    "measured_pm_arcsec_yr": 8.0497,
    "n_native_positions": 54,
    "stack_snr": 33.3,
