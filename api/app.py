@@ -641,6 +641,8 @@ _dist = ROOT / 'web' / 'dist'
 if _dist.is_dir():
     @app.get('/{full_path:path}')
     def spa(full_path: str):
+        if full_path.startswith(('api/', 'files/')) or full_path in ('api', 'files'):
+            raise HTTPException(404, 'Not found.')
         p = _dist / full_path
         if full_path and p.is_file() and _dist in p.resolve().parents:
             return FileResponse(p)

@@ -57,7 +57,10 @@ def test_curated_field_and_investigation_contract(client):
 
 def test_unknown_ids_404(client):
     assert client.get('/api/investigations/inothere00000').status_code == 404
-    assert client.get('/api/fields/../../etc').status_code == 404
+    assert client.get('/api/fields/fnot.there').status_code == 404
+    assert client.get('/api/no-such-endpoint').status_code == 404
+    r = client.get('/files/targets/epsilon-indi-b/..%2F..%2F..%2FREADME.md')
+    assert r.status_code == 404
 
 
 # ------------------------------------------------------------- held-out isolation
