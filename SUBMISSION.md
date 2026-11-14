@@ -67,7 +67,7 @@ One public web tool that does what the challenge asks, then goes further.
    1.04 ± 0.03. Of 6 other bright stars measured the same way (11 visit comparisons), 0 were flagged variable; their median change was 3 % and the largest 8 %.
 6. **Controls.** 33 still stars measured: 0 flagged as moving; error bars behave as quoted (pull spread 0.93).
 7. **Solar-system check.** No known asteroid or comet within 60″ of any target at the sampled observation times.
-8. **Tests.** 69 Python tests and 12 web tests pass.
+8. **Tests.** 71 Python tests and 12 web tests pass.
 
 Mistakes found and fixed along the way are in RESULTS_LOG.md.
 

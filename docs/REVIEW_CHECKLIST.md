@@ -19,7 +19,7 @@ Work through this list, then decide separately on each gated action at the botto
 - [ ] **Phone width:** usable, no sideways scrolling.
 
 ## 2. Check the science claims (VALIDATION.md, docs/HUNT_REPORT.md, RESULTS_LOG.md)
-- [ ] Re-run `pytest -q` (69 tests) and `npm --prefix web test` (12 tests).
+- [ ] Re-run `pytest -q` (71 tests) and `npm --prefix web test` (12 tests).
 - [ ] Read docs/HUNT_REPORT.md. For every row of "Movers that no catalogue explains", open it in the app and decide
       whether to mention it at all. **None may be called a discovery.**
 - [ ] Decide how to word the variable-star result. It is experimental; the control is one saturated star plus the bright

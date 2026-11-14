@@ -246,11 +246,11 @@ Git times are self-reported until the commit is pushed.
 
 ## 10. Test suite
 
-- `pytest`: 69 tests, all passing. The 45 earlier tests cover coordinates, motion fits, ePSF centroids, deblending,
-  saturation refusal, flags, de-duplication, evidence serialisation, the API contract and held-out isolation. The 24 new
+- `pytest`: 71 tests, all passing. The 45 earlier tests cover coordinates, motion fits, ePSF centroids, deblending,
+  saturation refusal, flags, de-duplication, evidence serialisation, the API contract and held-out isolation. The 26 new
   tests cover the matched filter, outlier rejection in stacks, static and fast-mover linking, the colour-term and
   leave-one-visit-out vetting, the Gaia and CatWISE decade checks (HTTP mocked), halo photometry on synthetic series,
-  the SkyBoT parser, the hunt API, and the rules for thin visits, parallax and saturated neighbours.
+  the SkyBoT parser, the hunt API, and the rules for thin visits, parallax, saturated neighbours and stack-only candidates.
 - `npm test`: 12 frontend unit tests, all passing.
 
 ## Limitations
