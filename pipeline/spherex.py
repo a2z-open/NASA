@@ -25,6 +25,11 @@ import requests
 from astropy.io import fits
 from astropy.io.votable import parse_single_table
 from astropy.wcs import WCS, FITSFixedWarning
+from astropy import log as _astropy_log
+
+# SPHEREx headers carry SIP coefficients without a '-SIP' CTYPE suffix; astropy applies them (as intended) and
+# logs an INFO message for every WCS it builds.  Silence that one known, expected message.
+_astropy_log.setLevel('WARNING')
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / '.parallax-cache'

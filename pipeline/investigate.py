@@ -48,8 +48,24 @@ def _clean(v):
     return v
 
 
+def neighbour_pixels(obs, stars, ra_t, dec_t, x_t, y_t, *, min_sep_arcsec=1.5, max_px=4.5):
+    """Gaia neighbours (propagated to this exposure) near the predicted source position, excluding the source itself."""
+    if not stars:
+        return [], []
+    from .measure import gaia_positions
+    ra, dec = gaia_positions(stars, obs.mjd)
+    x, y = obs.wcs.world_to_pixel_values(ra, dec)
+    from .astrometry import to_tangent
+    xi, eta = to_tangent(ra, dec, ra_t, dec_t)
+    sep = np.hypot(xi, eta)
+    sel = (np.abs(x - x_t) <= max_px) & (np.abs(y - y_t) <= max_px) & (sep > min_sep_arcsec)
+    idx = np.where(sel)[0]
+    return [(float(x[i]), float(y[i])) for i in idx], [{'source_id': stars[i]['source_id'], 'sep_arcsec': float(sep[i]), 'g': stars[i].get('g')} for i in idx]
+
+
 def measure_one(args) -> dict:
-    path, track, fixed, refs, strict = args
+    path, track, fixed, refs, strict = args[:5]
+    stars = args[5] if len(args) > 5 else None
     try:
         obs = load_observation(path, keep_epsf_zones=4)
     except Exception as error:  # noqa: BLE001
@@ -72,21 +88,36 @@ def measure_one(args) -> dict:
     reg, ref_rows = register(obs, refs)
     row['registration'] = reg.to_dict()
     dx, dy = (reg.dx, reg.dy) if reg.ok else (0.0, 0.0)
+    others, nb = neighbour_pixels(obs, stars, ra_p, dec_p, x_p, y_p)
+    others = [(ox + dx, oy + dy) for ox, oy in others]
+    row['deblended_neighbours'] = nb
     # Free centroid (position measurement)
-    fit, pos = measure_position(obs, reg, x_p + dx, y_p + dy, strict=strict)
+    fit, pos = measure_position(obs, reg, x_p + dx, y_p + dy, strict=strict, others=others)
     row['centroid'] = fit.to_dict()
     if pos:
         row['position'] = pos
     # Forced photometry at the predicted (follow) position, registration-corrected
-    forced = fit_source(obs, x_p + dx, y_p + dy, fix_position=True, strict=strict)
+    forced = fit_source(obs, x_p + dx, y_p + dy, fix_position=True, strict=strict, others=others)
     k = obs.ujy_per_unit
     row['follow'] = {'ok': forced.ok, 'reason': forced.reason,
                      'flux_ujy': _clean(forced.flux * k) if forced.ok else None,
                      'flux_err_ujy': _clean(forced.flux_err * k) if forced.ok else None,
                      'chi2r': _clean(forced.chi2r) if forced.ok else None}
+    if not forced.ok and forced.reason in ('core_saturated', 'core_masked'):
+        wing = fit_source(obs, x_p + dx, y_p + dy, fix_position=True, strict=strict, others=others, allow_saturated_core=True)
+        wc = fit_source(obs, x_p + dx, y_p + dy, fix_position=False, strict=strict, others=others, allow_saturated_core=True)
+        row['wing'] = {'ok': wing.ok, 'reason': wing.reason, 'n_pix': wing.n_pix,
+                       'flux_ujy': _clean(wing.flux * k) if wing.ok else None,
+                       'flux_err_ujy': _clean(wing.flux_err * k) if wing.ok else None, 'chi2r': _clean(wing.chi2r) if wing.ok else None}
+        if wc.ok:
+            wx, wy = wc.x - dx, wc.y - dy
+            wra, wdec = obs.wcs.pixel_to_world_values(wx, wy)
+            scale = pixel_scale_arcsec(obs)
+            row['wing_position'] = {'ra': float(wra), 'dec': float(wdec), 'snr': _clean(wc.snr), 'chi2r': _clean(wc.chi2r),
+                                    'sigma_arcsec': float(scale * math.hypot(wc.sx, wc.sy) / math.sqrt(2)), 'n_pix': wc.n_pix}
     if fixed is not None:
         xf, yf = obs.wcs.world_to_pixel_values(fixed[0], fixed[1])
-        ff = fit_source(obs, float(xf) + dx, float(yf) + dy, fix_position=True, strict=strict)
+        ff = fit_source(obs, float(xf) + dx, float(yf) + dy, fix_position=True, strict=strict, others=others)
         row['fixed'] = {'ok': ff.ok, 'reason': ff.reason, 'offset_px': float(math.hypot(float(xf) - x_p, float(yf) - y_p)),
                         'flux_ujy': _clean(ff.flux * k) if ff.ok else None,
                         'flux_err_ujy': _clean(ff.flux_err * k) if ff.ok else None}
@@ -94,12 +125,22 @@ def measure_one(args) -> dict:
     return row
 
 
-def measure_epochs(files, track, refs, *, fixed=None, strict=False, workers=6) -> list[dict]:
-    jobs = [(str(f), track, fixed, refs, strict) for f in files]
+def measure_epochs(files, track, refs, *, fixed=None, strict=False, workers=6, stars=None, progress=None) -> list[dict]:
+    """`stars`: catalogue sources to deblend (fit simultaneously) when they fall near the source."""
+    jobs = [(str(f), track, fixed, refs, strict, stars) for f in files]
+    out = []
     if workers <= 1 or len(jobs) < 8:
-        return [measure_one(j) for j in jobs]
+        for j in jobs:
+            out.append(measure_one(j))
+            if progress:
+                progress(len(out), len(jobs))
+        return out
     with ProcessPoolExecutor(max_workers=workers) as ex:
-        return list(ex.map(measure_one, jobs, chunksize=4))
+        for r in ex.map(measure_one, jobs, chunksize=4):
+            out.append(r)
+            if progress and len(out) % 8 == 0:
+                progress(len(out), len(jobs))
+    return out
 
 
 def usable_positions(rows, *, snr_min=SNR_POSITION_MIN):

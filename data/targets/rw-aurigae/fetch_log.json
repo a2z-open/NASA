@@ -1,0 +1,14 @@
+{
+ "ok": 142,
+ "failures": [
+  {
+   "product_id": "2026W10_2B_0340_2-D2",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W10_2B/l2b-v27-2026-231/2/level2_2026W10_2B_0340_2D2_spx_l2b-v27-2026-231.fits?center=76.9565595,30.4012480&size=10.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W10_2B/l2b"
+  },
+  {
+   "product_id": "2026W09_2A_0289_3-D3",
+   "error": "Archive request failed: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W09_2A/l2b-v27-2026-229/3/level2_2026W09_2A_0289_3D3_spx_l2b-v27-2026-229.fits?center=76.9565595,30.4012480&size=10.0000arcmin (HTTP 503 from https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W09_2A/l2b"
+  }
+ ],
+ "finished_utc": "2026-11-14T08:33:46+00:00"
+}

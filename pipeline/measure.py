@@ -81,8 +81,12 @@ def local_background(obs: Observation, x: float, y: float, mask: np.ndarray) -> 
 
 
 def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = False, strict: bool = False,
-               max_shift: float = 1.5) -> Fit:
-    """Fit flux (and optionally position) of a point source with the local ePSF."""
+               max_shift: float = 1.5, others=(), allow_saturated_core: bool = False) -> Fit:
+    """Fit flux (and optionally position) of a point source with the local ePSF.
+
+    `others` lists (x, y) pixel positions of known neighbours (e.g. Gaia stars propagated to this
+    epoch).  Their fluxes are fitted simultaneously with fixed positions (scene-model deblending).
+    """
     ny, nx = obs.shape
     if not (STAMP_RADIUS <= x0 <= nx - 1 - STAMP_RADIUS and STAMP_RADIUS <= y0 <= ny - 1 - STAMP_RADIUS):
         return Fit(False, 'off_image')
@@ -90,6 +94,9 @@ def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = F
     if zone is None:
         return Fit(False, 'no_epsf')
     mask = obs.hard_mask(strict=strict)
+    if allow_saturated_core:
+        # Wing mode: additionally exclude bleeding/bloom pixels; fit only clean pixels around a saturated core.
+        mask = mask | ((obs.flags & flag_mask(obs.flag_names, {'BLOOM', 'TRANSIENT', 'OVERFLOW', 'NONLINEAR', 'SUR_ERROR'})) != 0)
     xc, yc = int(round(x0)), int(round(y0))
     ys = slice(yc - STAMP_RADIUS, yc + STAMP_RADIUS + 1)
     xs = slice(xc - STAMP_RADIUS, xc + STAMP_RADIUS + 1)
@@ -100,7 +107,10 @@ def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = F
     core = (xx - x0) ** 2 + (yy - y0) ** 2 <= 1.5 ** 2
     n_masked_core = int((bad & core).sum())
     near_flags = tuple(obs.flags_near(x0, y0, 1.5))
-    if (~bad & core).sum() < 3:
+    if allow_saturated_core:
+        if (~bad).sum() < 10:
+            return Fit(False, 'too_few_wing_pixels', n_masked_core=n_masked_core, flags=near_flags)
+    elif (~bad & core).sum() < 3:
         sat = flag_mask(obs.flag_names, {'OVERFLOW', 'NONLINEAR'})
         reason = 'core_saturated' if (obs.flags[ys, xs][core] & sat).any() else 'core_masked'
         return Fit(False, reason, n_masked_core=n_masked_core, flags=near_flags)
@@ -112,12 +122,17 @@ def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = F
     sig = np.sqrt(var[good] + bkg_err ** 2)
     px, py = xx[good].astype(float), yy[good].astype(float)
 
+    others = [(ox, oy) for ox, oy in others if abs(ox - x0) <= STAMP_RADIUS + 1.5 and abs(oy - y0) <= STAMP_RADIUS + 1.5]
+    other_psf = [epsf_values(zone, px - ox, py - oy) for ox, oy in others]
+    k_other = len(other_psf)
+
     def model(p):
+        extra = sum(p[len(p) - k_other + i] * other_psf[i] for i in range(k_other)) if k_other else 0.0
         if fix_position:
-            f, b = p
-            return f * epsf_values(zone, px - x0, py - y0) + b
-        f, x, y, b = p
-        return f * epsf_values(zone, px - x, py - y) + b
+            f, b = p[0], p[1]
+            return f * epsf_values(zone, px - x0, py - y0) + b + extra
+        f, x, y, b = p[0], p[1], p[2], p[3]
+        return f * epsf_values(zone, px - x, py - y) + b + extra
 
     def resid(p):
         return (d - model(p)) / sig
@@ -129,6 +144,12 @@ def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = F
         p0 = [f0, x0, y0, 0.0]
         lb = [-np.inf, x0 - max_shift, y0 - max_shift, -np.inf]
         ub = [np.inf, x0 + max_shift, y0 + max_shift, np.inf]
+    if k_other:
+        p0 = p0 + [f0] * k_other
+        lb = lb + [-np.inf] * k_other
+        ub = ub + [np.inf] * k_other
+    if d.size <= len(p0) + 2:
+        return Fit(False, 'too_few_pixels', flags=near_flags)
     try:
         res = least_squares(resid, p0, bounds=(lb, ub), x_scale='jac', max_nfev=200)
     except (ValueError, np.linalg.LinAlgError):
@@ -144,11 +165,11 @@ def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = F
     except np.linalg.LinAlgError:
         return Fit(False, 'singular', flags=near_flags)
     if fix_position:
-        f, b = res.x
+        f, b = res.x[0], res.x[1]
         x, y, sx, sy = x0, y0, 0.0, 0.0
         ferr = err[0]
     else:
-        f, x, y, b = res.x
+        f, x, y, b = res.x[0], res.x[1], res.x[2], res.x[3]
         ferr, sx, sy = err[0], err[1], err[2]
         if abs(x - x0) >= max_shift - 1e-3 or abs(y - y0) >= max_shift - 1e-3:
             return Fit(False, 'centroid_at_bound', flux=float(f), flags=near_flags)
@@ -291,9 +312,9 @@ def pixel_scale_arcsec(obs: Observation) -> float:
     return float(np.mean([abs(s.to_value('deg')) if hasattr(s, 'to_value') else abs(float(s)) for s in scales])) * 3600
 
 
-def measure_position(obs: Observation, reg: Registration, x0: float, y0: float, *, strict=False):
+def measure_position(obs: Observation, reg: Registration, x0: float, y0: float, *, strict=False, others=()):
     """Centroid a source near (x0, y0) and return registered sky position + uncertainty (arcsec)."""
-    f = fit_source(obs, x0, y0, strict=strict)
+    f = fit_source(obs, x0, y0, strict=strict, others=others)
     if not f.ok:
         return f, None
     dx, dy = (reg.dx, reg.dy) if reg.ok else (0.0, 0.0)
