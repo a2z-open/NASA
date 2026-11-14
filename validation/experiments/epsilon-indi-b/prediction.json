@@ -1,0 +1,587 @@
+{
+ "code_commit": "1039625d22acf97860beb8994f52c168e47b29fb",
+ "code_dirty": false,
+ "disclosures": [
+  "Catalogue (Gaia DR3) astrometry was used to locate the source in training images (centroid search seed) and to register frames with field stars; the primary prediction itself uses only SPHEREx positions.",
+  "The experimenter (an AI coding agent working for the team) had seen published Gaia DR3 values for this source before the experiment; it did not view any held-out pixel.",
+  "Git commit timestamps are self-reported. An externally timestamped record (e.g. pushing the commit) is stronger evidence of when the prediction was frozen."
+ ],
+ "experiment": "epsilon-indi-b-heldout-v1",
+ "held_out": {
+  "mean_epoch_mjd": 61310.829136275,
+  "mean_epoch_utc": "2026-09-27T19:53:57.374Z",
+  "n_products": 120,
+  "note": "Only SIA2 metadata (IDs, times, URLs) of the held-out products was read before the lock.",
+  "pixels_inspected_before_lock": false,
+  "product_ids": [
+   "2026W39_1A_0276_1-D3",
+   "2026W39_1A_0276_1-D6",
+   "2026W39_1A_0276_2-D3",
+   "2026W39_1A_0276_2-D6",
+   "2026W39_1A_0276_3-D3",
+   "2026W39_1A_0276_3-D6",
+   "2026W39_1A_0276_4-D3",
+   "2026W39_1A_0276_4-D6",
+   "2026W39_1A_0434_3-D3",
+   "2026W39_1A_0434_3-D6",
+   "2026W39_1A_0434_4-D3",
+   "2026W39_1A_0434_4-D6",
+   "2026W39_1A_0578_1-D3",
+   "2026W39_1A_0578_1-D6",
+   "2026W39_1A_0578_2-D3",
+   "2026W39_1A_0578_2-D6",
+   "2026W39_1A_0578_3-D3",
+   "2026W39_1A_0578_3-D6",
+   "2026W39_1A_0578_4-D3",
+   "2026W39_1A_0578_4-D6",
+   "2026W39_2A_0155_1-D3",
+   "2026W39_2A_0155_1-D6",
+   "2026W39_2A_0155_2-D3",
+   "2026W39_2A_0155_2-D6",
+   "2026W39_2A_0155_3-D3",
+   "2026W39_2A_0155_3-D6",
+   "2026W39_2A_0155_4-D3",
+   "2026W39_2A_0155_4-D6",
+   "2026W39_2A_0169_1-D3",
+   "2026W39_2A_0169_1-D6",
+   "2026W39_2A_0169_2-D3",
+   "2026W39_2A_0169_2-D6",
+   "2026W39_2A_0312_3-D3",
+   "2026W39_2A_0312_3-D6",
+   "2026W39_2A_0312_4-D3",
+   "2026W39_2A_0312_4-D6",
+   "2026W39_2A_0398_1-D3",
+   "2026W39_2A_0398_1-D6",
+   "2026W39_2A_0398_2-D3",
+   "2026W39_2A_0398_2-D6",
+   "2026W39_2A_0398_3-D3",
+   "2026W39_2A_0398_3-D6",
+   "2026W39_2A_0398_4-D3",
+   "2026W39_2A_0398_4-D6",
+   "2026W39_2A_0581_1-D3",
+   "2026W39_2A_0581_1-D6",
+   "2026W39_2A_0597_1-D3",
+   "2026W39_2A_0597_1-D6",
+   "2026W39_2A_0597_2-D3",
+   "2026W39_2A_0597_2-D6",
+   "2026W39_2A_0597_3-D3",
+   "2026W39_2A_0597_3-D6",
+   "2026W39_2A_0597_4-D3",
+   "2026W39_2A_0597_4-D6",
+   "2026W39_2A_0647_1-D3",
+   "2026W39_2A_0647_1-D6",
+   "2026W39_2A_0659_1-D3",
+   "2026W39_2A_0659_1-D6",
+   "2026W39_2A_0659_2-D3",
+   "2026W39_2A_0659_2-D6",
+   "2026W39_2A_0682_1-D3",
+   "2026W39_2A_0682_1-D6",
+   "2026W39_2A_0682_2-D3",
+   "2026W39_2A_0682_2-D6",
+   "2026W39_2A_0682_3-D3",
+   "2026W39_2A_0682_3-D6",
+   "2026W39_2A_0682_4-D3",
+   "2026W39_2A_0682_4-D6",
+   "2026W40_1A_0031_1-D2",
+   "2026W40_1A_0031_1-D5",
+   "2026W40_1A_0070_1-D3",
+   "2026W40_1A_0070_1-D6",
+   "2026W40_1A_0070_2-D3",
+   "2026W40_1A_0070_2-D6",
+   "2026W40_1A_0407_1-D2",
+   "2026W40_1A_0407_1-D5",
+   "2026W40_1A_0407_2-D2",
+   "2026W40_1A_0407_2-D5",
+   "2026W40_1A_0407_3-D2",
+   "2026W40_1A_0407_3-D5",
+   "2026W40_1A_0435_3-D2",
+   "2026W40_1A_0435_3-D5",
+   "2026W40_1A_0453_1-D2",
+   "2026W40_1A_0453_1-D5",
+   "2026W40_1A_0518_1-D2",
+   "2026W40_1A_0518_1-D5",
+   "2026W40_1A_0569_1-D2",
+   "2026W40_1A_0569_1-D5",
+   "2026W40_1A_0569_2-D2",
+   "2026W40_1A_0569_2-D5",
+   "2026W40_1A_0613_1-D2",
+   "2026W40_1A_0613_1-D5",
+   "2026W40_1A_0692_1-D2",
+   "2026W40_1A_0692_1-D5",
+   "2026W40_1A_0721_1-D2",
+   "2026W40_1A_0721_1-D5",
+   "2026W40_1A_0721_2-D2",
+   "2026W40_1A_0721_2-D5",
+   "2026W40_1A_0721_3-D2",
+   "2026W40_1A_0721_3-D5",
+   "2026W40_1A_0734_1-D2",
+   "2026W40_1A_0734_1-D5",
+   "2026W40_1A_0734_2-D2",
+   "2026W40_1A_0734_2-D5",
+   "2026W40_1A_0734_3-D2",
+   "2026W40_1A_0734_3-D5",
+   "2026W40_2A_0143_1-D2",
+   "2026W40_2A_0143_1-D5",
+   "2026W40_2A_0143_2-D2",
+   "2026W40_2A_0143_2-D5",
+   "2026W40_2A_0143_3-D2",
+   "2026W40_2A_0143_3-D5",
+   "2026W40_2A_0172_1-D2",
+   "2026W40_2A_0172_1-D5",
+   "2026W40_2A_0172_2-D2",
+   "2026W40_2A_0172_2-D5",
+   "2026W40_2A_0216_1-D2",
+   "2026W40_2A_0216_1-D5",
+   "2026W40_2A_0216_2-D2",
+   "2026W40_2A_0216_2-D5"
+  ],
+  "visit": {
+   "end_utc": "2026-10-02T11:30:20.851Z",
+   "id": "visit-4",
+   "mjd_end": 61315.479408,
+   "mjd_start": 61305.226906,
+   "n_products": 120,
+   "per_detector": {
+    "D1": 0,
+    "D2": 24,
+    "D3": 36,
+    "D4": 0,
+    "D5": 24,
+    "D6": 36
+   },
+   "releases": [
+    "QR3"
+   ],
+   "sealed": true,
+   "start_utc": "2026-09-22T05:26:44.678Z"
+  }
+ },
+ "locked_utc": "2026-11-14T08:37:47+00:00",
+ "predictions": {
+  "catalog_full": {
+   "cov_arcsec2": [
+    [
+     1e-06,
+     0
+    ],
+    [
+     0,
+     1e-06
+    ]
+   ],
+   "dec_deg": -56.80122286207144,
+   "note": "catalogue formal errors are negligible here; systematic photocentre differences are not included",
+   "ra_deg": 331.0980720099082,
+   "track": {
+    "dec": -56.79381206688221,
+    "parallax": 270.6580324694526,
+    "pmdec": -2466.8318147663504,
+    "pmra": 3981.97666296105,
+    "ra": 331.07645259656397,
+    "source": "Gaia DR3 6412596012146801152 (RUWE 4.30: astrometric binary, treat errors as optimistic)",
+    "t0_mjd": 57388.5
+   }
+  },
+  "catalog_parallax": {
+   "cov_arcsec2": [
+    [
+     0.0007533919854607487,
+     0.0
+    ],
+    [
+     0.0,
+     0.0007533919854607487
+    ]
+   ],
+   "dec_deg": -56.80134835069754,
+   "dec_ref": -56.800642320413466,
+   "fixed_parallax_arcsec": 0.27065803246945264,
+   "model": "linear_fixed_parallax",
+   "param_cov": [
+    [
+     8.41491432667433e-05,
+     0.0,
+     -2.9888086748889396e-18,
+     0.0
+    ],
+    [
+     0.0,
+     8.41491432667433e-05,
+     0.0,
+     -2.9888086748889396e-18
+    ],
+    [
+     -2.9887353196732416e-18,
+     0.0,
+     0.0006805487142524702,
+     0.0
+    ],
+    [
+     0.0,
+     -2.9887353196732416e-18,
+     0.0,
+     0.0006805487142524702
+    ]
+   ],
+   "params": {
+    "eta0": 0.012989121497007265,
+    "pmdec": -2.379645469108594,
+    "pmra": 3.922736232862141,
+    "xi0": -0.061660763373596404
+   },
+   "ra_deg": 331.0981508266952,
+   "ra_ref": 331.0962827007096,
+   "summary": {
+    "bic": 641.6700884827719,
+    "chi2": 615.7745256973628,
+    "chi2_reduced": 0.956171623753669,
+    "dof": 644,
+    "fixed_parallax_mas": 270.6580324694526,
+    "model": "linear_fixed_parallax",
+    "n_points": 324,
+    "n_rejected": 0,
+    "pm_position_angle_deg": 121.24221381039784,
+    "pm_total_err_masyr": 26.087328614721553,
+    "pm_total_masyr": 4588.090246634053,
+    "pmdec_err_masyr": 26.087328614721557,
+    "pmdec_masyr": -2379.645469108594,
+    "pmra_err_masyr": 26.087328614721557,
+    "pmra_masyr": 3922.736232862141,
+    "reference": {
+     "dec_deg": -56.800642320413466,
+     "ra_deg": 331.0962827007096,
+     "t0_mjd": 60948.625769258615
+    }
+   },
+   "t0_mjd": 60948.625769258615,
+   "track": {
+    "dec": -56.80063871232026,
+    "parallax": 270.6580324694526,
+    "pmdec": -2379.645469108594,
+    "pmra": 3922.736232862141,
+    "ra": 331.09625141978916,
+    "source": "SPHEREx fit (linear_fixed_parallax)",
+    "t0_mjd": 60948.625769258615
+   }
+  },
+  "primary": {
+   "cov_arcsec2": [
+    [
+     0.0007857796223605409,
+     4.4089073511467513e-05
+    ],
+    [
+     4.4089073511467513e-05,
+     0.0008134101463754791
+    ]
+   ],
+   "dec_deg": -56.80135372436297,
+   "dec_ref": -56.800642320413466,
+   "fixed_parallax_arcsec": null,
+   "model": "linear_parallax",
+   "param_cov": [
+    [
+     8.913111885669499e-05,
+     -1.0501928159681894e-06,
+     -4.110428813500849e-06,
+     2.610330405758673e-06,
+     -2.1871092648839445e-05
+    ],
+    [
+     -1.0501928159681894e-06,
+     8.437052230218773e-05,
+     8.664720917522513e-07,
+     -5.502536473633259e-07,
+     4.610392797490317e-06
+    ],
+    [
+     -4.11042881350085e-06,
+     8.664720917522516e-07,
+     0.00068394006467677,
+     -2.153679221997964e-06,
+     1.8044963846830608e-05
+    ],
+    [
+     2.610330405758673e-06,
+     -5.502536473633259e-07,
+     -2.1536792219979633e-06,
+     0.0006819164095982626,
+     -1.145946565125265e-05
+    ],
+    [
+     -2.187109264883945e-05,
+     4.610392797490318e-06,
+     1.8044963846830608e-05,
+     -1.1459465651252654e-05,
+     9.601506169940047e-05
+    ]
+   ],
+   "params": {
+    "eta0": 0.014163995630387583,
+    "parallax": 0.2951257117671763,
+    "pmdec": -2.38256570397087,
+    "pmra": 3.927334661280857,
+    "xi0": -0.0672342106156342
+   },
+   "ra_deg": 331.09814361768724,
+   "ra_ref": 331.0962827007096,
+   "summary": {
+    "bic": 641.9088394039647,
+    "chi2": 609.5393859222033,
+    "chi2_reduced": 0.9479617199412183,
+    "dof": 643,
+    "model": "linear_parallax",
+    "n_points": 324,
+    "n_rejected": 0,
+    "parallax_err_mas": 9.798727555116555,
+    "parallax_mas": 295.12571176717626,
+    "pm_position_angle_deg": 121.24360758124162,
+    "pm_total_err_masyr": 26.14183710750499,
+    "pm_total_masyr": 4593.536423654027,
+    "pmdec_err_masyr": 26.113529244402464,
+    "pmdec_masyr": -2382.56570397087,
+    "pmra_err_masyr": 26.15224779396161,
+    "pmra_masyr": 3927.334661280857,
+    "reference": {
+     "dec_deg": -56.800642320413466,
+     "ra_deg": 331.0962827007096,
+     "t0_mjd": 60948.625769258615
+    }
+   },
+   "t0_mjd": 60948.625769258615,
+   "track": {
+    "dec": -56.800638385965584,
+    "parallax": 295.12571176717626,
+    "pmdec": -2382.56570397087,
+    "pmra": 3927.334661280857,
+    "ra": 331.0962485923422,
+    "source": "SPHEREx fit (linear_parallax)",
+    "t0_mjd": 60948.625769258615
+   }
+  },
+  "stationary_null": {
+   "cov_arcsec2": [
+    [
+     0.00037936255931010437,
+     0
+    ],
+    [
+     0,
+     0.00037936255931010437
+    ]
+   ],
+   "dec_deg": -56.800970588362915,
+   "ra_deg": 331.09750195059934,
+   "track": {
+    "dec": -56.800970588362915,
+    "parallax": 0.0,
+    "pmdec": 0.0,
+    "pmra": 0.0,
+    "ra": 331.09750195059934,
+    "t0_mjd": 61310.829136275
+   }
+  }
+ },
+ "protocol": {
+  "comparison_models": {
+   "catalog_full": "catalogue astrometry propagated (catalogue-assisted; no SPHEREx fitting)",
+   "catalog_parallax": "linear proper motion fitted to SPHEREx, parallax fixed at the catalogue value (catalogue-assisted)",
+   "stationary_null": "the source stays at its mean position in the last training visit (\"stays here\")"
+  },
+  "criterion": "PASS if the inverse-variance-weighted mean residual (measured - predicted) over usable held-out exposures has Mahalanobis distance d^2 < 11.83 (the 99.73 % / \"3 sigma\" region for 2 dof) under Sigma = Sigma_prediction(mean held-out epoch) + Sigma_measurement(mean). INCONCLUSIVE if fewer than 10 usable held-out exposures. Otherwise FAIL.",
+  "held_out_rule": "All products of the chronologically last visit (visits are separated by gaps > 30 days in IRSA SIA2 metadata).",
+  "measurement": {
+   "centroid": "release ePSF least-squares fit on native pixels, 7x7 stamp, hard flags masked",
+   "held_out_seed": "free centroid search starts at the locked primary prediction (search box +/-1.5 px = +/-9.2 arcsec)",
+   "registration": "pure pixel shift from Gaia DR3 reference stars propagated (pm + parallax) to each exposure; target and stars within 20 arcsec of a brighter-or-similar neighbour excluded",
+   "usable_position": "centroid converged, S/N >= 5.0, no OVERFLOW/NONLINEAR within 1.5 px"
+  },
+  "min_heldout_exposures": 10,
+  "pass_threshold_d2": 11.83,
+  "primary_model": "linear_parallax (SPHEREx-only: position, proper motion and parallax all fitted to training data)",
+  "question": "Where will this source be in a SPHEREx visit that the model has never seen?",
+  "training_rule": "All products of every earlier visit that downloaded and validated.",
+  "version": 1
+ },
+ "target": {
+  "catalogue": "Gaia DR3 6412596012146801152 (RUWE 4.30: astrometric binary, treat errors as optimistic)",
+  "slug": "epsilon-indi-b",
+  "title": "Epsilon Indi B"
+ },
+ "training": {
+  "motion_fits": {
+   "catalog_parallax": {
+    "bic": 641.6700884827719,
+    "chi2": 615.7745256973628,
+    "chi2_reduced": 0.956171623753669,
+    "dof": 644,
+    "fixed_parallax_mas": 270.6580324694526,
+    "model": "linear_fixed_parallax",
+    "n_points": 324,
+    "n_rejected": 0,
+    "pm_position_angle_deg": 121.24221381039784,
+    "pm_total_err_masyr": 26.087328614721553,
+    "pm_total_masyr": 4588.090246634053,
+    "pmdec_err_masyr": 26.087328614721557,
+    "pmdec_masyr": -2379.645469108594,
+    "pmra_err_masyr": 26.087328614721557,
+    "pmra_masyr": 3922.736232862141,
+    "reference": {
+     "dec_deg": -56.800642320413466,
+     "ra_deg": 331.0962827007096,
+     "t0_mjd": 60948.625769258615
+    }
+   },
+   "linear": {
+    "bic": 1421.8708140539545,
+    "chi2": 1395.9876160388242,
+    "chi2_reduced": 2.174435539001284,
+    "dof": 642,
+    "model": "linear",
+    "n_points": 323,
+    "n_rejected": 1,
+    "pm_position_angle_deg": 121.17488718661346,
+    "pm_total_err_masyr": 38.472319298780945,
+    "pm_total_masyr": 4528.569058943289,
+    "pmdec_err_masyr": 38.472319298780945,
+    "pmdec_masyr": -2344.2230676981926,
+    "pmra_err_masyr": 38.472319298780945,
+    "pmra_masyr": 3874.603970793684,
+    "reference": {
+     "dec_deg": -56.800642320413466,
+     "ra_deg": 331.0962827007096,
+     "t0_mjd": 60948.625769258615
+    }
+   },
+   "linear_parallax": {
+    "bic": 641.9088394039647,
+    "chi2": 609.5393859222033,
+    "chi2_reduced": 0.9479617199412183,
+    "dof": 643,
+    "model": "linear_parallax",
+    "n_points": 324,
+    "n_rejected": 0,
+    "parallax_err_mas": 9.798727555116555,
+    "parallax_mas": 295.12571176717626,
+    "pm_position_angle_deg": 121.24360758124162,
+    "pm_total_err_masyr": 26.14183710750499,
+    "pm_total_masyr": 4593.536423654027,
+    "pmdec_err_masyr": 26.113529244402464,
+    "pmdec_masyr": -2382.56570397087,
+    "pmra_err_masyr": 26.15224779396161,
+    "pmra_masyr": 3927.334661280857,
+    "reference": {
+     "dec_deg": -56.800642320413466,
+     "ra_deg": 331.0962827007096,
+     "t0_mjd": 60948.625769258615
+    }
+   },
+   "stationary": {
+    "bic": 29193.012675771894,
+    "chi2": 29180.07107676433,
+    "chi2_reduced": 45.31066937385765,
+    "dof": 644,
+    "model": "stationary",
+    "n_points": 323,
+    "n_rejected": 1,
+    "reference": {
+     "dec_deg": -56.800642320413466,
+     "ra_deg": 331.0962827007096,
+     "t0_mjd": 60948.625769258615
+    }
+   }
+  },
+  "motion_significance": {
+   "delta_bic": 28551.10383636793,
+   "delta_chi2": 28570.531690842126,
+   "equivalent_sigma": 99.0,
+   "extra_params": 3,
+   "p_value": 0.0,
+   "pm_over_error": 175.71589956603623
+  },
+  "n_products": 337,
+  "n_usable_positions": 324,
+  "product_ids_sha256": "8b749619b7def65b6415c02f26973c93e1837e87f74abaf02440167629f10347",
+  "quality": {
+   "flag_counts_near_source": {
+    "DICHROIC": 2,
+    "HALO": 50,
+    "NONFUNC": 7,
+    "OVERFLOW": 1,
+    "PERSIST": 1,
+    "SOURCE": 337,
+    "SUR_ERROR": 13,
+    "TRANSIENT": 26
+   },
+   "n_observations": 337,
+   "outcomes": {
+    "centroid_at_bound": 3,
+    "low_snr": 9,
+    "ok": 324,
+    "saturation_flag_near_core": 1
+   }
+  },
+  "visits": [
+   {
+    "end_utc": "2025-06-10T04:35:14.842Z",
+    "id": "visit-1",
+    "mjd_end": 60836.191144,
+    "mjd_start": 60789.855522,
+    "n_products": 118,
+    "per_detector": {
+     "D1": 3,
+     "D2": 32,
+     "D3": 25,
+     "D4": 4,
+     "D5": 30,
+     "D6": 24
+    },
+    "releases": [
+     "DR1"
+    ],
+    "sealed": false,
+    "start_utc": "2025-04-24T20:31:57.101Z"
+   },
+   {
+    "end_utc": "2025-11-12T20:36:49.219Z",
+    "id": "visit-2",
+    "mjd_end": 60991.858903,
+    "mjd_start": 60946.964111,
+    "n_products": 146,
+    "per_detector": {
+     "D1": 24,
+     "D2": 30,
+     "D3": 23,
+     "D4": 23,
+     "D5": 24,
+     "D6": 22
+    },
+    "releases": [
+     "DR1"
+    ],
+    "sealed": false,
+    "start_utc": "2025-09-28T23:08:19.190Z"
+   },
+   {
+    "end_utc": "2026-05-04T02:50:19.565Z",
+    "id": "visit-3",
+    "mjd_end": 61164.118282,
+    "mjd_start": 61148.84479,
+    "n_products": 74,
+    "per_detector": {
+     "D1": 19,
+     "D2": 7,
+     "D3": 12,
+     "D4": 19,
+     "D5": 6,
+     "D6": 11
+    },
+    "releases": [
+     "DR1"
+    ],
+    "sealed": false,
+    "start_utc": "2026-04-18T20:16:29.856Z"
+   }
+  ]
+ }
+}
