@@ -97,4 +97,15 @@ TARGETS: dict[str, Target] = {
     ),
 }
 
+# Additional validation target (not one of the NASA five): a second, independent held-out experiment.
+TARGETS['j0415-0935'] = Target(
+    'j0415-0935', '2MASS J0415-0935', 'T8 brown dwarf (validation target)',
+    'Second held-out motion prediction with the identical locked protocol',
+    Astrometry(63.831432, -9.585187, 2000.0, None, 2193.0, 527.0, 174.34, 3.0, 2.0, 2.76,
+               'SIMBAD via Sesame: 2MASS position (epoch about 1998-2000; used only as a search seed), proper motion Faherty et al. 2009 (AJ 137, 1), parallax Faherty et al. 2012 (ApJ 752, 56)',
+               'https://simbad.cds.unistra.fr/simbad/sim-id?Ident=2MASS+J04151954-0935066'),
+    notes=('Not one of the five NASA challenge targets; added after the Epsilon Indi B experiment to test the protocol on a second source.',),
+)
+
 ORDER = ['epsilon-indi-b', 'barnards-star', 'wise-0855', 'rw-aurigae', 'r-draconis']
+VALIDATION_EXTRA = ['j0415-0935']
