@@ -39,7 +39,9 @@ Work through this list, then decide separately on each gated action at the botto
 - [ ] Registered team name, members and challenge are correct on the Space Apps site.
 - [ ] Complete AI_USAGE.md with every tool the team used.
 - [ ] LICENSE (MIT) is acceptable to all members.
-- [ ] Fonts: Unbounded, Instrument Sans, IBM Plex Mono (Google Fonts, OFL), listed in THIRD_PARTY_NOTICES.md.
+- [ ] Font: Hanken Grotesk (Google Fonts, OFL). Photographs: 11 NASA images in `web/public/img/`, each credited in
+      THIRD_PARTY_NOTICES.md and in the page footer. Two are artist's impressions and say so. Confirm the team is happy
+      using NASA photographs as decoration (no NASA logo is used).
 - [ ] At least one member attends in person on Sunday. Know the Seattle and global deadlines (Sun 15 Nov, 11:59 p.m.).
 
 ## 4. Gated actions (each needs its own explicit "yes")

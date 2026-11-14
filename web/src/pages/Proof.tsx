@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 import { api, huntApi, type Forecast, type HaloResults, type HaloVariability, type HuntIndex, type ValidationReport } from '../api.ts';
-import { Page } from '../components/Shell.tsx';
+import { Page, PageHero } from '../components/Shell.tsx';
 import { Link } from '../router.tsx';
 import { humanize, num } from '../lib/format.ts';
 import { Experiments } from './Lab.tsx';
@@ -22,11 +22,13 @@ export function Proof() {
   const nc = d?.negative_controls;
   return (
     <Page>
-      <header className="page-head">
-        <p className="eyebrow">Proof</p>
-        <h1>Don't take our word for it.</h1>
-        <p className="lede">Three tests. Each one could have failed, and each uses only real SPHEREx images.</p>
-      </header>
+      <PageHero
+        title="Don't take our word for it."
+        lede="Neptune was found in 1846 right where the maths said it would be. We hold PARALLAX to the same kind of test: say first, look after."
+        img="/img/neptune.webp"
+        alt="Neptune, photographed by NASA's Voyager 2 in 1989"
+        caption="Neptune, from Voyager 2."
+      />
 
       <section className="band2" aria-labelledby="t1">
         <h2 className="test-h" id="t1"><span>Test 1</span>Predict where a star will be, before the images exist</h2>

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import { startReveal } from './reveal.ts';
 import { useLocation, Link } from './router.tsx';
 import { Home } from './pages/Home.tsx';
 import { Explore } from './pages/Explore.tsx';
@@ -62,3 +63,5 @@ function Root() {
 }
 
 createRoot(document.getElementById('root')!).render(<StrictMode><Root /></StrictMode>);
+
+startReveal();

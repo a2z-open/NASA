@@ -7,6 +7,8 @@ const N = 29; // native SPHEREx pixels across the porthole
 
 /** Two real SPHEREx exposures of Epsilon Indi B, same wavelength, 17 months apart, blinking. */
 export function HeroBlink() {
+  const pick = useRef<(i: number | null) => void>(() => undefined);
+  const [hold, setHold] = useState<number | null>(null);
   const ref = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [k, setK] = useState(0);
@@ -59,7 +61,15 @@ export function HeroBlink() {
         };
         show();
         setState('ready');
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) timer = window.setInterval(show, 1100);
+        const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!still) timer = window.setInterval(show, 1100);
+        pick.current = (want: number | null) => {
+          window.clearInterval(timer);
+          if (want == null) { timer = window.setInterval(show, 1100); return; }
+          i = want;
+          show();
+        };
+        if (still) setHold(0);
       } catch {
         if (alive) setState('error');
       }
@@ -67,6 +77,7 @@ export function HeroBlink() {
     return () => { alive = false; window.clearInterval(timer); };
   }, []);
 
+  const choose = (i: number | null) => { setHold(i); pick.current(i); };
   return (
     <figure className="porthole" data-state={state}>
       <Link href="/explore?target=epsilon-indi-b" className="porthole__glass" aria-label="Open Epsilon Indi B in the explorer">
@@ -74,17 +85,13 @@ export function HeroBlink() {
         {meta && <span className="porthole__ring" style={{ left: `${meta.rings[k][0] * 100}%`, top: `${meta.rings[k][1] * 100}%` }} aria-hidden="true" />}
         {state === 'error' && <span className="porthole__error">Image unavailable</span>}
       </Link>
-      <span className="porthole__mark porthole__mark--tl" aria-hidden="true" />
-      <span className="porthole__mark porthole__mark--tr" aria-hidden="true" />
-      <span className="porthole__mark porthole__mark--bl" aria-hidden="true" />
-      <span className="porthole__mark porthole__mark--br" aria-hidden="true" />
       <figcaption className="porthole__caption">
-        <span className="porthole__dates mono">
-          <b className={k === 0 ? 'is-on' : ''}>{meta?.dates[0] ?? '—'}</b>
-          <i aria-hidden="true" />
-          <b className={k === 1 ? 'is-on' : ''}>{meta?.dates[1] ?? '—'}</b>
-        </span>
-        <span><strong>Epsilon Indi B</strong>, 12 light-years away. Real SPHEREx pixels{meta ? ` at ${meta.lam.toFixed(2)} µm` : ''}; each square is 6 arcseconds.</span>
+        <div className="blinkbar" role="group" aria-label="Which image to show">
+          <button type="button" className={k === 0 ? 'is-on' : ''} aria-pressed={hold === 0} onClick={() => choose(0)}>{meta?.dates[0] ?? 'First'}</button>
+          <button type="button" className={k === 1 ? 'is-on' : ''} aria-pressed={hold === 1} onClick={() => choose(1)}>{meta?.dates[1] ?? 'Second'}</button>
+          <button type="button" className="blinkbar__auto" aria-pressed={hold === null} onClick={() => choose(null)}>Blink</button>
+        </div>
+        <span>Real SPHEREx pixels{meta ? ` at ${meta.lam.toFixed(2)} µm` : ''}. Each square is 6 arcseconds of sky.</span>
       </figcaption>
     </figure>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, type HuntInjection, type HuntMover } from '../api.ts';
-import { Page } from '../components/Shell.tsx';
+import { Page, PageHero } from '../components/Shell.tsx';
 import { paint } from '../components/FieldImage.tsx';
 import { Link } from '../router.tsx';
 
@@ -211,11 +211,13 @@ export function Hunt() {
 
   return (
     <Page>
-      <header className="page-head">
-        <p className="eyebrow">Planet X hunt</p>
-        <h1>A blind search for anything that moves.</h1>
-        <p className="lede">The search gets a patch of sky and nothing else. It finds every source, tests each one for motion, and only then looks it up.</p>
-      </header>
+      <PageHero
+        title="The Planet X hunt"
+        lede="A blind search. It gets a patch of sky and nothing else, finds every source, tests each one for motion, and only then looks it up."
+        img="/img/cold-dwarf.webp"
+        alt="An artist's impression of the brown dwarf WISE 0855 as a dim blue world against the Milky Way"
+        caption="WISE 0855, the coldest known brown dwarf, in an artist's impression. The search found it without being told."
+      />
 
       {error && <p className="notice">The hunt has not been run on this machine yet.</p>}
       {idx && (

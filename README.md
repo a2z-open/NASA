@@ -60,6 +60,9 @@ WiseView, Driftnet and others ([docs/COMPETITORS.md](docs/COMPETITORS.md)). PARA
 
 PARALLAX builds on SPIFF (Gagné et al. 2026, arXiv:2604.22012) for brown-dwarf templates.
 
+The interface uses real NASA photographs of Pluto, Neptune, the WISE sky and SPHEREx as decoration. Each is credited in
+the page footer and in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The sky images you measure are always SPHEREx data.
+
 ## Run it locally
 
 Requirements: Python 3.12+ and Node 20+ (tested with Python 3.13 and Node 22).

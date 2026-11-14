@@ -1,14 +1,16 @@
-import { Page } from '../components/Shell.tsx';
+import { Page, PageHero } from '../components/Shell.tsx';
 import { Link } from '../router.tsx';
 
 export function DataAbout() {
   return (
     <Page>
-      <header className="page-head">
-        <p className="eyebrow">About</p>
-        <h1>What you are looking at</h1>
-        <p className="lede">Every image here is a real NASA SPHEREx observation. Nothing is simulated, and when something cannot be measured the app says so.</p>
-      </header>
+      <PageHero
+        title="What you are looking at"
+        lede="Every sky image here is a real NASA SPHEREx observation. Nothing is simulated, and when something cannot be measured the app says so."
+        img="/img/spherex-assembly.webp"
+        alt="The SPHEREx space telescope and its cone-shaped shields in a clean room, with an engineer beside it"
+        caption="SPHEREx during final assembly, March 2024."
+      />
 
       <div className="plain">
         <h3>How it works</h3>

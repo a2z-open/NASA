@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, cachedFrame, loadFrames, type Field, type Frame, type Investigation, type Target } from '../api.ts';
-import { Header } from '../components/Shell.tsx';
+import { Header, PageHero } from '../components/Shell.tsx';
 import { SkyCanvas, type Colormap, type Overlays, type SkyCanvasHandle } from '../components/SkyCanvas.tsx';
 import { Timeline } from '../components/Timeline.tsx';
 import { DataStatePill } from '../components/DataState.tsx';
@@ -151,10 +151,14 @@ function ExploreSearch({ fov }: { fov: number }) {
 function ExploreIdle({ targets }: { targets: Target[] | null }) {
   return (
     <main id="main" className="page"><div className="page__inner">
+      <PageHero
+        title="Pick a patch of sky"
+        lede="Type a name or coordinates in the bar above. Or start with one of NASA's five test targets."
+        img="/img/spherex-dust.webp"
+        alt="A cloud of glowing dust among thousands of stars, imaged in infrared by SPHEREx"
+        caption="Dust in the Large Magellanic Cloud, seen by SPHEREx at 3.29 microns."
+      />
       <div className="idle">
-        <p className="eyebrow">Explore</p>
-        <h1>Pick a patch of sky</h1>
-        <p className="muted">Type a name or coordinates above. Or start with one of NASA's test targets.</p>
         <div className="idle__targets">
           {targets?.map(t => (
             <Link key={t.slug} href={`/explore?target=${t.slug}`} className="idle__target">
