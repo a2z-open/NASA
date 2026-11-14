@@ -1,0 +1,349 @@
+{
+ "archive_at_lock": {
+  "latest_exposure_utc": "2026-10-02T11:30:20.851Z",
+  "n_products_covering_the_source": 458,
+  "note": "No exposure later than this was listed by the archive when the forecast was locked.",
+  "service": "IRSA SIA2 (spherex_dr1, spherex_qr3)"
+ },
+ "criterion": "PASS if the inverse-variance-weighted mean residual (measured - predicted) over the usable exposures of the next visit has Mahalanobis distance d^2 < 11.83 (the 99.73 % region for 2 degrees of freedom) under Sigma = Sigma_prediction(mean epoch) + Sigma_measurement. INCONCLUSIVE if fewer than 10 usable exposures. Otherwise FAIL. Identical to the held-out experiments.",
+ "data_used": {
+  "first_observation_utc": "2025-04-24T20:32:54.640Z",
+  "last_observation_utc": "2026-10-02T11:29:23.289Z",
+  "n_usable_positions": 434
+ },
+ "fit": {
+  "bic": 805.7429749351658,
+  "chi2": 771.9120163618641,
+  "chi2_reduced": 0.8944519308943963,
+  "dof": 863,
+  "model": "linear_parallax",
+  "n_points": 434,
+  "n_rejected": 0,
+  "parallax_err_mas": 9.40283905565792,
+  "parallax_mas": 297.83602634346164,
+  "pm_position_angle_deg": 121.49494719312007,
+  "pm_total_err_masyr": 16.411292034730177,
+  "pm_total_masyr": 4634.766802937459,
+  "pmdec_err_masyr": 16.05349878186381,
+  "pmdec_masyr": -2421.3104921420118,
+  "pmra_err_masyr": 16.543601685782463,
+  "pmra_masyr": 3952.0018747786703,
+  "reference": {
+   "dec_deg": -56.80080497124116,
+   "ra_deg": 331.0967015193795,
+   "t0_mjd": 61029.516110875746
+  }
+ },
+ "fixed_parallax_arcsec": null,
+ "how_to_check": "When IRSA releases a later visit of this field, measure the source with pipeline/investigate.py (same code), take the weighted mean position and epoch, interpolate this table to that epoch with the stored parameters, and apply the criterion.",
+ "kind": "forward_prediction",
+ "locked_utc": "2026-11-14T12:11:32+00:00",
+ "model": "linear_parallax",
+ "model_note": "SPHEREx only: proper motion and parallax fitted to all four visits. The orbital motion of the unresolved binary (Ba/Bb) is not modelled, which is the main risk to this forecast.",
+ "param_cov": [
+  [
+   6.578117723326458e-05,
+   -9.298455109027656e-07,
+   -2.718658587879457e-06,
+   -1.8280497894978497e-06,
+   -4.733887356781446e-06
+  ],
+  [
+   -9.298455109027661e-07,
+   6.893888546807112e-05,
+   9.973501018482023e-06,
+   6.706269230971786e-06,
+   1.7366443357330398e-05
+  ],
+  [
+   -2.718658587879465e-06,
+   9.97350101848202e-06,
+   0.0002736907567378244,
+   1.9607618925526204e-05,
+   5.077556413473511e-05
+  ],
+  [
+   -1.8280497894978502e-06,
+   6.706269230971777e-06,
+   1.9607618925526204e-05,
+   0.00025771482313930285,
+   3.414193298935433e-05
+  ],
+  [
+   -4.733887356781447e-06,
+   1.7366443357330398e-05,
+   5.0775564134735116e-05,
+   3.414193298935433e-05,
+   8.84133823066059e-05
+  ]
+ ],
+ "params": {
+  "eta0": 0.05848746409220498,
+  "parallax": 0.2978360263434616,
+  "pmdec": -2.4213104921420117,
+  "pmra": 3.9520018747786705,
+  "xi0": -0.01596577229246497
+ },
+ "predictions": [
+  {
+   "cov_arcsec2": [
+    [
+     0.0002997406362853542,
+     -1.6119402508480918e-05
+    ],
+    [
+     -1.6119402508480918e-05,
+     0.00030114470669647986
+    ]
+   ],
+   "date_utc": "2026-12-01T00:00:00Z",
+   "dec_deg": -56.80143526718478,
+   "mjd": 61375.0,
+   "offset_from_stays_here_arcsec": 0.6060981280039869,
+   "ra_deg": 331.09845272367625,
+   "sigma_dec_arcsec": 0.017353521449448808,
+   "sigma_ra_arcsec": 0.01731301927121189
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0003274058696263432,
+     -1.1742687138934145e-05
+    ],
+    [
+     -1.1742687138934145e-05,
+     0.000391802688883725
+    ]
+   ],
+   "date_utc": "2027-01-01T00:00:00Z",
+   "dec_deg": -56.80145942822194,
+   "mjd": 61406.0,
+   "offset_from_stays_here_arcsec": 1.011881504291996,
+   "ra_deg": 331.09865550728136,
+   "sigma_dec_arcsec": 0.019794006387887343,
+   "sigma_ra_arcsec": 0.0180943601607336
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0003786045392205761,
+     3.383926978498588e-05
+    ],
+    [
+     3.383926978498588e-05,
+     0.0005010949912494924
+    ]
+   ],
+   "date_utc": "2027-02-01T00:00:00Z",
+   "dec_deg": -56.801490167303406,
+   "mjd": 61437.0,
+   "offset_from_stays_here_arcsec": 1.4841627337736125,
+   "ra_deg": 331.09888892369014,
+   "sigma_dec_arcsec": 0.02238515113305006,
+   "sigma_ra_arcsec": 0.019457762955195444
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0004710879349129421,
+     9.948018447824948e-05
+    ],
+    [
+     9.948018447824948e-05,
+     0.0005839244465034156
+    ]
+   ],
+   "date_utc": "2027-03-01T00:00:00Z",
+   "dec_deg": -56.80152997700777,
+   "mjd": 61465.0,
+   "offset_from_stays_here_arcsec": 1.9442974321810462,
+   "ra_deg": 331.0991108248689,
+   "sigma_dec_arcsec": 0.024164528683659765,
+   "sigma_ra_arcsec": 0.021704560233115577
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0006153660111944073,
+     0.0001594253802561879
+    ],
+    [
+     0.0001594253802561879,
+     0.0006327432308240539
+    ]
+   ],
+   "date_utc": "2027-04-01T00:00:00Z",
+   "dec_deg": -56.801590590233836,
+   "mjd": 61496.0,
+   "offset_from_stays_here_arcsec": 2.4575181899908274,
+   "ra_deg": 331.0993487509959,
+   "sigma_dec_arcsec": 0.025154387903983152,
+   "sigma_ra_arcsec": 0.02480657193556593
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.000750528136631714,
+     0.00017033994519639377
+    ],
+    [
+     0.00017033994519639377,
+     0.0006417781533649596
+    ]
+   ],
+   "date_utc": "2027-05-01T00:00:00Z",
+   "dec_deg": -56.801664466887885,
+   "mjd": 61526.0,
+   "offset_from_stays_here_arcsec": 2.9287849598043394,
+   "ra_deg": 331.09955424355917,
+   "sigma_dec_arcsec": 0.02533334074623715,
+   "sigma_ra_arcsec": 0.027395768589906618
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.000834791762677491,
+     0.00013054606336752455
+    ],
+    [
+     0.00013054606336752455,
+     0.0006412621483289421
+    ]
+   ],
+   "date_utc": "2027-06-01T00:00:00Z",
+   "dec_deg": -56.801751071396886,
+   "mjd": 61557.0,
+   "offset_from_stays_here_arcsec": 3.3687870214556415,
+   "ra_deg": 331.0997304097645,
+   "sigma_dec_arcsec": 0.025323154391365663,
+   "sigma_ra_arcsec": 0.028892763154075296
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0008504431997727003,
+     7.168643232103054e-05
+    ],
+    [
+     7.168643232103054e-05,
+     0.0006590635724704241
+    ]
+   ],
+   "date_utc": "2027-07-01T00:00:00Z",
+   "dec_deg": -56.80183728042417,
+   "mjd": 61587.0,
+   "offset_from_stays_here_arcsec": 3.7409838047000696,
+   "ra_deg": 331.0998649847899,
+   "sigma_dec_arcsec": 0.02567223349205176,
+   "sigma_ra_arcsec": 0.029162359297092207
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0008303079402076604,
+     2.5280714406639923e-05
+    ],
+    [
+     2.5280714406639923e-05,
+     0.0007052216745676869
+    ]
+   ],
+   "date_utc": "2027-08-01T00:00:00Z",
+   "dec_deg": -56.80192055604729,
+   "mjd": 61618.0,
+   "offset_from_stays_here_arcsec": 4.072952879449927,
+   "ra_deg": 331.0999752513883,
+   "sigma_dec_arcsec": 0.026556010140224132,
+   "sigma_ra_arcsec": 0.028815064466484547
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0008220786464147819,
+     7.328843044882754e-06
+    ],
+    [
+     7.328843044882754e-06,
+     0.0007699551601911935
+    ]
+   ],
+   "date_utc": "2027-09-01T00:00:00Z",
+   "dec_deg": -56.80199101209239,
+   "mjd": 61649.0,
+   "offset_from_stays_here_arcsec": 4.364455881013459,
+   "ra_deg": 331.1000719727644,
+   "sigma_dec_arcsec": 0.02774806588198885,
+   "sigma_ra_arcsec": 0.02867191389521777
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0008521176889967572,
+     5.973928433713987e-06
+    ],
+    [
+     5.973928433713987e-06,
+     0.0008413876111856792
+    ]
+   ],
+   "date_utc": "2027-10-01T00:00:00Z",
+   "dec_deg": -56.802043361065344,
+   "mjd": 61679.0,
+   "offset_from_stays_here_arcsec": 4.629210229463982,
+   "ra_deg": 331.1001712034248,
+   "sigma_dec_arcsec": 0.029006682181622896,
+   "sigma_ra_arcsec": 0.02919105494833575
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0009162906331511232,
+     5.778541030078368e-06
+    ],
+    [
+     5.778541030078368e-06,
+     0.0009310204946329254
+    ]
+   ],
+   "date_utc": "2027-11-01T00:00:00Z",
+   "dec_deg": -56.802081531207364,
+   "mjd": 61710.0,
+   "offset_from_stays_here_arcsec": 4.913977249022442,
+   "ra_deg": 331.1002979020886,
+   "sigma_dec_arcsec": 0.03051262844516882,
+   "sigma_ra_arcsec": 0.03027029291485504
+  },
+  {
+   "cov_arcsec2": [
+    [
+     0.0009928619501807928,
+     1.1094297436703806e-05
+    ],
+    [
+     1.1094297436703806e-05,
+     0.0010499537064413663
+    ]
+   ],
+   "date_utc": "2027-12-01T00:00:00Z",
+   "dec_deg": -56.80210769626742,
+   "mjd": 61740.0,
+   "offset_from_stays_here_arcsec": 5.229738336946509,
+   "ra_deg": 331.1004559265817,
+   "sigma_dec_arcsec": 0.032402989159047754,
+   "sigma_ra_arcsec": 0.03150971199774433
+  }
+ ],
+ "reference": {
+  "dec_deg": -56.80080497124116,
+  "ra_deg": 331.0967015193795,
+  "t0_mjd": 61029.516110875746
+ },
+ "statement": "Predicted positions of this source on future dates, fitted to every SPHEREx exposure of the field available at lock time.",
+ "stays_here_null": {
+  "dec_deg": -56.80137307070206,
+  "note": "mean position in the latest visit: where the source would be if it did not move",
+  "ra_deg": 331.0981669906518
+ },
+ "target": "epsilon-indi-b",
+ "title": "Epsilon Indi B"
+}
