@@ -1,0 +1,94 @@
+{
+ "classification": "Independent held-out recovery (SPHEREx-only motion model; catalogue used to identify the source and register frames)",
+ "code_commit": "4a5d7157fd52d375e986b530ccdd9cc0bba7be66",
+ "evaluations": {
+  "catalog_full": {
+   "equivalent_sigma": 99.0,
+   "heldout_scatter_chi2r": 0.6779775461328293,
+   "mahalanobis_d2": 6386.347381274127,
+   "mean_residual_arcsec": {
+    "ddec": 0.8526895960879567,
+    "dra_cosdec": 3.172140882873267
+   },
+   "measurement_sigma_arcsec": 0.04109102519471307,
+   "n_usable": 74,
+   "prediction_sigma_arcsec": 0.0009999999999999992,
+   "residual_arcsec": 3.284746158848905,
+   "verdict": "FAIL"
+  },
+  "catalog_parallax": {
+   "equivalent_sigma": 0.7036302142067683,
+   "heldout_scatter_chi2r": 0.6781716942417112,
+   "mahalanobis_d2": 1.4610207847893069,
+   "mean_residual_arcsec": {
+    "ddec": 0.09628325547657517,
+    "dra_cosdec": 0.0867314132562241
+   },
+   "measurement_sigma_arcsec": 0.04109102519471307,
+   "n_usable": 74,
+   "prediction_sigma_arcsec": 0.09902227823025703,
+   "residual_arcsec": 0.12958704923945666,
+   "verdict": "PASS"
+  },
+  "primary": {
+   "equivalent_sigma": 0.2692605838566034,
+   "heldout_scatter_chi2r": 0.6770864165260112,
+   "mahalanobis_d2": 0.4772019027466903,
+   "mean_residual_arcsec": {
+    "ddec": 0.11625914824901597,
+    "dra_cosdec": 0.16989779513097383
+   },
+   "measurement_sigma_arcsec": 0.04109102519471307,
+   "n_usable": 74,
+   "prediction_sigma_arcsec": 0.9313393455395774,
+   "residual_arcsec": 0.20586755534069234,
+   "verdict": "PASS"
+  },
+  "stationary_null": {
+   "equivalent_sigma": 25.38427656281367,
+   "heldout_scatter_chi2r": 0.6677193850960592,
+   "mahalanobis_d2": 651.2844311180984,
+   "mean_residual_arcsec": {
+    "ddec": 0.38719127835255684,
+    "dra_cosdec": 1.4939088338816842
+   },
+   "measurement_sigma_arcsec": 0.04109102519471307,
+   "n_usable": 74,
+   "prediction_sigma_arcsec": 0.04436694244023706,
+   "residual_arcsec": 1.5432694806747203,
+   "verdict": "FAIL"
+  }
+ },
+ "experiment": "j0415-0935-heldout-v1",
+ "held_out_measured": {
+  "n_downloaded": 121,
+  "n_products": 122,
+  "n_usable": 74,
+  "quality": {
+   "flag_counts_near_source": {
+    "COLD": 1,
+    "DICHROIC": 2,
+    "HALO": 6,
+    "NONFUNC": 5,
+    "SOURCE": 121,
+    "SUR_ERROR": 5,
+    "TRANSIENT": 6
+   },
+   "n_observations": 121,
+   "outcomes": {
+    "centroid_at_bound": 5,
+    "low_snr": 42,
+    "ok": 74
+   }
+  },
+  "weighted_mean_position": {
+   "dec_deg": -9.581039736243092,
+   "mean_mjd": 61272.86249739718,
+   "ra_deg": 63.84882828006487
+  }
+ },
+ "prediction_commit": "4a5d7157fd52d375e986b530ccdd9cc0bba7be66 2026-11-14T01:21:13-08:00",
+ "prediction_sha256": "c9beae2e2bb8d75321b9d96b1d18ea20831fc0000e121ce6073483acff6b3b8c",
+ "primary_verdict": "PASS",
+ "revealed_utc": "2026-11-14T09:29:22+00:00"
+}
