@@ -11,6 +11,8 @@ the organizers exactly what existed before the official start. Git history is pr
 | Sat 14 Nov 2026, from 00:19 | Claude Code, working for the team in the team's local clone | Everything on branch `parallax-build`: science pipeline, held-out experiment, validation, API, frontend and documents. | Local commits on `parallax-build`, starting at `1039625`. |
 | Sat 14 Nov 2026, 00:37:57 | Claude Code | Epsilon Indi B prediction **locked and committed** before any held-out pixel was downloaded. | Commit `ef75c76`; SHA-256 `c902006d2cb11e96db29bace24b4a2f8111ae4d0cc84ccd744563203c95798d5` |
 | Sat 14 Nov 2026, 00:39:41 | Claude Code | Held-out visit downloaded, measured and evaluated. | Commit `51d8ea1`; `validation/experiments/epsilon-indi-b/result.json` |
+| Sat 14 Nov 2026, 01:21:13 | Claude Code | Second experiment (2MASS J0415−0935) locked before its held-out visit was downloaded. | Commit `4a5d715`; SHA-256 `c9beae2e2bb8d75321b9d96b1d18ea20831fc0000e121ce6073483acff6b3b8c` |
+| Sat 14 Nov 2026, 01:29:42 | Claude Code | Second held-out visit revealed and evaluated. | Commit `ce84964` |
 
 ## Authorization: TEAM ACTION REQUIRED
 

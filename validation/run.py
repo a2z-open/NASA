@@ -27,7 +27,7 @@ from pipeline.investigate import SNR_POSITION_MIN, measure_epochs, usable_positi
 from pipeline.measure import GAIA_EPOCH_MJD, reference_candidates
 from pipeline.motion import fit_motion, motion_significance
 from pipeline.spherex import CACHE, ROOT
-from pipeline.targets import ORDER, TARGETS
+from pipeline.targets import ORDER, TARGETS, VALIDATION_EXTRA
 
 DATA = ROOT / 'data' / 'targets'
 OUT = ROOT / 'validation' / 'validation_results.json'
@@ -39,9 +39,9 @@ def jload(p):
     return json.loads(Path(p).read_text())
 
 
-def benchmark():
+def benchmark(slugs=None):
     rows = []
-    for slug in ORDER:
+    for slug in (slugs or ORDER):
         inv = jload(DATA / slug / 'investigation.json')
         man = jload(DATA / slug / 'archive_manifest.json')
         m = inv.get('motion') or {}
@@ -82,6 +82,9 @@ def recovery_status(slug, r):
         return 'Recovered: motion, parallax and spectral type measured; held-out prediction passed' if r['motion_status'] == 'significant' else 'Not recovered'
     if slug == 'barnards-star':
         return 'Inconclusive: saturated in every cached exposure (OVERFLOW at the core)'
+    if slug == 'j0415-0935':
+        return ('Recovered: motion and parallax agree with the literature within 1 sigma; spectrum matches its published type (T8); '
+                'held-out prediction passed') if r['motion_status'] == 'significant' else 'Not recovered'
     if slug == 'wise-0855':
         cs = r.get('cold_search') or {}
         bands = {b['band']: b for b in cs.get('bands', [])}
@@ -209,6 +212,7 @@ def main(argv=None):
                        'template_max_reduced_chi2': TEMPLATE_MAX_RCHI2,
                        'note': 'Fixed in pipeline/analysis.py before the validation runs; not tuned per target.'},
         'targets': benchmark(),
+        'extra_targets': benchmark(VALIDATION_EXTRA),
         'experiments': experiments(),
         'negative_controls': prior.get('negative_controls') if skip_controls else negative_controls(),
         'injections': prior.get('injections'),

@@ -3,98 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#151719">
-  <meta name="description" content="Explore dated, real SPHEREx observations from the NASA/IPAC Infrared Science Archive.">
+  <meta name="theme-color" content="#05070a">
+  <meta name="description" content="PARALLAX: explore real NASA SPHEREx infrared observations, measure moving and variable sources, and turn them into reproducible scientific evidence.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <title>PARALLAX · SPHEREx Observation Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <title>PARALLAX · Investigate the moving infrared sky</title>
 </head>
 <body>
-  <a class="skip-link" href="#observation-title">Skip to observations</a>
-  <header class="masthead"><div class="shell masthead-inner">
-    <a class="wordmark" href="./" aria-label="PARALLAX home">
-      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-        <path d="M3 20.5 9.4 5.5h3.2l6.3 15m-13-5h10.8m2-10 4.9 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      PARALLAX
-    </a>
-    <a class="source-link" href="https://irsa.ipac.caltech.edu/Missions/spherex.html" target="_blank" rel="noreferrer">NASA/IPAC IRSA <span aria-hidden="true">↗</span></a>
-  </div></header>
-  <main class="shell">
-    <div class="page-heading">
-      <div>
-        <h1 id="observation-title" tabindex="-1">Barnard’s Star</h1>
-        <p id="field-caption">SPHEREx observations</p>
-      </div>
-      <button id="copy-link" class="link-button" type="button" hidden>Copy field link</button>
-    </div>
-    <div class="workspace">
-      <section class="observations" aria-label="Observation playback">
-        <div class="viewer-top">
-          <span id="frame-source">SPHEREx Level 2</span>
-          <span id="frame-count" class="measurement" aria-hidden="true"></span>
-        </div>
-        <div id="viewport" class="viewport" tabindex="0" aria-label="Sky image. Use arrow keys to step through observations.">
-          <div id="image-message" class="image-message">
-            <p id="message-title">Opening observations</p>
-            <p id="message-detail">Loading the selected field.</p>
-          </div>
-          <span id="orientation" class="orientation" aria-label="North is up, east is left" hidden>
-            <svg width="43" height="44" viewBox="0 0 43 44" fill="none" aria-hidden="true">
-              <path d="M15 32V15m0 17h17M12 19l3-4 3 4M19 29l-4 3 4 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-              <text x="15" y="9" text-anchor="middle">N</text><text x="6" y="36" text-anchor="middle">E</text>
-            </svg>
-          </span>
-        </div>
-        <div class="transport">
-          <div class="transport-buttons" role="group" aria-label="Playback controls">
-            <button id="previous" type="button" class="icon-button" aria-label="Previous observation" disabled>
-              <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true"><path d="M5 4v12m10-11-7 5 7 5V5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button id="play" type="button" class="play-button" aria-label="Play observations" disabled>
-              <svg id="play-icon" viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true"><path d="m7 4 9 6-9 6V4Z" fill="currentColor"/></svg>
-              <svg id="pause-icon" viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true" hidden><path d="M7 5v10m6-10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              <span id="play-label">Play</span>
-            </button>
-            <button id="next" type="button" class="icon-button" aria-label="Next observation" disabled>
-              <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true"><path d="M15 4v12M5 5l7 5-7 5V5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </div>
-          <ol id="timeline" class="timeline" aria-label="Observation dates"></ol>
-        </div>
-        <div id="observation-information" class="observation-information" hidden>
-          <div class="observation-metadata">
-            <div><span>Observed</span><time id="date-readout">—</time></div>
-            <div><span>Detector</span><strong id="detector-readout">—</strong></div>
-            <div><span>Wavelength</span><strong id="wave-readout">—</strong></div>
-          </div>
-          <div class="observation-links">
-            <span id="comparison-readout"></span>
-            <a id="archive-record" target="_blank" rel="noreferrer">Source FITS <span aria-hidden="true">↗</span></a>
-          </div>
-          <p id="observation-note" class="observation-note" hidden></p>
-        </div>
-      </section>
-      <aside class="field-tools" aria-label="Field selection">
-        <section>
-          <h2>Find a sky field</h2>
-          <form id="lookup-form" novalidate>
-            <div class="coordinate-inputs">
-              <label for="ra">Right ascension <span>°</span><input id="ra" name="ra" inputmode="decimal" autocomplete="off" placeholder="269.4463" required></label>
-              <label for="dec">Declination <span>°</span><input id="dec" name="dec" inputmode="decimal" autocomplete="off" placeholder="4.7685" required></label>
-            </div>
-            <p class="coordinate-note">ICRS coordinates in decimal degrees</p>
-            <button id="search" class="primary-button" type="submit">Find observations <span aria-hidden="true">→</span></button>
-            <p id="form-error" class="form-error" role="alert" hidden></p>
-          </form>
-        </section>
-        <section class="targets-section">
-          <h2>Target catalog</h2>
-          <ul id="targets" class="targets"></ul>
-        </section>
-      </aside>
-    </div>
-    <p id="announcement" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
-  </main>
-  <script type="module" src="/src/viewer.ts"></script>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

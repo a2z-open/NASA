@@ -28,7 +28,7 @@ Work through this list, then decide separately on each gated action at the botto
 - [ ] Registered team name, members and challenge are correct on the Space Apps site. The team was possibly registered as "Aiges".
 - [ ] Complete AI_USAGE.md with every tool the team used.
 - [ ] LICENSE (MIT) is acceptable to all members.
-- [ ] Confirm the font families the frontend loads (THIRD_PARTY_NOTICES.md TEAM TODO).
+- [ ] Fonts loaded: IBM Plex Sans, IBM Plex Mono, Instrument Serif (Google Fonts, OFL). Already listed in THIRD_PARTY_NOTICES.md.
 - [ ] At least one member attends in person on Sunday. Know the Seattle presentation deadline and the global deadline (Sun 15 Nov, 11:59 p.m.).
 
 ## 4. Gated actions (each needs its own explicit "yes")

@@ -34,7 +34,7 @@ See `web/package.json` for exact versions.
 - React and React DOM: MIT
 - Vite and @vitejs/plugin-react: MIT
 - TypeScript: Apache-2.0
-- Web fonts are loaded from Google Fonts under the SIL Open Font License. **TEAM TODO:** confirm the font families the frontend actually loads.
+- Web fonts from Google Fonts, under the SIL Open Font License 1.1: IBM Plex Sans, IBM Plex Mono and Instrument Serif.
 
 ## External services called at runtime
 

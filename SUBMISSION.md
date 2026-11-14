@@ -58,16 +58,17 @@ stars and catalogue context. WISE 0855's astrometry comes from Kirkpatrick et al
    - We hashed and committed the prediction (SHA-256 `c902006d…`), then downloaded the sealed visit 4.
    - Visit 4 landed **0.072″** from the prediction (d² = 4.85 against a pre-registered 11.83).
    - The "stays here" null failed by 1.95″. Gaia DR3 propagation failed by 0.56″, which we attribute to the binary's photocentre.
-2. **Epsilon Indi B:**
+2. **A second held-out experiment** used the identical protocol on 2MASS J0415−0935 (T8). The catalogue-parallax prediction landed 0.13″ from the sealed visit (PASS). The SPHEREx-only primary also passed, but it is a weak test with only two training visits. Its spectrum independently matches the published type, T8.
+3. **Epsilon Indi B:**
    - μ = 4635 ± 16 mas/yr and ϖ = 298 ± 9 mas from SPHEREx alone (434 exposures)
    - a 102-bin motion-corrected spectrum that best matches a T3 template (unresolved T1 + T6)
    - fixed-position photometry would have lost 45 % of the light
-3. **WISE 0855:** not detected at 0.75–3.8 µm (3σ < 9 µJy at 0.75–2.4 µm), detected at 4.4–5.0 µm (460 ± 32 µJy, S/N 14),
+4. **WISE 0855:** not detected at 0.75–3.8 µm (3σ < 9 µJy at 0.75–2.4 µm), detected at 4.4–5.0 µm (460 ± 32 µJy, S/N 14),
    with the spectrum at the cold end of the template library (Y1).
-4. **Honest failures:** Barnard's Star, RW Aur and R Dra saturate SPHEREx. PARALLAX reports this rather than forcing
+5. **Honest failures:** Barnard's Star, RW Aur and R Dra saturate SPHEREx. PARALLAX reports this rather than forcing
    numbers, and shows the naive-versus-wavelength-matched lesson on real comparison stars: an apparent 9–11× change
    becomes 0.98–1.02 at matched wavelengths.
-5. **Controls:**
+6. **Controls:**
    - 33 stationary stars measured with leave-one-out registration gave **0 false positives**, and the proper-motion pulls have σ = 0.93, so the error bars are honest.
    - 16 synthetic injection scenarios gave 0 false positives, with recovery thresholds mapped.
    - The automated test suite passes: 45 Python tests and 12 web tests.

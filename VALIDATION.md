@@ -69,6 +69,35 @@ the source in training images (the centroid search seed) and to register frames 
 - No held-out pixel was viewed before the lock.
 - Git timestamps are self-reported. The commits have not been pushed: that waits for team approval.
 
+### 1b. Second held-out experiment: 2MASS J0415−0935 (T8 brown dwarf; not one of the NASA five)
+
+This experiment was added after the first one, using the **identical, unmodified protocol and code**. The catalogue seed
+comes from SIMBAD via Sesame: a 2MASS position whose epoch was approximated as J2000.0, proper motion from Faherty et al. 2009,
+and parallax from Faherty et al. 2012. The seed was used only to find the source in the images.
+
+| | Visits | Products |
+|---|---|---|
+| Training | 1–2 (DR1, 2025-08 and 2026-02) | 258 downloaded, 164 usable |
+| Held-out | 3 (QR3, 2026-08-12 → 09-20) | 122 listed, 121 downloaded, 74 usable |
+
+The lock is commit `4a5d715` (01:21:13 −08:00), with prediction SHA-256 `c9beae2e2bb8d75321b9d96b1d18ea20831fc0000e121ce6073483acff6b3b8c`.
+The reveal is commit `ce84964` (01:29:42).
+
+| Model | Residual | σ_pred | d² | Verdict |
+|---|---|---|---|---|
+| Primary: SPHEREx pm + parallax | 0.206″ | 0.93″ | 0.48 | PASS (**weak test**, see below) |
+| SPHEREx pm + catalogue parallax | **0.130″** | 0.099″ | **1.46** | **PASS** |
+| Catalogue propagation | 3.28″ | — | 6386 | FAIL. Not meaningful: the seed's position epoch is approximate (about 1 year × 2.3″/yr). |
+| Stationary null | 1.54″ | 0.044″ | 651 | FAIL |
+
+**Honest reading.** The two training visits are about six months apart, so a SPHEREx-only fit cannot separate proper motion
+from parallax (ϖ = 153 ± 323 mas in training). The pre-registered primary prediction therefore had a large uncertainty
+and passes trivially. We report it as pre-registered rather than swapping the model afterwards. The informative test is
+the catalogue-parallax variant (σ_pred 0.10″), which landed 0.13″ from the measured position. With all three visits,
+SPHEREx alone gives μα* = 2180 ± 56 and μδ = 512 ± 56 mas/yr, against the literature 2193 and 527 (−0.2σ, −0.3σ), and
+ϖ = 195 ± 27 mas against 174 ± 3 (+0.8σ). The motion-corrected spectrum fills 102 of 102 bins. Its best template is
+**T8** (χ²ᵣ 1.08; T7 4.95; T9 5.83), which matches the published spectral type, T8.0.
+
 ## 2. The five NASA targets
 
 | Target | Archive / cached / usable | Result | Key measurements |
@@ -138,7 +167,7 @@ motion. A second live query (RA 270.0, Dec −23.5, 3′) rendered 16 frames in 
 
 ## Limitations
 
-- The validation set is small: five named targets, one held-out experiment, 33 measured controls and 16 synthetic scenarios.
+- The validation set is small: five named targets plus one extra target, two held-out experiments, 33 measured controls and 16 synthetic scenarios.
   It does not establish full-sky completeness or false-positive rates.
 - The controls are moderately bright, isolated stars. Crowded fields, nebulosity and faint sources near the detection limit are under-represented.
 - Three of the five NASA targets saturate SPHEREx; the release ePSF cannot model their wings.

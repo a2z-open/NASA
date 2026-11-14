@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-14T09:11:21+00:00",
+ "generated_utc": "2026-11-14T09:30:57+00:00",
  "thresholds": {
   "motion_equivalent_sigma": 5.0,
   "motion_pm_over_error": 5.0,
@@ -431,6 +431,103 @@
    "recovery_status": "Inconclusive: saturated; variability not measurable"
   }
  ],
+ "extra_targets": [
+  {
+   "target": "2MASS J0415-0935",
+   "slug": "j0415-0935",
+   "purpose": "Second held-out motion prediction with the identical locked protocol",
+   "archive_products": 383,
+   "cached_products": 379,
+   "usable_positions": 240,
+   "outcomes": {
+    "low_snr": 120,
+    "ok": 240,
+    "centroid_at_bound": 12,
+    "outside_cutout": 5,
+    "core_masked": 1,
+    "saturation_flag_near_core": 1
+   },
+   "date_range": [
+    "2025-08-12T05:35:22.135Z",
+    "2026-09-20T14:57:10.928Z"
+   ],
+   "wavelength_coverage_um": [
+    0.7391928814320049,
+    5.002581599865085
+   ],
+   "visits": 3,
+   "flag_counts_near_source": {
+    "SOURCE": 374,
+    "NONFUNC": 14,
+    "PERSIST": 4,
+    "DICHROIC": 3,
+    "HALO": 15,
+    "TRANSIENT": 12,
+    "SUR_ERROR": 10,
+    "OVERFLOW": 1,
+    "COLD": 1
+   },
+   "motion_status": "significant",
+   "pm_total_masyr": 2239.2501145809965,
+   "pm_total_err_masyr": 55.709683454711005,
+   "pmra_masyr": 2179.9375238831035,
+   "pmdec_masyr": 511.97018235187295,
+   "parallax_mas": 195.4411109623835,
+   "parallax_err_mas": 26.549456704313968,
+   "catalog_comparison": {
+    "source": "SIMBAD via Sesame: 2MASS position (epoch about 1998-2000; used only as a search seed), proper motion Faherty et al. 2009 (AJ 137, 1), parallax Faherty et al. 2012 (ApJ 752, 56)",
+    "pmra_masyr": 2193.0,
+    "pmdec_masyr": 527.0,
+    "parallax_mas": 174.34,
+    "d_pmra_sigma": -0.23413057284164607,
+    "d_pmdec_sigma": -0.2697036565336213,
+    "d_parallax_sigma": 0.7905248988363416
+   },
+   "spectrum_status": "measured",
+   "spectrum_bins_detected": 67,
+   "template": "T8",
+   "template_status": "matched",
+   "template_rchi2": 1.082575423276691,
+   "fixed_vs_follow_ratio": 0.5528003163561462,
+   "variability_status": "not_detected",
+   "variability_method": "core",
+   "variability_pairs": [
+    {
+     "visit_a": "visit-1",
+     "visit_b": "visit-2",
+     "n_bins": 57,
+     "mean_ratio": 1.029819185969519,
+     "mean_ratio_err": 0.02178205443925478,
+     "median_ratio": 1.0290054836839775,
+     "median_ratio_err": 0.018916045294916747,
+     "significance_sigma": 1.389190518653349,
+     "bin_scatter_chi2r": 3.3955939928550194,
+     "variable": false
+    },
+    {
+     "visit_a": "visit-2",
+     "visit_b": "visit-3",
+     "n_bins": 57,
+     "mean_ratio": 1.0060298135003498,
+     "mean_ratio_err": 0.022712061039891877,
+     "median_ratio": 1.0005279159238043,
+     "median_ratio_err": 0.023018115271502215,
+     "significance_sigma": 0.2662883119943762,
+     "bin_scatter_chi2r": 3.7332207381104565,
+     "variable": false
+    }
+   ],
+   "naive_max_ratio": 9.65930838951077,
+   "verdicts": [
+    "Known source recovered (SIMBAD via Sesame: 2MASS position)",
+    "Evidence supports astronomical motion",
+    "Spectrum consistent with an ultracool dwarf (T8)"
+   ],
+   "headline": "Moves 2.24\u2033/yr across 240 SPHEREx exposures; spectrum matches a T8 template.",
+   "cold_search": null,
+   "recovery_status": "Recovered: motion and parallax agree with the literature within 1 sigma; spectrum matches its published type (T8); held-out prediction passed"
+  }
+ ],
  "experiments": [
   {
    "experiment": "epsilon-indi-b-heldout-v1",
@@ -526,6 +623,107 @@
    "primary_verdict": "PASS",
    "heldout_usable": 111,
    "heldout_downloaded": 112,
+   "classification": "Independent held-out recovery (SPHEREx-only motion model; catalogue used to identify the source and register frames)",
+   "disclosures": [
+    "Catalogue (Gaia DR3) astrometry was used to locate the source in training images (centroid search seed) and to register frames with field stars; the primary prediction itself uses only SPHEREx positions.",
+    "The experimenter (an AI coding agent working for the team) had seen published Gaia DR3 values for this source before the experiment; it did not view any held-out pixel.",
+    "Git commit timestamps are self-reported. An externally timestamped record (e.g. pushing the commit) is stronger evidence of when the prediction was frozen."
+   ]
+  },
+  {
+   "experiment": "j0415-0935-heldout-v1",
+   "target": "2MASS J0415-0935",
+   "locked_utc": "2026-11-14T09:21:03+00:00",
+   "prediction_sha256": "c9beae2e2bb8d75321b9d96b1d18ea20831fc0000e121ce6073483acff6b3b8c",
+   "training_products": 258,
+   "training_usable": 164,
+   "heldout_products": 122,
+   "criterion": "PASS if the inverse-variance-weighted mean residual (measured - predicted) over usable held-out exposures has Mahalanobis distance d^2 < 11.83 (the 99.73 % / \"3 sigma\" region for 2 dof) under Sigma = Sigma_prediction(mean held-out epoch) + Sigma_measurement(mean). INCONCLUSIVE if fewer than 10 usable held-out exposures. Otherwise FAIL.",
+   "primary_model": "linear_parallax (SPHEREx-only: position, proper motion and parallax all fitted to training data)",
+   "training_fit": {
+    "bic": 262.0188320560056,
+    "chi2": 233.05376401408483,
+    "chi2_reduced": 0.7215286811581574,
+    "dof": 323,
+    "model": "linear_parallax",
+    "n_points": 164,
+    "n_rejected": 0,
+    "parallax_err_mas": 322.6696838106701,
+    "parallax_mas": 153.24693284669877,
+    "pm_position_angle_deg": 78.85587104766262,
+    "pm_total_err_masyr": 1252.0559519910373,
+    "pm_total_masyr": 2045.2791268988647,
+    "pmdec_err_masyr": 328.34650146761516,
+    "pmdec_masyr": 395.30683846218295,
+    "pmra_err_masyr": 1274.478028667574,
+    "pmra_masyr": 2006.7135347112242,
+    "reference": {
+     "dec_deg": -9.581167573762823,
+     "ra_deg": 63.8482955951738,
+     "t0_mjd": 60982.343130081426
+    }
+   },
+   "result": {
+    "catalog_full": {
+     "equivalent_sigma": 99.0,
+     "heldout_scatter_chi2r": 0.6779775461328293,
+     "mahalanobis_d2": 6386.347381274127,
+     "mean_residual_arcsec": {
+      "ddec": 0.8526895960879567,
+      "dra_cosdec": 3.172140882873267
+     },
+     "measurement_sigma_arcsec": 0.04109102519471307,
+     "n_usable": 74,
+     "prediction_sigma_arcsec": 0.0009999999999999992,
+     "residual_arcsec": 3.284746158848905,
+     "verdict": "FAIL"
+    },
+    "catalog_parallax": {
+     "equivalent_sigma": 0.7036302142067683,
+     "heldout_scatter_chi2r": 0.6781716942417112,
+     "mahalanobis_d2": 1.4610207847893069,
+     "mean_residual_arcsec": {
+      "ddec": 0.09628325547657517,
+      "dra_cosdec": 0.0867314132562241
+     },
+     "measurement_sigma_arcsec": 0.04109102519471307,
+     "n_usable": 74,
+     "prediction_sigma_arcsec": 0.09902227823025703,
+     "residual_arcsec": 0.12958704923945666,
+     "verdict": "PASS"
+    },
+    "primary": {
+     "equivalent_sigma": 0.2692605838566034,
+     "heldout_scatter_chi2r": 0.6770864165260112,
+     "mahalanobis_d2": 0.4772019027466903,
+     "mean_residual_arcsec": {
+      "ddec": 0.11625914824901597,
+      "dra_cosdec": 0.16989779513097383
+     },
+     "measurement_sigma_arcsec": 0.04109102519471307,
+     "n_usable": 74,
+     "prediction_sigma_arcsec": 0.9313393455395774,
+     "residual_arcsec": 0.20586755534069234,
+     "verdict": "PASS"
+    },
+    "stationary_null": {
+     "equivalent_sigma": 25.38427656281367,
+     "heldout_scatter_chi2r": 0.6677193850960592,
+     "mahalanobis_d2": 651.2844311180984,
+     "mean_residual_arcsec": {
+      "ddec": 0.38719127835255684,
+      "dra_cosdec": 1.4939088338816842
+     },
+     "measurement_sigma_arcsec": 0.04109102519471307,
+     "n_usable": 74,
+     "prediction_sigma_arcsec": 0.04436694244023706,
+     "residual_arcsec": 1.5432694806747203,
+     "verdict": "FAIL"
+    }
+   },
+   "primary_verdict": "PASS",
+   "heldout_usable": 74,
+   "heldout_downloaded": 121,
    "classification": "Independent held-out recovery (SPHEREx-only motion model; catalogue used to identify the source and register frames)",
    "disclosures": [
     "Catalogue (Gaia DR3) astrometry was used to locate the source in training images (centroid search seed) and to register frames with field stars; the primary prediction itself uses only SPHEREx positions.",
