@@ -1,0 +1,97 @@
+{
+ "generated_utc": "2026-11-15T00:11:12+00:00",
+ "settings": {
+  "same_night_arcsec": 4.0,
+  "rate_arcsec_h": [
+   1.0,
+   90.0
+  ],
+  "track_tol_arcsec": 4.0,
+  "track_rms_max": 2.0,
+  "track_nights": 4,
+  "flux_ratio_max": 3.0,
+  "pair_max_h": 36.0,
+  "accel_max": 0.15,
+  "min_span_h": 6.0,
+  "linker": "grow step by step, curved fit from 4 points (version 3)"
+ },
+ "statement": "Tracks found from SPHEREx detections alone. No asteroid catalogue was consulted before this file was locked.",
+ "version": 3,
+ "history": "Version 1 (24-arcminute patches) removed every dot near a Gaia or WISE star. In these fields the ~10,000 catalogue stars per patch covered almost the whole image, so nothing was left (validation/asteroids/v1/, ledger entry 24). Version 2 removes fixed sources by comparing epochs with each other, as moving-object surveys do, and uses 60-arcminute patches; on six patches it recovered 1 of 3 known asteroids brighter than V 17 and none fainter (validation/asteroids/v2_calibration/, ledger entry 25). Those six patches were then used to tune the linker on known asteroids (version 3: tracks grow step by step and may curve). Version 3 is run blind on six different patches; the tuning patches are not counted in its result.",
+ "control": "Each field was also linked 8 times after rotating each night's detections by a random angle about the field centre (and mirroring half the nights): the number of tracks that appear by chance.",
+ "summary": {
+  "ast00": {
+   "epochs": 11,
+   "epochs_with_pairs": 8,
+   "paired_detections": 8262,
+   "fixed_sources_removed": 8148,
+   "night_detections": 114,
+   "nights": 8,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast01": {
+   "epochs": 9,
+   "epochs_with_pairs": 8,
+   "paired_detections": 7075,
+   "fixed_sources_removed": 6908,
+   "night_detections": 167,
+   "nights": 8,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast02": {
+   "epochs": 8,
+   "epochs_with_pairs": 7,
+   "paired_detections": 6546,
+   "fixed_sources_removed": 6406,
+   "night_detections": 140,
+   "nights": 7,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast03": {
+   "epochs": 8,
+   "epochs_with_pairs": 8,
+   "paired_detections": 9343,
+   "fixed_sources_removed": 9126,
+   "night_detections": 217,
+   "nights": 8,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast04": {
+   "epochs": 9,
+   "epochs_with_pairs": 7,
+   "paired_detections": 7613,
+   "fixed_sources_removed": 7410,
+   "night_detections": 203,
+   "nights": 7,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast05": {
+   "epochs": 9,
+   "epochs_with_pairs": 6,
+   "paired_detections": 7239,
+   "fixed_sources_removed": 7115,
+   "night_detections": 124,
+   "nights": 6,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  }
+ },
+ "tracks": []
+}

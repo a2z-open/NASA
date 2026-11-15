@@ -3,6 +3,7 @@ import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, 
 import { Page, PageHero } from '../components/Shell.tsx';
 import { DistantWorlds, PlanetNineReach, VanishedPanel } from './Distant.tsx';
 import { ColdSpec } from './ColdSpec.tsx';
+import { AsteroidHunt } from './Asteroids.tsx';
 import { paint } from '../components/FieldImage.tsx';
 import { Link } from '../router.tsx';
 
@@ -223,6 +224,7 @@ export function Hunt() {
 
       <DistantWorlds />
       <ColdSpec />
+      <AsteroidHunt />
       <PlanetNineReach />
       <VanishedPanel />
 

@@ -1,0 +1,9 @@
+{
+ "n_objects": 845,
+ "n_spectra": 809,
+ "failures": {
+  "too close to a tile edge": 30,
+  "too few valid planes": 2,
+  "nothing there": 4
+ }
+}

@@ -101,7 +101,49 @@ def section() -> tuple[str, str]:
                  + (f" It missed {vet['published_T'] - vet['published_T_flagged']} of {vet['published_T']} published T dwarfs hidden in the list." if vet else ''))
     else:
         line += '. The unclassified objects have not been scored yet.'
-    L.append('**Reproduce.** `python -m validation.coldspec lists | positions | extract | quality | train | lock | apply`, then `python -m validation.coldspec_after vet | check`, then `python -m validation.coldspec_md`. '
+    wide = OUT / 'wide'
+    if (wide / 'vetting.json').is_file():
+        wl, wr, wv = (json.loads((wide / n).read_text()) for n in ('objects.json', 'results.json', 'vetting.json'))
+        b = wv['blind_test']
+        fresh = [f for f in wv['flagged'] if f['verdict'].startswith('no published spectrum')]
+        L.append('### 12b. The wider search\n')
+        L.append('The first search only covered objects that SIMBAD lists. The wider search takes objects that other surveys picked out from their colours alone '
+                 '(photometric candidates, most never observed with a spectrograph) and fainter SIMBAD candidates. **The model, the cuts and the decision rule are the locked ones**: '
+                 '`wide_apply` refuses to run unless `protocol.json` and `model.joblib` still match ledger entry `coldspec:protocol`. Nothing was refitted or retuned.\n')
+        L.append('| Pool | Objects kept |\n|---|---:|')
+        names = {'des_y6': 'DES Y6 ultracool candidates (Dal Ponte et al. 2023), photometric type L6 or later', 'des_y3': 'DES Y3 L and T candidates (Carnero Rosell et al. 2019), L6 or later, not already above',
+                 'ukidss_T': 'UKIDSS photometric T dwarfs (Skrzypek et al. 2016)', 'ukidss_L': 'UKIDSS photometric L dwarfs, L6 or later (Skrzypek et al. 2016)',
+                 'simbad_faint': 'SIMBAD brown-dwarf candidates with no spectral type, J 17.2 to 18.3'}
+        for k, n in wl['counts'].items():
+            L.append(f"| {names.get(k, k)} | {n:,} |")
+        L.append(f"\nKept means: J between {wl['cuts']['J_min']:.0f} and {wl['cuts']['J_max']}, more than {wl['cuts']['abs_gal_b_min']:.0f}° from the Galactic plane, and not already scored in the first search. "
+                 f"{len(wl['objects']):,} objects; a spectrum was extracted for {wr['n_objects']:,}; {wr['n_pass_quality']:,} pass the quality cuts; {wr['n_outliers']} are outliers and get no answer. "
+                 f"**The model flagged {wr['n_flagged']}.** The scores were hashed into the ledger (`coldspec:wide-results`) before vetting.\n")
+        L.append(f"**Vetting.** Each scored object was compared with published spectral types: {'; '.join(wv['references'])}. "
+                 f"{b['n_with_published_type']} scored objects have a published type. Blind test on those: the model flagged {b['published_T_flagged']} of {b['published_T']} published T dwarfs "
+                 f"and {b['published_not_T_flagged']} of {b['published_not_T']} published warmer dwarfs; median type error {b['type_median_abs_subtypes']} subtypes.\n")
+        L.append(f"Of the {wr['n_flagged']} flagged: **{wv['n_already_typed']} already have a published type, {wv['n_doubtful']} are doubtful (WISE colour), "
+                 f"and {wv['n_no_published_spectrum']} have no published spectrum that we could find.**\n")
+        if wv['flagged']:
+            L.append('| Object | Pool | J | Survey\'s photometric type | Model type | P(T) | J-band S/N | W1 − W2 | Published type | Verdict |\n|---|---|---:|---|---|---:|---:|---:|---|---|')
+            for f in wv['flagged']:
+                w = (f.get('wise') or {}).get('W1_W2')
+                L.append(f"| {f['name']} | {f['group']} | {f['J']:.2f} | {f['phot_type'] or '—'} | {f['pred_type']} | {f['p_T']:.2f} | {f['snr_J']:.0f} | {w if w is not None else '—'} | "
+                         f"{(f['published_type'] + ' (' + f['published_in'] + ')') if f['published_type'] else 'none found'} | {f['verdict']} |")
+            L.append('')
+        if (wide / 'candidates.json').is_file():
+            wc = json.loads((wide / 'candidates.json').read_text())
+            L.append(f"**Grading by methane depth (after vetting).** {wc['rule']} Limits from known dwarfs: 1.7 µm index below {wc['limits']['methane_1p7_warm_1st_percentile']}, "
+                     f"3.3/4.5 µm index below {wc['limits']['methane_3p3_warm_1st_percentile']}. **{wc['n_strong']} of {wc['n']} are strong.** None of the {wc['n']} has any entry in SIMBAD within 15″.\n")
+            L.append('| Object | Grade | Model type | 1.7 µm index | 3.3/4.5 µm index | J-band S/N | W1 − W2 |\n|---|---|---|---:|---:|---:|---:|')
+            for c in wc['candidates']:
+                L.append(f"| {c['name']} (RA {c['ra']:.5f}, Dec {c['dec']:+.5f}) | {c['grade']} | {c['pred_type']} | {c['methane_1p7']} | {c['methane_3p3']} | {c['snr_J']:.0f} | {(c['wise'] or {}).get('W1_W2', '—')} |")
+            L.append('')
+            L.append('**What this is.** ' + wc['what_it_is'] + '\n')
+        L.append('**What the wider search does and does not show.** ' + wv['caveat'] + ' No claim has been sent to anyone.\n')
+        line += (f" Wider search (same locked model, {wr['n_pass_quality']:,} more objects from DES, UKIDSS and SIMBAD): {wr['n_flagged']} flagged; {wv['n_already_typed']} already typed, "
+                 f"{wv['n_doubtful']} doubtful, {len(fresh)} with no published spectrum found (candidates for a first spectroscopic type, not new objects).")
+    L.append('**Reproduce.** `python -m validation.coldspec lists | positions | extract | quality | train | lock | apply`, then `python -m validation.coldspec_after vet | wide_lists | wide_positions | wide_extract | wide_apply | wide_vet | wide_grade | check`, then `python -m validation.coldspec_md`. '
              'Files: `validation/coldspec/` (`objects.json`, `positions.json`, `spectra.npz`, `quality.json`, `cv.json`, `protocol.json`, `model.joblib`, `results.json`, `vetting.json`, `check_queue.json`).')
     return '\n'.join(L), line
 

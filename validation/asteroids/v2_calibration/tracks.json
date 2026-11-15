@@ -1,0 +1,170 @@
+{
+ "generated_utc": "2026-11-14T23:45:33+00:00",
+ "settings": {
+  "same_night_arcsec": 4.0,
+  "rate_arcsec_h": [
+   1.0,
+   90.0
+  ],
+  "track_tol_arcsec": 4.0,
+  "track_rms_max": 2.0,
+  "track_nights": 4,
+  "flux_ratio_max": 3.0,
+  "pair_max_h": 80.0
+ },
+ "statement": "Tracks found from SPHEREx detections alone. No asteroid catalogue was consulted before this file was locked.",
+ "version": 2,
+ "history": "Version 1 (24-arcminute patches) removed every dot near a Gaia or WISE star. In these fields the ~10,000 catalogue stars per patch covered almost the whole image, so nothing was left (validation/asteroids/tracks_v1_catalog_exclusion.json, ledger entry 24). Version 2 removes fixed sources by comparing epochs with each other, as moving-object surveys do, and uses 60-arcminute patches.",
+ "control": "Each field was also linked 8 times after rotating each night's detections by a random angle about the field centre (and mirroring half the nights): the number of tracks that appear by chance.",
+ "summary": {
+  "ast00": {
+   "epochs": 14,
+   "epochs_with_pairs": 12,
+   "paired_detections": 29926,
+   "fixed_sources_removed": 29753,
+   "night_detections": 173,
+   "nights": 12,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast01": {
+   "epochs": 13,
+   "epochs_with_pairs": 8,
+   "paired_detections": 6520,
+   "fixed_sources_removed": 6435,
+   "night_detections": 85,
+   "nights": 8,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast02": {
+   "epochs": 12,
+   "epochs_with_pairs": 8,
+   "paired_detections": 10149,
+   "fixed_sources_removed": 10052,
+   "night_detections": 97,
+   "nights": 8,
+   "tracks": 1,
+   "tracks_4plus": 1,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast03": {
+   "epochs": 11,
+   "epochs_with_pairs": 10,
+   "paired_detections": 12578,
+   "fixed_sources_removed": 12425,
+   "night_detections": 153,
+   "nights": 9,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast04": {
+   "epochs": 9,
+   "epochs_with_pairs": 4,
+   "paired_detections": 4517,
+   "fixed_sources_removed": 4149,
+   "night_detections": 368,
+   "nights": 4,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast05": {
+   "epochs": 8,
+   "epochs_with_pairs": 5,
+   "paired_detections": 4512,
+   "fixed_sources_removed": 4392,
+   "night_detections": 120,
+   "nights": 5,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  }
+ },
+ "tracks": [
+  {
+   "points": [
+    {
+     "night": 5,
+     "mjd": 61191.1484286485,
+     "x": -1561.4545529830627,
+     "y": -432.0130196372881,
+     "sigma": 1.5,
+     "n_images": 2,
+     "detectors": [
+      2
+     ],
+     "snr": 15.025822246825495,
+     "flux_ujy": 13.239824562828419
+    },
+    {
+     "night": 6,
+     "mjd": 61191.690010639504,
+     "x": -1114.510161540297,
+     "y": -271.1166121691009,
+     "sigma": 1.5,
+     "n_images": 2,
+     "detectors": [
+      2
+     ],
+     "snr": 12.531640844811028,
+     "flux_ujy": 10.597006690087012
+    },
+    {
+     "night": 7,
+     "mjd": 61192.1662353905,
+     "x": -722.8654341993915,
+     "y": -131.56681154077773,
+     "sigma": 1.5,
+     "n_images": 2,
+     "detectors": [
+      2
+     ],
+     "snr": 17.235428567852612,
+     "flux_ujy": 16.042961062311544
+    },
+    {
+     "night": 9,
+     "mjd": 61192.77642557,
+     "x": -225.10076715088417,
+     "y": 48.09426660845337,
+     "sigma": 1.5,
+     "n_images": 2,
+     "detectors": [
+      2
+     ],
+     "snr": 17.392046753139727,
+     "flux_ujy": 16.386363857758433
+    }
+   ],
+   "rms_arcsec": 0.3726884399202942,
+   "rate_arcsec_h": 36.351065538749985,
+   "cx": [
+    -904.336086950084,
+    34.212974216647986,
+    -0.007942312452722897
+   ],
+   "cy": [
+    -196.23048049891725,
+    12.283011074385511,
+    -0.002026109500607078
+   ],
+   "t0_h": 1468606.6866014912,
+   "id": "ast02-t00",
+   "field": "ast02",
+   "n_nights": 4,
+   "detectors": [
+    2
+   ]
+  }
+ ]
+}

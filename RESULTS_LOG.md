@@ -92,5 +92,11 @@ Negative controls and injection tests: see VALIDATION.md (appended when the runs
 ## Cold-world spectra (14 Nov 2026)
 
 <!-- COLDSPEC_LINE -->
-- Cold-world spectra: the model reads types to ±1.5 subtypes and recognises 59 of 66 known T dwarfs with 0 false alarms; applied under a locked rule to 448 unclassified objects, it flagged 5: 5 are T dwarfs already typed in the literature (a blind test passed), 0 doubtful, 0 new candidates. It missed 1 of 6 published T dwarfs hidden in the list.
+- Cold-world spectra: the model reads types to ±1.5 subtypes and recognises 59 of 66 known T dwarfs with 0 false alarms; applied under a locked rule to 448 unclassified objects, it flagged 5: 5 are T dwarfs already typed in the literature (a blind test passed), 0 doubtful, 0 new candidates. It missed 1 of 6 published T dwarfs hidden in the list. Wider search (same locked model, 158 more objects from DES, UKIDSS and SIMBAD): 20 flagged; 7 already typed, 1 doubtful, 12 with no published spectrum found (candidates for a first spectroscopic type, not new objects).
 <!-- /COLDSPEC_LINE -->
+
+## Asteroid hunt (14 Nov 2026)
+
+<!-- ASTEROIDS_LINE -->
+- Asteroid hunt: 0 moving-object tracks from SPHEREx alone in 6 patches near the ecliptic: 0 are known asteroids recovered blind, 0 match nothing known (chance expectation 0.0).
+<!-- /ASTEROIDS_LINE -->

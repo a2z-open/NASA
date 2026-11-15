@@ -15,7 +15,20 @@ interface Vet {
   matches: { name: string; published_type: string; model_type: string; flagged: boolean }[];
 }
 interface Quality { scatter_passing_cuts_dex: number; n_passing: number; wise_check: { scatter_dex: number; n: number } | null }
-interface Doc { cv: Cv; results: Res | null; protocol: { locked_utc: string } | null; vetting: Vet | null; quality: Quality | null }
+interface WideFlag {
+  oid: string; name: string; group: string; cite: string; ra: number; dec: number; J: number; phot_type: string | null; snr_J: number; pred_type: string; p_T: number;
+  wise: { W1_W2: number | null } | null; spectrum: Cand['spectrum']; published_type: string | null; published_in: string | null; published_name: string | null; verdict: string;
+}
+interface Graded extends WideFlag { methane_1p7: number; methane_3p3: number; grade: 'strong' | 'likely'; in_simbad: boolean }
+interface Wide {
+  n_objects: number; n_spectra: number; n_pass_quality: number; n_flagged: number;
+  candidates: { n: number; n_strong: number; candidates: Graded[]; what_it_is: string; limits: { methane_1p7_warm_1st_percentile: number; methane_3p3_warm_1st_percentile: number } } | null;
+  vetting: {
+    flagged: WideFlag[]; n_already_typed: number; n_doubtful: number; n_no_published_spectrum: number; caveat: string; references: string[];
+    blind_test: { n_with_published_type: number; type_median_abs_subtypes: number | null; published_T: number; published_T_flagged: number; published_not_T: number; published_not_T_flagged: number };
+  };
+}
+interface Doc { cv: Cv; results: Res | null; protocol: { locked_utc: string } | null; vetting: Vet | null; quality: Quality | null; wide: Wide | null }
 
 const TICKS: [number, string][] = [[0, 'M0'], [5, 'M5'], [10, 'L0'], [15, 'L5'], [20, 'T0'], [25, 'T5'], [30, 'Y0']];
 
@@ -44,7 +57,8 @@ function Scatter({ points }: { points: Point[] }) {
 }
 
 /** A candidate's SPHEREx spectrum: the dips at 1.7 and 3.3 microns are methane. */
-function Spark({ s }: { s: Cand['spectrum'] }) {
+function Spark({ s: raw }: { s: Cand['spectrum'] }) {
+  const s = raw.filter(p => p.ujy > -4 * p.err);          // a flux far below zero is a corrupted band, not light: not drawn
   const w = 300, h = 96, m = { l: 6, r: 6, t: 8, b: 18 };
   if (s.length < 3) return null;
   const top = Math.max(...s.map(p => p.ujy + p.err)) * 1.05, bot = Math.min(0, ...s.map(p => p.ujy - p.err));
@@ -59,6 +73,60 @@ function Spark({ s }: { s: Cand['spectrum'] }) {
       {s.map((p, i) => <circle key={i} cx={sx(p.um)} cy={sy(p.ujy)} r={2} fill="#f5f5f7" />)}
       {[1, 2, 3, 4, 5].map(v => <text key={v} x={sx(v)} y={h - 4} textAnchor="middle" className="cs-axis">{v} µm</text>)}
     </svg>
+  );
+}
+
+const POOL: Record<string, string> = { des_y6: 'Dark Energy Survey', des_y3: 'Dark Energy Survey', ukidss_T: 'UKIDSS', ukidss_L: 'UKIDSS', simbad_faint: 'SIMBAD' };
+
+/** The wider search: objects other surveys picked from colours alone, given a SPHEREx spectrum and the same locked model. */
+function WideBlock({ w }: { w: Wide }) {
+  const v = w.vetting, b = v.blind_test;
+  const fresh: (WideFlag & Partial<Graded>)[] = w.candidates?.candidates ?? v.flagged.filter(f => f.verdict.startsWith('no published spectrum'));
+  const typed = v.flagged.filter(f => f.verdict.startsWith('already'));
+  const doubt = v.flagged.filter(f => f.verdict.startsWith('doubtful'));
+  return (
+    <>
+      <h3 className="cs-h3">The wider search.</h3>
+      <p className="test-p">
+        Then we gave the same locked model {w.n_objects.toLocaleString('en-US')} more objects: ones that other surveys picked out from their colours alone, mostly without ever taking a spectrum, and fainter catalogue candidates.
+        {' '}{w.n_pass_quality.toLocaleString('en-US')} had a clean enough SPHEREx spectrum. The model flagged {w.n_flagged}.
+      </p>
+      <div className="tiles tiles--3">
+        <div className="tile"><span className="tile__n">{typed.length} of {w.n_flagged}</span><span className="tile__t">flagged objects already have a published type. {b.published_T > 0 ? `Blind test: it flagged ${b.published_T_flagged} of ${b.published_T} published T dwarfs in this list, and ${b.published_not_T_flagged} of ${b.published_not_T} published warmer dwarfs.` : ''}</span></div>
+        <div className="tile"><span className="tile__n">{fresh.length}</span><span className="tile__t">flagged objects with no published spectrum that we could find{w.candidates ? `, ${w.candidates.n_strong} with strong methane` : ''}. Another survey suspected them from colours; SPHEREx now shows the methane.</span></div>
+        <div className="tile"><span className="tile__n">{doubt.length}</span><span className="tile__t">flagged but doubtful, because their WISE colour is not that of a T dwarf</span></div>
+      </div>
+      {fresh.length > 0 && (
+        <>
+          <h3 className="cs-h3">{w.candidates ? `${w.candidates.n_strong} brown dwarfs, seen in methane for the first time.` : 'Candidates for a first spectrum.'}</h3>
+          <p className="test-p">The Dark Energy Survey listed these as possible T dwarfs from their colours alone. We found no published spectrum of any of them, and SIMBAD has no entry for them at all. Their SPHEREx spectra show the methane that only cold worlds have.{w.candidates ? ` In ${w.candidates.n_strong} of them, both methane bands are deeper than in 99% of known warmer dwarfs.` : ''} These are not new objects, and a large telescope should confirm them before anyone publishes them.</p>
+          <div className="cs-cands">
+            {fresh.map(c => (
+              <article key={c.oid} className="cs-cand">
+                <header><h4>{c.name}</h4><span className="cs-chip">{c.grade === 'strong' ? 'Strong methane' : c.grade === 'likely' ? 'Likely' : c.verdict.includes('agrees') ? 'WISE agrees' : 'No WISE colour'}</span></header>
+                <Spark s={c.spectrum} />
+                <dl>
+                  <div><dt>Model reads</dt><dd>{c.pred_type}</dd></div>
+                  <div><dt>{POOL[c.group] ?? 'Survey'} guessed</dt><dd>{c.phot_type ?? '—'}</dd></div>
+                  <div><dt>Signal</dt><dd>{c.snr_J.toFixed(0)}×</dd></div>
+                  <div><dt>WISE colour</dt><dd>{c.wise?.W1_W2 != null ? c.wise.W1_W2.toFixed(2) : '—'}</dd></div>
+                </dl>
+                <Link className="cs-go" href={`/map?ra=${c.ra.toFixed(5)}&dec=${c.dec.toFixed(5)}&fov=0.5`}>See it on the sky map</Link>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+      {fresh.length === 0 && <p className="test-p"><strong>Again, nothing unpublished.</strong> Every object the model flagged in the wider list already has a published type or fails the WISE check.</p>}
+      {typed.length > 0 && (
+        <div className="cs-table" role="table" aria-label="Wider search: flagged objects that already have a published type">
+          <div role="row" className="cs-tr cs-tr--h"><span role="columnheader">Already typed</span><span role="columnheader">Model read</span><span role="columnheader">Published type</span></div>
+          {typed.slice(0, 12).map(c => <div role="row" className="cs-tr" key={c.oid}><span role="cell">{c.published_name || c.name}</span><span role="cell">{c.pred_type}</span><span role="cell">{c.published_type}</span></div>)}
+          {typed.length > 12 && <div role="row" className="cs-tr cs-tr--miss"><span role="cell">and {typed.length - 12} more, in validation/coldspec/wide/vetting.json</span><span role="cell" /><span role="cell" /></div>}
+        </div>
+      )}
+      <p className="small dim">{v.caveat} Checked against: {v.references.join('; ')}.</p>
+    </>
   );
 }
 
@@ -146,6 +214,7 @@ export function ColdSpec() {
         </>
       )}
       {r && doubtful.length > 0 && <p className="small dim">Flagged but doubtful, because the WISE colour disagrees: {doubtful.map(c => c.name).join(', ')}.</p>}
+      {d.wide && <WideBlock w={d.wide} />}
       <p className="small dim">Spectra: SPHEREx DR1 all-sky data cube (IRSA). Types and the unclassified lists: SIMBAD (CDS). Model, cuts and decision rule were hash-locked {d.protocol ? `on ${d.protocol.locked_utc.slice(0, 10)} ` : ''}before any unclassified object was scored. The absolute flux scale is not calibrated; only the shape of each spectrum is used.</p>
     </section>
   );

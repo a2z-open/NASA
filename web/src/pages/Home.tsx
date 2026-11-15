@@ -23,6 +23,7 @@ interface ColdDoc {
   cv: { held_out: { rms_subtypes: number; T_found: number; T_total: number; false_T: number; not_T_total: number } };
   results: { n_pass_quality: number; n_candidates: number; candidates: { name: string; verdict: string }[] } | null;
   vetting: { candidates: { name: string; verdict: string }[] } | null;
+  wide: { n_pass_quality: number; candidates: { n: number; n_strong: number } | null } | null;
 }
 
 const LAUNCH = Date.UTC(2025, 2, 12, 3, 10);   // SPHEREx lifted off 11 March 2025, 8:10 p.m. Pacific
@@ -219,11 +220,13 @@ export function Home() {
                   </Link>
                   <Link className="e-card" href="/hunt#cs-h">
                     <span className="e-card__n">05</span>
-                    <span className="e-card__k">{newCold > 0 ? 'New candidates' : 'Blind test'}</span>
-                    <span className="e-card__v">{newCold > 0 ? newCold : `${knownCold} of ${cold.results.n_candidates}`}</span>
-                    <span className="e-card__t">{newCold > 0
-                      ? `Possible new cold worlds among ${cold.results.n_pass_quality.toLocaleString('en-US')} objects nobody had classified. Candidates, not confirmed discoveries.`
-                      : `It flagged ${cold.results.n_candidates} of ${cold.results.n_pass_quality.toLocaleString('en-US')} unclassified objects. All were methane dwarfs astronomers had already typed. No new world yet.`}</span>
+                    <span className="e-card__k">{cold.wide?.candidates ? 'First spectra' : newCold > 0 ? 'New candidates' : 'Blind test'}</span>
+                    <span className="e-card__v">{cold.wide?.candidates ? cold.wide.candidates.n_strong : newCold > 0 ? newCold : `${knownCold} of ${cold.results.n_candidates}`}</span>
+                    <span className="e-card__t">{cold.wide?.candidates
+                      ? 'Brown dwarfs that a survey had only guessed from colours. SPHEREx shows their methane, and no spectrum of them was ever published. To confirm with a big telescope.'
+                      : newCold > 0
+                        ? `Possible new cold worlds among ${cold.results.n_pass_quality.toLocaleString('en-US')} objects nobody had classified. Candidates, not confirmed discoveries.`
+                        : `It flagged ${cold.results.n_candidates} of ${cold.results.n_pass_quality.toLocaleString('en-US')} unclassified objects. All were methane dwarfs astronomers had already typed. No new world yet.`}</span>
                   </Link>
                 </>
               )}

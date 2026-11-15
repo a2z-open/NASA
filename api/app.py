@@ -789,6 +789,13 @@ def coldspec_results():
     if (base / 'objects.json').exists():
         o = read_json(base / 'objects.json')
         out['lists'] = {'counts': o['counts'], 'generated_utc': o['generated_utc'], 'source': o['source']}
+    wide = base / 'wide'
+    out['wide'] = None
+    if (wide / 'vetting.json').exists() and (wide / 'results.json').exists():
+        r, lists = read_json(wide / 'results.json'), read_json(wide / 'objects.json')
+        out['wide'] = {'n_objects': len(lists['objects']), 'counts': lists['counts'], 'sources': lists['sources'], 'n_spectra': r['n_objects'],
+                       'n_pass_quality': r['n_pass_quality'], 'n_outliers': r['n_outliers'], 'n_flagged': r['n_flagged'], 'vetting': read_json(wide / 'vetting.json'),
+                       'candidates': read_json(wide / 'candidates.json') if (wide / 'candidates.json').exists() else None}
     return out
 
 
@@ -847,8 +854,27 @@ async def check_vote(request: Request):
             f.write(json.dumps({'id': item['id'], 'answer': answer, 'name': name, 'utc': now()}) + '\n')
         tally = _check_tallies()[item['id']]
     return {'id': item['id'], 'tally': tally, 'kind': item['kind'], 'name': item['name'], 'truth': item['truth'], 'truth_label': item['truth_label'],
-            'model': item['model'], 'flagged': bool(item.get('flagged')),
+            'model': item['model'], 'flagged': bool(item.get('flagged')), 'first_spectrum': bool(item.get('first_spectrum')),
             'agrees_with_known': (answer == item['truth']) if item['truth'] and answer != 'unsure' else None}
+
+
+@app.get('/api/asteroids')
+def asteroid_results():
+    """Asteroid hunt: tracks found in SPHEREx images alone, then matched to known asteroids (validation/asteroids.py)."""
+    p = ROOT / 'validation' / 'asteroids' / 'results.json'
+    if not p.exists():
+        raise HTTPException(404, 'The asteroid hunt has not been run yet (python -m validation.asteroids).')
+    d = dict(read_json(p))
+    d['tracks'] = [{k: v for k, v in t.items() if k != 'points'} | {'n_points': len(t['points'])} for t in d['tracks']]
+    d.pop('recovery', None)
+    tr = ROOT / 'validation' / 'asteroids' / 'tracks.json'
+    if tr.exists():
+        t = read_json(tr)
+        d['history'], d['version'] = t.get('history'), t.get('version')
+    plan = ROOT / 'validation' / 'asteroids' / 'plan.json'
+    if plan.exists():
+        d['fields'] = [{k: f[k] for k in ('id', 'ra', 'dec', 'ecl_lon', 'n_nights')} | {'n_images': len(f['products'])} for f in read_json(plan)['fields']]
+    return d
 
 
 @app.get('/api/ml')

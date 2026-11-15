@@ -1,0 +1,10372 @@
+{
+ "generated_utc": "2026-11-14T23:54:44+00:00",
+ "n_fields": 6,
+ "n_tracks": 1,
+ "n_tracks_known": 1,
+ "n_tracks_unmatched": 0,
+ "recovery_by_V": [
+  {
+   "V": "0-17",
+   "n": 3,
+   "found": 1
+  },
+  {
+   "V": "17-18",
+   "n": 3,
+   "found": 0
+  },
+  {
+   "V": "18-19",
+   "n": 10,
+   "found": 0
+  },
+  {
+   "V": "19-20",
+   "n": 42,
+   "found": 0
+  },
+  {
+   "V": "20+",
+   "n": 1409,
+   "found": 0
+  }
+ ],
+ "n_known_in_view": 1468,
+ "n_known_found": 1,
+ "tracks": [
+  {
+   "id": "ast02-t00",
+   "field": "ast02",
+   "n_nights": 4,
+   "rate_arcsec_h": 36.4,
+   "rms_arcsec": 0.37,
+   "detectors": [
+    2
+   ],
+   "snr_max": 17.4,
+   "known": {
+    "name": "Mertona",
+    "class": "MB>Middle",
+    "V": 16.9,
+    "delta_au": 2.72814192744
+   },
+   "first_mjd": 61191.1484286485,
+   "points": [
+    {
+     "mjd": 61191.1484286485,
+     "x": -1561.4545529830627,
+     "y": -432.0130196372881,
+     "snr": 15.025822246825495,
+     "n_images": 2,
+     "flux_ujy": 13.239824562828419
+    },
+    {
+     "mjd": 61191.690010639504,
+     "x": -1114.510161540297,
+     "y": -271.1166121691009,
+     "snr": 12.531640844811028,
+     "n_images": 2,
+     "flux_ujy": 10.597006690087012
+    },
+    {
+     "mjd": 61192.1662353905,
+     "x": -722.8654341993915,
+     "y": -131.56681154077773,
+     "snr": 17.235428567852612,
+     "n_images": 2,
+     "flux_ujy": 16.042961062311544
+    },
+    {
+     "mjd": 61192.77642557,
+     "x": -225.10076715088417,
+     "y": 48.09426660845337,
+     "snr": 17.392046753139727,
+     "n_images": 2,
+     "flux_ujy": 16.386363857758433
+    }
+   ]
+  }
+ ],
+ "recovery": [
+  {
+   "field": "ast00",
+   "name": "2013 CE240",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 XM38",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 AS12",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 EE73",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 DF83",
+   "V": 23.8,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 UV261",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2025 FR22",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 WU141",
+   "V": 20.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 US243",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 PK27",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 JR10",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 FH106",
+   "V": 21.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 SX82",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1998 XZ62",
+   "V": 19.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2023 TG56",
+   "V": 24.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 WV104",
+   "V": 23.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 AF73",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 PW344",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2020 JL28",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 GR32",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 YX21",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 YT41",
+   "V": 21.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 YK23",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 XK396",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 BE124",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 CC387",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 XH6",
+   "V": 24.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 SE52",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 TA49",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 SB137",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 TX25",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 CL270",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1999 XO222",
+   "V": 20.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 FJ96",
+   "V": 21.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 TW434",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 CY27",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 EA85",
+   "V": 21.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 RE184",
+   "V": 22.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1999 WK17",
+   "V": 21.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 NP5",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 YQ94",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 QO83",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 AC149",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 QD161",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 RM18",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 GU52",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 WT206",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2020 HU131",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 VE109",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 OE66",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 QD217",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 BS39",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 ER80",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 WF180",
+   "V": 21.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 UC50",
+   "V": 21.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 YS188",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 KX222",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 YL35",
+   "V": 20.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 TF131",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 TJ78",
+   "V": 20.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 VD9",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 WV99",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 UD193",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 GB89",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 YC61",
+   "V": 21,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 QR29",
+   "V": 20.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 NW96",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2737 P-L",
+   "V": 20.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2023 RW79",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 MZ78",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 RP191",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 YP71",
+   "V": 25,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 PW111",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 RL61",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 BV177",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2022 QF157",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 WA174",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 UJ186",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 TC318",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 UH226",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 RZ20",
+   "V": 21.7,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 WQ162",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1995 WW42",
+   "V": 20.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 DP192",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 HG527",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 KW75",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 KE",
+   "V": 20.9,
+   "class": "Hungaria",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 JM33",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 RX52",
+   "V": 21.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 QA94",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 JP25",
+   "V": 21.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 JQ81",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 SX306",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Yojikondo",
+   "V": 19.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Elizabethacton",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 VH42",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 YR77",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 RC21",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 SV13",
+   "V": 21,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 SA19",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 GN50",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 GV90",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 GH77",
+   "V": 21.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 HT17",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 YS128",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1230 T-2",
+   "V": 21,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 UX30",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 WO72",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 CH77",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 SP395",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 SK16",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 SG50",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 SG31",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 TM170",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 YS118",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 FE65",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 BM157",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 YC165",
+   "V": 23.3,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 BG108",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 WK11",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 WL123",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 HX58",
+   "V": 21,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 WC31",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 RT213",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 PB49",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 AH32",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 BT79",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 HS14",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 UC527",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 AZ135",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 US92",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 TZ151",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2020 KD48",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 VC88",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 YX24",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 TC89",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 SO284",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 QC6",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 RA151",
+   "V": 20.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 XV2",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 BB19",
+   "V": 21,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2023 RM17",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1995 SX45",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 GO108",
+   "V": 21.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 HY337",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 SJ44",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 CU97",
+   "V": 22.6,
+   "class": "MB>Cybele",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 KT48",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 CM299",
+   "V": 21.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 RK130",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 BC4",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 EM47",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 YS69",
+   "V": 21.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 WF201",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 QC121",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 NL36",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 UE403",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 UK296",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 YT50",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 EF117",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 YR5",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 VZ18",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 RE126",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 MW112",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 TZ225",
+   "V": 20.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 XH70",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 WL153",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 TM262",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 TK21",
+   "V": 22.4,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 BL1",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 UP215",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1998 RO40",
+   "V": 19.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2025 AF6",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 FO64",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 RH85",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 WG415",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 HK217",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 UL1",
+   "V": 21.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 ED142",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 BL137",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 EP10",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 JZ27",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 PU98",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2022 RQ51",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 YL79",
+   "V": 21,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 WT75",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 BJ61",
+   "V": 21.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 QW118",
+   "V": 19.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Beatles",
+   "V": 19.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 SV100",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 KB65",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 CK69",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 SX86",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 VX197",
+   "V": 22.8,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 VT52",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2018 XJ22",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 CJ60",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 TP91",
+   "V": 22.5,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2022 SC139",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 FX165",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 CP24",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 FU5",
+   "V": 22.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 HU83",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 SH142",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 YV80",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 EA12",
+   "V": 20.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 YU49",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2022 UX138",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Giblin",
+   "V": 18,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 CT105",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 JK107",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2025 HQ79",
+   "V": 24.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 BE12",
+   "V": 23.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 GZ91",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 BH64",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Nakanoshima",
+   "V": 19.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 QC114",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 JJ168",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 UQ317",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 OO10",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 TR177",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 UV42",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 TR59",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Stoops",
+   "V": 19.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 UF108",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2020 BF77",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1995 YG3",
+   "V": 20.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2025 HJ22",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 VW28",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 EY27",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 WZ28",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2022 UD182",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 CK23",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2307 T-3",
+   "V": 19.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 CQ364",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 RG156",
+   "V": 21.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 MQ21",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 XH1",
+   "V": 21.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 UH176",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 VO19",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 HE603",
+   "V": 24.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 QS31",
+   "V": 19.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 UL161",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 BR303",
+   "V": 24.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2025 MT49",
+   "V": 25.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 RP15",
+   "V": 23.1,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2026 NN2",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 UV194",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 SW398",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 TR193",
+   "V": 21.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 SK255",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2020 RL129",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 HS274",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 AC8",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 RJ250",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 CX100",
+   "V": 20.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 QG167",
+   "V": 21,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2003 CX19",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2007 VG108",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 BV138",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 GG43",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 SC98",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 UM234",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2010 YA6",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 PL48",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 XH49",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 HB71",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 HY86",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 GK111",
+   "V": 23.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 BY10",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 HW52",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 GN89",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2018 VM165",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 DL13",
+   "V": 24.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "1998 XN11",
+   "V": 18.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 WQ62",
+   "V": 19.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 DJ35",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 XY78",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 XY86",
+   "V": 20.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 BR462",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2006 YA50",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2013 NV76",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 BD43",
+   "V": 22.1,
+   "class": "Hungaria",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2017 VL9",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 TU55",
+   "V": 20.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 TX192",
+   "V": 19.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 GW58",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 GQ5",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2020 JH31",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 EM167",
+   "V": 20.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 HP42",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 UJ362",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 QP104",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 CJ12",
+   "V": 21.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 PO313",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2004 XO129",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 FW382",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 XZ58",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 BH87",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 DP72",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 XW27",
+   "V": 19.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2025 NS551",
+   "V": 23.4,
+   "class": "KBO>Classical>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 TS179",
+   "V": 24.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 SE280",
+   "V": 20.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 SN242",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 UG64",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 EL194",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2014 HA360",
+   "V": 23.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 BK21",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 UC166",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2023 JS2",
+   "V": 22.8,
+   "class": "Hungaria",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2002 XO81",
+   "V": 20.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 VH89",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2008 VY108",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 QC228",
+   "V": 21.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 QW69",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2016 SF121",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 OA32",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2001 YJ54",
+   "V": 20.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2022 UD52",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2011 WX86",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2019 PD83",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "Giannimorandi",
+   "V": 21.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2005 YS288",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2009 UB102",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2021 GQ97",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 AY152",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2012 BV184",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2018 FK16",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2000 DT58",
+   "V": 20.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast00",
+   "name": "2015 NY27",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 VE205",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 LB29",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1115 T-3",
+   "V": 19.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 TC67",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 EM116",
+   "V": 21.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 CX169",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 RH57",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 NQ28",
+   "V": 24.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 QJ186",
+   "V": 25.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1994 RF25",
+   "V": 19.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 JV162",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 VH13",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 RT123",
+   "V": 24.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 YK23",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 BZ94",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 RP108",
+   "V": 24.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 MH8",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 TJ47",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 RO146",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 HK417",
+   "V": 24.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 SL127",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 XX50",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 EA98",
+   "V": 21.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2021 NB65",
+   "V": 22.9,
+   "class": "MB>Cybele",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 UD57",
+   "V": 25.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 HB516",
+   "V": 24.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 GG92",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 SP451",
+   "V": 25.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 PX131",
+   "V": 25.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 EK151",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 TV82",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 EA194",
+   "V": 22.6,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 TQ5",
+   "V": 20,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 XE318",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 UR247",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 DO139",
+   "V": 21.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 TS365",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2009 PL4",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 AV285",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 DV279",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 TF234",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 UQ59",
+   "V": 21.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 FC122",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "Arvernia",
+   "V": 20.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 BV26",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 SZ135",
+   "V": 21.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 QO30",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 TB384",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 OJ190",
+   "V": 25.7,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 OP39",
+   "V": 22.9,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 TE25",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 HC67",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 TP370",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 TT43",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 XJ123",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 GD397",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 RW254",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 CM147",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 AX173",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2009 QU24",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 SJ21",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 SX158",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 BY18",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 QJ15",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 VB128",
+   "V": 24.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 FH8",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 GR124",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 RD58",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 TU64",
+   "V": 21.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 XL128",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 RA65",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 SC6",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 QJ36",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 QH231",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 PR36",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 BU159",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 QX92",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 TD69",
+   "V": 24.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 DH53",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 RJ59",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 NV59",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 RB14",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 FO177",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 HO94",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 UB113",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 HN26",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 RU37",
+   "V": 25.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 JY96",
+   "V": 24.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 RQ148",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 LY25",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 EL70",
+   "V": 22.6,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 RZ92",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 NP2",
+   "V": 24.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2018 NA59",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 OQ23",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 ES133",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 CC57",
+   "V": 21.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 CY20",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 RF64",
+   "V": 25.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 VB56",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 VT64",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 AT24",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 BS552",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 TR41",
+   "V": 24.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 TH55",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 RB164",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2018 MX21",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 SC300",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2026 EO83",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 SG181",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 SM56",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 XH291",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 PO43",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 QQ7",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 FK51",
+   "V": 21,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 UQ202",
+   "V": 28.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 FD31",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QX524",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 QE92",
+   "V": 20.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2021 SA85",
+   "V": 22.6,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 FL90",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 TL160",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 PH53",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 RD80",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 PW35",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 WY164",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 QP60",
+   "V": 21.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 AJ7",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 TS31",
+   "V": 25.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 GU170",
+   "V": 24.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 SA307",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 RU169",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 EH157",
+   "V": 21.6,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2026 EZ80",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 VU79",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 EP47",
+   "V": 20.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 NQ",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 UD105",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 CF31",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 AX187",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 RO63",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 VK97",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 NF47",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 RB7",
+   "V": 22.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1994 PO",
+   "V": 18,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QN423",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1993 DN",
+   "V": 19.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QM426",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 AA201",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 YY99",
+   "V": 23.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 VT51",
+   "V": 21.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 EF10",
+   "V": 21.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 KB11",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2026 FC22",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QG193",
+   "V": 24.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 TP73",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 QF135",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "Odysseus",
+   "V": 16.1,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1120 T-1",
+   "V": 20.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 CB63",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QT78",
+   "V": 24.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 FC91",
+   "V": 24.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 RL78",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 OZ179",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 JH21",
+   "V": 20.6,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 UV94",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 CZ71",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 TW100",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 DR53",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 SZ134",
+   "V": 24.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 CQ190",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 TE207",
+   "V": 24.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 UD20",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 YO3",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 QH188",
+   "V": 20.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 RZ171",
+   "V": 25.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 RX99",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 AM148",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 MT126",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 YB10",
+   "V": 21.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 QU91",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 HT36",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 QH140",
+   "V": 21.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 SR116",
+   "V": 25.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 PW297",
+   "V": 24.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 UG343",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 RJ201",
+   "V": 25.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 QT109",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 ST397",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "Anahita",
+   "V": 13.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 YM72",
+   "V": 20.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2026 ER5",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 AE74",
+   "V": 21.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 YR18",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 MP164",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2023 OJ38",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 SS85",
+   "V": 21.6,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 WY137",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2018 FN52",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 TT1",
+   "V": 22.2,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 BU438",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 CT19",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 HD548",
+   "V": 24.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 RF126",
+   "V": 19.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 LA2",
+   "V": 19.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 BP195",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 TS233",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 SQ42",
+   "V": 25.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 DO53",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 GY74",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2018 ND32",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1998 HF54",
+   "V": 21,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2024 QW8",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 SK20",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2009 EJ30",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 US202",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 ES46",
+   "V": 20.4,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 ST24",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 UC292",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QQ542",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 FZ211",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 OF33",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 JV42",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 UH33",
+   "V": 24.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 JH1",
+   "V": 20.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 OT24",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 SR454",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1999 XJ178",
+   "V": 20,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 QY193",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 HN348",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 YU",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 AB204",
+   "V": 20.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "Kathyfries",
+   "V": 20.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2012 TX265",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1992 DW9",
+   "V": 21.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 PC318",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 FG134",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2009 SU120",
+   "V": 24.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 SX130",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 CL130",
+   "V": 23.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 QT70",
+   "V": 23,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 YA182",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2007 EW147",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 CF394",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 AH52",
+   "V": 21.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 UM397",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1993 PY5",
+   "V": 19.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 GH135",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2026 EC84",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "Irinara",
+   "V": 17.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 PN63",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 QB112",
+   "V": 21.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 WA180",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2009 SK346",
+   "V": 23,
+   "class": "MB>Cybele",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 GC4",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 SB2",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 LG30",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 UC158",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 SD126",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 GG97",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 TR183",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2020 PV109",
+   "V": 24.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2019 SP48",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2010 RN201",
+   "V": 25.4,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 PF103",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2003 UH216",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 RG66",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2017 RF167",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 ST382",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 AY162",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 TN99",
+   "V": 23.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 CL147",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2001 OU81",
+   "V": 21,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2000 AU50",
+   "V": 19.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 LF13",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 SZ259",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 GU67",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 OA182",
+   "V": 23.9,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 EF142",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2011 RQ36",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2005 JL69",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 AT134",
+   "V": 22.4,
+   "class": "Trojan",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2016 BE149",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2004 XO116",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 OL29",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 OZ136",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2002 CF137",
+   "V": 21.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2014 HH55",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 VB183",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2013 CF268",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2008 VV21",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 OD118",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2006 UU370",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "2015 XO99",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast01",
+   "name": "1998 SC56",
+   "V": 20.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 SP266",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 FG568",
+   "V": 25.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 OT12",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 RB18",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 QT111",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 KB9",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 NA59",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Miyahara",
+   "V": 19.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RS124",
+   "V": 24.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 TC124",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 PQ",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 OT1",
+   "V": 23,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 HP124",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 TF200",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 WB104",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 SY28",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 UB94",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 SO177",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2018 GO30",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RH118",
+   "V": 24.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 OZ431",
+   "V": 23.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 JD60",
+   "V": 20.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 SA333",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 PF82",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 RE99",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 VB4",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 TX223",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2023 TL105",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 WH56",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 HR145",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2012 UO70",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2012 CR9",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 QR56",
+   "V": 20.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RR6",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 YM36",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 BK4",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 LH6",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Werntz",
+   "V": 20.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 UJ187",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 OW140",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 BZ645",
+   "V": 24.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 AW135",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 CL141",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 LC4",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "344P",
+   "V": 20.5,
+   "class": "Comet",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 VA14",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 HT299",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2019 AT57",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 XR16",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 WQ46",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 PF1",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Walkowicz",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 VR88",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 GZ60",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 FG97",
+   "V": 21.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 EB211",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 QN168",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 UH47",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 RK19",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 SC201",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 EZ57",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 ST134",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 BM161",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 HJ251",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 BW26",
+   "V": 23.8,
+   "class": "Hungaria",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 TZ222",
+   "V": 20,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 QZ169",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2020 BS31",
+   "V": 24.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 FQ96",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 DM158",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2001 FT132",
+   "V": 21.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 HC32",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Kassandraholt",
+   "V": 18.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 AJ105",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 WX174",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 AL227",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RK144",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 HD71",
+   "V": 25.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 WS43",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 TB97",
+   "V": 21.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 PT66",
+   "V": 20,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 UA11",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 QE153",
+   "V": 19.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 QN29",
+   "V": 21.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 BR7",
+   "V": 22,
+   "class": "Hungaria",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 UC51",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 OE158",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 RU35",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 LP1",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 BL198",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 HE86",
+   "V": 24.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 QZ26",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2023 WE13",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 CU309",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2018 VV170",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 FP47",
+   "V": 20.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 MM26",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 QF35",
+   "V": 20.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 LN7",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 VX21",
+   "V": 21.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 DT19",
+   "V": 24.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 VB162",
+   "V": 20.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 QD45",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 HS71",
+   "V": 24.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 AV17",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 MH15",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 RB59",
+   "V": 20.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 PE306",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 SX209",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 LV114",
+   "V": 22.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 RL182",
+   "V": 21,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 OH29",
+   "V": 24.5,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 HH158",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 KO13",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 RO156",
+   "V": 21.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 TB34",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 EM180",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RN54",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 MB49",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2012 CY51",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 OL94",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 EH121",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 EN173",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Mertona",
+   "V": 16.9,
+   "class": "MB>Middle",
+   "found": true
+  },
+  {
+   "field": "ast02",
+   "name": "2009 SF58",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 FA126",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 CG10",
+   "V": 23.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 JV192",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 YF99",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 BT24",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 XU46",
+   "V": 21.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 KG12",
+   "V": 21.5,
+   "class": "Centaur",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 UG434",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1993 PU5",
+   "V": 19.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 WQ114",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 TY40",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 SF77",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 DR204",
+   "V": 23.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 SV105",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Yarigatake",
+   "V": 18.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 QU169",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 BM30",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 SW367",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 UB85",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RT15",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 KO117",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2020 FZ33",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 JB14",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2001 BM13",
+   "V": 20.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 PO22",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 SZ44",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 HH156",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2020 YL24",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 UP148",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 LC45",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 CZ236",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2018 UU24",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 YV188",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 LB55",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 TV54",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2018 BO68",
+   "V": 23.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 CV85",
+   "V": 21.4,
+   "class": "MB>Cybele",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 MB83",
+   "V": 24.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RA127",
+   "V": 24.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 FL162",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 CV105",
+   "V": 20.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 CA68",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RZ7",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RC146",
+   "V": 24.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 UX33",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 YA14",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2012 EH31",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 UJ89",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 QJ169",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 VF6",
+   "V": 19.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 UN61",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 JP30",
+   "V": 19.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 JG79",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 OY13",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 UH22",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RG127",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2020 BO180",
+   "V": 24.6,
+   "class": "Hungaria",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 PT76",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 HB490",
+   "V": 24.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 HQ598",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 AJ65",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 CG50",
+   "V": 23.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 GF111",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 NR38",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 CW252",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 SD27",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 JZ61",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 OU158",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 CD159",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 SF168",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 BJ21",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 XT403",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 EV19",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 QD145",
+   "V": 20.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RC158",
+   "V": 24.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 AR255",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 AK3",
+   "V": 30.8,
+   "class": "NEA>Apollo",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RG11",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 JT40",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 YT259",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 XU50",
+   "V": 18.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2020 PB83",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 RX3",
+   "V": 20.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 FP174",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2001 SE98",
+   "V": 20.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2006 SZ258",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1997 YS10",
+   "V": 18.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 TC50",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 UZ503",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 OU24",
+   "V": 21.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 QK4",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2013 SW52",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2018 QU18",
+   "V": 23,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 DM303",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 NG64",
+   "V": 24.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2012 HE32",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2019 JS64",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 RU65",
+   "V": 20.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 GH275",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 TZ67",
+   "V": 23.9,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 NY86",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 JT107",
+   "V": 20.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 TO34",
+   "V": 20.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 EG81",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2019 NT29",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 PO93",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 NG3",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 XX444",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 BD55",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 XS47",
+   "V": 20.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 EA23",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 FS238",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 PA121",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2009 PM16",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 UZ456",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 YY81",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2001 KK7",
+   "V": 19.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 PD30",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 WC131",
+   "V": 24.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 TN221",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 QH179",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2019 AV153",
+   "V": 24.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 QB18",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 JL105",
+   "V": 20.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 NL27",
+   "V": 21.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RE106",
+   "V": 23.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2020 DK17",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 HS23",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2021 VH19",
+   "V": 27.3,
+   "class": "NEA>Amor",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1998 HX46",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 TA57",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 SL347",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2005 RW51",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2000 JM13",
+   "V": 20.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2016 QD82",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2012 JF33",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2004 RB105",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2002 QQ25",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RD8",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1993 VD6",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 GU104",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 KU369",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 YE47",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "Klarasmi",
+   "V": 18.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 VC87",
+   "V": 24.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1999 RX81",
+   "V": 20.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 VJ332",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2025 KS5",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RF74",
+   "V": 24.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 HY28",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 BQ100",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 WU137",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RC29",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2011 UD140",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 UY",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2015 HS527",
+   "V": 25.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2026 RY117",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2014 OW194",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2017 UD33",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 AZ13",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2007 MJ2",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2003 SJ357",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2010 SO31",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "1981 EP42",
+   "V": 19.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2022 SB170",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast02",
+   "name": "2008 CN123",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 PM21",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2005 AN66",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 HX119",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2005 QJ99",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 JJ80",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 MF206",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 VY311",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2021 EJ50",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 BV228",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 TL386",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 CO117",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2003 SR148",
+   "V": 21.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 RY54",
+   "V": 25.1,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2004 GJ30",
+   "V": 21.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "4892 P-L",
+   "V": 20.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2000 QY36",
+   "V": 20.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 OQ38",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 LV17",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 XU291",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 EG46",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2004 TA217",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2023 SH49",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 FO50",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2010 CL110",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RB65",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 NT1",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2023 RM27",
+   "V": 23.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2008 GJ176",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 TF465",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 QM506",
+   "V": 23.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2023 QA111",
+   "V": 24.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2004 EO2",
+   "V": 21,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 OR2",
+   "V": 27.5,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 OH348",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 BJ236",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2020 TQ19",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 PL72",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 QC379",
+   "V": 23.9,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 HH52",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1981 EV25",
+   "V": 19.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 VP8",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2017 MV2",
+   "V": 27,
+   "class": "NEA>Amor",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 RW35",
+   "V": 26.1,
+   "class": "Mars-Crosser",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RZ190",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 TU486",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 FP",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 TK92",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 FC34",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 WQ73",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RS126",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 EX83",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 OB16",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 LD28",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 ST224",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 PC23",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1998 RJ36",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 SJ67",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2004 JH49",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2022 CF11",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 TC73",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2008 SK281",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 SZ248",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 FN192",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 KA152",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2019 AP129",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 DE275",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 QT115",
+   "V": 24.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 TX367",
+   "V": 25.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 AK337",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1999 NE23",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2003 WY185",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2005 SO38",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "3003 T-2",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2018 FZ55",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 EF303",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2010 NA97",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 BA167",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1999 VZ105",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 SD150",
+   "V": 20.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 WQ70",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 KT145",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 XU10",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 TY296",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1991 RJ2",
+   "V": 24.4,
+   "class": "NEA>Amor",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 SL428",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 XQ91",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 SS396",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2004 FO48",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 QP591",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2008 SN365",
+   "V": 22.8,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 PS156",
+   "V": 21,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 AV44",
+   "V": 21.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RL339",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 PQ16",
+   "V": 21.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 AF261",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 CA116",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 OZ154",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2003 VM13",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1993 DK2",
+   "V": 19,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 EO43",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2003 SB127",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2000 SB20",
+   "V": 20.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2005 SZ131",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2017 XX20",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RW392",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 BR132",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 BA222",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 BB453",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 KV22",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2017 OQ93",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 QT114",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2003 SC276",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1998 FN53",
+   "V": 19.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 WN98",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 VT80",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2010 EU43",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 EZ403",
+   "V": 24.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 RD154",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2008 XG5",
+   "V": 21.8,
+   "class": "MB>Hilda",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1999 GX41",
+   "V": 20.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2009 BP150",
+   "V": 21.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 BM24",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 PQ220",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2021 GV45",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 AF81",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 QL66",
+   "V": 20,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 RZ194",
+   "V": 24.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 UE14",
+   "V": 23.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2020 RQ62",
+   "V": 25.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 UN80",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 AV192",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2009 SX152",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2017 BF24",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1999 JQ23",
+   "V": 20.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 DW178",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 SS9",
+   "V": 24.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 BO63",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 TV75",
+   "V": 24.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 RW37",
+   "V": 20.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 TT20",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 SK60",
+   "V": 20.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RB26",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 YV30",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2021 RG117",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2022 JD6",
+   "V": 23.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 HN115",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 NC68",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 FM4",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 AD10",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 AS157",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 KH8",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "Sumava",
+   "V": 17.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2009 QQ45",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 VK118",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2011 OR73",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 AZ106",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 FO22",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 FO73",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2020 PQ43",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2003 SY461",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "Samabates",
+   "V": 19.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 UO167",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2008 UY185",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 TC179",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2012 UJ26",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 JZ26",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2007 PO55",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2018 PC140",
+   "V": 24.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2013 SG32",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 NU4",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 QY31",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 PB29",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2017 OD18",
+   "V": 24.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2024 UH12",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2000 QE232",
+   "V": 22,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 TC225",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2009 DQ104",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "1992 CK3",
+   "V": 19.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2016 CC411",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 RX104",
+   "V": 20.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 TN254",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2022 GB13",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2009 BE26",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 VU14",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 XY512",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2015 RK329",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2002 OG37",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 KJ101",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2001 XS77",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2006 DM215",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast03",
+   "name": "2014 AP59",
+   "V": 22.4,
+   "class": "MB>Cybele",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 SJ216",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 DT115",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 FU315",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 DP137",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1999 CN14",
+   "V": 20.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 CK78",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 GO76",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 RL300",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1999 CG51",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 RZ110",
+   "V": 20.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 HY38",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 DD83",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 CW227",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2003 FV73",
+   "V": 21.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 WR139",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 AU29",
+   "V": 21.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 TL204",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 DQ11",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 BJ11",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2021 PW209",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2019 SR273",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 CB157",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 BW65",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 DH25",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 PP59",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 DN4",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 FF254",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 VD176",
+   "V": 22.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 FO4",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 TB217",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 DB27",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1998 FK58",
+   "V": 19.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 KJ383",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1999 XY189",
+   "V": 18.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 HL23",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 CW111",
+   "V": 20.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 HF102",
+   "V": 21.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 QE161",
+   "V": 21.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 FM58",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 GV102",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2011 BB185",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 AK14",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 RH132",
+   "V": 20.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 QW49",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 BU200",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 OF49",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 TD466",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 CS61",
+   "V": 22.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 PE15",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 FE219",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1997 WO15",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2003 KX19",
+   "V": 21.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 FF248",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2021 DG12",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 TL180",
+   "V": 21.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 HD59",
+   "V": 24.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 UY28",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2018 NG33",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 HE73",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 JS46",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2025 MK41",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 JD59",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 OC81",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 VM137",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "Stephbecca",
+   "V": 20.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 CJ86",
+   "V": 23.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "Louisgolowich",
+   "V": 20,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 BX296",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2019 CY17",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 TJ263",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2018 GU42",
+   "V": 24.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 DR58",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 CR218",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 AU48",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 BQ138",
+   "V": 24.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 EM72",
+   "V": 21.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 AT35",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 RU94",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 HT21",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 CF84",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2011 HB80",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 BM198",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 DG166",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 CW71",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 MM27",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2003 SA381",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 HB27",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 AB47",
+   "V": 22.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 GD25",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 DL112",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2020 HJ70",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 EW66",
+   "V": 24.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 FZ148",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 UP6",
+   "V": 22.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 DW175",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 EH285",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 TV450",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 FC176",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 UP272",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 DB5",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 SO48",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 TO484",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 TG77",
+   "V": 21.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 TL241",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 UQ66",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 DQ61",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 RB151",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2198 T-1",
+   "V": 20.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2000 SN384",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 SH108",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 NP145",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 WR176",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 KZ9",
+   "V": 22.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 DL40",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 RU38",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 VN151",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 YU34",
+   "V": 21.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 GM17",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 ED137",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 WA31",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 WR84",
+   "V": 21.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 RA283",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 BY51",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 UB108",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1999 VQ166",
+   "V": 20.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1997 SG6",
+   "V": 20.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 AQ109",
+   "V": 21.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 VJ187",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 HH498",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 CN149",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 JW134",
+   "V": 21,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 EF28",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 YF46",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 DK7",
+   "V": 22.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 PP83",
+   "V": 20.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2025 MT189",
+   "V": 24,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2003 SY103",
+   "V": 21,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 TL188",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 GA217",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 PU45",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "Williamknight",
+   "V": 17.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 EO189",
+   "V": 23.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 OK111",
+   "V": 21.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 AW32",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 GT243",
+   "V": 21.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 EM34",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 BR141",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 YS13",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 UC28",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "Oljato",
+   "V": 21.9,
+   "class": "NEA>Apollo",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2018 VT166",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 VE204",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 RU123",
+   "V": 22.5,
+   "class": "MB>Cybele",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2011 DC14",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 FH8",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 BZ321",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2018 VC168",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2004 FW40",
+   "V": 21.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 JD42",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2002 AT12",
+   "V": 21.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2000 JK77",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 RS207",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 DD101",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 FU40",
+   "V": 23.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 DK53",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 BR505",
+   "V": 24.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 VE150",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 FW39",
+   "V": 22.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2006 BH110",
+   "V": 21.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 RZ35",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 TN51",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 WL20",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 PW329",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 UJ291",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2012 QJ75",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 BZ447",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 HP63",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 UD214",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2021 DF11",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2000 QF196",
+   "V": 20.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 TF61",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 BN112",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 SX416",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 UN268",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 QQ90",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 UY100",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 KO33",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2011 SF345",
+   "V": 22.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 OA346",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 SR237",
+   "V": 19.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2000 HK4",
+   "V": 20.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2010 CE118",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 RM39",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 DA293",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2018 JE13",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 BM199",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2009 VQ132",
+   "V": 23.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1999 TV32",
+   "V": 20.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "1999 XC6",
+   "V": 19.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2016 EB315",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 GA11",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 WX57",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2007 ER2",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 BO29",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2017 PM15",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2008 HW2",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2013 AV92",
+   "V": 23.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2005 RJ58",
+   "V": 22.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2001 KY13",
+   "V": 20.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2014 ST399",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast04",
+   "name": "2015 XB266",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2005 MR31",
+   "V": 21.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 BE49",
+   "V": 23.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 ND363",
+   "V": 23.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 HN319",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 ME390",
+   "V": 24.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1998 SH133",
+   "V": 19.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2004 VL98",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 RQ55",
+   "V": 21.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 VA189",
+   "V": 21.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 WO40",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 XL17",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 QV95",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2017 UQ131",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2024 FJ12",
+   "V": 25.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 PJ355",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2017 BM109",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 KW19",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 SN23",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2006 DL177",
+   "V": 22.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 QA139",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 DF217",
+   "V": 23.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2006 DO118",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 RG148",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2016 EW130",
+   "V": 24.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2012 BM126",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2011 CP106",
+   "V": 22.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 OX103",
+   "V": 21.8,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 DY64",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1999 RX214",
+   "V": 23.9,
+   "class": "KBO>Classical>Main",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2013 YD48",
+   "V": 28.2,
+   "class": "NEA>Apollo",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2000 DU68",
+   "V": 19.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 VE37",
+   "V": 22.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1998 HR92",
+   "V": 20.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2005 TN124",
+   "V": 22.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 CQ44",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2014 ET193",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2003 WZ112",
+   "V": 20.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 PA52",
+   "V": 21.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 MK236",
+   "V": 24.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2013 TY37",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2003 UA304",
+   "V": 21.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2004 HT45",
+   "V": 21.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2016 TA37",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 BJ53",
+   "V": 23.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 PJ160",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1998 SG49",
+   "V": 18.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 EZ43",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2020 RL93",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1986 WB1",
+   "V": 19.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 DT255",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 QX51",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 MF393",
+   "V": 24.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2007 EY130",
+   "V": 21.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2000 TH76",
+   "V": 22.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2022 RQ27",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2003 SP284",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2018 KG18",
+   "V": 23.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 TV199",
+   "V": 22.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2012 TU171",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 NR33",
+   "V": 24.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 VA203",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 NE59",
+   "V": 24.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 SU405",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2001 NZ21",
+   "V": 19.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2019 GF69",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2008 GH39",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 EK155",
+   "V": 22.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1998 FY57",
+   "V": 20.2,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2017 DE156",
+   "V": 23.7,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2007 EZ180",
+   "V": 21.6,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2020 HK120",
+   "V": 23.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 UK198",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2001 NW13",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 CF82",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "Michtchenko",
+   "V": 19.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2007 EV126",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2007 HV34",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 SZ222",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 CE76",
+   "V": 21.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2019 GT15",
+   "V": 23,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 SA160",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 KG241",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2014 HH174",
+   "V": 24.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2012 HT90",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1999 TN75",
+   "V": 22.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2008 HN13",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2016 WZ84",
+   "V": 23.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 FL139",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2004 JU22",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2001 KQ30",
+   "V": 20.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2008 FC127",
+   "V": 22.8,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 UD81",
+   "V": 22.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 QM60",
+   "V": 20.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 HQ252",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 RB368",
+   "V": 23,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 KS192",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2020 HH103",
+   "V": 25,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2004 AS25",
+   "V": 21.1,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2000 RT92",
+   "V": 20.6,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 MK223",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 HW504",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2006 FL1",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2014 JY131",
+   "V": 24.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2001 XC4",
+   "V": 20,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1998 RU45",
+   "V": 20.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2004 TP2",
+   "V": 22,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2020 HK69",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2014 OY321",
+   "V": 23.9,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2000 GV97",
+   "V": 20.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2007 EU167",
+   "V": 23,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1998 VU5",
+   "V": 19.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2005 TA164",
+   "V": 22.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 SB405",
+   "V": 23.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2014 OZ262",
+   "V": 22.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2013 HB63",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2008 TA6",
+   "V": 21.4,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2005 VU37",
+   "V": 22.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 PC212",
+   "V": 23.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 MM112",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2020 OM109",
+   "V": 22.3,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 RB185",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 MJ295",
+   "V": 24,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2002 GC186",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 HO398",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2003 UR227",
+   "V": 21.1,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2014 DC95",
+   "V": 23.5,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1999 TW43",
+   "V": 22.8,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2000 DK3",
+   "V": 19.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 HJ326",
+   "V": 23.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2015 GQ77",
+   "V": 23.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2022 UO122",
+   "V": 23.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2001 OP18",
+   "V": 21.1,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "1999 FS44",
+   "V": 19.6,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2012 DY41",
+   "V": 24.5,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2005 WY26",
+   "V": 21.2,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2021 CW55",
+   "V": 24.2,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2006 SM16",
+   "V": 21.7,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2017 FO7",
+   "V": 22.9,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2000 DA41",
+   "V": 21.7,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2009 WW213",
+   "V": 22.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2011 FH111",
+   "V": 23.3,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2013 HR43",
+   "V": 23.5,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2012 UP97",
+   "V": 22.9,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2025 OX371",
+   "V": 23.4,
+   "class": "MB>Outer",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2019 PW43",
+   "V": 23.4,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2010 LL21",
+   "V": 24,
+   "class": "MB>Inner",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2006 HQ84",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2008 UH10",
+   "V": 22.3,
+   "class": "MB>Middle",
+   "found": false
+  },
+  {
+   "field": "ast05",
+   "name": "2003 SW325",
+   "V": 22,
+   "class": "MB>Outer",
+   "found": false
+  }
+ ],
+ "chance_tracks_expected": 0.0,
+ "chance_tracks_4plus_expected": 0.0,
+ "n_unmatched_4plus": 0,
+ "note": "A track that matches no known asteroid is a candidate, not a discovery. It needs follow-up images and a report to the Minor Planet Center, which this project has not made."
+}

@@ -1,0 +1,116 @@
+{
+ "generated_utc": "2026-11-14T23:36:48+00:00",
+ "settings": {
+  "same_night_arcsec": 4.0,
+  "rate_arcsec_h": [
+   1.0,
+   90.0
+  ],
+  "track_tol_arcsec": 4.0,
+  "track_rms_max": 2.0,
+  "track_nights": 4,
+  "flux_ratio_max": 3.0,
+  "pair_max_h": 80.0
+ },
+ "statement": "Tracks found from SPHEREx detections alone. No asteroid catalogue was consulted before this file was locked.",
+ "control": "Each field was also linked 8 times after rotating each night's detections by a random angle about the field centre (and mirroring half the nights): the number of tracks that appear by chance.",
+ "summary": {
+  "ast00": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast01": {
+   "night_detections": 2,
+   "nights": 2,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast02": {
+   "night_detections": 1,
+   "nights": 1,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast03": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast04": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast05": {
+   "night_detections": 1,
+   "nights": 1,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast06": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast07": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast08": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast09": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast10": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  },
+  "ast11": {
+   "night_detections": 0,
+   "nights": 0,
+   "tracks": 0,
+   "tracks_4plus": 0,
+   "chance_tracks_per_run": 0.0,
+   "chance_tracks_4plus_per_run": 0.0
+  }
+ },
+ "tracks": []
+}

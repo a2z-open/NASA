@@ -8,7 +8,7 @@ interface Item { id: string; kind: 'known' | 'unknown'; snr: number; ra: number;
 interface Queue { question: string; reference: { cold: { um: number; v: number }[]; warm: { um: number; v: number }[] }; bands_um: [number, number][]; note: string; items: Item[]; total_votes: number }
 interface Reply {
   id: string; tally: { dips: number; smooth: number; unsure: number; n: number }; kind: 'known' | 'unknown'; name: string; truth: Answer | null; truth_label: string | null;
-  model: { type: string; p_T: number } | null; flagged: boolean; agrees_with_known: boolean | null;
+  model: { type: string; p_T: number } | null; flagged: boolean; first_spectrum?: boolean; agrees_with_known: boolean | null;
 }
 
 const LABEL: Record<Answer, string> = { dips: 'Yes, it goes dark', smooth: 'No, it stays bright', unsure: "Can't tell" };
@@ -26,7 +26,8 @@ function fit(ref: { um: number; v: number }[], s: Bin[]) {
   return ref.map(r => ({ um: r.um, y: r.v * k }));
 }
 
-function Spectrum({ s, q }: { s: Bin[]; q: Queue }) {
+function Spectrum({ s: raw, q }: { s: Bin[]; q: Queue }) {
+  const s = useMemo(() => raw.filter(p => p.ujy > -4 * p.err), [raw]);      // a flux far below zero is a corrupted band: not drawn
   const w = 760, h = 340, m = { l: 14, r: 14, t: 34, b: 34 };
   const cold = useMemo(() => fit(q.reference.cold, s), [q, s]);
   const warm = useMemo(() => fit(q.reference.warm, s), [q, s]);
@@ -122,7 +123,7 @@ export function Check() {
                   </h2>
                   <p>
                     <strong>{reply.name}</strong>{' '}
-                    {reply.kind === 'known' ? <>is {reply.truth_label}.</> : <>has no spectral type in the catalogues. {reply.flagged ? 'Our model flagged it as a possible cold world.' : ''}</>}
+                    {reply.kind === 'known' ? <>is {reply.truth_label}.</> : reply.first_spectrum ? <>was picked out by another survey from its colours alone. We found no published spectrum of it. Our model flagged it as a cold world.</> : <>has no spectral type in the catalogues. {reply.flagged ? 'Our model flagged it as a possible cold world.' : ''}</>}
                     {reply.model && <> Our model reads it as type {reply.model.type}, {Math.round(reply.model.p_T * 100)}% likely a methane dwarf.</>}
                   </p>
                   <p className="ck-tally">

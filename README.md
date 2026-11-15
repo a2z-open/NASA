@@ -205,5 +205,11 @@ not affiliated with or endorsed by NASA.
 ## Cold-world spectra (fourth session)
 
 <!-- COLDSPEC_LINE -->
-- Cold-world spectra: the model reads types to ±1.5 subtypes and recognises 59 of 66 known T dwarfs with 0 false alarms; applied under a locked rule to 448 unclassified objects, it flagged 5: 5 are T dwarfs already typed in the literature (a blind test passed), 0 doubtful, 0 new candidates. It missed 1 of 6 published T dwarfs hidden in the list. See VALIDATION.md, section 12.
+- Cold-world spectra: the model reads types to ±1.5 subtypes and recognises 59 of 66 known T dwarfs with 0 false alarms; applied under a locked rule to 448 unclassified objects, it flagged 5: 5 are T dwarfs already typed in the literature (a blind test passed), 0 doubtful, 0 new candidates. It missed 1 of 6 published T dwarfs hidden in the list. Wider search (same locked model, 158 more objects from DES, UKIDSS and SIMBAD): 20 flagged; 7 already typed, 1 doubtful, 12 with no published spectrum found (candidates for a first spectroscopic type, not new objects). See VALIDATION.md, section 12.
 <!-- /COLDSPEC_LINE -->
+
+## Asteroid hunt (fourth session)
+
+<!-- ASTEROIDS_LINE -->
+- Asteroid hunt: 0 moving-object tracks from SPHEREx alone in 6 patches near the ecliptic: 0 are known asteroids recovered blind, 0 match nothing known (chance expectation 0.0). See VALIDATION.md, section 13.
+<!-- /ASTEROIDS_LINE -->

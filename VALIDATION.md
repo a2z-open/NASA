@@ -355,5 +355,105 @@ The miss, 2MASS J04385515+0423001, was read as L0.5. Its SPHEREx signal is far s
 
 **Conclusion: 0 new candidates.** Every object the model flagged is a T dwarf that astronomers had already typed; SIMBAD simply does not carry the type. So this search found no new cold world. What it gives instead is a blind test: the model had never been told what these objects are, and the truth was looked up only after its answers were locked. No claim of discovery is made, and nothing has been sent to anyone.
 
-**Reproduce.** `python -m validation.coldspec lists | positions | extract | quality | train | lock | apply`, then `python -m validation.coldspec_after vet | check`, then `python -m validation.coldspec_md`. Files: `validation/coldspec/` (`objects.json`, `positions.json`, `spectra.npz`, `quality.json`, `cv.json`, `protocol.json`, `model.joblib`, `results.json`, `vetting.json`, `check_queue.json`).
+### 12b. The wider search
+
+The first search only covered objects that SIMBAD lists. The wider search takes objects that other surveys picked out from their colours alone (photometric candidates, most never observed with a spectrograph) and fainter SIMBAD candidates. **The model, the cuts and the decision rule are the locked ones**: `wide_apply` refuses to run unless `protocol.json` and `model.joblib` still match ledger entry `coldspec:protocol`. Nothing was refitted or retuned.
+
+| Pool | Objects kept |
+|---|---:|
+| DES Y6 ultracool candidates (Dal Ponte et al. 2023), photometric type L6 or later | 256 |
+| DES Y3 L and T candidates (Carnero Rosell et al. 2019), L6 or later, not already above | 74 |
+| UKIDSS photometric T dwarfs (Skrzypek et al. 2016) | 43 |
+| UKIDSS photometric L dwarfs, L6 or later (Skrzypek et al. 2016) | 32 |
+| SIMBAD brown-dwarf candidates with no spectral type, J 17.2 to 18.3 | 440 |
+
+Kept means: J between 11 and 18.3, more than 10° from the Galactic plane, and not already scored in the first search. 845 objects; a spectrum was extracted for 809; 158 pass the quality cuts; 10 are outliers and get no answer. **The model flagged 20.** The scores were hashed into the ledger (`coldspec:wide-results`) before vetting.
+
+**Vetting.** Each scored object was compared with published spectral types: Best et al. 2018, ApJS 234, 1; Best et al. 2020, AJ 159, 257; Best et al. 2021, AJ 161, 42; Kirkpatrick et al. 2021, ApJS 253, 7; spectroscopic types quoted in the candidate tables; SIMBAD main and measurement tables within 12 arcsec (flagged objects). 29 scored objects have a published type. Blind test on those: the model flagged 7 of 9 published T dwarfs and 0 of 20 published warmer dwarfs; median type error 0.77 subtypes.
+
+Of the 20 flagged: **7 already have a published type, 1 are doubtful (WISE colour), and 12 have no published spectrum that we could find.**
+
+| Object | Pool | J | Survey's photometric type | Model type | P(T) | J-band S/N | W1 − W2 | Published type | Verdict |
+|---|---|---:|---|---|---:|---:|---:|---|---|
+| DES 1055175672 | des_y6 | 16.71 | T5.0 | T4.8 | 1.00 | 14 | 1.39 | none found | no published spectrum found; WISE colour agrees |
+| DES 1075884089 | des_y6 | 17.40 | T5.0 | T5.6 | 1.00 | 16 | 1.68 | none found | no published spectrum found; WISE colour agrees |
+| DES 1082529367 | des_y6 | 17.34 | T3.0 | T2.8 | 1.00 | 13 | 1.08 | none found | no published spectrum found; WISE colour agrees |
+| DES 1316158591 | des_y6 | 17.98 | T3.0 | T4.7 | 1.00 | 9 | 1.31 | none found | no published spectrum found; WISE colour agrees |
+| DES 1409842617 | des_y6 | 16.61 | T6.0 | T5.2 | 1.00 | 22 | 1.84 | none found | no published spectrum found; WISE colour agrees |
+| DES 1418166094 | des_y6 | 17.11 | T3.0 | T4.0 | 1.00 | 10 | 1.12 | none found | no published spectrum found; WISE colour agrees |
+| DES 1441279267 | des_y6 | 17.20 | T5.0 | T4.8 | 1.00 | 11 | 1.49 | none found | no published spectrum found; WISE colour agrees |
+| DES 1498379950 | des_y6 | 17.47 | T6.0 | T6.7 | 1.00 | 13 | 2.7 | none found | no published spectrum found; WISE colour agrees |
+| DES 1034152240 | des_y6 | 17.30 | T2.0 | T2.3 | 1.00 | 8 | 0.95 | none found | no published spectrum found; WISE colour agrees |
+| DES 261972837 | des_y3 | 17.18 | T3.0 | T3.0 | 1.00 | 8 | 1.05 | none found | no published spectrum found; WISE colour agrees |
+| DES 1511657102 | des_y6 | 17.60 | T3.0 | T1.1 | 1.00 | 8 | 0.95 | none found | no published spectrum found; WISE colour agrees |
+| DES 1462875234 | des_y6 | 17.29 | T2.0 | T1.5 | 1.00 | 11 | 0.78 | none found | no published spectrum found; WISE colour agrees |
+| DES 1159918707 | des_y6 | 17.12 | T7.0 | T6.3 | 1.00 | 18 | 2.3 | T8 (Kirkpatrick et al. 2021, ApJS 253, 7) | already typed in the literature |
+| DES 1358847797 | des_y6 | 17.38 | T6.0 | T6.0 | 1.00 | 8 | 1.57 | T6 (Best et al. 2018, ApJS 234, 1) | already typed in the literature |
+| DES 920214585 | des_y6 | 15.86 | T5.0 | T5.7 | 1.00 | 33 | 1.51 | T5 (Best et al. 2020, AJ 159, 257) | already typed in the literature |
+| DES 101455938 | des_y3 | 17.65 | T4.0 | T5.4 | 1.00 | 12 | 0.39 | none found | doubtful: WISE colour is not that of a T dwarf |
+| ULAS J131307.47+123540.7 | ukidss_T | 17.43 | T2.0 | T2.3 | 1.00 | 6 | 0.78 | T2.5 (Best et al. 2018, ApJS 234, 1) | already typed in the literature |
+| ULAS J152103.14+013143.2 | ukidss_T | 16.10 | T2.5 | T2.6 | 1.00 | 23 | 0.97 | T2 (spectroscopic type quoted in its source table) | already typed in the literature |
+| DES 1355223843 | des_y6 | 17.66 | T2.0 | T2.1 | 1.00 | 6 | 1.03 | T2.5 (Best et al. 2018, ApJS 234, 1) | already typed in the literature |
+| DES 1359412367 | des_y6 | 16.59 | T1.0 | T1.1 | 1.00 | 25 | 0.79 | T1 (Best et al. 2020, AJ 159, 257) | already typed in the literature |
+
+**Grading by methane depth (after vetting).** strong: both methane indices deeper than 99 % of known M and L dwarfs; likely: flagged by the locked model but not past both limits. Indices are band differences of the normalised spectrum (pipeline: validation.coldspec.features). Limits from known dwarfs: 1.7 µm index below -0.31, 3.3/4.5 µm index below 0.01. **10 of 12 are strong.** None of the 12 has any entry in SIMBAD within 15″.
+
+| Object | Grade | Model type | 1.7 µm index | 3.3/4.5 µm index | J-band S/N | W1 − W2 |
+|---|---|---|---:|---:|---:|---:|
+| DES 1055175672 (RA 4.55380, Dec -47.50327) | strong | T4.8 | -2.82 | -1.02 | 14 | 1.39 |
+| DES 1441279267 (RA 61.24970, Dec -64.54753) | strong | T4.8 | -1.81 | -1.49 | 11 | 1.49 |
+| DES 1498379950 (RA 69.89003, Dec -45.80226) | strong | T6.7 | -1.8 | -1.95 | 13 | 2.7 |
+| DES 1409842617 (RA 55.38634, Dec -19.42995) | strong | T5.2 | -1.78 | -0.6 | 22 | 1.84 |
+| DES 1075884089 (RA 8.40716, Dec -22.33739) | strong | T5.6 | -1.3 | -1.03 | 16 | 1.68 |
+| DES 1418166094 (RA 56.97830, Dec -19.50366) | strong | T4.0 | -1.24 | -0.46 | 10 | 1.12 |
+| DES 1316158591 (RA 39.68498, Dec -19.11612) | strong | T4.7 | -1.1 | -0.81 | 9 | 1.31 |
+| DES 1082529367 (RA 8.78375, Dec -45.42984) | strong | T2.8 | -1.02 | -0.31 | 13 | 1.08 |
+| DES 1511657102 (RA 72.93045, Dec -31.39194) | strong | T1.1 | -0.55 | -0.07 | 8 | 0.95 |
+| DES 261972837 (RA 29.37018, Dec -2.85308) | strong | T3.0 | -0.52 | -0.2 | 8 | 1.05 |
+| DES 1462875234 (RA 63.13043, Dec -58.53592) | likely | T1.5 | -0.54 | 0.15 | 11 | 0.78 |
+| DES 1034152240 (RA 359.50761, Dec -51.71081) | likely | T2.3 | -0.25 | -0.35 | 8 | 0.95 |
+
+**What this is.** Objects that the Dark Energy Survey listed as T-dwarf candidates from colours alone (Dal Ponte et al. 2023; Carnero Rosell et al. 2019). We found no published spectrum of them in four compilations, in their source tables or in SIMBAD (where they have no entry at all). Their SPHEREx spectra show methane absorption. This is a first spectroscopic confirmation of their nature at SPHEREx resolution, not the discovery of new objects, and it should be checked with a proper spectrum before it is published.
+
+**What the wider search does and does not show.** "No published spectrum found" means: none in the four compilations listed, none quoted by the candidate's own source table, and none in SIMBAD within 12 arcsec. It does not prove that no spectrum exists. These objects were already picked out by other surveys from their colours; what SPHEREx adds is a spectrum that shows methane. They are candidates for a first spectroscopic type, not new discoveries of objects. No claim has been sent to anyone.
+
+**Reproduce.** `python -m validation.coldspec lists | positions | extract | quality | train | lock | apply`, then `python -m validation.coldspec_after vet | wide_lists | wide_positions | wide_extract | wide_apply | wide_vet | wide_grade | check`, then `python -m validation.coldspec_md`. Files: `validation/coldspec/` (`objects.json`, `positions.json`, `spectra.npz`, `quality.json`, `cv.json`, `protocol.json`, `model.joblib`, `results.json`, `vetting.json`, `check_queue.json`).
 <!-- /COLDSPEC -->
+
+<!-- ASTEROIDS -->
+## 13. Asteroid hunt: things that move from night to night (fourth session)
+
+**Method.** Patches of sky near the ecliptic (the path of the planets), away from the Milky Way, that SPHEREx imaged on several epochs within one week. In each epoch SPHEREx takes two images about 2 minutes apart. A dot counts only if it is in both images of an epoch (within 4.0″), which removes cosmic rays and noise. A dot that is also present at the same place on two or more other epochs is a fixed star or galaxy and is removed, so no catalogue is used to remove anything. What is left is joined into straight lines over 4 or more epochs (speed 1 to 90″ per hour, within 4.0″, fit scatter under 2.0″, brightness steady within a factor 3).
+
+**Blind, then checked.** The tracks were written to `validation/asteroids/tracks.json` and hashed into the ledger before any asteroid catalogue was consulted. Only then was IMCCE SkyBoT (Berthier et al. 2006) asked which known asteroids were in each patch at each epoch.
+
+**Chance control.** Each patch was also linked 8 times after rotating each epoch's dots by a random angle about the patch centre. Real movers no longer line up; the density of dots stays the same.
+
+| Patch | Ecliptic longitude | Epochs | Dots in both images | Fixed, removed | Left | Tracks | Chance tracks per run |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ast00 | 355° | 11 | 8262 | 8148 | 114 | 0 | 0.0 |
+| ast01 | 145° | 9 | 7075 | 6908 | 167 | 0 | 0.0 |
+| ast02 | 15° | 8 | 6546 | 6406 | 140 | 0 | 0.0 |
+| ast03 | 55° | 8 | 9343 | 9126 | 217 | 0 | 0.0 |
+| ast04 | 215° | 9 | 7613 | 7410 | 203 | 0 | 0.0 |
+| ast05 | 335° | 9 | 7239 | 7115 | 124 | 0 | 0.0 |
+
+**Result.** 0 tracks. **0 are known asteroids**, recovered blind. 0 match no known asteroid (0 on 4+ epochs); chance alone is expected to give 0.0 tracks in total.
+
+| Known asteroids in view on 4+ epochs, by V | In view | Found blind |
+|---|---:|---:|
+| V 0-17 | 3 | 0 |
+| V 18-19 | 7 | 0 |
+| V 19-20 | 32 | 0 |
+| V 20+ | 1178 | 0 |
+
+**What this is and is not.** A track that matches no known asteroid is a candidate, not a discovery. It needs follow-up images and a report to the Minor Planet Center, which this project has not made. Nothing has been sent to the Minor Planet Center or anyone else.
+
+**Calibration patches (version 2, not counted above).** 1 track(s), all known asteroids: Mertona (V 16.9). Recovery by V: V 0-17: 1/3, V 17-18: 0/3, V 18-19: 0/10, V 19-20: 0/42, V 20+: 0/1409. The linker was then tuned on these patches (version 3) and, on them, recovered 2 of the 3 known asteroids brighter than V 17.
+
+**Conclusion.** Single SPHEREx images, linked this way, catch only asteroids brighter than about magnitude 17, and only some of those. Every asteroid that bright was catalogued long ago, so this channel cannot find a new asteroid. It is reported as a measured limit, not a discovery.
+
+**History.** Version 1 (24-arcminute patches) removed every dot near a Gaia or WISE star. In these fields the ~10,000 catalogue stars per patch covered almost the whole image, so nothing was left (validation/asteroids/v1/, ledger entry 24). Version 2 removes fixed sources by comparing epochs with each other, as moving-object surveys do, and uses 60-arcminute patches; on six patches it recovered 1 of 3 known asteroids brighter than V 17 and none fainter (validation/asteroids/v2_calibration/, ledger entry 25). Those six patches were then used to tune the linker on known asteroids (version 3: tracks grow step by step and may curve). Version 3 is run blind on six different patches; the tuning patches are not counted in its result. A one-line fix to the report step (brightness values given as text) is recorded as its own ledger entry.
+
+**Reproduce.** `python -m validation.asteroids plan | fetch | detect | link | known | report`, then `python -m validation.asteroids_md`.
+<!-- /ASTEROIDS -->
