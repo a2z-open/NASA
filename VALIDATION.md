@@ -539,3 +539,30 @@ Visit 1 and visit 4 of p9-033-02 are one year apart, so the Earth was in nearly 
 
 **Reproduce.** `python -m validation.p9_deepstack fetch|stack|inject|vet|cross <patch>`, then `python -m validation.p9_deepstack_md`.
 <!-- /P9DEEP -->
+
+<!-- COLDSPEC_OTHERS -->
+## 12c. The methane candidates, checked with other telescopes (fifth session)
+
+The brown dwarfs whose SPHEREx spectra show methane (section 12, "strong" and "likely") were checked with data from other telescopes only, under rules fixed in `validation/coldspec_others.py` before the first run: radius_arcsec: 6.0; moves: total proper motion >= 50 mas/yr and >= 3 sigma (CatWISE2020); j_ks: J - Ks < 0.5 (VISTA VHS DR5, or UKIDSS LAS DR9); w1_w2: W1 - W2 >= 0.8 (CatWISE2020); agrees: every test that has data passes.
+
+| Candidate | SPHEREx grade | Model type | Motion (mas/yr, WISE) | J − Ks (near IR) | W1 − W2 (WISE) | Tests passed |
+|---|---|---|---:|---:|---:|---:|
+| DES 1055175672 | strong | T4.8 | 244 ± 24 | -0.11 (VHS) | 1.43 | 3 of 3 (all) |
+| DES 1441279267 | strong | T4.8 | 151 ± 15 | 0.05 (VHS) | 1.38 | 3 of 3 (all) |
+| DES 1498379950 | strong | T6.7 | 31 ± 30 | -0.39 (VHS) | 2.44 | 2 of 3 |
+| DES 1409842617 | strong | T5.2 | 181 ± 23 | -0.10 (VHS) | 1.63 | 3 of 3 (all) |
+| DES 1075884089 | strong | T5.6 | 275 ± 54 | -0.09 (VHS) | 1.50 | 3 of 3 (all) |
+| DES 1418166094 | strong | T4.0 | 53 ± 21 | 0.67 (VHS) | 0.97 | 1 of 3 |
+| DES 1316158591 | strong | T4.7 | 131 ± 44 | -0.42 (VHS) | 1.33 | 2 of 3 |
+| DES 1082529367 | strong | T2.8 | 372 ± 23 | 0.50 (VHS) | 0.96 | 3 of 3 (all) |
+| DES 1511657102 | strong | T1.1 | 291 ± 31 | 0.53 (VHS) | 0.96 | 2 of 3 |
+| DES 261972837 | strong | T3.0 | 230 ± 33 | 0.58 (VHS) | 0.92 | 2 of 3 |
+| DES 1462875234 | likely | T1.5 | 59 ± 14 | 0.89 (VHS) | 0.65 | 1 of 3 |
+| DES 1034152240 | likely | T2.3 | 189 ± 22 | 0.78 (VHS) | 0.87 | 2 of 3 |
+
+**Result.** 9 of 12 measurably move, so they are nearby and not distant galaxies or quasars, and 5 of 12 pass all three tests. Most of the rest miss only the near-infrared test, with J − Ks between 0.5 and 0.9; the model reads them as early T dwarfs (T0–T3), which are often that red, so the 0.5 limit set in advance is strict for them. It is kept as it was. Hubble or JWST has pointed within 30″ of 0 of them (NASA MAST). This makes cold brown dwarfs very likely; a spectrum from a large telescope would still be needed to confirm each one.
+
+**Two failed runs, on the record.** Ledger entry 44 holds a run in which no test had data (naming catalogue columns one by one made the VizieR mirror return headers without rows), and entry 45 one in which a motion and its error were read in the wrong order. Both were fixed without changing any rule; entry 46 holds the result above.
+
+**Reproduce.** `python -m validation.coldspec_others`.
+<!-- /COLDSPEC_OTHERS -->

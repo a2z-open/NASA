@@ -813,7 +813,8 @@ def coldspec_results():
         r, lists = read_json(wide / 'results.json'), read_json(wide / 'objects.json')
         out['wide'] = {'n_objects': len(lists['objects']), 'counts': lists['counts'], 'sources': lists['sources'], 'n_spectra': r['n_objects'],
                        'n_pass_quality': r['n_pass_quality'], 'n_outliers': r['n_outliers'], 'n_flagged': r['n_flagged'], 'vetting': read_json(wide / 'vetting.json'),
-                       'candidates': read_json(wide / 'candidates.json') if (wide / 'candidates.json').exists() else None}
+                       'candidates': read_json(wide / 'candidates.json') if (wide / 'candidates.json').exists() else None,
+                       'other_telescopes': read_json(wide / 'other_telescopes.json') if (wide / 'other_telescopes.json').exists() else None}
     return out
 
 
@@ -954,6 +955,32 @@ def how_we_find_them():
     es = ledger.entries()
     out['ledger'] = {'ok': ok, 'n': len(es), 'last': [{'seq': e['seq'], 'label': e['label'], 'hash': e['hash'][:12], 'time_utc': e['time_utc']} for e in es[-4:]]}
     return out
+
+
+@app.get('/api/telescopes')
+def other_telescopes(ra: float, dec: float, radius_arcmin: float = 3.0):
+    """Which other telescopes have looked at this spot: NASA MAST (Hubble, JWST, TESS, ...), NASA HEASARC (Chandra, XMM-Newton,
+    Swift, ...) and CADC (NEOSSat). Counts, years and a few preview images; nothing is downloaded (pipeline/archives.py)."""
+    from pipeline import archives
+    try:
+        return archives.look(ra, dec, radius_arcmin)
+    except ValueError as error:
+        raise HTTPException(400, str(error))
+
+
+@app.get('/api/telescopes/preview')
+def other_telescope_preview(uri: str):
+    """A JWST or Hubble preview image from MAST, passed on as an image (only MAST preview addresses are accepted)."""
+    from fastapi.responses import Response
+    from pipeline import archives
+    try:
+        data = archives.preview(uri)
+    except ValueError as error:
+        raise HTTPException(400, str(error))
+    except Exception:  # noqa: BLE001
+        raise HTTPException(502, 'MAST did not send the preview image.')
+    kind = 'image/png' if data.startswith(b'\x89PNG') else 'image/jpeg'
+    return Response(content=data, media_type=kind, headers={'Cache-Control': 'public, max-age=604800'})
 
 
 @app.get('/api/ml')

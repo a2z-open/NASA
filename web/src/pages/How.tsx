@@ -31,7 +31,8 @@ interface DistantBody { body: string; title: string; match: { r_fit_au: number; 
 interface Spec { um: number; ujy: number; err: number }
 interface ColdDoc {
   cv: { held_out: { T_found: number; T_total: number; false_T: number; not_T_total: number } };
-  wide: { candidates: { n_strong: number; candidates: { name: string; pred_type: string; grade: string; snr_J: number; spectrum: Spec[] }[] } | null } | null;
+  wide: { candidates: { n_strong: number; candidates: { name: string; pred_type: string; grade: string; snr_J: number; spectrum: Spec[] }[] } | null;
+    other_telescopes?: { n: number; n_agree: number; n_moves: number } | null } | null;
 }
 
 const json = <T,>(u: string) => fetch(u).then(r => (r.ok ? (r.json() as Promise<T>) : null)).catch(() => null);
@@ -349,6 +350,7 @@ export function How() {
           <p className="how-p">SPHEREx splits light into 102 colours. Cold worlds hold methane, which leaves dark dips. Our model learned those dips from known dwarfs.</p>
           {cold && <Fact v={`${cold.cv.held_out.T_found} of ${cold.cv.held_out.T_total}`} t={`known methane dwarfs recognised, with ${cold.cv.held_out.false_T} false alarms in ${fmt(cold.cv.held_out.not_T_total)} warmer ones`} />}
           {cold?.wide?.candidates && <Fact v={String(cold.wide.candidates.n_strong)} t="brown dwarfs seen in methane for the first time" />}
+          {cold?.wide?.other_telescopes && <Fact v={`${cold.wide.other_telescopes.n_moves} of ${cold.wide.other_telescopes.n}`} t={`of the methane candidates drift across the sky in WISE and NEOWISE images, as nearby brown dwarfs do. ${cold.wide.other_telescopes.n_agree} also pass both colour tests from VISTA and WISE.`} />}
         </Step>
 
         <Step n={7} id="s7" title="Seal it, then check." fig={how?.ledger ? <Chain l={how.ledger} /> : null}>

@@ -71,3 +71,5 @@ reprojected for display. PARALLAX uses no NASA logos or mission branding.
   the `/api/how` endpoint and the `/how` page. No machine-learning model was added: the deep stack is a matched filter and a sum
   along predicted paths, checked with control motions and synthetic planets.
 - No AI runs inside the app at request time, and no large-language-model API is called by the pipeline or the app.
+- Also in the fifth session: Claude Code wrote `pipeline/archives.py` (live archive lookups), the extra sky-map layers, the
+  "What other telescopes saw here" panel and `validation/coldspec_others.py`. No AI runs inside the app.

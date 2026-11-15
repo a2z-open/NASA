@@ -1,0 +1,605 @@
+{
+ "generated_utc": "2026-11-15T02:49:53+00:00",
+ "rules": {
+  "radius_arcsec": 6.0,
+  "moves": "total proper motion >= 50 mas/yr and >= 3 sigma (CatWISE2020)",
+  "j_ks": "J - Ks < 0.5 (VISTA VHS DR5, or UKIDSS LAS DR9)",
+  "w1_w2": "W1 - W2 >= 0.8 (CatWISE2020)",
+  "agrees": "every test that has data passes"
+ },
+ "n": 12,
+ "n_agree": 5,
+ "n_moves": 9,
+ "candidates": [
+  {
+   "name": "DES 1055175672",
+   "ra": 4.553804,
+   "dec": -47.503267,
+   "grade": "strong",
+   "model_type": "T4.8",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 244.0,
+     "error": 24.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.318
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 1.43,
+     "error": 0.04,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": -0.11,
+     "error": 0.0473,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.985
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "TESS",
+     "n": 8
+    },
+    {
+     "name": "GALEX",
+     "n": 2
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 3,
+   "agrees": true
+  },
+  {
+   "name": "DES 1441279267",
+   "ra": 61.2497,
+   "dec": -64.547526,
+   "grade": "strong",
+   "model_type": "T4.8",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 151.0,
+     "error": 15.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.029
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 1.38,
+     "error": 0.03,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": 0.05,
+     "error": 0.093,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.138
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "NEOSSat",
+     "n": 2
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 3,
+   "agrees": true
+  },
+  {
+   "name": "DES 1498379950",
+   "ra": 69.890028,
+   "dec": -45.802263,
+   "grade": "strong",
+   "model_type": "T6.7",
+   "tests": {
+    "moves": {
+     "pass": false,
+     "value": 31.0,
+     "error": 30.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.152
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 2.44,
+     "error": 0.07,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": -0.39,
+     "error": 0.1194,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.224
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "NEOSSat",
+     "n": 55
+    },
+    {
+     "name": "Swift (ultraviolet camera)",
+     "n": 26
+    },
+    {
+     "name": "TESS",
+     "n": 5
+    },
+    {
+     "name": "GALEX",
+     "n": 2
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 2,
+   "agrees": false
+  },
+  {
+   "name": "DES 1409842617",
+   "ra": 55.386339,
+   "dec": -19.429949,
+   "grade": "strong",
+   "model_type": "T5.2",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 181.0,
+     "error": 23.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.43
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 1.63,
+     "error": 0.04,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": -0.1,
+     "error": 0.0415,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.225
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "TESS",
+     "n": 6
+    },
+    {
+     "name": "Pan-STARRS",
+     "n": 5
+    },
+    {
+     "name": "GALEX",
+     "n": 4
+    },
+    {
+     "name": "NEOSSat",
+     "n": 2
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 3,
+   "agrees": true
+  },
+  {
+   "name": "DES 1075884089",
+   "ra": 8.407159,
+   "dec": -22.337393,
+   "grade": "strong",
+   "model_type": "T5.6",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 275.0,
+     "error": 54.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.98
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 1.5,
+     "error": 0.08,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": -0.09,
+     "error": 0.09,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.104
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "Pan-STARRS",
+     "n": 5
+    },
+    {
+     "name": "GALEX",
+     "n": 4
+    },
+    {
+     "name": "TESS",
+     "n": 3
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 3,
+   "agrees": true
+  },
+  {
+   "name": "DES 1418166094",
+   "ra": 56.978295,
+   "dec": -19.503657,
+   "grade": "strong",
+   "model_type": "T4.0",
+   "tests": {
+    "moves": {
+     "pass": false,
+     "value": 53.0,
+     "error": 21.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.352
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 0.97,
+     "error": 0.04,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": false,
+     "value": 0.67,
+     "error": 0.0334,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.19
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "TESS",
+     "n": 6
+    },
+    {
+     "name": "Pan-STARRS",
+     "n": 5
+    },
+    {
+     "name": "NEOSSat",
+     "n": 3
+    },
+    {
+     "name": "GALEX",
+     "n": 2
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 1,
+   "agrees": false
+  },
+  {
+   "name": "DES 1316158591",
+   "ra": 39.684981,
+   "dec": -19.116124,
+   "grade": "strong",
+   "model_type": "T4.7",
+   "tests": {
+    "moves": {
+     "pass": false,
+     "value": 131.0,
+     "error": 44.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.752
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 1.33,
+     "error": 0.07,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": -0.42,
+     "error": 0.2016,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.2
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "Pan-STARRS",
+     "n": 5
+    },
+    {
+     "name": "TESS",
+     "n": 5
+    },
+    {
+     "name": "GALEX",
+     "n": 4
+    },
+    {
+     "name": "NEOSSat",
+     "n": 3
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 2,
+   "agrees": false
+  },
+  {
+   "name": "DES 1082529367",
+   "ra": 8.783753,
+   "dec": -45.429838,
+   "grade": "strong",
+   "model_type": "T2.8",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 372.0,
+     "error": 23.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.181
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 0.96,
+     "error": 0.04,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": true,
+     "value": 0.5,
+     "error": 0.0415,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 1.857
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "TESS",
+     "n": 8
+    },
+    {
+     "name": "GALEX",
+     "n": 4
+    },
+    {
+     "name": "NEOSSat",
+     "n": 1
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 3,
+   "agrees": true
+  },
+  {
+   "name": "DES 1511657102",
+   "ra": 72.930455,
+   "dec": -31.391936,
+   "grade": "strong",
+   "model_type": "T1.1",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 291.0,
+     "error": 31.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.387
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 0.96,
+     "error": 0.05,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": false,
+     "value": 0.53,
+     "error": 0.0741,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.794
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "TESS",
+     "n": 6
+    },
+    {
+     "name": "GALEX",
+     "n": 4
+    },
+    {
+     "name": "Pan-STARRS",
+     "n": 4
+    },
+    {
+     "name": "NEOSSat",
+     "n": 3
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 2,
+   "agrees": false
+  },
+  {
+   "name": "DES 261972837",
+   "ra": 29.370176,
+   "dec": -2.85308,
+   "grade": "strong",
+   "model_type": "T3.0",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 230.0,
+     "error": 33.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.043
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 0.92,
+     "error": 0.06,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": false,
+     "value": 0.58,
+     "error": 0.0633,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.63
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "Pan-STARRS",
+     "n": 5
+    },
+    {
+     "name": "NEOSSat",
+     "n": 5
+    },
+    {
+     "name": "TESS",
+     "n": 4
+    },
+    {
+     "name": "GALEX",
+     "n": 2
+    },
+    {
+     "name": "Sloan Digital Sky Survey (spectra)",
+     "n": 1
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 2,
+   "agrees": false
+  },
+  {
+   "name": "DES 1462875234",
+   "ra": 63.130426,
+   "dec": -58.535916,
+   "grade": "likely",
+   "model_type": "T1.5",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 59.0,
+     "error": 14.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.207
+    },
+    "w1_w2": {
+     "pass": false,
+     "value": 0.65,
+     "error": 0.03,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": false,
+     "value": 0.89,
+     "error": 0.0381,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.123
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "NEOSSat",
+     "n": 1
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 1,
+   "agrees": false
+  },
+  {
+   "name": "DES 1034152240",
+   "ra": 359.507611,
+   "dec": -51.710814,
+   "grade": "likely",
+   "model_type": "T2.3",
+   "tests": {
+    "moves": {
+     "pass": true,
+     "value": 189.0,
+     "error": 22.0,
+     "unit": "mas/yr",
+     "data": "CatWISE2020 (WISE + NEOWISE)",
+     "match_arcsec": 0.076
+    },
+    "w1_w2": {
+     "pass": true,
+     "value": 0.87,
+     "error": 0.04,
+     "data": "CatWISE2020"
+    },
+    "j_ks": {
+     "pass": false,
+     "value": 0.78,
+     "error": 0.0516,
+     "data": "VISTA VHS DR5",
+     "match_arcsec": 0.906
+    }
+   },
+   "hubble_or_jwst": [],
+   "other_telescopes": [
+    {
+     "name": "TESS",
+     "n": 12
+    },
+    {
+     "name": "GALEX",
+     "n": 3
+    },
+    {
+     "name": "NEOSSat",
+     "n": 2
+    }
+   ],
+   "n_tests": 3,
+   "n_pass": 2,
+   "agrees": false
+  }
+ ],
+ "what_it_is": "A check of the SPHEREx methane candidates with other telescopes' data: WISE and NEOWISE (motion and mid-infrared colour) and VISTA or UKIDSS (near-infrared colour). Agreement makes a cold brown dwarf much more likely; a spectrum from a large telescope would confirm it. These objects were already candidates from the Dark Energy Survey's colours; they are not new objects.",
+ "references": [
+  "CatWISE2020: Marocco et al. 2021, ApJS 253, 8 (VizieR II/365)",
+  "VISTA VHS DR5: McMahon et al. 2013, The Messenger 154, 35 (VizieR II/367)",
+  "UKIDSS LAS DR9: Lawrence et al. 2007, MNRAS 379, 1599 (VizieR II/319)"
+ ]
+}

@@ -363,3 +363,26 @@ a:hover { color: #fff; text-decoration-color: #fff; }
 .cs-tr--h { font: 600 11px var(--font-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-2); background: var(--s1); }
 .cs-tr--miss { color: var(--text-3); }
 .cs-tr em { font-style: normal; color: var(--text-3); }
+
+/* ---------- "What other telescopes saw here" (components/OtherScopes.tsx), used on the sky map ---------- */
+.os-ask { justify-self: start; min-height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.22); background: transparent; color: inherit; font: 500 14px/1 var(--font); cursor: pointer; }
+.os-ask:hover { border-color: #fff; }
+.os-wait { margin: 0; color: var(--text-3); font-size: 13px; line-height: 1.5; }
+.os-link { border: 0; background: none; color: inherit; text-decoration: underline; padding: 0; cursor: pointer; font: inherit; }
+.os { display: grid; gap: 10px; }
+.os-hd { margin: 0; font-size: 14px; line-height: 1.45; }
+.os-hd b { font-weight: 600; }
+.os-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.os-list li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.os-list b { display: block; font-weight: 500; font-size: 14px; }
+.os-list small { display: block; color: var(--text-3); font-size: 12px; }
+.os-n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.os-pics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.os-pics figure { margin: 0; }
+.os-pics img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; background: #0b0b0c; display: block; }
+.os-pics figcaption { font-size: 11px; color: var(--text-3); margin-top: 3px; line-height: 1.3; }
+.os-small { margin: 0; color: var(--text-3); font-size: 12px; line-height: 1.45; }
+.os-small a { color: inherit; }
+
+.cs-others { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: var(--text-2); }
+.cs-others b { color: var(--text); font-weight: 600; }

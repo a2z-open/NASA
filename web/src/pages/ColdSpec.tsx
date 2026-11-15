@@ -23,6 +23,9 @@ interface Graded extends WideFlag { methane_1p7: number; methane_3p3: number; gr
 interface Wide {
   n_objects: number; n_spectra: number; n_pass_quality: number; n_flagged: number;
   candidates: { n: number; n_strong: number; candidates: Graded[]; what_it_is: string; limits: { methane_1p7_warm_1st_percentile: number; methane_3p3_warm_1st_percentile: number } } | null;
+  other_telescopes?: { n: number; n_agree: number; n_moves: number; rules: Record<string, string>;
+    candidates: { name: string; agrees: boolean; n_pass: number; n_tests: number; tests: Record<string, { pass: boolean; value: number; error: number | null; data: string }>;
+      hubble_or_jwst?: { name: string; n: number }[] }[] } | null;
   vetting: {
     flagged: WideFlag[]; n_already_typed: number; n_doubtful: number; n_no_published_spectrum: number; caveat: string; references: string[];
     blind_test: { n_with_published_type: number; type_median_abs_subtypes: number | null; published_T: number; published_T_flagged: number; published_not_T: number; published_not_T_flagged: number };
@@ -100,6 +103,9 @@ function WideBlock({ w }: { w: Wide }) {
         <>
           <h3 className="cs-h3">{w.candidates ? `${w.candidates.n_strong} brown dwarfs, seen in methane for the first time.` : 'Candidates for a first spectrum.'}</h3>
           <p className="test-p">The Dark Energy Survey listed these as possible T dwarfs from their colours alone. We found no published spectrum of any of them, and SIMBAD has no entry for them at all. Their SPHEREx spectra show the methane that only cold worlds have.{w.candidates ? ` In ${w.candidates.n_strong} of them, both methane bands are deeper than in 99% of known warmer dwarfs.` : ''} These are not new objects, and a large telescope should confirm them before anyone publishes them.</p>
+          {w.other_telescopes && (
+            <p className="test-p"><strong>Checked with other telescopes.</strong> A cold brown dwarf nearby should drift across the sky (WISE and NEOWISE, 2010–2016), look blue in the near infrared (VISTA or UKIRT: J − Ks below 0.5) and red in the mid infrared (WISE: W1 − W2 of 0.8 or more). {w.other_telescopes.n_moves} of {w.other_telescopes.n} measurably move, which a distant galaxy or quasar would not, and {w.other_telescopes.n_agree} pass all three tests. Most of the others miss only the near-infrared test by a little, which is common for the warmest T dwarfs. The rules were set before the check was run.</p>
+          )}
           <div className="cs-cands">
             {fresh.map(c => (
               <article key={c.oid} className="cs-cand">
@@ -111,6 +117,20 @@ function WideBlock({ w }: { w: Wide }) {
                   <div><dt>Signal</dt><dd>{c.snr_J.toFixed(0)}×</dd></div>
                   <div><dt>WISE colour</dt><dd>{c.wise?.W1_W2 != null ? c.wise.W1_W2.toFixed(2) : '—'}</dd></div>
                 </dl>
+                {(() => {
+                  const o = w.other_telescopes?.candidates.find(x => x.name === c.name);
+                  if (!o) return null;
+                  const t = o.tests;
+                  const mark = (k: string) => (t[k] ? (t[k].pass ? 'yes' : 'no') : 'no data');
+                  return (
+                    <p className="cs-others">
+                      <b>Other telescopes {o.agrees ? 'agree' : `agree on ${o.n_pass} of ${o.n_tests}`}.</b>
+                      {' '}Moves: {t.moves ? `${t.moves.value} ± ${t.moves.error} mas a year (WISE)` : 'no data'}, {mark('moves')}.
+                      {' '}Near-infrared colour: {t.j_ks ? `${t.j_ks.value.toFixed(2)} (${t.j_ks.data.startsWith('VISTA') ? 'VISTA' : 'UKIRT'})` : 'no data'}, {mark('j_ks')}.
+                      {' '}Mid-infrared colour: {t.w1_w2 ? `${t.w1_w2.value.toFixed(2)} (WISE)` : 'no data'}, {mark('w1_w2')}.
+                    </p>
+                  );
+                })()}
                 <Link className="cs-go" href={`/map?ra=${c.ra.toFixed(5)}&dec=${c.dec.toFixed(5)}&fov=0.5`}>See it on the sky map</Link>
               </article>
             ))}

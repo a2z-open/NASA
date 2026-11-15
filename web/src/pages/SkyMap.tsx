@@ -7,21 +7,56 @@ import { CHUNK_STATUS_LABEL, ChunkReview, useChunkAssignments } from '../compone
 import { CHUNKS, chunkAt, chunkFromId, chunkGridLines } from '../lib/skyChunks.ts';
 import { distantApi } from './Distant.tsx';
 import '../map.css';
+import { OtherScopes } from '../components/OtherScopes.tsx';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AladinNS = any;
 
-// All-sky image layers (HiPS), served by NASA/IPAC's IRSA.  The SPHEREx layer is IRSA's DR1 all-sky cube: one
-// all-sky image for each of SPHEREx's 102 colours, in ascending wavelength (frames 50 and 51 are blank dichroic channels).
+// Sky image layers (HiPS) from many telescopes.  SPHEREx is IRSA's DR1 all-sky cube: one all-sky image for each of its 102
+// colours, in ascending wavelength (frames 50 and 51 are blank dichroic channels).  Every other layer is a picture to compare
+// with; no measurement on this site is made from them.  Each host was checked to serve tiles to browsers (CORS) on 15 Nov 2026.
 const IRSA = 'https://irsa.ipac.caltech.edu/data/hips';
-const SPHEREX = { id: `${IRSA}/SPHEREx/spherex_allsky_cube`, fmt: 'png', label: 'SPHEREx', year: '2025', thumb: '/img/spherex-vela.webp' };
-const LAYERS = [
+const ESA = 'https://skies.esac.esa.int';
+const MASTS3 = 'https://stpubdata.s3.us-east-1.amazonaws.com/mast/skybackgrounds';
+type Light = 'Infrared' | 'Visible' | 'Ultraviolet' | 'X-ray' | 'Gamma ray' | 'Microwave';
+type Cover = 'all' | 'most' | 'part' | 'patches';
+interface Layer { id: string; fmt: string; label: string; year: string; light: Light; who: string; host: string; cover: Cover; thumb?: string;
+  eg?: { name: string; ra: number; dec: number; fov: number } }
+const SPHEREX: Layer = { id: `${IRSA}/SPHEREx/spherex_allsky_cube`, fmt: 'png', label: 'SPHEREx', year: '2025', light: 'Infrared', who: 'NASA', host: 'NASA/IPAC IRSA', cover: 'all', thumb: '/img/spherex-vela.webp' };
+const LAYERS: Layer[] = [
   SPHEREX,
-  { id: `${IRSA}/CDS/AllWISE/RGB-W4-W2-W1`, fmt: 'jpeg', label: 'WISE', year: '2010', thumb: `${IRSA}/CDS/AllWISE/RGB-W4-W2-W1/preview.jpg` },
-  { id: `${IRSA}/CDS/2MASS/Color`, fmt: 'jpeg', label: '2MASS', year: '1998', thumb: `${IRSA}/CDS/2MASS/Color/preview.jpg` },
-  { id: `${IRSA}/CDS/DSS2/color`, fmt: 'jpeg', label: 'Visible', year: '1950s–90s', thumb: `${IRSA}/CDS/DSS2/color/preview.jpg` },
-  { id: `${IRSA}/CDS/IRIS/color`, fmt: 'jpeg', label: 'IRAS', year: '1983', thumb: `${IRSA}/CDS/IRIS/color/preview.jpg` },
+  { id: `${ESA}/JWST/NIRCam_Imaging`, fmt: 'png', label: 'JWST', year: '2022–', light: 'Infrared', who: 'NASA, ESA, CSA', host: 'ESA ESASky (eJWST)', cover: 'patches', eg: { name: 'the Pillars of Creation', ra: 274.7000, dec: -13.8070, fov: 0.08 } },
+  { id: `${IRSA}/CDS/AllWISE/RGB-W4-W2-W1`, fmt: 'jpeg', label: 'WISE', year: '2010', light: 'Infrared', who: 'NASA', host: 'NASA/IPAC IRSA', cover: 'all', thumb: `${IRSA}/CDS/AllWISE/RGB-W4-W2-W1/preview.jpg` },
+  { id: `${IRSA}/CDS/2MASS/Color`, fmt: 'jpeg', label: '2MASS', year: '1998', light: 'Infrared', who: 'NASA, NSF', host: 'NASA/IPAC IRSA', cover: 'all', thumb: `${IRSA}/CDS/2MASS/Color/preview.jpg` },
+  { id: `${ESA}/Spitzer/IRAC134_RGB_bright`, fmt: 'png', label: 'Spitzer', year: '2003–20', light: 'Infrared', who: 'NASA', host: 'ESA ESASky', cover: 'patches', eg: { name: 'the Orion Nebula', ra: 83.8221, dec: -5.3911, fov: 1.2 } },
+  { id: 'https://padc-web.obspm.fr/planeto/hips/VOXASTRO_P_VHS_COLOR', fmt: 'png', label: 'VISTA', year: '2009–', light: 'Infrared', who: 'ESO', host: 'ESO VHS, via PADC', cover: 'part', eg: { name: 'the Sculptor Galaxy', ra: 11.8880, dec: -25.2880, fov: 0.6 } },
+  { id: 'https://padc-web.obspm.fr/planeto/hips/VOXASTRO_P_UKIDSS_COLOR', fmt: 'png', label: 'UKIRT', year: '2005–12', light: 'Infrared', who: 'UKIRT', host: 'UKIDSS, via PADC', cover: 'part', eg: { name: 'the Orion Nebula', ra: 83.8221, dec: -5.3911, fov: 1 } },
+  { id: `${ESA}/AKARI/color`, fmt: 'jpeg', label: 'AKARI', year: '2006–07', light: 'Infrared', who: 'JAXA', host: 'ESA ESASky', cover: 'all' },
+  { id: `${ESA}/Herschel/color`, fmt: 'png', label: 'Herschel', year: '2009–13', light: 'Infrared', who: 'ESA', host: 'ESA ESASky', cover: 'part', eg: { name: 'the Orion Nebula', ra: 83.8221, dec: -5.3911, fov: 1.5 } },
+  { id: `${IRSA}/CDS/IRIS/color`, fmt: 'jpeg', label: 'IRAS', year: '1983', light: 'Infrared', who: 'NASA, UK, NL', host: 'NASA/IPAC IRSA', cover: 'all', thumb: `${IRSA}/CDS/IRIS/color/preview.jpg` },
+  { id: `${IRSA}/CDS/DSS2/color`, fmt: 'jpeg', label: 'Photo plates', year: '1950s–90s', light: 'Visible', who: 'STScI', host: 'NASA/IPAC IRSA', cover: 'all', thumb: `${IRSA}/CDS/DSS2/color/preview.jpg` },
+  { id: `${MASTS3}/PanSTARRS`, fmt: 'jpeg', label: 'Pan-STARRS', year: '2010–14', light: 'Visible', who: 'University of Hawaii', host: 'NASA MAST', cover: 'most', thumb: `${MASTS3}/PanSTARRS/preview.jpg` },
+  { id: `${IRSA}/CDS/SDSS/DR9/color`, fmt: 'jpeg', label: 'SDSS', year: '2000–08', light: 'Visible', who: 'SDSS', host: 'NASA/IPAC IRSA', cover: 'part', thumb: `${IRSA}/CDS/SDSS/DR9/color/preview.jpg`, eg: { name: 'the Whirlpool Galaxy', ra: 202.4696, dec: 47.1952, fov: 0.3 } },
+  { id: `${ESA}/HST/ACS`, fmt: 'jpeg', label: 'Hubble', year: '2002–', light: 'Visible', who: 'NASA, ESA', host: 'ESA ESASky (eHST)', cover: 'patches', eg: { name: 'the Whirlpool Galaxy', ra: 202.4696, dec: 47.1952, fov: 0.15 } },
+  { id: `${ESA}/Gaia/dr3/RGB`, fmt: 'png', label: 'Gaia', year: '2014–17', light: 'Visible', who: 'ESA', host: 'ESA ESASky', cover: 'all' },
+  { id: `${MASTS3}/GALEXColor`, fmt: 'png', label: 'GALEX', year: '2003–12', light: 'Ultraviolet', who: 'NASA', host: 'NASA MAST', cover: 'most', thumb: `${MASTS3}/GALEXColor/preview.jpg` },
+  { id: 'https://skyview.gsfc.nasa.gov/surveys/uvot/int/color2', fmt: 'jpg', label: 'Swift', year: '2004–', light: 'Ultraviolet', who: 'NASA', host: 'NASA HEASARC SkyView', cover: 'patches', eg: { name: 'the Andromeda Galaxy', ra: 10.6847, dec: 41.2687, fov: 1.5 } },
+  { id: 'https://cdaftp.cfa.harvard.edu/cxc-hips', fmt: 'png', label: 'Chandra', year: '1999–', light: 'X-ray', who: 'NASA', host: 'Chandra X-ray Center', cover: 'patches', eg: { name: 'the Crab Nebula', ra: 83.6331, dec: 22.0145, fov: 0.15 } },
+  { id: 'https://esdchips.esac.esa.int/XMM-Newton/EPIC-RGB', fmt: 'jpeg', label: 'XMM-Newton', year: '1999–', light: 'X-ray', who: 'ESA', host: 'ESA', cover: 'patches', eg: { name: 'Cassiopeia A', ra: 350.8500, dec: 58.8150, fov: 0.3 } },
+  { id: 'https://erosita.mpe.mpg.de/erodat/static/hips/eRASS1_RGB_Rate_c010', fmt: 'png', label: 'eROSITA', year: '2019–20', light: 'X-ray', who: 'MPE (Germany)', host: 'MPE', cover: 'part', eg: { name: 'the Vela supernova remnant', ra: 128.8, dec: -45.2, fov: 12 } },
+  { id: `${ESA}/FermiColor`, fmt: 'jpeg', label: 'Fermi', year: '2008–', light: 'Gamma ray', who: 'NASA', host: 'ESA ESASky', cover: 'all', thumb: `${ESA}/FermiColor/preview.jpg` },
+  { id: `${ESA}/Integral/color`, fmt: 'jpeg', label: 'INTEGRAL', year: '2002–25', light: 'Gamma ray', who: 'ESA', host: 'ESA ESASky', cover: 'all' },
+  { id: `${IRSA}/CDS/PLANCK/R2/HFI/color`, fmt: 'jpeg', label: 'Planck', year: '2009–13', light: 'Microwave', who: 'ESA', host: 'NASA/IPAC IRSA', cover: 'all', thumb: `${IRSA}/CDS/PLANCK/R2/HFI/color/preview.jpg` },
 ];
+const LIGHTS: { light: Light; glyph: string; say: string }[] = [
+  { light: 'Infrared', glyph: 'IR', say: 'Heat light, and the colours just past red' },
+  { light: 'Visible', glyph: 'V', say: 'The light our eyes see' },
+  { light: 'Ultraviolet', glyph: 'UV', say: 'Past violet: hot young stars' },
+  { light: 'X-ray', glyph: 'X', say: 'Very hot gas, black holes, dead stars' },
+  { light: 'Gamma ray', glyph: 'γ', say: 'The most energetic light there is' },
+  { light: 'Microwave', glyph: 'µ', say: 'Cold dust and the glow left over from the Big Bang' },
+];
+const COVER: Record<Cover, string> = { all: 'the whole sky', most: 'most of the sky', part: 'part of the sky', patches: 'only small patches' };
 const WAVES = [0.753, 0.771, 0.790, 0.809, 0.828, 0.848, 0.868, 0.889, 0.910, 0.932, 0.955, 0.978, 1.001, 1.025, 1.050, 1.075, 1.102, 1.113, 1.139, 1.167, 1.195, 1.224, 1.254, 1.284, 1.315, 1.346, 1.378, 1.412, 1.446, 1.481, 1.517, 1.554, 1.592, 1.631, 1.656, 1.695, 1.735, 1.775, 1.818, 1.861, 1.905, 1.949, 1.995, 2.041, 2.089, 2.139, 2.189, 2.240, 2.292, 2.345, 2.399, 2.445, 2.506, 2.575, 2.646, 2.719, 2.794, 2.871, 2.951, 3.033, 3.118, 3.204, 3.293, 3.383, 3.476, 3.570, 3.667, 3.768, 3.833, 3.867, 3.901, 3.935, 3.970, 4.005, 4.040, 4.076, 4.112, 4.148, 4.184, 4.220, 4.257, 4.294, 4.331, 4.368, 4.405, 4.435, 4.467, 4.500, 4.533, 4.566, 4.600, 4.635, 4.669, 4.704, 4.739, 4.773, 4.808, 4.843, 4.879, 4.915, 4.951, 4.988];
 const BLANK = new Set([50, 51]);
 
@@ -102,7 +137,7 @@ const IcInfo = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M12 11v5.5
 const IcTarget = () => I(<><circle cx="12" cy="12" r="7.5" /><circle cx="12" cy="12" r="2.6" /><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22" /></>);
 const catIcon = (c?: Cat) => c === 'nasa' ? <IcTarget /> : c === 'planets' || c === 'dwarfs' ? <IcPlanet /> : c === 'deep' ? <IcSpiral /> : c === 'stars' ? <IcStar /> : c === 'cold' ? <IcSnow /> : c === 'finds' ? <IcFlag /> : <IcPin />;
 
-function hips(Ali: AladinNS, a: any, l: typeof LAYERS[number]) {
+function hips(Ali: AladinNS, a: any, l: Layer) {
   const opts = { name: l.label, imgFormat: l.fmt };
   if (typeof Ali.imageHiPS === 'function') return Ali.imageHiPS(l.id, opts);
   return a.newImageSurvey(l.id, opts);
@@ -176,6 +211,8 @@ export function SkyMap() {
   const [list, setList] = useState<Cat | null>(null);
   const [layersOpen, setLayersOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [scopes, setScopes] = useState<{ ra: number; dec: number; name: string } | null>(null);
+  const cur = LAYERS.find(l => l.id === layer);
 
   // ---- start the map ----
   useEffect(() => {
@@ -418,7 +455,7 @@ export function SkyMap() {
   }
   const imagesFov = (s: Sel) => Math.min(20, Math.max(4, Math.round(((s.fov ?? centre?.fov ?? 0.2) * 60) / 3)));
   const today = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-  const hasCard = !!(sel && !sel.pin) || !!list;
+  const hasCard = !!(sel && !sel.pin) || !!list || !!(scopes && sel?.pin);
   const centreChunk = centre && centre.fov <= CHUNK_GRID_FOV ? chunkAt(centre.ra, centre.dec) : null;
   const centreStatus = centreChunk && chunkTeam.assignments?.[centreChunk.id]?.status;
   const suggestedChunk = chunkFromId(q);
@@ -523,6 +560,7 @@ export function SkyMap() {
               <div className="gm-row"><IcPin /><span>{fmtCoord(sel.ra, sel.dec)}<small>Right ascension, declination</small></span></div>
               {sel.moves && <div className="gm-row"><IcClock /><span>Here on {today}<small>It moves, so next month it will be somewhere else. Position from {sel.source}.</small></span></div>}
               {!sel.moves && sel.source && <div className="gm-row"><IcInfo /><span>Position from {sel.source}</span></div>}
+              <div className="gm-row gm-row--os"><IcLayers /><OtherScopes ra={sel.ra} dec={sel.dec} /></div>
             </div>
           </div>
         </section>
@@ -530,18 +568,32 @@ export function SkyMap() {
 
       <div className="gm-layers">
         <button type="button" className="gm-tile" aria-expanded={layersOpen} aria-label="Layers: choose which telescope's sky to show" onClick={() => { setActiveChunk(null); setLayersOpen(v => !v); }}>
-          <img src={(LAYERS.find(l => l.id !== layer && l.id !== SPHEREX.id) ?? LAYERS[1]).thumb} alt="" />
+          <img src={(LAYERS.find(l => l.id !== layer && l.id !== SPHEREX.id && l.thumb) ?? LAYERS[2]).thumb} alt="" />
           <span className="gm-tile__lb"><IcLayers />Layers</span>
         </button>
         {layersOpen && (
           <div className="gm-pop" role="dialog" aria-label="Layers">
-            <div className="gm-pop__tiles" role="radiogroup" aria-label="Telescope">
-              {LAYERS.map(l => (
-                <button key={l.id} type="button" role="radio" aria-checked={layer === l.id} className={`gm-ltile${layer === l.id ? ' is-on' : ''}`} onClick={() => setLayer(l.id)}>
-                  <i><img src={l.thumb} alt="" loading="lazy" /></i>{l.label}<br />{l.year}
-                </button>
+            <div role="radiogroup" aria-label="Telescope">
+              {LIGHTS.map(g => (
+                <div key={g.light} className="gm-pop__group">
+                  <div className="gm-pop__gh"><b>{g.light}</b><span>{g.say}</span></div>
+                  <div className="gm-pop__tiles">
+                    {LAYERS.filter(l => l.light === g.light).map(l => (
+                      <button key={l.id} type="button" role="radio" aria-checked={layer === l.id} className={`gm-ltile${layer === l.id ? ' is-on' : ''}`}
+                        onClick={() => setLayer(l.id)} title={`${l.label} (${l.who}), ${l.year}: ${COVER[l.cover]}`}>
+                        <i>{l.thumb ? <img src={l.thumb} alt="" loading="lazy" /> : <span className="gm-ltile__glyph" aria-hidden="true">{g.glyph}</span>}</i>{l.label}<br />{l.year}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
+            {cur && cur.cover !== 'all' && (
+              <div className="gm-pop__note">
+                <span>{cur.label} has imaged {COVER[cur.cover]}. Where the map is empty, it never looked.</span>
+                {cur.eg && <button type="button" className="gm-pop__play" onClick={() => { const a = al.current; if (a) { a.gotoRaDec(cur.eg!.ra, cur.eg!.dec); a.setFoV(cur.eg!.fov); } }}>Show me {cur.eg.name}</button>}
+              </div>
+            )}
             {layer === SPHEREX.id && (
               <div className="gm-pop__sec">
                 <div className="gm-pop__hd"><span>Infrared colour</span><b>{WAVES[slice].toFixed(2)} µm{WAVES[slice] < 1.1 ? ' · reflected sunlight' : WAVES[slice] > 3.8 ? ' · where cold worlds glow' : ''}</b></div>
@@ -566,8 +618,15 @@ export function SkyMap() {
           <IcPin />
           <span><b>Dropped pin</b><span>{fmtCoord(sel.ra, sel.dec)}</span></span>
           <button type="button" className="gm-btn" onClick={() => navigate(openHere(sel.ra, sel.dec, 10))}>See real images</button>
+          <button type="button" className="gm-btn gm-btn--line" onClick={() => setScopes({ ra: sel.ra, dec: sel.dec, name: 'Dropped pin' })}>Other telescopes</button>
           <button type="button" className="gm-ic" aria-label="Remove pin" onClick={() => setSel(null)}><IcX /></button>
         </div>
+      )}
+      {scopes && sel?.pin && Math.abs(scopes.ra - sel.ra) < 1e-9 && (
+        <section className="gm-card" aria-label="Other telescopes at the dropped pin">
+          <div className="gm-list__hd"><h2>Other telescopes here</h2><button type="button" className="gm-ic" aria-label="Close" onClick={() => setScopes(null)}><IcX /></button></div>
+          <div className="gm-card__scroll gm-card__pad"><p className="gm-card__kind">{fmtCoord(scopes.ra, scopes.dec)}</p><OtherScopes ra={scopes.ra} dec={scopes.dec} auto /></div>
+        </section>
       )}
       {toast && <p className="gm-toast" role="status">{toast}</p>}
 
@@ -585,7 +644,7 @@ export function SkyMap() {
         </button>}
         <span className="gm-status__coords">{centre ? `${fmtCoord(centre.ra, centre.dec)} · ${fmtFov(centre.fov)}` : ''}</span>
         <span className="gm-status__credits">
-          <span>Sky: NASA/IPAC IRSA (SPHEREx DR1, WISE, 2MASS, DSS2, IRAS) · Map: Aladin Lite ·</span>
+          <span>Sky: {cur ? `${cur.label} (${cur.who}), tiles from ${cur.host}` : 'NASA/IPAC IRSA'} · Map: Aladin Lite ·</span>
           <Link href="/about">Sources</Link>
         </span>
       </div>

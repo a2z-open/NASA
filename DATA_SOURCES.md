@@ -127,3 +127,16 @@ PARALLAX is an independent hackathon project. It is not affiliated with or endor
 | **Gaia DR3** (ESA) | Lining up every image (registration) before measuring or adding images. | Gaia archive, cached per patch |
 | **Brown, Holman & Batygin 2024** and the track of Brown & Batygin 2021 | The predicted brightness (V 22.0 at 550 AU, range V 20.6–23.1) and sky track of Planet Nine that choose the deep-stack patches and set the comparison. | Published papers (docs/PLANET_NINE_RESEARCH.md) |
 
+## Other telescopes (fifth session, later)
+
+SPHEREx stays the only data any search or measurement on this site is made from. Data from other telescopes is used to check
+results and to compare, and is always labelled with its source.
+
+| Source | Used for | How it is reached |
+|---|---|---|
+| **NASA MAST** (Barbara A. Mikulski Archive for Space Telescopes), CAOM tables | "What other telescopes saw here": counts and years of observations by Hubble, JWST, TESS, GALEX, Pan-STARRS, Swift UV/optical, IUE, Kepler/K2, FUSE and SDSS spectra at any spot, and a few JWST and Hubble preview images (passed on by the app as images, from MAST addresses only). Processed products (HLA, HLSP) and entries marked as Roman tests are not counted. | TAP: https://mast.stsci.edu/vo-tap/api/v0.1/caom (`pipeline/archives.py`) |
+| **NASA HEASARC** master tables | The same, for Chandra, XMM-Newton, Swift X-ray, NuSTAR and NICER. | TAP: https://heasarc.gsfc.nasa.gov/xamin/vo/tap |
+| **Canadian Astronomy Data Centre** (CADC), CAOM tables | The same, for NEOSSat, the Canadian Space Agency's asteroid-hunting satellite (a Space Apps partner resource). | TAP: https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/argus |
+| **CatWISE2020** (Marocco et al. 2021, ApJS 253, 8; VizieR II/365) | Motion and W1 − W2 colour of the SPHEREx methane candidates (`validation/coldspec_others.py`). | VizieR, CfA mirror |
+| **VISTA Hemisphere Survey DR5** (McMahon et al. 2013; VizieR II/367) and **UKIDSS LAS DR9** (Lawrence et al. 2007; VizieR II/319) | J − Ks colour of the same candidates. | VizieR, CfA mirror |
+| **Sky-map picture layers (HiPS)** | Pictures only, to compare with SPHEREx: JWST NIRCam and Hubble ACS (ESA ESASky, from the eJWST and eHST archives), Spitzer IRAC, AKARI, Herschel, Gaia DR3, Fermi and INTEGRAL (ESA ESASky); WISE, 2MASS, IRAS, DSS2, SDSS DR9 and Planck (NASA/IPAC IRSA); Pan-STARRS DR1 and GALEX (NASA MAST); VISTA VHS and UKIDSS (Paris Observatory PADC); Swift UVOT (NASA HEASARC SkyView); Chandra (Chandra X-ray Center); XMM-Newton (ESA); eROSITA DR1 (MPE). Each host was checked to serve tiles to browsers on 15 Nov 2026. | Aladin Lite, directly from each host |

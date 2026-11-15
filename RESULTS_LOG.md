@@ -106,3 +106,9 @@ Negative controls and injection tests: see VALIDATION.md (appended when the runs
 <!-- P9DEEP_LINE -->
 - Planet Nine deep stack: 2 patches on the predicted track, 248 photos; one visit added along parallax reaches 60 µJy (synthetic planets, 50% found at 550 AU) against 7.2 µJy predicted; 2 planet-like candidate(s) against about 2.0 expected by chance; 0 survive the checks (split halves, detectors, and the other visits).
 <!-- /P9DEEP_LINE -->
+
+## Cold worlds, checked with other telescopes (15 Nov 2026)
+
+<!-- COLDSPEC_OTHERS_LINE -->
+- Methane candidates checked with other telescopes (WISE/NEOWISE motion and colour, VISTA/UKIRT colour): 9 of 12 move, 5 pass all three tests.
+<!-- /COLDSPEC_OTHERS_LINE -->

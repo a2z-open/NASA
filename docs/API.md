@@ -228,3 +228,15 @@ Malformed JSON, a non-object body or a non-numeric field of view return 400.
   control path 60″ away) from `validation/asteroids/stack.json`. `deep`: each Planet Nine deep-stack patch (photos per visit, area,
   single-photo depth, candidate counts, synthetic-planet results) from `validation/p9_deepstack/<patch>/`. `planet_nine`: the predicted
   brightness. `ledger`: whether every seal checks out, how many there are, and the last four. Used by the page at `/how`.
+
+## Other telescopes (fifth session)
+
+- `GET /api/telescopes?ra=&dec=&radius_arcmin=3` → `{telescopes, n_telescopes, n_observations, previews, not_counted, unanswered,
+  links, note}`. Asks NASA MAST, NASA HEASARC and the CADC at once which other telescopes pointed within the radius (0.1 to 30′):
+  each row has `name`, `agency`, `light`, `archive`, `n`, `first_year`, `last_year`. `unanswered` lists archives that did not
+  answer in time (never shown as "no observations"). Cached for a week per position. Typical time 8 to 30 s uncached.
+- `GET /api/telescopes/preview?uri=mast:JWST/product/...jpg` → the JWST or Hubble preview image as `image/jpeg` or
+  `image/png`. Only MAST product addresses for JWST and Hubble are accepted (400 otherwise); MAST serves these as downloads,
+  which browsers will not show inline.
+- `/api/coldspec` now also returns `wide.other_telescopes`: the methane candidates checked with WISE/NEOWISE motion and colour
+  and VISTA/UKIDSS colour (`validation/coldspec_others.py`).

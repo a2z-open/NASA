@@ -84,3 +84,14 @@ eclipse.space (a reference the team supplied); no code, fonts, text or images fr
 - **joblib** (BSD-3-Clause, installed with scikit-learn), used to store the locked model `validation/coldspec/model.joblib`.
 - Fonts: **Inter** and **Barlow** (SIL Open Font License 1.1), loaded from Google Fonts. On Apple devices the system font is used instead.
 - Home page photograph: SPHEREx in orbit, illustration by NASA/JPL-Caltech. Footer: Pluto's horizon, NASA/JHUAPL/SwRI.
+
+## Sky-map picture layers from other telescopes (fifth session)
+
+The sky map can show pictures from other telescopes, loaded by the viewer's browser directly from the archives that publish
+them as HiPS tiles. None are copied into this repository. Credits, as each publisher asks: JWST (NASA/ESA/CSA; tiles from
+ESA's eJWST archive via ESASky), Hubble (NASA/ESA; eHST via ESASky), Spitzer (NASA/JPL-Caltech; ESASky), AKARI (JAXA), Herschel
+(ESA), Gaia DR3 (ESA/Gaia/DPAC), Fermi (NASA; HEALPixed by CDS), INTEGRAL (ESA), WISE, 2MASS, IRAS/IRIS, DSS2, SDSS and Planck
+(tiles from NASA/IPAC IRSA, many HEALPixed by CDS), Pan-STARRS DR1 (PS1 Science Consortium; tiles from STScI/MAST), GALEX
+(NASA; STScI/MAST), VISTA VHS (ESO) and UKIDSS (UKIRT/WFAU; both hosted by Paris Observatory PADC), Swift UVOT (NASA; HEASARC
+SkyView), Chandra (NASA/CXC), XMM-Newton (ESA), eROSITA DR1 (MPE/IKI). The map's status line names the source of the layer
+being shown.

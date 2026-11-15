@@ -66,3 +66,9 @@ each path a distant planet could take, with two impossible-motion controls and s
 stacking test along known asteroid paths (`validation/asteroids_stack.py`), and the page "How we find them" (`/how`) that
 walks through the method with the real numbers. The deep-stack method was tuned on the first patch using only its controls and
 synthetic planets, then frozen for the second patch; VALIDATION.md, section 14, records the steps.
+
+Later in the fifth session, at the team's request, data from other telescopes was added, for checking and comparing only: the
+sky map's picture layers now cover 23 telescopes (JWST and Hubble included, from ESA's archives), a live "What other telescopes
+saw here" lookup asks NASA MAST, NASA HEASARC and Canada's CADC (NEOSSat), and the SPHEREx methane candidates were checked with
+WISE/NEOWISE motion and colour and VISTA/UKIRT colour (ledger entries 44 to 47; 44 and 45 were failed runs, explained in
+VALIDATION.md, section 12c).

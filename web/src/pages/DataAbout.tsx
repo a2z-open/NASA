@@ -27,12 +27,14 @@ export function DataAbout() {
           <li><strong>SIMBAD</strong> (Wenger et al. 2000) for object names and spectral types; <strong>Kirkpatrick et al. 2021</strong> for the motion of WISE 0855.</li>
           <li>Brown-dwarf candidates picked from colours by the <strong>Dark Energy Survey</strong> (Carnero Rosell et al. 2019; Dal Ponte et al. 2023) and <strong>UKIDSS</strong> (Skrzypek et al. 2016), and published types from Best et al. 2018, 2020 and 2021 and Kirkpatrick et al. 2021, all through VizieR.</li>
           <li><strong>NASA JPL Horizons</strong> (Giorgini et al. 1996) for the positions of planets and dwarf planets, and <strong>IMCCE SkyBoT</strong> (Berthier et al. 2006) for known asteroids.</li>
+          <li><strong>Other telescopes, to compare and check.</strong> The sky map can show pictures from 22 more telescopes, from JWST and Hubble to Chandra and Fermi, loaded from the archives that publish them (NASA IRSA, NASA MAST, ESA ESASky, NASA HEASARC and others). "What other telescopes saw here" asks NASA's MAST and HEASARC archives and Canada's CADC (for NEOSSat) live. The methane brown dwarfs are checked with motion and colours from WISE, NEOWISE, VISTA and UKIRT. Every search on this site runs on SPHEREx images; other telescopes are used only to line images up, to check results and to compare.</li>
         </ul>
         <p className="small muted">This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, funded by the National Aeronautics and Space Administration.</p>
 
         <h3>Good to know</h3>
         <ul className="bullets">
           <li>Images are resampled onto one north-up grid so they line up. Measurements use the original pixels.</li>
+          <li>Pictures from other telescopes are only for comparing. Each layer says which telescope and archive it comes from.</li>
           <li>Each SPHEREx image sees a slightly different colour. Brightness is only compared between images of the same colour.</li>
           <li>On charts of measurements, a dashed line is always a fitted model or a prediction, never an observation. In the game and the diagrams, dashed shows where something was before and solid where it is now.</li>
         </ul>
