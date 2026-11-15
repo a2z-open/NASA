@@ -1,4 +1,11 @@
 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="7" fill="#151719"/>
-  <path d="m7 23 6-14h3l6 14M9.4 18.2h10m1.3-9.2 5.8 14" fill="none" stroke="#ffa269" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+  <!-- The PARALLAX mark from the site header: an orbit and one body displaced on it. -->
+  <defs>
+    <mask id="cut"><rect width="32" height="32" fill="#fff"/><circle cx="23.8" cy="8.2" r="7.2" fill="#000"/></mask>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <g transform="translate(16 16) scale(0.74) translate(-16 -16)">
+    <circle cx="16" cy="16" r="11" fill="none" stroke="#fff" stroke-width="3.2" mask="url(#cut)"/>
+    <circle cx="23.8" cy="8.2" r="4.4" fill="#fff"/>
+  </g>
 </svg>

@@ -87,8 +87,11 @@
     radial-gradient(ellipse 62% 70% at 0% 100%, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.4) 42%, rgba(0, 0, 0, 0) 72%);
 }
 .e-hero__text { position: absolute; left: var(--pad); right: var(--pad); bottom: 26px; color: #fff; }
-.e-hero__h { font-family: var(--font-display); font-weight: 600; font-size: clamp(40px, 4.3vw, 84px); line-height: 1; letter-spacing: -0.045em; margin: 0; text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3); }
-.e-hero__sub { margin: 16px 0 0; max-width: 33ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.45; color: rgba(255, 255, 255, 0.8); }
+.e-hero__h { font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-weight: 300; font-size: clamp(44px, 5.4vw, 84px); line-height: 0.96; letter-spacing: -0.012em; margin: 0; }
+.e-hero__h em { font-style: italic; font-weight: 300; }
+.e-hero__sub { margin: 18px 0 0; max-width: min(430px, 42vw); font-size: clamp(15px, 1.2vw, 17px); line-height: 1.5; color: rgba(255, 255, 255, 0.86); }
+.e-hero__go { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.e-top.is-ink ~ main .e-hero__go { pointer-events: none; }   /* the title block has faded out by then; don't leave an invisible button clickable */
 .e-hero__meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: clamp(36px, 6vh, 64px); }
 .e-hero__meta .e-label { font-size: 11px; }
 .e-hero__beside {
