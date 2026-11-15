@@ -9,12 +9,14 @@ Service: https://ssd.jpl.nasa.gov/api/horizons.api (Giorgini et al. 1996).
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from functools import lru_cache
 import json
 import re
-from pathlib import Path
 
 import numpy as np
 import requests
+from astropy.time import Time
 
 from .spherex import CACHE, USER_AGENT
 
@@ -87,7 +89,7 @@ def at(eph: dict, mjd):
 
 SOLAR = {
     'sun': ('10', 'The Sun', 'our star'), 'the sun': ('10', 'The Sun', 'our star'),
-    'moon': ('301', 'The Moon', 'moon'), 'the moon': ('301', 'The Moon', 'moon'),
+    'moon': ('301', 'The Moon', 'moon'), 'the moon': ('301', 'The Moon', 'moon'), 'luna': ('301', 'The Moon', 'moon'),
     'mercury': ('199', 'Mercury', 'planet'), 'venus': ('299', 'Venus', 'planet'), 'mars': ('499', 'Mars', 'planet'),
     'jupiter': ('599', 'Jupiter', 'planet'), 'saturn': ('699', 'Saturn', 'planet'), 'uranus': ('799', 'Uranus', 'planet'),
     'neptune': ('899', 'Neptune', 'planet'), 'ceres': ('1;', 'Ceres', 'dwarf planet'), 'vesta': ('4;', 'Vesta', 'asteroid'),
@@ -99,29 +101,31 @@ SOLAR.update({k: (v['command'], v['title'], v['kind']) for k, v in BODIES.items(
 
 
 def where_now(command: str) -> dict:
-    """Geocentric RA, Dec (deg) and distance (AU) of a Solar System body today, from JPL Horizons."""
-    from datetime import datetime, timedelta, timezone
-    day = datetime.now(timezone.utc).date()
+    """Earth-centered ICRF position at the current UTC minute, from JPL Horizons."""
+    epoch = datetime.now(timezone.utc).replace(second=0, microsecond=0)
+    return _where_at(command, epoch)
+
+
+@lru_cache(maxsize=128)
+def _where_at(command: str, epoch: datetime) -> dict:
+    jd = Time(epoch, scale='utc').jd
     params = {
         'format': 'text', 'COMMAND': f"'{command}'", 'OBJ_DATA': 'NO', 'MAKE_EPHEM': 'YES', 'EPHEM_TYPE': 'OBSERVER',
-        'CENTER': "'500@399'", 'START_TIME': f"'{day}'", 'STOP_TIME': f"'{day + timedelta(days=1)}'", 'STEP_SIZE': "'1 d'",
+        'CENTER': "'500@399'", 'TLIST': f"'{jd:.9f}'", 'TLIST_TYPE': 'JD', 'REF_SYSTEM': 'ICRF',
         'QUANTITIES': "'1,20'", 'ANG_FORMAT': 'DEG', 'CAL_FORMAT': 'JD', 'CSV_FORMAT': 'YES', 'EXTRA_PREC': 'YES',
     }
-    key = re.sub(r'[^A-Za-z0-9]+', '_', f'now_{command}_{day}').strip('_')
-    path = CACHE / 'horizons' / f'{key}.json'
-    if path.is_file():
-        return json.loads(path.read_text())
-    r = requests.get(HORIZONS_URL, params=params, timeout=30, headers={'User-Agent': USER_AGENT})
+    r = requests.get(HORIZONS_URL, params=params, timeout=15, headers={'User-Agent': USER_AGENT})
     r.raise_for_status()
     text = r.text
-    if '$$SOE' not in text:
+    if '$$SOE' not in text or '$$EOE' not in text:
         raise LookupError('Horizons found no single match for ' + command)
-    c = [x.strip() for x in text.split('$$SOE', 1)[1].strip().splitlines()[0].split(',')]
+    rows = text.split('$$SOE', 1)[1].split('$$EOE', 1)[0].strip().splitlines()
+    cols = [value.strip() for value in rows[0].split(',')] if len(rows) == 1 else []
+    if len(cols) < 6:
+        raise LookupError('Horizons returned an invalid ephemeris for ' + command)
+    row_jd, ra, dec, delta = (_num(cols[i]) for i in (0, 3, 4, 5))
+    if not (abs(row_jd - jd) < 1 / 86400 and 0 <= ra < 360 and -90 <= dec <= 90):
+        raise LookupError('Horizons returned no position at the requested time for ' + command)
     name = re.search(r'Target body name:\s*(.+?)\s{2,}', text)
-    out = {'mjd': _num(c[0]) - 2400000.5, 'ra': _num(c[3]), 'dec': _num(c[4]), 'delta_au': _num(c[5]),
-           'target': name.group(1).strip() if name else command}
-    if not (np.isfinite(out['ra']) and np.isfinite(out['dec'])):
-        raise LookupError('Horizons returned no position for ' + command)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(out))
-    return out
+    return {'mjd': row_jd - 2400000.5, 'ra': ra, 'dec': dec, 'delta_au': delta if np.isfinite(delta) else None,
+            'target': name.group(1).strip() if name else command, 'position_utc': epoch.isoformat()}

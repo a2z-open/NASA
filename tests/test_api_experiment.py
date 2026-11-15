@@ -104,3 +104,51 @@ def test_reveal_refuses_tampered_prediction(tmp_path, monkeypatch):
     monkeypatch.setattr(experiment, 'EXP', tmp_path / 'exp')
     with pytest.raises(SystemExit, match='does not match'):
         experiment.reveal('x')
+
+
+def test_resolve_sun_exposes_jpl_identity_and_observation_epoch(client, monkeypatch):
+    from pipeline import ephem
+
+    def where_now(command):
+        assert command == '10'
+        return {'ra': 229.956788877, 'dec': -18.358514060, 'delta_au': 0.9892882363,
+                'position_utc': '2026-11-15T02:33:00+00:00'}
+
+    monkeypatch.setattr(ephem, 'where_now', where_now)
+    response = client.get('/api/resolve', params={'q': 'the Sun'})
+    assert response.status_code == 200
+    result = response.json()
+    assert (result['name'], result['body_id'], result['source']) == ('The Sun', '10', 'JPL Horizons')
+    assert result['position_utc'] == '2026-11-15T02:33:00+00:00'
+    assert (result['ra'], result['dec']) == (229.956788877, -18.358514060)
+
+
+def test_horizons_lookup_requests_the_actual_utc_minute(monkeypatch):
+    from datetime import datetime
+    from types import SimpleNamespace
+    from pipeline import ephem
+
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz):
+            return cls(2026, 11, 15, 2, 33, 54, tzinfo=tz)
+
+    def get(url, *, params, timeout, headers):
+        assert params['CENTER'] == "'500@399'"
+        assert params['REF_SYSTEM'] == 'ICRF'
+        assert float(params['TLIST'].strip("'")) == pytest.approx(2461359.60625, abs=1e-8, rel=0)
+        return SimpleNamespace(
+            raise_for_status=lambda: None,
+            text='Target body name: Sun (10)  {source: DE441}\n'
+                 '$$SOE\n2461359.606250000, , , 229.956788877, -18.358514060, 0.98928823630289, -0.3943695,\n$$EOE',
+        )
+
+    ephem._where_at.cache_clear()
+    try:
+        monkeypatch.setattr(ephem, 'datetime', Clock)
+        monkeypatch.setattr(ephem.requests, 'get', get)
+        result = ephem.where_now('10')
+        assert result['position_utc'] == '2026-11-15T02:33:00+00:00'
+        assert (result['ra'], result['dec']) == (229.956788877, -18.358514060)
+    finally:
+        ephem._where_at.cache_clear()

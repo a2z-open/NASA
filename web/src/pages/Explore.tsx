@@ -128,7 +128,8 @@ function ExploreSearch({ fov }: { fov: number }) {
     try {
       const r = await resolveQuery(q.trim());
       const fv = Math.min(30, Math.max(2, Number(f) || 6));
-      if (r.target) navigate(`/explore?target=${r.target}`);
+      if (r.moves) navigate(`/map?q=${encodeURIComponent(q.trim())}`);
+      else if (r.target) navigate(`/explore?target=${r.target}`);
       else navigate(`/explore?ra=${r.ra.toFixed(6)}&dec=${r.dec.toFixed(6)}&fov=${fv}`);
       setQ('');
     } catch (ex) { setErr((ex as Error).message); } finally { setBusy(false); }
@@ -519,6 +520,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       <div className="ws__bar">
         <div className="ws__title">
           <h1>{field?.title ?? target?.title ?? (field && Number.isFinite(field.ra) ? `${formatRA(field.ra, 1)} ${formatDec(field.dec, 0)}` : 'Opening field')}</h1>
+          {field?.kind === 'live' && <p className="small dim">SPHEREx archive field at fixed sky coordinates. Each frame shows its own observation date.</p>}
           {field && Number.isFinite(field.ra) && <p className="mono small dim">{allFrames.length} images · {num(field.fov_arcmin, 0)}′ wide · {field.ra.toFixed(5)}°, {field.dec.toFixed(5)}°</p>}
         </div>
         <div className="ws__bar-right">

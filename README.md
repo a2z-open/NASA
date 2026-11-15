@@ -18,10 +18,10 @@ distance and the spectrum. A blind search does the same for every source in a fi
 | A public web tool: enter RA and Dec, see the images play as a video | Home and **Explore**: a name or coordinates, then Play, Blink, Subtract, Add |
 | Tested on Barnard's Star, Epsilon Indi B, WISE 0855, RW Aurigae, R Draconis | All five are built in and work offline; results below |
 | Easy to update with new data releases | One `RELEASES` table in `pipeline/spherex.py`; DR1 and QR3 are both searched |
-| Show the 102 bands; add detectors together; spectra on the fly | Every frame shows its wavelength; filter by detector or wavelength; **Add** mode; click a source for its 0.75–5 µm spectrum; the Sky map slides through all 102 all-sky colours |
+| Show the 102 bands; add detectors together; spectra on the fly | Every frame shows its wavelength; filter by detector or wavelength; **Add** mode; click a source for its 0.75–5 µm spectrum; the Sky map offers the 99 published DR1 image planes |
 | Add or subtract images taken at different times | **Add** and **Subtract** modes, with a warning when two frames are not the same wavelength |
 | Let the user choose the field of view | The **Width** box (2′ to 30′) |
-| Overlays from other telescopes (Gaia, WISE) | Gaia DR3 stars moved to each frame's date; **What WISE saw around 2015** (CatWISE2020); the **Sky map** shows the whole sky in SPHEREx's 102 colours and in WISE, 2MASS, photographic plates and IRAS |
+| Overlays from other telescopes (Gaia, WISE) | Gaia DR3 stars moved to each frame's date; **What WISE saw around 2015** (CatWISE2020); the **Sky map** offers SPHEREx DR1 and layers from other archives, including AllWISE, 2MASS, JWST and Hubble |
 | Coordinates in the URL, embeddable | `/explore?ra=..&dec=..&fov=..`; add `&embed=1` for a viewer-only page |
 | Show metadata such as contamination flags | Flags, release, wavelength and SHA-256 for every frame; saturated sources are refused, not forced |
 | Use Astropy | Yes, throughout the pipeline |

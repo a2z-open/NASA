@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { api } from '../api.ts';
+import { api, type ResolveResult } from '../api.ts';
 import { parseCoordinateString } from '../lib/astro.ts';
 import { navigate } from '../router.tsx';
 
@@ -12,11 +12,13 @@ interface Props {
   onResolved?: (r: { ra: number; dec: number; target?: string; name?: string }) => void;
 }
 
-export async function resolveQuery(q: string): Promise<{ ra: number; dec: number; target?: string; name?: string; moves?: boolean }> {
+type ResolvedQuery = Omit<ResolveResult, 'name'> & { name?: string };
+
+export async function resolveQuery(q: string): Promise<ResolvedQuery> {
   const coords = parseCoordinateString(q);
   if (coords) return coords;
   const r = await api.resolve(q);
-  return { ra: r.ra, dec: r.dec, target: r.target, name: r.name ?? undefined, moves: r.moves };
+  return { ...r, name: r.name ?? undefined };
 }
 
 export function SearchBox({ label, placeholder, large, fov, initial = '', onResolved }: Props) {
@@ -33,6 +35,7 @@ export function SearchBox({ label, placeholder, large, fov, initial = '', onReso
     try {
       const r = await resolveQuery(text);
       if (onResolved) onResolved(r);
+      else if (r.moves) navigate(`/map?q=${encodeURIComponent(text)}`);
       else if (r.target) navigate(`/explore?target=${r.target}`);
       else navigate(`/explore?ra=${r.ra.toFixed(6)}&dec=${r.dec.toFixed(6)}&fov=${fov ?? 6}`);
     } catch (err) {

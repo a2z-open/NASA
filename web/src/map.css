@@ -79,6 +79,12 @@
 .gm-card__scroll { overflow: auto; }
 .gm-card__pic { position: relative; height: 150px; background: #0b0b0c; display: grid; place-items: center; overflow: hidden; }
 .gm-card__pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gm-card__pic--object { height: 192px; }
+.gm-card__pic--object img { position: absolute; inset: 0; object-fit: contain; }
+.gm-card__image-credit { color: var(--g-text-2); }
+.gm-card__ephemeris { margin-top: 8px; font-variant-numeric: tabular-nums; }
+.gm-card__ephemeris p { margin: 3px 0; }
+.gm-card__ephemeris small { color: var(--g-text-2); font-size: 12px; }
 .gm-card__pic > svg { width: 56px; height: 56px; color: var(--g-text-2); }
 .gm-card__close { position: absolute; top: 8px; right: 8px; background: rgba(0, 0, 0, 0.55); color: #fff; }
 .gm-card__close svg { width: 20px; height: 20px; }
@@ -132,6 +138,7 @@
 .gm-ltile i img, .gm-ltile i span { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .gm-ltile.is-on i { border-color: #fff; }
 .gm-ltile.is-on { color: #fff; }
+.gm-layer-note { margin: 10px 0 0; color: var(--g-text-2); font-size: 12px; line-height: 1.4; }
 .gm-pop__sec { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--g-line); }
 .gm-pop__hd { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--g-text-2); margin-bottom: 8px; }
 .gm-pop__hd b { color: #fff; font-weight: 500; }
@@ -215,16 +222,19 @@
   .gm-search { width: auto; right: 12px; }
   .gm-chips { top: 68px; left: 12px; }
   .gm-card { top: auto; bottom: 0; left: 0; width: 100%; max-width: none; max-height: 52%; border-radius: 20px 20px 0 0; }
+  .gm--solar :is(.gm__map, .gm-chunk-labels) { bottom: auto; height: 60% !important; }
   .gm-card__pic { height: 96px; }
-  .gm-layers { bottom: 30px; }
-  .gm--chunks .gm-layers { bottom: 48px; }
+  .gm-card__pic--object { height: clamp(104px, 18vh, 156px); }
+  .gm-layers, .gm-ctl, .gm-chunk-panel { bottom: 64px; }
+  .gm--chunks :is(.gm-layers, .gm-ctl, .gm-chunk-panel) { bottom: 86px; }
   .gm-tile { width: 62px; height: 62px; }
   .gm-pop { width: calc(100vw - 100px); }
   .gm-pop__tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .gm-drop { max-width: calc(100% - 24px); bottom: 104px; }
-  .gm-status__coords { display: none; }
+  .gm-status { flex-wrap: wrap; justify-content: flex-end; gap: 3px 8px; }
+  .gm-status__credits { width: 100%; }
   .gm-status__chunk { min-height: 32px; padding-inline: 8px; }
-  .gm-chunk-panel { right: 12px; bottom: 48px; width: min(300px, calc(100% - 24px)); }
+  .gm-chunk-panel { right: 12px; width: min(300px, calc(100% - 24px)); }
   .gm.has-card .gm-layers, .gm.has-card .gm-ctl, .gm.has-card .gm-drop, .gm.has-card .gm-status { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .gm-card, .gm-pop, .gm-drop, .gm-toast { animation: none; } }

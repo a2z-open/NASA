@@ -56,6 +56,27 @@ as NASA asks, and its use here does not imply NASA's endorsement. Files are in `
 | `spherex-assembly.webp` | PIA26543 | SPHEREx in final assembly, March 2024 | NASA/JPL-Caltech/BAE Systems |
 | `spherex-glow.webp`, `spherex-glow-soft.webp` | (unknown) | SPHEREx as a silhouette above the glowing edge of Earth, illustration; opening picture of the home page; the soft file is a blurred copy used as a tint | Supplied by the team on 14 Nov 2026 as "SPHEREx Silhouette Above Earth's Glow". **TEAM TODO: confirm who made it and its licence, then fix this credit and the home-page footer.** It was not found among NASA/JPL-Caltech releases. |
 
+The Sky Map's dated object images use NASA spacecraft data. The files ending in `-archive.webp` are resized
+versions of the linked images. Each object card links to its source and keeps the image date separate from the
+JPL Horizons position timestamp.
+
+| Object | Image source | Credit |
+|---|---|---|
+| Sun | [PIA26681](https://science.nasa.gov/photojournal/image-of-sun-from-nasas-solar-dynamics-observatory/) | NASA/GSFC/Solar Dynamics Observatory |
+| Moon | [PIA00405](https://photojournal.jpl.nasa.gov/catalog/PIA00405) | NASA/JPL/USGS |
+| Mercury | [PIA10172](https://science.nasa.gov/photojournal/messengers-first-look-at-mercurys-previously-unseen-side/) | NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington |
+| Venus | [PIA00072](https://science.nasa.gov/photojournal/venus-cloud-patterns-colorized-and-filtered/) | NASA/JPL |
+| Mars | [PIA00407](https://science.nasa.gov/photojournal/global-color-views-of-mars/) | NASA/JPL/USGS |
+| Jupiter | [PIA04866](https://science.nasa.gov/photojournal/cassini-jupiter-portrait/) | NASA/JPL/Space Science Institute |
+| Saturn | [PIA11141](https://science.nasa.gov/resource/saturn-four-years-on/) | NASA/JPL/Space Science Institute |
+| Uranus | [PIA18182](https://science.nasa.gov/photojournal/uranus-as-seen-by-nasas-voyager-2/) | NASA/JPL-Caltech |
+| Neptune | [PIA01492](https://science.nasa.gov/image-detail/amf-pia01492/) | NASA/JPL |
+| Pluto | [PIA19952](https://photojournal.jpl.nasa.gov/catalog/PIA19952) | NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute |
+| Ceres | [PIA21406](https://science.nasa.gov/resource/enhanced-color-view-of-ceres-at-opposition/) | NASA/JPL-Caltech/UCLA/MPS/DLR/IDA |
+| Vesta | [PIA14317](https://science.nasa.gov/resource/full-frame-image-of-vesta/) | NASA/JPL-Caltech/UCLA/MPS/DLR/IDA |
+| Bennu | [Bennu Mosaic](https://science.nasa.gov/resource/bennu-mosaic/) | NASA/Goddard/University of Arizona |
+| Arrokoth | [First Images of Arrokoth](https://science.nasa.gov/resource/first-images-of-arrokoth-2014-mu69/) | NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute |
+
 The design direction was dealt with the `design-taste-frontend` skill. The home page follows the section order of
 eclipse.space (a reference the team supplied); no code, fonts, text or images from the reference sites were copied.
 

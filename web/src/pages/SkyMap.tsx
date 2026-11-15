@@ -5,6 +5,9 @@ import { huntApi } from '../api.ts';
 import { resolveQuery } from '../components/SearchBox.tsx';
 import { CHUNK_STATUS_LABEL, ChunkReview, useChunkAssignments } from '../components/ChunkReview.tsx';
 import { CHUNKS, chunkAt, chunkFromId, chunkGridLines } from '../lib/skyChunks.ts';
+import { SOLAR_IMAGES } from '../lib/solarImages.ts';
+import { SPHEREX_MAP_BANDS } from '../lib/skySurvey.ts';
+import { parseDec, parseRA } from '../lib/astro.ts';
 import { distantApi } from './Distant.tsx';
 import '../map.css';
 import { OtherScopes } from '../components/OtherScopes.tsx';
@@ -12,9 +15,7 @@ import { OtherScopes } from '../components/OtherScopes.tsx';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AladinNS = any;
 
-// Sky image layers (HiPS) from many telescopes.  SPHEREx is IRSA's DR1 all-sky cube: one all-sky image for each of its 102
-// colours, in ascending wavelength (frames 50 and 51 are blank dichroic channels).  Every other layer is a picture to compare
-// with; no measurement on this site is made from them.  Each host was checked to serve tiles to browsers (CORS) on 15 Nov 2026.
+// Survey layers (HiPS) from the archives listed on each layer.
 const IRSA = 'https://irsa.ipac.caltech.edu/data/hips';
 const ESA = 'https://skies.esac.esa.int';
 const MASTS3 = 'https://stpubdata.s3.us-east-1.amazonaws.com/mast/skybackgrounds';
@@ -22,7 +23,7 @@ type Light = 'Infrared' | 'Visible' | 'Ultraviolet' | 'X-ray' | 'Gamma ray' | 'M
 type Cover = 'all' | 'most' | 'part' | 'patches';
 interface Layer { id: string; fmt: string; label: string; year: string; light: Light; who: string; host: string; cover: Cover; thumb?: string;
   eg?: { name: string; ra: number; dec: number; fov: number } }
-const SPHEREX: Layer = { id: `${IRSA}/SPHEREx/spherex_allsky_cube`, fmt: 'png', label: 'SPHEREx', year: '2025', light: 'Infrared', who: 'NASA', host: 'NASA/IPAC IRSA', cover: 'all', thumb: '/img/spherex-vela.webp' };
+const SPHEREX: Layer = { id: `${IRSA}/SPHEREx/spherex_allsky_cube`, fmt: 'png', label: 'SPHEREx', year: 'DR1', light: 'Infrared', who: 'NASA', host: 'NASA/IPAC IRSA', cover: 'all', thumb: '/img/spherex-vela.webp' };
 const LAYERS: Layer[] = [
   SPHEREX,
   { id: `${ESA}/JWST/NIRCam_Imaging`, fmt: 'png', label: 'JWST', year: '2022–', light: 'Infrared', who: 'NASA, ESA, CSA', host: 'ESA ESASky (eJWST)', cover: 'patches', eg: { name: 'the Pillars of Creation', ra: 274.7000, dec: -13.8070, fov: 0.08 } },
@@ -57,55 +58,54 @@ const LIGHTS: { light: Light; glyph: string; say: string }[] = [
   { light: 'Microwave', glyph: 'µ', say: 'Cold dust and the glow left over from the Big Bang' },
 ];
 const COVER: Record<Cover, string> = { all: 'the whole sky', most: 'most of the sky', part: 'part of the sky', patches: 'only small patches' };
-const WAVES = [0.753, 0.771, 0.790, 0.809, 0.828, 0.848, 0.868, 0.889, 0.910, 0.932, 0.955, 0.978, 1.001, 1.025, 1.050, 1.075, 1.102, 1.113, 1.139, 1.167, 1.195, 1.224, 1.254, 1.284, 1.315, 1.346, 1.378, 1.412, 1.446, 1.481, 1.517, 1.554, 1.592, 1.631, 1.656, 1.695, 1.735, 1.775, 1.818, 1.861, 1.905, 1.949, 1.995, 2.041, 2.089, 2.139, 2.189, 2.240, 2.292, 2.345, 2.399, 2.445, 2.506, 2.575, 2.646, 2.719, 2.794, 2.871, 2.951, 3.033, 3.118, 3.204, 3.293, 3.383, 3.476, 3.570, 3.667, 3.768, 3.833, 3.867, 3.901, 3.935, 3.970, 4.005, 4.040, 4.076, 4.112, 4.148, 4.184, 4.220, 4.257, 4.294, 4.331, 4.368, 4.405, 4.435, 4.467, 4.500, 4.533, 4.566, 4.600, 4.635, 4.669, 4.704, 4.739, 4.773, 4.808, 4.843, 4.879, 4.915, 4.951, 4.988];
-const BLANK = new Set([50, 51]);
-
-// Brown & Batygin (2021): about 95 % of Planet Nine's predicted positions lie within 12 degrees of declination of this track.
-// The track itself is derived from their orbit (inclination 16, node 97) in docs/PLANET_NINE_RESEARCH.md. Approximate.
+// An approximate segment of the Brown & Batygin (2021) model corridor. See docs/PLANET_NINE_RESEARCH.md.
 const P9_TRACK: [number, number][] = [[33, -2], [46, 4], [60, 11], [74, 16], [90, 21], [107, 25]];
 
-type Cat = 'planets' | 'dwarfs' | 'finds' | 'nasa' | 'cold' | 'deep' | 'stars';
+type Cat = 'planets' | 'dwarfs' | 'finds' | 'nasa' | 'cold' | 'deep' | 'stars' | 'sun-moon';
 interface Place {
   name: string; kind: string; cat: Cat; blurb: string;
-  q?: string;                       // looked up live (it moves): NASA JPL Horizons
-  ra?: number; dec?: number;        // fixed position
-  fov?: number; img?: string; ours?: boolean;
+  q?: string;                       // object name for an updated position
+  ra?: number; dec?: number;        // fixed sky field or historical marker
+  fov?: number; ours?: boolean;
 }
 const PLACES: Place[] = [
-  { name: 'Mercury', kind: 'Planet', cat: 'planets', q: 'Mercury', blurb: 'The closest planet to the Sun. SPHEREx never looks this close to the Sun.' },
+  { name: 'The Sun', kind: 'Our star', cat: 'sun-moon', q: 'Sun', blurb: 'SPHEREx surveys the sky away from the Sun.' },
+  { name: 'The Moon', kind: 'Moon', cat: 'sun-moon', q: 'Moon', blurb: 'Its position and phase change as it orbits Earth.' },
+  { name: 'Mercury', kind: 'Planet', cat: 'planets', q: 'Mercury', blurb: 'The closest planet to the Sun.' },
   { name: 'Venus', kind: 'Planet', cat: 'planets', q: 'Venus', blurb: 'The brightest planet in our sky.' },
   { name: 'Mars', kind: 'Planet', cat: 'planets', q: 'Mars', blurb: 'The red planet.' },
-  { name: 'Jupiter', kind: 'Planet', cat: 'planets', q: 'Jupiter', blurb: 'The largest planet. Far too bright for SPHEREx to image cleanly.' },
+  { name: 'Jupiter', kind: 'Planet', cat: 'planets', q: 'Jupiter', blurb: 'The largest planet in our Solar System.' },
   { name: 'Saturn', kind: 'Planet', cat: 'planets', q: 'Saturn', blurb: 'The ringed planet.' },
   { name: 'Uranus', kind: 'Planet', cat: 'planets', q: 'Uranus', blurb: 'An ice giant, 19 times farther from the Sun than Earth.' },
-  { name: 'Neptune', kind: 'Planet', cat: 'planets', q: 'Neptune', blurb: 'Found in 1846, right where the maths said it would be.', img: '/img/neptune.webp' },
-  { name: 'Pluto', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Pluto', blurb: 'Found in 1930 by comparing two photos of the same sky.', img: '/img/pluto.webp' },
+  { name: 'Neptune', kind: 'Planet', cat: 'planets', q: 'Neptune', blurb: 'Found in 1846, right where the maths said it would be.' },
+  { name: 'Pluto', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Pluto', blurb: 'Found in 1930 by comparing two photos of the same sky.' },
   { name: 'Makemake', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Makemake', blurb: 'PARALLAX found it with no hints and measured its distance: 52.7 AU.', ours: true },
-  { name: 'Eris', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Eris', blurb: 'Too faint for one photo. PARALLAX found it by stacking photos along its path: 95.5 AU.', ours: true },
+  { name: 'Eris', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Eris', blurb: 'PARALLAX recovered Eris by stacking images along its path and measured its distance: 95.5 AU.', ours: true },
   { name: 'Haumea', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Haumea', blurb: 'An egg-shaped dwarf planet with a ring.' },
   { name: 'Ceres', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Ceres', blurb: 'The largest body in the asteroid belt.' },
   { name: 'Sedna', kind: 'Distant world', cat: 'dwarfs', q: 'Sedna', blurb: 'One of the most distant known worlds. Its odd orbit is a clue in the Planet Nine debate.' },
   { name: 'Makemake, where we found it', kind: 'Our find', cat: 'finds', ra: 201.3, dec: 20.6, fov: 6, blurb: 'The path PARALLAX fitted through three SPHEREx visits. It loops because Earth moves.', ours: true },
-  { name: 'Epsilon Indi B', kind: 'Brown dwarf pair', cat: 'finds', ra: 331.0976, dec: -56.8012, fov: 0.6, blurb: 'We locked a prediction of where it would be, then opened the images. It landed 0.07″ away.', ours: true },
-  { name: 'Planet Nine zone', kind: 'Prediction', cat: 'finds', ra: 60, dec: 11, fov: 60, blurb: 'About 95 % of predicted positions lie between the dashed lines. Even with SPHEREx photos added up along its path, it would be about 8 times too faint.' },
-  { name: 'WISE 0855', kind: 'Brown dwarf', cat: 'cold', ra: 133.787, dec: -7.2445, fov: 0.6, blurb: 'The coldest known brown dwarf, near the freezing point of water. PARALLAX found it by its motion alone.', ours: true, img: '/img/cold-dwarf.webp' },
-  { name: "Barnard's Star", kind: 'Red dwarf', cat: 'cold', ra: 269.4486, dec: 4.7379, fov: 0.6, blurb: 'The fastest-moving star in our sky. Too bright for the camera, so we measured its halo.', ours: true },
-  { name: 'Luhman 16', kind: 'Brown dwarf pair', cat: 'cold', ra: 162.3285, dec: -53.3194, fov: 0.6, blurb: 'The closest brown dwarfs to the Sun, 6.5 light-years away.' },
+  { name: 'Epsilon Indi B', kind: 'Brown dwarf pair', cat: 'finds', q: 'Epsilon Indi B', ra: 331.0976, dec: -56.8012, fov: 0.6, blurb: 'We locked a prediction of where it would be, then opened the images. It landed 0.07″ away.', ours: true },
+  { name: 'Planet Nine zone', kind: 'Model estimate', cat: 'finds', ra: 60, dec: 11, fov: 60, blurb: 'The dashed lines show an approximate search corridor based on Brown and Batygin’s 2021 model. Planet Nine remains unconfirmed.' },
+  { name: 'WISE 0855', kind: 'Brown dwarf', cat: 'cold', q: 'WISE 0855', ra: 133.787, dec: -7.2445, fov: 0.6, blurb: 'The coldest known brown dwarf, near the freezing point of water. PARALLAX found it by its motion alone.', ours: true },
+  { name: "Barnard's Star", kind: 'Red dwarf', cat: 'cold', q: "Barnard's Star", ra: 269.4486, dec: 4.7379, fov: 0.6, blurb: 'The fastest-moving star in our sky. Too bright for the camera, so we measured its halo.', ours: true },
+  { name: 'Luhman 16', kind: 'Brown dwarf pair', cat: 'cold', q: 'Luhman 16', fov: 0.6, blurb: 'The closest brown dwarfs to the Sun, 6.5 light-years away.' },
   { name: 'Orion Nebula', kind: 'Nebula', cat: 'deep', ra: 83.8221, dec: -5.3911, fov: 2, blurb: 'A cloud where stars are being born, 1,300 light-years away.' },
   { name: 'Andromeda Galaxy', kind: 'Galaxy', cat: 'deep', ra: 10.6847, dec: 41.2687, fov: 4, blurb: 'Our nearest large galaxy, 2.5 million light-years away.' },
   { name: 'Milky Way centre', kind: 'Galactic centre', cat: 'deep', ra: 266.4168, dec: -29.0078, fov: 8, blurb: 'The crowded heart of our galaxy. Infrared light sees through the dust.' },
   { name: 'Large Magellanic Cloud', kind: 'Galaxy', cat: 'deep', ra: 80.8938, dec: -69.7561, fov: 10, blurb: 'A small galaxy that orbits ours.' },
   { name: 'Pleiades', kind: 'Star cluster', cat: 'deep', ra: 56.75, dec: 24.1167, fov: 3, blurb: 'The Seven Sisters.' },
-  { name: 'Vega', kind: 'Star', cat: 'stars', ra: 279.2347, dec: 38.7837, fov: 2, blurb: 'One of the brightest stars, 25 light-years away.' },
-  { name: 'Sirius', kind: 'Star', cat: 'stars', ra: 101.2872, dec: -16.7161, fov: 2, blurb: 'The brightest star in the night sky.' },
-  { name: 'Betelgeuse', kind: 'Star', cat: 'stars', ra: 88.7929, dec: 7.4071, fov: 2, blurb: "A red supergiant in Orion's shoulder." },
-  { name: 'Polaris', kind: 'Star', cat: 'stars', ra: 37.9546, dec: 89.2641, fov: 4, blurb: 'The North Star.' },
-  { name: 'RW Aurigae', kind: 'Variable star', cat: 'stars', ra: 76.9565, dec: 30.4014, fov: 0.6, blurb: "A young star that dims when dust drifts in front of it. One of NASA's five test targets. Too bright for the camera, so we measure the ring of light around it." },
-  { name: 'R Draconis', kind: 'Variable star', cat: 'stars', ra: 248.1676, dec: 66.755, fov: 0.6, blurb: "A red giant that swells and shrinks, brightening and fading about every eight months. One of NASA's five test targets. Too bright for the camera, so we measure the ring of light around it." },
+  { name: 'Vega', kind: 'Star', cat: 'stars', q: 'Vega', fov: 2, blurb: 'One of the brightest stars, 25 light-years away.' },
+  { name: 'Sirius', kind: 'Star', cat: 'stars', q: 'Sirius', fov: 2, blurb: 'The brightest star in the night sky.' },
+  { name: 'Betelgeuse', kind: 'Star', cat: 'stars', q: 'Betelgeuse', fov: 2, blurb: "A red supergiant in Orion's shoulder." },
+  { name: 'Polaris', kind: 'Star', cat: 'stars', q: 'Polaris', fov: 4, blurb: 'The North Star.' },
+  { name: 'RW Aurigae', kind: 'Variable star', cat: 'stars', q: 'RW Aurigae', fov: 0.6, blurb: "A young star that dims when dust drifts in front of it. One of NASA's five test targets. Too bright for the camera, so we measure the ring of light around it." },
+  { name: 'R Draconis', kind: 'Variable star', cat: 'stars', q: 'R Draconis', fov: 0.6, blurb: "A red giant that swells and shrinks, brightening and fading about every eight months. One of NASA's five test targets. Too bright for the camera, so we measure the ring of light around it." },
 ];
 const CATS: { id: Cat; label: string }[] = [
-  { id: 'finds', label: 'Our finds' }, { id: 'nasa', label: "NASA's 5 targets" }, { id: 'planets', label: 'Planets' }, { id: 'dwarfs', label: 'Dwarf planets' },
+  { id: 'finds', label: 'Our finds' }, { id: 'nasa', label: "NASA's 5 targets" }, { id: 'planets', label: 'Planets' }, { id: 'dwarfs', label: 'Dwarf planets and candidates' },
   { id: 'cold', label: 'Cold neighbours' }, { id: 'deep', label: 'Nebulae and galaxies' }, { id: 'stars', label: 'Stars' },
+  { id: 'sun-moon', label: 'Sun and Moon' },
 ];
 // The five objects the challenge asks every tool to be tested on, in the order the challenge lists them.
 // They keep their own categories too; this chip just gathers them in one place.
@@ -113,7 +113,7 @@ const NASA_FIVE = ["Barnard's Star", 'Epsilon Indi B', 'WISE 0855', 'RW Aurigae'
 const inList = (c: Cat) => (c === 'nasa' ? NASA_FIVE.flatMap(n => PLACES.filter(p => p.name === n)) : PLACES.filter(p => p.cat === c));
 const POPULAR = ['Makemake, where we found it', 'Pluto', 'WISE 0855', 'Orion Nebula', 'Planet Nine zone', 'Andromeda Galaxy'];
 
-interface Sel { name: string; kind: string; blurb?: string; ra: number; dec: number; fov?: number; img?: string; moves?: boolean; source?: string; ours?: boolean; cat?: Cat; pin?: boolean }
+interface Sel { name: string; kind: string; blurb?: string; ra: number; dec: number; fov?: number; solarQuery?: string; bodyId?: string; positionUtc?: string; source?: string; epochNote?: string; ours?: boolean; cat?: Cat; pin?: boolean }
 interface Toggles { finds: boolean; fields: boolean; nine: boolean; forecasts: boolean }
 
 // ---- icons (one stroke weight, one family) ----
@@ -132,13 +132,12 @@ const IcMinus = () => I(<path d="M5 12h14" />);
 const IcShare = () => I(<><circle cx="6.500" cy="12" r="2.200" /><circle cx="17.500" cy="6" r="2.200" /><circle cx="17.500" cy="18" r="2.200" /><path d="m8.500 11 7-4M8.500 13l7 4" /></>);
 const IcGlobe = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M3.500 12h17M12 3.500c3 3 3 14 0 17M12 3.500c-3 3-3 14 0 17" /></>);
 const IcLayers = () => I(<><path d="m12 4 8.500 4.500L12 13 3.500 8.500z" /><path d="m3.500 12.500 8.500 4.500 8.500-4.500" /></>);
-const IcClock = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M12 7.500V12l3 2" /></>);
 const IcInfo = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M12 11v5.500M12 7.800v.2" /></>);
 const IcTarget = () => I(<><circle cx="12" cy="12" r="7.5" /><circle cx="12" cy="12" r="2.6" /><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22" /></>);
-const catIcon = (c?: Cat) => c === 'nasa' ? <IcTarget /> : c === 'planets' || c === 'dwarfs' ? <IcPlanet /> : c === 'deep' ? <IcSpiral /> : c === 'stars' ? <IcStar /> : c === 'cold' ? <IcSnow /> : c === 'finds' ? <IcFlag /> : <IcPin />;
+const catIcon = (c?: Cat) => c === 'nasa' ? <IcTarget /> : c === 'planets' || c === 'dwarfs' ? <IcPlanet /> : c === 'deep' ? <IcSpiral /> : c === 'stars' || c === 'sun-moon' ? <IcStar /> : c === 'cold' ? <IcSnow /> : c === 'finds' ? <IcFlag /> : <IcPin />;
 
-function hips(Ali: AladinNS, a: any, l: Layer) {
-  const opts = { name: l.label, imgFormat: l.fmt };
+function hips(Ali: AladinNS, a: any, l: Layer, errorCallback: () => void) {
+  const opts = { name: l.label, imgFormat: l.fmt, errorCallback };
   if (typeof Ali.imageHiPS === 'function') return Ali.imageHiPS(l.id, opts);
   return a.newImageSurvey(l.id, opts);
 }
@@ -163,9 +162,44 @@ function pinCanvas(size = 30, hollow = false) {
   return c;
 }
 
-const fmtCoord = (ra: number, dec: number) => `${ra.toFixed(4)}°, ${dec >= 0 ? '+' : '−'}${Math.abs(dec).toFixed(4)}°`;
+/** Aladin supplies the projected pixel of the source. Leave its center open to show the sky underneath. */
+function drawEphemerisMarker(source: { x: number; y: number; data: { name: string } }, ctx: CanvasRenderingContext2D) {
+  ctx.save();
+  ctx.translate(source.x, source.y);
+  ctx.beginPath();
+  ctx.arc(0, 0, 9, 0, Math.PI * 2);
+  ctx.moveTo(-14, 0); ctx.lineTo(-9, 0);
+  ctx.moveTo(9, 0); ctx.lineTo(14, 0);
+  ctx.moveTo(0, -14); ctx.lineTo(0, -9);
+  ctx.moveTo(0, 9); ctx.lineTo(0, 14);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#161617';
+  ctx.stroke();
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = '#ffd39a';
+  ctx.stroke();
+
+  const label = `${source.data.name} · JPL position`;
+  ctx.font = '600 12px system-ui';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const labelWidth = Math.min(ctx.measureText(label).width, 232);
+  ctx.beginPath();
+  ctx.roundRect(-labelWidth / 2 - 8, 19, labelWidth + 16, 24, 5);
+  ctx.fillStyle = '#1e1f20';
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#ffd39a';
+  ctx.fillText(label, 0, 31, labelWidth);
+  ctx.restore();
+}
+
+const fmtCoord = (ra: number, dec: number) => `${(Number(ra.toFixed(4)) % 360).toFixed(4)}°, ${dec >= 0 ? '+' : '−'}${Math.abs(dec).toFixed(4)}°`;
 const fmtFov = (f: number) => f >= 1 ? `${f.toFixed(f >= 10 ? 0 : 1)}° wide` : `${(f * 60).toFixed(0)}′ wide`;
 const openHere = (ra: number, dec: number, fov = 10) => `/explore?ra=${ra.toFixed(5)}&dec=${dec.toFixed(5)}&fov=${fov}`;
+const ephemerisTime = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+});
 const CHUNK_GRID_FOV = 45;
 const CHUNK_SEARCH_FOV = 28;
 
@@ -189,13 +223,18 @@ export function SkyMap() {
   const al = useRef<any>(null);
   const A = useRef<AladinNS>(null);
   const cube = useRef<any>(null);
+  const pendingLayer = useRef<any>(null);
+  const bandIndex = useRef(41);
   const groups = useRef<Record<keyof Toggles, any[]>>({ finds: [], fields: [], nine: [], forecasts: [] });
   const selCat = useRef<any>(null);
+  const ephemerisCat = useRef<any>(null);
   const pins = useRef<{ place: Sel; size: number; group: keyof Toggles }[]>([]);
   const showRef = useRef<Toggles | null>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [layer, setLayer] = useState(LAYERS[0].id);
-  const [slice, setSlice] = useState(42);
+  const activeLayer = LAYERS.find(l => l.id === layer) ?? SPHEREX;
+  const [slice, setSlice] = useState(41);
+  const [layerStatus, setLayerStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [sweep, setSweep] = useState(false);
   const [show, setShow] = useState<Toggles>({ finds: true, fields: true, nine: true, forecasts: false });
   const [centre, setCentre] = useState<{ ra: number; dec: number; fov: number } | null>(null);
@@ -212,7 +251,6 @@ export function SkyMap() {
   const [layersOpen, setLayersOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [scopes, setScopes] = useState<{ ra: number; dec: number; name: string } | null>(null);
-  const cur = LAYERS.find(l => l.id === layer);
 
   // ---- start the map ----
   useEffect(() => {
@@ -225,12 +263,19 @@ export function SkyMap() {
         if (!alive || !box.current) return;
         A.current = Ali;
         const params = new URLSearchParams(window.location.search);
-        const ra = Number(params.get('ra')), dec = Number(params.get('dec')), fov = Number(params.get('fov'));
+        const fov = Number(params.get('fov'));
         const chunk = chunkFromId(params.get('chunk') ?? '');
-        const target = chunk ? `${chunk.ra} ${chunk.dec}`
-          : Number.isFinite(ra) && params.get('ra') ? `${ra} ${dec}` : '201.3 +20.6';
+        let target = '201.3 +20.6';
+        if (chunk) target = `${chunk.ra} ${chunk.dec}`;
+        else if (params.has('ra') || params.has('dec')) {
+          try {
+            target = `${parseRA(params.get('ra') ?? '')} ${parseDec(params.get('dec') ?? '')}`;
+          } catch {
+            setErr('This link needs a valid right ascension and declination. Enter both in Search the sky.');
+          }
+        }
         const a = Ali.aladin(box.current, {
-          survey: SPHEREX.id, fov: chunk ? CHUNK_SEARCH_FOV : Number.isFinite(fov) && fov > 0 ? fov : 60, target, projection: 'SIN', cooFrame: 'ICRS', log: false,
+          survey: SPHEREX.id, fov: chunk ? CHUNK_SEARCH_FOV : Number.isFinite(fov) && fov > 0 ? Math.min(180, Math.max(0.03, fov)) : 60, target, projection: 'SIN', cooFrame: 'ICRS', log: false,
           showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false,
           showFrame: false, showCooGridControl: false, showSimbadPointerControl: false, showContextMenu: false, showProjectionControl: false,
           showCooGrid: false, showStatusBar: false, showShareControl: false, showSettingsControl: false,
@@ -261,6 +306,11 @@ export function SkyMap() {
         a.on('positionChanged', report);
         a.on('zoomChanged', report);
         a.on('resizeChanged', () => window.requestAnimationFrame(report));
+        a.on('stackChanged', ({ change, layer: added }: { change: string; layer?: any }) => {
+          if (!alive || change !== 'added' || !added || added !== pendingLayer.current) return;
+          if (added === cube.current) added.setFrequency({ value: SPHEREX_MAP_BANDS[bandIndex.current].tileFrequencyHz, unit: 'Hz' });
+          setLayerStatus('ready');
+        });
         report();
         // tap a pin (anywhere on its shape): open its card.  tap empty sky: drop a pin.
         a.on('click', (e: any) => {
@@ -280,7 +330,7 @@ export function SkyMap() {
           setLayersOpen(false);
           setActiveChunk(null);
           if (hit) setSel(hit);
-          else setSel(s => (s && !s.pin ? null : { name: 'Dropped pin', kind: 'A spot in the sky', ra: e.ra, dec: e.dec, pin: true }));
+          else setSel({ name: 'Dropped pin', kind: 'A spot in the sky', ra: e.ra, dec: e.dec, pin: true });
         });
         await drawOverlays(Ali, a);
         if (alive) setState('ready');
@@ -323,7 +373,9 @@ export function SkyMap() {
         const o = b.object as any;
         if (!o) continue;
         const cosd = Math.cos(o.dec0_deg * Math.PI / 180);
-        const toSky = (p: { dx_deg: number; dy_deg: number }) => [o.ra0_deg + p.dx_deg / cosd, o.dec0_deg + p.dy_deg];
+        const toSky = (p: { dx_deg: number; dy_deg: number }) => [
+          ((o.ra0_deg + p.dx_deg / cosd) % 360 + 360) % 360, o.dec0_deg + p.dy_deg,
+        ];
         const ov = Ali.graphicOverlay({ name: `${b.title} path`, color: '#ffffff', lineWidth: 2 });
         a.addOverlay(ov);
         ov.add(Ali.polyline(o.curve.map(toSky)));
@@ -336,7 +388,8 @@ export function SkyMap() {
         g.finds.push(ov, dots);
       }
     } catch { /* distant results unavailable */ }
-    mk(cat, PLACES.filter(p => p.ra != null && p.ours && p.name !== 'Makemake, where we found it').map(p => ({ ...p, ra: p.ra!, dec: p.dec! })));
+    mk(cat, PLACES.filter(p => p.ra != null && p.ours && p.name !== 'Makemake, where we found it')
+      .map(p => ({ ...p, ra: p.ra!, dec: p.dec!, kind: `${p.kind} · historical field` })));
     // where Planet Nine is predicted (approximate)
     const band = Ali.graphicOverlay({ name: 'Planet Nine zone', color: '#ffffff', lineWidth: 1.5, lineDash: [8, 8] });
     a.addOverlay(band);
@@ -351,13 +404,19 @@ export function SkyMap() {
       const fc = await huntApi.forecasts();
       const fcat = Ali.catalog({ name: 'Forecasts', color: '#ffffff', sourceSize: 6, shape: 'circle' });
       a.addCatalog(fcat);
-      for (const f of fc.forecasts) fcat.addSources(f.predictions.map(p => Ali.source(p.ra_deg, p.dec_deg, { place: { name: `${f.title}, forecast`, kind: `Locked forecast for ${p.date_utc.slice(0, 7)}`, ra: p.ra_deg, dec: p.dec_deg, ours: true, blurb: 'A position we predicted and locked before SPHEREx took the image.' } })));
+      for (const f of fc.forecasts) mk(fcat, f.predictions.map(p => ({
+        name: `${f.title}, forecast`, kind: `Locked prediction for ${p.date_utc.slice(0, 10)} UTC`,
+        ra: p.ra_deg, dec: p.dec_deg, fov: 0.4, cat: 'finds',
+        blurb: 'The marker shows the predicted location. The archive field shows observations taken at their own dates.',
+      })), 'forecasts', 6);
       g.forecasts.push(fcat);
       fcat.hide();
     } catch { /* forecasts unavailable */ }
     // the pin for whatever is selected
     selCat.current = Ali.catalog({ name: 'Selected', shape: pinCanvas(38), sourceSize: 38 });
     a.addCatalog(selCat.current);
+    ephemerisCat.current = Ali.catalog({ name: 'JPL position', shape: drawEphemerisMarker, sourceSize: 28 });
+    a.addCatalog(ephemerisCat.current);
   }
 
   // ---- layers ----
@@ -366,20 +425,25 @@ export function SkyMap() {
     if (!a || state !== 'ready') return;
     const l = LAYERS.find(x => x.id === layer);
     if (!l) return;
+    setLayerStatus('loading');
+    let current = true;
     try {
-      const sv = hips(A.current, a, l);
-      a.setBaseImageLayer(sv);
+      const sv = hips(A.current, a, l, () => { if (current) setLayerStatus('error'); });
+      pendingLayer.current = sv;
       cube.current = l.id === SPHEREX.id ? sv : null;
-      if (cube.current) window.setTimeout(() => { try { cube.current?.setSliceNumber(slice); } catch { /* not ready */ } }, 400);
-    } catch { /* ignore */ }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      a.setBaseImageLayer(sv);
+    } catch { setLayerStatus('error'); }
+    return () => { current = false; };
   }, [layer, state]);
-  useEffect(() => { try { cube.current?.setSliceNumber(slice); } catch { /* not ready */ } }, [slice]);
   useEffect(() => {
-    if (!sweep || layer !== SPHEREX.id) return;
-    const id = window.setInterval(() => setSlice(k => { let n = (k + 1) % WAVES.length; while (BLANK.has(n)) n = (n + 1) % WAVES.length; return n; }), 125);
+    bandIndex.current = slice;
+    cube.current?.setFrequency({ value: SPHEREX_MAP_BANDS[slice].tileFrequencyHz, unit: 'Hz' });
+  }, [slice]);
+  useEffect(() => {
+    if (!sweep || layer !== SPHEREX.id || layerStatus !== 'ready') return;
+    const id = window.setInterval(() => setSlice(k => (k + 1) % SPHEREX_MAP_BANDS.length), 500);
     return () => window.clearInterval(id);
-  }, [sweep, layer]);
+  }, [sweep, layer, layerStatus]);
   useEffect(() => {
     showRef.current = show;
     if (state !== 'ready') return;
@@ -388,11 +452,13 @@ export function SkyMap() {
 
   // ---- the selected place: fly there and plant the big pin ----
   useEffect(() => {
-    const a = al.current, Ali = A.current, cat = selCat.current;
-    if (!a || !Ali || !cat) return;
-    try { cat.removeAll?.(); } catch { /* ignore */ }
+    const a = al.current, Ali = A.current, cat = selCat.current, movingCat = ephemerisCat.current;
+    if (!a || !Ali || !cat || !movingCat) return;
+    cat.removeAll();
+    movingCat.removeAll();
     if (!sel) return;
-    try { cat.addSources([Ali.source(sel.ra, sel.dec, { place: sel })]); } catch { /* ignore */ }
+    const destination = sel.solarQuery ? movingCat : cat;
+    destination.addSources([Ali.source(sel.ra, sel.dec, { name: sel.name })]);
     if (!sel.pin) { a.gotoRaDec(sel.ra, sel.dec); if (sel.fov) a.setFoV(sel.fov); }
   }, [sel, state]);
 
@@ -411,21 +477,24 @@ export function SkyMap() {
       al.current.setFoV(CHUNK_SEARCH_FOV);
       return;
     }
+    const k = known ?? PLACES.find(p => p.name.toLowerCase() === t.toLowerCase() || p.q?.toLowerCase() === t.toLowerCase());
+    if (k && !k.q && k.ra != null && k.dec != null) {
+      setSel({ ...k, ra: k.ra, dec: k.dec });
+      return;
+    }
     setBusy(true);
     try {
-      const r = await resolveQuery(t);
-      const k = known ?? PLACES.find(p => p.name.toLowerCase() === t.toLowerCase() || p.q?.toLowerCase() === t.toLowerCase());
+      const r = await resolveQuery(k?.q ?? t);
       setSel({
-        name: k?.name ?? r.name ?? t, kind: k?.kind ?? (r.moves ? 'Solar System body' : r.name ? 'Star or deep-sky object' : 'Coordinates'),
-        blurb: k?.blurb, img: k?.img, cat: k?.cat, ours: k?.ours, ra: r.ra, dec: r.dec, fov: k?.fov ?? (r.moves ? 3 : 1.5), moves: !!r.moves,
-        source: r.moves ? 'NASA JPL Horizons' : r.name ? 'the SIMBAD catalogue' : undefined,
+        name: k?.name ?? r.name ?? t, kind: k?.kind ?? r.kind ?? (r.moves ? 'Solar System body' : r.name ? 'Star or deep-sky object' : 'Coordinates'),
+        blurb: k?.blurb, cat: k?.cat, ours: k?.ours, ra: r.ra, dec: r.dec, fov: k?.fov ?? (r.moves ? 3 : 1.5),
+        solarQuery: r.moves ? (k?.q ?? t) : undefined, bodyId: r.body_id, positionUtc: r.position_utc, source: r.name ? r.source : undefined, epochNote: r.epoch_note,
       });
     } catch (x) { setSel(null); setErr((x as Error).message || `Couldn't find "${t}".`); }
     finally { setBusy(false); }
   }
   async function pick(p: Place) {
-    setFocus(false); setErr(null); setQ(p.name); setList(null);
-    if (p.ra != null && p.dec != null) { setSel({ ...p, ra: p.ra, dec: p.dec }); return; }
+    setQ(p.name);
     await find(p.q ?? p.name, p);
   }
   const submit = (e: FormEvent) => { e.preventDefault(); void find(q); };
@@ -450,11 +519,12 @@ export function SkyMap() {
   }
   function share() {
     if (!sel) return;
+    if (sel.solarQuery) return copyLink(`${window.location.origin}/map?q=${encodeURIComponent(sel.solarQuery)}`);
     const url = `${window.location.origin}/map?ra=${sel.ra.toFixed(5)}&dec=${sel.dec.toFixed(5)}&fov=${(sel.fov ?? centre?.fov ?? 3).toFixed(2)}`;
     return copyLink(url);
   }
   const imagesFov = (s: Sel) => Math.min(20, Math.max(4, Math.round(((s.fov ?? centre?.fov ?? 0.2) * 60) / 3)));
-  const today = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  const objectImage = sel?.solarQuery && sel.bodyId ? SOLAR_IMAGES[sel.bodyId] : undefined;
   const hasCard = !!(sel && !sel.pin) || !!list || !!(scopes && sel?.pin);
   const centreChunk = centre && centre.fov <= CHUNK_GRID_FOV ? chunkAt(centre.ra, centre.dec) : null;
   const centreStatus = centreChunk && chunkTeam.assignments?.[centreChunk.id]?.status;
@@ -469,7 +539,7 @@ export function SkyMap() {
   }
 
   return (
-    <div className={`gm${hasCard ? ' has-card' : ''}${centreChunk ? ' gm--chunks' : ''}`}>
+    <div className={`gm${hasCard ? ' has-card' : ''}${centreChunk ? ' gm--chunks' : ''}${sel?.solarQuery ? ' gm--solar' : ''}`}>
       <div ref={box} className="gm__map" aria-label="Interactive map of the whole sky. Drag to pan, scroll to zoom, click to drop a pin." role="application" />
       {chunkLabels.length > 0 && <div className="gm-chunk-labels" role="group" aria-label="Visible sky chunks">
         {chunkLabels.map(({ id, x, y }) => {
@@ -540,27 +610,34 @@ export function SkyMap() {
       {sel && !sel.pin && !list && (
         <section className="gm-card" aria-label={sel.name}>
           <div className="gm-card__scroll">
-            <div className="gm-card__pic">
-              {sel.img ? <img src={sel.img} alt="" /> : catIcon(sel.cat)}
+            <div className={`gm-card__pic${objectImage ? ' gm-card__pic--object' : ''}`}>
+              {objectImage ? <img src={`/img/${objectImage.file}-archive.webp`} alt={`${sel.name} in an archival NASA image`} /> : catIcon(sel.cat)}
               <button type="button" className="gm-ic gm-card__close" aria-label="Close" onClick={() => setSel(null)}><IcX /></button>
             </div>
             <div className="gm-card__body">
               <h2 className="gm-card__title">{sel.name}</h2>
               <p className="gm-card__kind">{sel.kind}</p>
+              {objectImage && <p className="gm-card__meta gm-card__image-credit">Archive image · {objectImage.caption}</p>}
+              {sel.solarQuery && <div className="gm-card__ephemeris">
+                <p>{fmtCoord(sel.ra, sel.dec)} <small>RA, Dec · Earth center (ICRF)</small></p>
+                <p><small>JPL Horizons{sel.positionUtc && <> · <time dateTime={sel.positionUtc}>{ephemerisTime.format(new Date(sel.positionUtc))} UTC</time></>}</small></p>
+                <p><small>The crosshair marks the calculated position over the survey image.</small></p>
+              </div>}
               {sel.ours && <p className="gm-card__meta">PARALLAX result</p>}
             </div>
             <div className="gm-acts">
-              <button type="button" className="gm-act gm-act--main" onClick={() => navigate(openHere(sel.ra, sel.dec, imagesFov(sel)))}><i><IcImages /></i>Real images</button>
+              {objectImage && <a className="gm-act gm-act--main" href={objectImage.source} target="_blank" rel="noreferrer"><i><IcImages /></i>NASA image</a>}
+              {!sel.solarQuery && <button type="button" className="gm-act gm-act--main" onClick={() => navigate(openHere(sel.ra, sel.dec, imagesFov(sel)))}><i><IcImages /></i>Archive field</button>}
               <button type="button" className="gm-act" onClick={() => zoom(0.4)}><i><IcPlus /></i>Zoom in</button>
               <button type="button" className="gm-act" onClick={() => zoom(2.5)}><i><IcMinus /></i>Zoom out</button>
               <button type="button" className="gm-act" onClick={() => void share()}><i><IcShare /></i>Share</button>
             </div>
             <div className="gm-rows">
               {sel.blurb && <div className="gm-row"><IcInfo /><span>{sel.blurb}</span></div>}
-              <div className="gm-row"><IcPin /><span>{fmtCoord(sel.ra, sel.dec)}<small>Right ascension, declination</small></span></div>
-              {sel.moves && <div className="gm-row"><IcClock /><span>Here on {today}<small>It moves, so next month it will be somewhere else. Position from {sel.source}.</small></span></div>}
-              {!sel.moves && sel.source && <div className="gm-row"><IcInfo /><span>Position from {sel.source}</span></div>}
-              <div className="gm-row gm-row--os"><IcLayers /><OtherScopes ra={sel.ra} dec={sel.dec} /></div>
+              {!sel.solarQuery && <div className="gm-row"><IcPin /><span>{fmtCoord(sel.ra, sel.dec)}<small>Right ascension, declination</small></span></div>}
+              {sel.solarQuery && !objectImage && <div className="gm-row"><IcImages /><span>No verified object image in PARALLAX.</span></div>}
+              {!sel.solarQuery && sel.source && <div className="gm-row"><IcInfo /><span>Position from {sel.source}{sel.epochNote && <small>{sel.epochNote}</small>}</span></div>}
+              {!sel.solarQuery && <div className="gm-row gm-row--os"><IcLayers /><OtherScopes ra={sel.ra} dec={sel.dec} /></div>}
             </div>
           </div>
         </section>
@@ -568,7 +645,7 @@ export function SkyMap() {
 
       <div className="gm-layers">
         <button type="button" className="gm-tile" aria-expanded={layersOpen} aria-label="Layers: choose which telescope's sky to show" onClick={() => { setActiveChunk(null); setLayersOpen(v => !v); }}>
-          <img src={(LAYERS.find(l => l.id !== layer && l.id !== SPHEREX.id && l.thumb) ?? LAYERS[2]).thumb} alt="" />
+          {activeLayer.thumb && <img src={activeLayer.thumb} alt="" />}
           <span className="gm-tile__lb"><IcLayers />Layers</span>
         </button>
         {layersOpen && (
@@ -580,7 +657,7 @@ export function SkyMap() {
                   <div className="gm-pop__tiles">
                     {LAYERS.filter(l => l.light === g.light).map(l => (
                       <button key={l.id} type="button" role="radio" aria-checked={layer === l.id} className={`gm-ltile${layer === l.id ? ' is-on' : ''}`}
-                        onClick={() => setLayer(l.id)} title={`${l.label} (${l.who}), ${l.year}: ${COVER[l.cover]}`}>
+                        onClick={() => { setSweep(false); setLayer(l.id); }} title={`${l.label} (${l.who}), ${l.year}: ${COVER[l.cover]}`}>
                         <i>{l.thumb ? <img src={l.thumb} alt="" loading="lazy" /> : <span className="gm-ltile__glyph" aria-hidden="true">{g.glyph}</span>}</i>{l.label}<br />{l.year}
                       </button>
                     ))}
@@ -588,17 +665,21 @@ export function SkyMap() {
                 </div>
               ))}
             </div>
-            {cur && cur.cover !== 'all' && (
+            {layerStatus === 'error' && <p className="gm-layer-note" role="alert">The survey could not load. Choose another layer or switch back to retry.</p>}
+            {layerStatus !== 'error' && activeLayer.cover !== 'all' && (
               <div className="gm-pop__note">
-                <span>{cur.label} has imaged {COVER[cur.cover]}. Where the map is empty, it never looked.</span>
-                {cur.eg && <button type="button" className="gm-pop__play" onClick={() => { const a = al.current; if (a) { a.gotoRaDec(cur.eg!.ra, cur.eg!.dec); a.setFoV(cur.eg!.fov); } }}>Show me {cur.eg.name}</button>}
+                <span>{activeLayer.label} covers {COVER[activeLayer.cover]}.</span>
+                {activeLayer.eg && <button type="button" className="gm-pop__play" onClick={() => {
+                  const a = al.current, example = activeLayer.eg;
+                  if (a && example) { a.gotoRaDec(example.ra, example.dec); a.setFoV(example.fov); }
+                }}>Show me {activeLayer.eg.name}</button>}
               </div>
             )}
             {layer === SPHEREX.id && (
               <div className="gm-pop__sec">
-                <div className="gm-pop__hd"><span>Infrared colour</span><b>{WAVES[slice].toFixed(2)} µm{WAVES[slice] < 1.1 ? ' · reflected sunlight' : WAVES[slice] > 3.8 ? ' · where cold worlds glow' : ''}</b></div>
-                <input type="range" aria-label="Infrared colour" min={0} max={WAVES.length - 1} value={slice} onChange={e => { setSweep(false); setSlice(Number(e.target.value)); }} />
-                <button type="button" className="gm-pop__play" onClick={() => setSweep(v => !v)}>{sweep ? 'Stop' : 'Play all 102 colours'}</button>
+                <div className="gm-pop__hd"><span>SPHEREx wavelength</span><b>{SPHEREX_MAP_BANDS[slice].wavelength.toFixed(3)} µm</b></div>
+                <input type="range" aria-label="SPHEREx wavelength" aria-valuetext={`${SPHEREX_MAP_BANDS[slice].wavelength.toFixed(3)} micrometers`} min={0} max={SPHEREX_MAP_BANDS.length - 1} value={slice} onChange={e => { setSweep(false); setSlice(Number(e.target.value)); }} />
+                <button type="button" className="gm-pop__play" onClick={() => setSweep(v => !v)}>{sweep ? 'Pause bands' : `Play ${SPHEREX_MAP_BANDS.length} bands`}</button>
               </div>
             )}
             <div className="gm-pop__sec">
@@ -617,7 +698,7 @@ export function SkyMap() {
         <div className="gm-drop" role="status">
           <IcPin />
           <span><b>Dropped pin</b><span>{fmtCoord(sel.ra, sel.dec)}</span></span>
-          <button type="button" className="gm-btn" onClick={() => navigate(openHere(sel.ra, sel.dec, 10))}>See real images</button>
+          <button type="button" className="gm-btn" onClick={() => navigate(openHere(sel.ra, sel.dec, 10))}>Open archive field</button>
           <button type="button" className="gm-btn gm-btn--line" onClick={() => setScopes({ ra: sel.ra, dec: sel.dec, name: 'Dropped pin' })}>Other telescopes</button>
           <button type="button" className="gm-ic" aria-label="Remove pin" onClick={() => setSel(null)}><IcX /></button>
         </div>
@@ -631,7 +712,7 @@ export function SkyMap() {
       {toast && <p className="gm-toast" role="status">{toast}</p>}
 
       <div className="gm-ctl">
-        <button type="button" className="gm-ctl__one" aria-label="Show the whole sky" onClick={() => { setActiveChunk(null); al.current?.setFoV(180); }}><IcGlobe /></button>
+        <button type="button" className="gm-ctl__one" aria-label="Sky overview" onClick={() => { setActiveChunk(null); al.current?.setFoV(180); }}><IcGlobe /></button>
         <div className="gm-ctl__grp">
           <button type="button" aria-label="Zoom in" onClick={() => zoom(0.5)}><IcPlus /></button>
           <button type="button" aria-label="Zoom out" onClick={() => zoom(2)}><IcMinus /></button>
@@ -642,9 +723,9 @@ export function SkyMap() {
           onClick={event => openChunk(centreChunk.id, event.currentTarget)}>
           <IcGlobe />Chunk {centreChunk.id}{centreStatus && <i className="gm-chunk-dot" data-status={centreStatus} />}
         </button>}
-        <span className="gm-status__coords">{centre ? `${fmtCoord(centre.ra, centre.dec)} · ${fmtFov(centre.fov)}` : ''}</span>
+        <span className="gm-status__coords">{centre ? `Center RA/Dec · ${fmtCoord(centre.ra, centre.dec)} · ${fmtFov(centre.fov)}` : ''}</span>
         <span className="gm-status__credits">
-          <span>Sky: {cur ? `${cur.label} (${cur.who}), tiles from ${cur.host}` : 'NASA/IPAC IRSA'} · Map: Aladin Lite ·</span>
+          <span>Survey: {activeLayer.label}{layer === SPHEREX.id ? ` DR1 · ${SPHEREX_MAP_BANDS[slice].wavelength.toFixed(3)} µm` : ''}{layerStatus === 'loading' ? ' · loading' : layerStatus === 'error' ? ' · unavailable' : ''} · {activeLayer.host} · <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite</a> ·</span>
           <Link href="/about">Sources</Link>
         </span>
       </div>

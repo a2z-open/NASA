@@ -244,9 +244,9 @@ export interface LabExperiment {
 }
 
 export interface ResolveResult {
-  name: string; ra: number; dec: number; epoch_note?: string; source?: string; target?: string;
+  name: string | null; ra: number; dec: number; epoch_note?: string; source?: string; target?: string;
   pmra_masyr?: number | null; pmdec_masyr?: number | null; parallax_mas?: number | null;
-  moves?: boolean; kind?: string; distance_au?: number;
+  moves?: boolean; kind?: string; distance_au?: number | null; body_id?: string; position_utc?: string;
 }
 
 export class ApiError extends Error {

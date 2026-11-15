@@ -147,13 +147,18 @@ def resolve(q: str):
     except CoordinateError:
         pass
     key = re.sub(r'\s+', ' ', q.lower().replace('’', "'"))
+    if key in ('earth', 'the earth'):
+        raise HTTPException(400, 'This sky map looks outward from Earth, so Earth itself has no position on it.')
+    epoch = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    epoch_mjd = epoch.timestamp() / 86400 + 40587
+    catalogue_epoch = f'Catalogue position propagated to {epoch:%Y-%m-%d} UTC (proper motion and parallax)'
     if key in ALIASES:
         t = TARGETS[ALIASES[key]]
         p = propagate(t.astrometry.ra_deg, t.astrometry.dec_deg,
                       t.astrometry.epoch_mjd or (51544.5 + (t.astrometry.epoch_jyear - 2000.0) * 365.25),
-                      t.astrometry.pmra_masyr, t.astrometry.pmdec_masyr, t.astrometry.parallax_mas, [61040.0])
+                      t.astrometry.pmra_masyr, t.astrometry.pmdec_masyr, t.astrometry.parallax_mas, [epoch_mjd])
         return {'name': t.title, 'ra': float(p.ra[0]), 'dec': float(p.dec[0]), 'source': t.astrometry.source,
-                'epoch_note': 'catalogue astrometry propagated to 2026.0 (proper motion + parallax)', 'target': t.slug,
+                'epoch_note': catalogue_epoch, 'target': t.slug,
                 'pmra_masyr': t.astrometry.pmra_masyr, 'pmdec_masyr': t.astrometry.pmdec_masyr, 'parallax_mas': t.astrometry.parallax_mas}
     # Planets, the Sun, the Moon, dwarf planets and asteroids move, so star catalogues do not list them: ask JPL Horizons.
     if key in ephem.SOLAR:
@@ -163,7 +168,8 @@ def resolve(q: str):
         except Exception as error:  # noqa: BLE001
             raise HTTPException(503, f'Could not reach NASA JPL Horizons to find {title} ({type(error).__name__}). Try again.')
         return {'name': title, 'ra': w['ra'], 'dec': w['dec'], 'source': 'JPL Horizons', 'kind': kind, 'moves': True,
-                'distance_au': w['delta_au'], 'epoch_note': f'where {title} is today; it moves, so this changes day by day'}
+                'distance_au': w['delta_au'], 'body_id': command, 'position_utc': w['position_utc'],
+                'epoch_note': 'Earth-centered astrometric position (ICRF)'}
     try:
         r = requests.get('https://vizier.cfa.harvard.edu/viz-bin/nph-sesame/-oxp/SNV?' + requests.utils.quote(q), timeout=15,
                          headers={'User-Agent': 'PARALLAX/1.0 (research prototype)'})
@@ -175,8 +181,8 @@ def resolve(q: str):
                 try:
                     w = ephem.where_now(f'{q};')
                     return {'name': w['target'], 'ra': w['ra'], 'dec': w['dec'], 'source': 'JPL Horizons', 'kind': 'small body',
-                            'moves': True, 'distance_au': w['delta_au'],
-                            'epoch_note': 'where it is today; it moves, so this changes day by day'}
+                            'moves': True, 'distance_au': w['delta_au'], 'position_utc': w['position_utc'],
+                            'epoch_note': 'Earth-centered astrometric position (ICRF)'}
                 except Exception:  # noqa: BLE001
                     pass
             raise HTTPException(404, f'Couldn\'t find "{q}". Try a star like Vega, a planet like Mars, or coordinates.')
@@ -184,14 +190,16 @@ def resolve(q: str):
         pmra = res.findtext('pm/pmRA')
         pmdec = res.findtext('pm/pmDE')
         plx = res.findtext('plx/v')
-        out = {'name': q, 'ra': ra, 'dec': dec, 'source': res.get('name', 'Sesame'), 'epoch_note': 'J2000 position from SIMBAD',
+        resolver = res.get('name', 'Sesame')
+        source = 'SIMBAD (CDS)' if 'simbad' in resolver.lower() else resolver
+        out = {'name': q, 'ra': ra, 'dec': dec, 'source': source, 'epoch_note': 'Catalogue position at J2000',
                'otype': res.findtext('otype')}
         if pmra and pmdec:
             pmra, pmdec = float(pmra), float(pmdec)
-            p = propagate(ra, dec, 51544.5, pmra, pmdec, float(plx) if plx else 0.0, [61040.0])
+            p = propagate(ra, dec, 51544.5, pmra, pmdec, float(plx) if plx else 0.0, [epoch_mjd])
             out.update({'ra': float(p.ra[0]), 'dec': float(p.dec[0]), 'pmra_masyr': pmra, 'pmdec_masyr': pmdec,
                         'parallax_mas': float(plx) if plx else None,
-                        'epoch_note': 'SIMBAD J2000 position propagated to 2026.0 with its proper motion and parallax'})
+                        'epoch_note': catalogue_epoch})
         return out
     except HTTPException:
         raise
