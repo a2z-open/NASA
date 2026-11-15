@@ -1,0 +1,16 @@
+{
+ "generated_utc": "2026-11-15T01:32:13+00:00",
+ "field": {
+  "ra": 74.0,
+  "dec": 16.0,
+  "why": "on the predicted Planet Nine track; the most 0.75-1.6 um images in one visit of the track points we checked. Galactic latitude -15 deg: a crowded field."
+ },
+ "candidates": [],
+ "chance_expectation": {
+  "per_visit": 0.333,
+  "visits": 3,
+  "expected": 1.0,
+  "why": "With no planet, the real search and the two controls are alike, so the real map's highest peak beats both controls' highest peaks one time in three. The locked rule therefore expects about one chance candidate per three visits searched."
+ },
+ "rule": "A real source shows in both halves of the visit and in both detectors (S/N at least 2.5 and at least half of what a real source would give in each), and does not rest on one image (removing any one image drops its S/N by less than 35%)."
+}

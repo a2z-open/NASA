@@ -64,3 +64,10 @@ reprojected for display. PARALLAX uses no NASA logos or mission branding.
 - No AI runs inside the app at request time. The page "Check a candidate" collects human opinions; it does not use a model to
   judge them.
 - No large-language-model API is called by the pipeline or the app.
+
+## Fifth session (14–15 Nov 2026): asteroid hunt, Planet Nine deep stack, "How we find them"
+
+- Claude Code (model Opus 5.5) wrote the asteroid hunt, the Planet Nine deep stack, the stacking test along known asteroid paths,
+  the `/api/how` endpoint and the `/how` page. No machine-learning model was added: the deep stack is a matched filter and a sum
+  along predicted paths, checked with control motions and synthetic planets.
+- No AI runs inside the app at request time, and no large-language-model API is called by the pipeline or the app.

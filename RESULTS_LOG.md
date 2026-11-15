@@ -98,5 +98,11 @@ Negative controls and injection tests: see VALIDATION.md (appended when the runs
 ## Asteroid hunt (14 Nov 2026)
 
 <!-- ASTEROIDS_LINE -->
-- Asteroid hunt: 0 moving-object tracks from SPHEREx alone in 6 patches near the ecliptic: 0 are known asteroids recovered blind, 0 match nothing known (chance expectation 0.0).
+- Asteroid hunt: 0 moving-object tracks from SPHEREx alone in 6 patches near the ecliptic: 0 are known asteroids recovered blind, 0 match nothing known (chance expectation 0.0). Adding photos along known paths: 27 -> 53 known asteroids seen at S/N 5.
 <!-- /ASTEROIDS_LINE -->
+
+## Planet Nine deep stack (15 Nov 2026)
+
+<!-- P9DEEP_LINE -->
+- Planet Nine deep stack: 2 patches on the predicted track, 248 photos; one visit added along parallax reaches 60 µJy (synthetic planets, 50% found at 550 AU) against 7.2 µJy predicted; 2 planet-like candidate(s) against about 2.0 expected by chance; 0 survive the checks (split halves, detectors, and the other visits).
+<!-- /P9DEEP_LINE -->

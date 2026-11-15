@@ -1,0 +1,87 @@
+{
+ "generated_utc": "2026-11-15T01:32:12+00:00",
+ "field": {
+  "ra": 33.0,
+  "dec": -2.0,
+  "why": "on the predicted Planet Nine track at Galactic latitude -60 deg: few stars, so deeper."
+ },
+ "candidates": [
+  {
+   "visit": 3,
+   "snr": 5.9,
+   "margin_over_controls": 2.21,
+   "ra": 32.89828,
+   "dec": -1.79278,
+   "xi": -366.0,
+   "eta": 746.0,
+   "distance_au": 151.0,
+   "rate_arcsec_day": -0.48,
+   "near_masked_star": false,
+   "checks": {
+    "snr_all": 5.92,
+    "snr_first_half": 6.31,
+    "snr_second_half": 2.3,
+    "snr_detector_1": 2.89,
+    "snr_detector_2": 6.36,
+    "largest_drop_removing_one_image": 0.41,
+    "n_images": 36,
+    "other_visits": [
+     {
+      "visit": 1,
+      "predicted_shift_arcmin": 45.4,
+      "inside_patch": false
+     },
+     {
+      "visit": 4,
+      "predicted_shift_arcmin": 45.4,
+      "inside_patch": false
+     }
+    ],
+    "passes_split_tests": false,
+    "rests_on_one_image": false
+   }
+  },
+  {
+   "visit": 4,
+   "snr": 6.11,
+   "margin_over_controls": 1.84,
+   "ra": 32.94275,
+   "dec": -1.84389,
+   "xi": -206.0,
+   "eta": 562.0,
+   "distance_au": 150.0,
+   "rate_arcsec_day": 1.49,
+   "near_masked_star": false,
+   "checks": {
+    "snr_all": 6.1,
+    "snr_first_half": 5.53,
+    "snr_second_half": 4.6,
+    "snr_detector_1": 4.98,
+    "snr_detector_2": 5.36,
+    "largest_drop_removing_one_image": 0.46,
+    "n_images": 40,
+    "other_visits": [
+     {
+      "visit": 1,
+      "predicted_shift_arcmin": 0.0,
+      "inside_patch": true
+     },
+     {
+      "visit": 3,
+      "predicted_shift_arcmin": 45.4,
+      "inside_patch": false
+     }
+    ],
+    "passes_split_tests": true,
+    "rests_on_one_image": false
+   }
+  }
+ ],
+ "chance_expectation": {
+  "per_visit": 0.333,
+  "visits": 3,
+  "expected": 1.0,
+  "why": "With no planet, the real search and the two controls are alike, so the real map's highest peak beats both controls' highest peaks one time in three. The locked rule therefore expects about one chance candidate per three visits searched."
+ },
+ "rule": "A real source shows in both halves of the visit and in both detectors (S/N at least 2.5 and at least half of what a real source would give in each), and does not rest on one image (removing any one image drops its S/N by less than 35%)."
+}

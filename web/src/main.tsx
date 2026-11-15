@@ -15,6 +15,7 @@ import { Targets } from './pages/Targets.tsx';
 import { DataAbout } from './pages/DataAbout.tsx';
 import { SkyMap } from './pages/SkyMap.tsx';
 import { Check } from './pages/Check.tsx';
+import { How } from './pages/How.tsx';
 import { Page } from './components/Shell.tsx';
 import { Component, useEffect, type ReactNode } from 'react';
 
@@ -34,6 +35,7 @@ const TITLES: Record<string, string> = {
   '/': 'PARALLAX · Spot what moves in space',
   '/map': 'Sky map · PARALLAX',
   '/check': 'Check a candidate · PARALLAX',
+  '/how': 'How we find them · PARALLAX',
   '/explore': 'Explore · PARALLAX',
   '/hunt': 'Planet X hunt · PARALLAX',
   '/deck': 'PARALLAX in seven slides',
@@ -54,6 +56,7 @@ function App() {
   if (path.startsWith('/explore')) return <Explore />;
   if (path.startsWith('/map')) return <SkyMap />;
   if (path.startsWith('/check')) return <Check />;
+  if (path.startsWith('/how')) return <How />;
   if (path.startsWith('/investigation/')) return <InvestigationPage id={decodeURIComponent(path.slice('/investigation/'.length))} />;
   if (path.startsWith('/evidence/')) return <Evidence id={decodeURIComponent(path.slice('/evidence/'.length))} />;
   if (path.startsWith('/hunt')) return <Hunt />;

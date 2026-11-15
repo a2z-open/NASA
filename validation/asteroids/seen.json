@@ -1,0 +1,1245 @@
+{
+ "generated_utc": "2026-11-15T00:28:29+00:00",
+ "n_images": 216,
+ "n_in_view": 240,
+ "n_seen": 32,
+ "by_V": [
+  {
+   "V": "0-16",
+   "in_view": 4,
+   "seen": 2
+  },
+  {
+   "V": "16-17",
+   "in_view": 6,
+   "seen": 6
+  },
+  {
+   "V": "17-18",
+   "in_view": 13,
+   "seen": 10
+  },
+  {
+   "V": "18-19",
+   "in_view": 34,
+   "seen": 13
+  },
+  {
+   "V": "19-20",
+   "in_view": 183,
+   "seen": 1
+  }
+ ],
+ "rule": {
+  "snr_detect": 5.0,
+  "snr_empty_elsewhere": 3.0,
+  "search_px": 1.5,
+  "min_images": 2,
+  "V_max": 20.0
+ },
+ "seen": [
+  {
+   "set": "v2_calibration",
+   "field": "ast01",
+   "name": "Anahita",
+   "V": 13.9,
+   "class": "MB>Inner",
+   "delta_au": 2.29464860943,
+   "images_in_view": 5,
+   "detections": 5,
+   "max_snr": 110.5,
+   "hits": [
+    {
+     "mjd": 61029.020656953,
+     "snr": 110.5,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61030.312292254,
+     "snr": 99.8,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61030.313802289,
+     "snr": 93.0,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61030.582834511,
+     "snr": 75.6,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61030.990806282,
+     "snr": 90.8,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "Kolga",
+   "V": 14.4,
+   "class": "MB>Outer",
+   "delta_au": 2.53103003463,
+   "images_in_view": 2,
+   "detections": 2,
+   "max_snr": 81.3,
+   "hits": [
+    {
+     "mjd": 61226.244845506,
+     "snr": 81.3,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61226.246337763,
+     "snr": 74.7,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 13
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast01",
+   "name": "Odysseus",
+   "V": 16.1,
+   "class": "Trojan",
+   "delta_au": 4.907665094,
+   "images_in_view": 17,
+   "detections": 16,
+   "max_snr": 34.7,
+   "hits": [
+    {
+     "mjd": 61024.611168631,
+     "snr": 28.1,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61024.612678643,
+     "snr": 24.4,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61025.227061212,
+     "snr": 24.8,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 8
+    },
+    {
+     "mjd": 61025.358983643,
+     "snr": 32.8,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 8
+    },
+    {
+     "mjd": 61025.3604759,
+     "snr": 31.5,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 8
+    },
+    {
+     "mjd": 61025.901258354,
+     "snr": 28.1,
+     "empty_elsewhere_snr": 1.4,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61025.902750622,
+     "snr": 29.5,
+     "empty_elsewhere_snr": 1.4,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61027.187724071,
+     "snr": 31.9,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 16
+    },
+    {
+     "mjd": 61027.189216328,
+     "snr": 32.6,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 16
+    },
+    {
+     "mjd": 61028.686072138,
+     "snr": 34.7,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61028.687564395,
+     "snr": 30.5,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61029.228719905,
+     "snr": 32.4,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61030.312292254,
+     "snr": 34.5,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61030.313802289,
+     "snr": 27.1,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61030.582834511,
+     "snr": 28.0,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61030.990806282,
+     "snr": 31.0,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast00",
+   "name": "Sita",
+   "V": 16.1,
+   "class": "MB>Inner",
+   "delta_au": 1.81328531015,
+   "images_in_view": 4,
+   "detections": 4,
+   "max_snr": 34.0,
+   "hits": [
+    {
+     "mjd": 60834.838354083,
+     "snr": 29.0,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 7
+    },
+    {
+     "mjd": 60834.83984634,
+     "snr": 34.0,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 7
+    },
+    {
+     "mjd": 60835.58595524,
+     "snr": 27.1,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 7
+    },
+    {
+     "mjd": 60835.587447497,
+     "snr": 25.7,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 7
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast00",
+   "name": "Dhotel",
+   "V": 16.4,
+   "class": "MB>Middle",
+   "delta_au": 1.81323293914,
+   "images_in_view": 2,
+   "detections": 2,
+   "max_snr": 25.9,
+   "hits": [
+    {
+     "mjd": 60840.477881907,
+     "snr": 25.9,
+     "empty_elsewhere_snr": 1.4,
+     "n_other_images": 16
+    },
+    {
+     "mjd": 60840.479374152,
+     "snr": 24.5,
+     "empty_elsewhere_snr": 2.7,
+     "n_other_images": 16
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast03",
+   "name": "Gramme",
+   "V": 16.7,
+   "class": "MB>Outer",
+   "delta_au": 2.32955995279,
+   "images_in_view": 2,
+   "detections": 2,
+   "max_snr": 16.6,
+   "hits": [
+    {
+     "mjd": 60900.935397948,
+     "snr": 16.6,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 60900.936890194,
+     "snr": 16.2,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 10
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "Eijikato",
+   "V": 16.9,
+   "class": "MB>Middle",
+   "delta_au": 2.10475349306,
+   "images_in_view": 7,
+   "detections": 7,
+   "max_snr": 18.9,
+   "hits": [
+    {
+     "mjd": 61222.239383967,
+     "snr": 18.9,
+     "empty_elsewhere_snr": 0.7,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61222.240876212,
+     "snr": 18.0,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61222.511258643,
+     "snr": 16.1,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61222.5127509,
+     "snr": 16.4,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61222.986062266,
+     "snr": 9.9,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61222.987554511,
+     "snr": 14.2,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61223.868660113,
+     "snr": 12.7,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 14
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast02",
+   "name": "Mertona",
+   "V": 16.9,
+   "class": "MB>Middle",
+   "delta_au": 2.72814192744,
+   "images_in_view": 12,
+   "detections": 12,
+   "max_snr": 18.1,
+   "hits": [
+    {
+     "mjd": 61191.14768252,
+     "snr": 15.0,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61191.149174777,
+     "snr": 11.5,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61191.689264511,
+     "snr": 12.5,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61191.690756768,
+     "snr": 8.7,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.165489268,
+     "snr": 14.9,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.166981513,
+     "snr": 17.2,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.437683689,
+     "snr": 10.2,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.439175935,
+     "snr": 12.5,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.775679442,
+     "snr": 15.4,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.777171698,
+     "snr": 17.4,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61193.524649326,
+     "snr": 18.1,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61193.591036907,
+     "snr": 15.9,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 18
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast00",
+   "name": "Sokolsky",
+   "V": 17.2,
+   "class": "MB>Hilda",
+   "delta_au": 3.35241678936,
+   "images_in_view": 4,
+   "detections": 4,
+   "max_snr": 16.1,
+   "hits": [
+    {
+     "mjd": 60834.838354083,
+     "snr": 13.8,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 7
+    },
+    {
+     "mjd": 60834.83984634,
+     "snr": 12.6,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 7
+    },
+    {
+     "mjd": 60835.58595524,
+     "snr": 15.6,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 7
+    },
+    {
+     "mjd": 60835.587447497,
+     "snr": 16.1,
+     "empty_elsewhere_snr": 2.0,
+     "n_other_images": 7
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast05",
+   "name": "Wangxuan",
+   "V": 17.4,
+   "class": "MB>Inner",
+   "delta_au": 1.82737390795,
+   "images_in_view": 3,
+   "detections": 3,
+   "max_snr": 9.6,
+   "hits": [
+    {
+     "mjd": 61179.673627636,
+     "snr": 7.1,
+     "empty_elsewhere_snr": 2.1,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61179.675137648,
+     "snr": 7.1,
+     "empty_elsewhere_snr": 1.8,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61180.962456317,
+     "snr": 9.6,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 6
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "Edebono",
+   "V": 17.6,
+   "class": "MB>Outer",
+   "delta_au": 2.62828004961,
+   "images_in_view": 2,
+   "detections": 2,
+   "max_snr": 7.9,
+   "hits": [
+    {
+     "mjd": 61226.244845506,
+     "snr": 6.8,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61226.246337763,
+     "snr": 7.9,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 9
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast03",
+   "name": "Sumava",
+   "V": 17.6,
+   "class": "MB>Middle",
+   "delta_au": 2.56160019647,
+   "images_in_view": 14,
+   "detections": 11,
+   "max_snr": 11.9,
+   "hits": [
+    {
+     "mjd": 61157.236350067,
+     "snr": 9.1,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61157.237842324,
+     "snr": 11.9,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61158.660938018,
+     "snr": 8.2,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61158.935050958,
+     "snr": 9.5,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61158.936543215,
+     "snr": 11.1,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61159.748613967,
+     "snr": 9.2,
+     "empty_elsewhere_snr": 0.7,
+     "n_other_images": 14
+    },
+    {
+     "mjd": 61159.750106224,
+     "snr": 7.7,
+     "empty_elsewhere_snr": 0.7,
+     "n_other_images": 14
+    },
+    {
+     "mjd": 61161.51157068,
+     "snr": 9.0,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 14
+    },
+    {
+     "mjd": 61161.513062937,
+     "snr": 6.8,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 14
+    },
+    {
+     "mjd": 61161.514892729,
+     "snr": 9.4,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 14
+    },
+    {
+     "mjd": 61161.516384986,
+     "snr": 7.9,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 14
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast04",
+   "name": "1985 RS1",
+   "V": 17.8,
+   "class": "MB>Inner",
+   "delta_au": 1.58088609238,
+   "images_in_view": 3,
+   "detections": 3,
+   "max_snr": 12.4,
+   "hits": [
+    {
+     "mjd": 61217.894629812,
+     "snr": 7.1,
+     "empty_elsewhere_snr": 0.4,
+     "n_other_images": 8
+    },
+    {
+     "mjd": 61217.89612208,
+     "snr": 7.7,
+     "empty_elsewhere_snr": 0.4,
+     "n_other_images": 8
+    },
+    {
+     "mjd": 61218.57399671,
+     "snr": 12.4,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 9
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast04",
+   "name": "Williamknight",
+   "V": 17.8,
+   "class": "MB>Outer",
+   "delta_au": 2.93473264257,
+   "images_in_view": 7,
+   "detections": 7,
+   "max_snr": 10.9,
+   "hits": [
+    {
+     "mjd": 61212.531110483,
+     "snr": 7.2,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61212.532620495,
+     "snr": 10.3,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61213.549165911,
+     "snr": 10.9,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61213.550658168,
+     "snr": 8.7,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61214.637712474,
+     "snr": 9.4,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61214.639204719,
+     "snr": 7.3,
+     "empty_elsewhere_snr": 1.6,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61216.334104164,
+     "snr": 6.9,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 4
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast04",
+   "name": "Baur",
+   "V": 17.9,
+   "class": "MB>Inner",
+   "delta_au": 1.35116340887,
+   "images_in_view": 3,
+   "detections": 2,
+   "max_snr": 8.1,
+   "hits": [
+    {
+     "mjd": 60854.570901571,
+     "snr": 5.5,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 5
+    },
+    {
+     "mjd": 60854.572393817,
+     "snr": 8.1,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 5
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast02",
+   "name": "Helffrich",
+   "V": 17.9,
+   "class": "MB>Middle",
+   "delta_au": 2.55773926045,
+   "images_in_view": 6,
+   "detections": 4,
+   "max_snr": 9.3,
+   "hits": [
+    {
+     "mjd": 61187.889112659,
+     "snr": 9.3,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61188.295805425,
+     "snr": 6.4,
+     "empty_elsewhere_snr": 0.5,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61188.297297682,
+     "snr": 5.9,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61188.840727185,
+     "snr": 6.9,
+     "empty_elsewhere_snr": 0.3,
+     "n_other_images": 6
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast05",
+   "name": "Reizoutoyoko",
+   "V": 17.9,
+   "class": "MB>Outer",
+   "delta_au": 2.73811292756,
+   "images_in_view": 3,
+   "detections": 2,
+   "max_snr": 8.1,
+   "hits": [
+    {
+     "mjd": 61176.821217717,
+     "snr": 8.1,
+     "empty_elsewhere_snr": 1.8,
+     "n_other_images": 6
+    },
+    {
+     "mjd": 61177.501845888,
+     "snr": 6.7,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 5
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast03",
+   "name": "Ridley",
+   "V": 17.9,
+   "class": "MB>Inner",
+   "delta_au": 1.73223031879,
+   "images_in_view": 4,
+   "detections": 3,
+   "max_snr": 8.2,
+   "hits": [
+    {
+     "mjd": 60898.016796189,
+     "snr": 8.2,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 5
+    },
+    {
+     "mjd": 60898.018288435,
+     "snr": 7.2,
+     "empty_elsewhere_snr": 1.4,
+     "n_other_images": 5
+    },
+    {
+     "mjd": 60898.426597798,
+     "snr": 7.1,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 5
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast01",
+   "name": "1994 PO",
+   "V": 18.0,
+   "class": "MB>Middle",
+   "delta_au": 2.14195686461,
+   "images_in_view": 5,
+   "detections": 3,
+   "max_snr": 9.0,
+   "hits": [
+    {
+     "mjd": 61029.020656953,
+     "snr": 9.0,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61030.582834511,
+     "snr": 7.9,
+     "empty_elsewhere_snr": 0.7,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61030.990806282,
+     "snr": 7.2,
+     "empty_elsewhere_snr": 0.7,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast00",
+   "name": "Giblin",
+   "V": 18.0,
+   "class": "MB>Middle",
+   "delta_au": 2.41977677724,
+   "images_in_view": 16,
+   "detections": 3,
+   "max_snr": 6.9,
+   "hits": [
+    {
+     "mjd": 61157.682782879,
+     "snr": 5.4,
+     "empty_elsewhere_snr": 1.3,
+     "n_other_images": 16
+    },
+    {
+     "mjd": 61160.937194766,
+     "snr": 6.9,
+     "empty_elsewhere_snr": 1.6,
+     "n_other_images": 15
+    },
+    {
+     "mjd": 61161.548095391,
+     "snr": 6.7,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 16
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast05",
+   "name": "Maupertuis",
+   "V": 18.0,
+   "class": "MB>Inner",
+   "delta_au": 2.34569531167,
+   "images_in_view": 3,
+   "detections": 2,
+   "max_snr": 9.0,
+   "hits": [
+    {
+     "mjd": 61248.849133157,
+     "snr": 8.3,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61248.850625425,
+     "snr": 9.0,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "Katayama",
+   "V": 18.1,
+   "class": "MB>Inner",
+   "delta_au": 1.78760503839,
+   "images_in_view": 7,
+   "detections": 4,
+   "max_snr": 7.7,
+   "hits": [
+    {
+     "mjd": 61222.239383967,
+     "snr": 5.8,
+     "empty_elsewhere_snr": 1.1,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61222.240876212,
+     "snr": 6.9,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61222.511258643,
+     "snr": 7.0,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61222.5127509,
+     "snr": 7.7,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "Ferri",
+   "V": 18.2,
+   "class": "MB>Outer",
+   "delta_au": 2.46846491117,
+   "images_in_view": 6,
+   "detections": 3,
+   "max_snr": 6.6,
+   "hits": [
+    {
+     "mjd": 61224.412427231,
+     "snr": 6.2,
+     "empty_elsewhere_snr": 2.2,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61224.820434661,
+     "snr": 6.6,
+     "empty_elsewhere_snr": 0.7,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61226.246337763,
+     "snr": 5.3,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 13
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast04",
+   "name": "1992 UU2",
+   "V": 18.3,
+   "class": "MB>Inner",
+   "delta_au": 1.99527770629,
+   "images_in_view": 7,
+   "detections": 3,
+   "max_snr": 6.8,
+   "hits": [
+    {
+     "mjd": 60852.73795237,
+     "snr": 5.2,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 5
+    },
+    {
+     "mjd": 60856.676204858,
+     "snr": 6.4,
+     "empty_elsewhere_snr": 1.6,
+     "n_other_images": 4
+    },
+    {
+     "mjd": 60856.677697104,
+     "snr": 6.8,
+     "empty_elsewhere_snr": 1.6,
+     "n_other_images": 4
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast05",
+   "name": "1998 SG49",
+   "V": 18.4,
+   "class": "MB>Middle",
+   "delta_au": 2.54488043212,
+   "images_in_view": 4,
+   "detections": 3,
+   "max_snr": 9.3,
+   "hits": [
+    {
+     "mjd": 61246.13699524,
+     "snr": 5.1,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61246.746226027,
+     "snr": 9.3,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 10
+    },
+    {
+     "mjd": 61248.239031791,
+     "snr": 6.3,
+     "empty_elsewhere_snr": 1.4,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast04",
+   "name": "1999 XY189",
+   "V": 18.4,
+   "class": "MB>Inner",
+   "delta_au": 1.79091034059,
+   "images_in_view": 5,
+   "detections": 2,
+   "max_snr": 5.4,
+   "hits": [
+    {
+     "mjd": 61213.549165911,
+     "snr": 5.0,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 11
+    },
+    {
+     "mjd": 61214.297371814,
+     "snr": 5.4,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 11
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "1986 VZ",
+   "V": 18.5,
+   "class": "MB>Inner",
+   "delta_au": 1.61967390836,
+   "images_in_view": 2,
+   "detections": 2,
+   "max_snr": 6.4,
+   "hits": [
+    {
+     "mjd": 61226.244845506,
+     "snr": 6.4,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 9
+    },
+    {
+     "mjd": 61226.246337763,
+     "snr": 5.3,
+     "empty_elsewhere_snr": 1.0,
+     "n_other_images": 9
+    }
+   ]
+  },
+  {
+   "set": "v2_calibration",
+   "field": "ast02",
+   "name": "1997 YS10",
+   "V": 18.5,
+   "class": "MB>Inner",
+   "delta_au": 2.05666852189,
+   "images_in_view": 8,
+   "detections": 6,
+   "max_snr": 7.4,
+   "hits": [
+    {
+     "mjd": 61192.165489268,
+     "snr": 5.4,
+     "empty_elsewhere_snr": 0.9,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.166981513,
+     "snr": 5.3,
+     "empty_elsewhere_snr": 0.8,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.437683689,
+     "snr": 6.1,
+     "empty_elsewhere_snr": 2.0,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.439175935,
+     "snr": 7.4,
+     "empty_elsewhere_snr": 2.0,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61192.777171698,
+     "snr": 5.0,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 18
+    },
+    {
+     "mjd": 61193.524649326,
+     "snr": 5.1,
+     "empty_elsewhere_snr": 1.5,
+     "n_other_images": 18
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast05",
+   "name": "Lichtenberg",
+   "V": 18.6,
+   "class": "MB>Middle",
+   "delta_au": 1.85926320947,
+   "images_in_view": 4,
+   "detections": 3,
+   "max_snr": 7.2,
+   "hits": [
+    {
+     "mjd": 61178.044920124,
+     "snr": 6.1,
+     "empty_elsewhere_snr": 1.8,
+     "n_other_images": 12
+    },
+    {
+     "mjd": 61178.046412393,
+     "snr": 7.2,
+     "empty_elsewhere_snr": 1.8,
+     "n_other_images": 12
+    },
+    {
+     "mjd": 61179.673627636,
+     "snr": 5.7,
+     "empty_elsewhere_snr": 2.9,
+     "n_other_images": 5
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast04",
+   "name": "Cassadrury",
+   "V": 18.7,
+   "class": "MB>Inner",
+   "delta_au": 1.83357271115,
+   "images_in_view": 13,
+   "detections": 2,
+   "max_snr": 5.8,
+   "hits": [
+    {
+     "mjd": 60852.736442358,
+     "snr": 5.8,
+     "empty_elsewhere_snr": 1.2,
+     "n_other_images": 5
+    },
+    {
+     "mjd": 60856.676204858,
+     "snr": 5.1,
+     "empty_elsewhere_snr": 0.6,
+     "n_other_images": 13
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast01",
+   "name": "Komatsubara",
+   "V": 18.8,
+   "class": "MB>Inner",
+   "delta_au": 2.22338480491,
+   "images_in_view": 10,
+   "detections": 2,
+   "max_snr": 5.9,
+   "hits": [
+    {
+     "mjd": 60995.82102612,
+     "snr": 5.9,
+     "empty_elsewhere_snr": 0.5,
+     "n_other_images": 4
+    },
+    {
+     "mjd": 60999.008553527,
+     "snr": 5.3,
+     "empty_elsewhere_snr": 1.6,
+     "n_other_images": 5
+    }
+   ]
+  },
+  {
+   "set": "v3_blind",
+   "field": "ast02",
+   "name": "9542 P-L",
+   "V": 19.8,
+   "class": "MB>Outer",
+   "delta_au": 2.74777435232,
+   "images_in_view": 7,
+   "detections": 2,
+   "max_snr": 6.9,
+   "hits": [
+    {
+     "mjd": 61224.412427231,
+     "snr": 6.3,
+     "empty_elsewhere_snr": 2.5,
+     "n_other_images": 13
+    },
+    {
+     "mjd": 61224.413919476,
+     "snr": 6.9,
+     "empty_elsewhere_snr": 2.1,
+     "n_other_images": 13
+    }
+   ]
+  }
+ ],
+ "what_it_is": "A forced search for KNOWN asteroids: each was looked for where the IMCCE SkyBoT service says it was. A detection needs S/N 5 or more at that spot in at least two images, with the same spot empty in images from other epochs. It shows which asteroids SPHEREx caught and measured. It discovers nothing."
+}

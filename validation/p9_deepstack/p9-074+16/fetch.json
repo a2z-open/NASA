@@ -1,0 +1,32 @@
+{
+ "field": {
+  "ra": 74.0,
+  "dec": 16.0,
+  "why": "on the predicted Planet Nine track (Brown & Batygin 2021, derived in docs/PLANET_NINE_RESEARCH.md); the most 0.75-1.6 um images in one week of any track point we checked"
+ },
+ "size_arcmin": 30.0,
+ "n_images": 134,
+ "n_downloaded": 134,
+ "failed": [],
+ "visits": [
+  {
+   "n_images": 38,
+   "mjd_start": 60916.22,
+   "span_days": 4.42
+  },
+  {
+   "n_images": 57,
+   "mjd_start": 61093.08,
+   "span_days": 15.55
+  },
+  {
+   "n_images": 39,
+   "mjd_start": 61281.43,
+   "span_days": 10.11
+  }
+ ],
+ "detectors": [
+  1,
+  2
+ ]
+}

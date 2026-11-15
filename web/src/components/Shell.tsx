@@ -4,6 +4,7 @@ import { Starfield } from './Starfield.tsx';
 
 const NAV = [
   { href: '/map', label: 'Sky map' },
+  { href: '/how', label: 'How' },
   { href: '/check', label: 'Check' },
   { href: '/hunt', label: 'Finds' },
   { href: '/proof', label: 'Proof' },

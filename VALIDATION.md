@@ -453,7 +453,89 @@ Of the 20 flagged: **7 already have a published type, 1 are doubtful (WISE colou
 
 **Conclusion.** Single SPHEREx images, linked this way, catch only asteroids brighter than about magnitude 17, and only some of those. Every asteroid that bright was catalogued long ago, so this channel cannot find a new asteroid. It is reported as a measured limit, not a discovery.
 
+**Adding photos along known paths (fifth session).** 715 known asteroids (V up to 21.5) were measured at their exact predicted positions in every photo, with no search, after subtracting the same sky spot in photos taken more than 6 hours away. Adding the photos along each path was compared with the single-photo search of section 13, and with 4 control paths per asteroid 60″ away (2792 in all). Threshold: the stacked S/N that 1% of control paths reach (2.47).
+
+| V | Known asteroids | Seen in single photos (S/N 5 in two photos) | Added up, S/N 5 | Added up, 1% false-alarm threshold |
+|---|---:|---:|---:|---:|
+| 0-17 | 7 | 5 | 6 | 6 |
+| 17-18 | 9 | 9 | 9 | 9 |
+| 18-19 | 25 | 12 | 23 | 25 |
+| 19-20 | 115 | 1 | 12 | 73 |
+| 20-21.5 | 559 | 0 | 3 | 37 |
+
+At S/N 5, where only 5 of 2792 control paths land (about 1.3 false ones expected), 53 are seen when photos are added, against 27 in single photos. At the 1% threshold, 150, of which about 7 would be expected by chance. The faintest gains are at V 19-20. The pictures on the /how page are of asteroids that never pass S/N 4 in any single photo (re-picked after the lock: the first pick showed one-photo artefacts).
+
+In total 27 were seen in single photos and 150 when the photos were added. This measures what stacking adds for objects whose path is known; it discovers nothing. `python -m validation.asteroids_stack` (ledger label asteroids:stack).
+
 **History.** Version 1 (24-arcminute patches) removed every dot near a Gaia or WISE star. In these fields the ~10,000 catalogue stars per patch covered almost the whole image, so nothing was left (validation/asteroids/v1/, ledger entry 24). Version 2 removes fixed sources by comparing epochs with each other, as moving-object surveys do, and uses 60-arcminute patches; on six patches it recovered 1 of 3 known asteroids brighter than V 17 and none fainter (validation/asteroids/v2_calibration/, ledger entry 25). Those six patches were then used to tune the linker on known asteroids (version 3: tracks grow step by step and may curve). Version 3 is run blind on six different patches; the tuning patches are not counted in its result. A one-line fix to the report step (brightness values given as text) is recorded as its own ledger entry.
 
 **Reproduce.** `python -m validation.asteroids plan | fetch | detect | link | known | report`, then `python -m validation.asteroids_md`.
 <!-- /ASTEROIDS -->
+
+<!-- P9DEEP -->
+## 14. Planet Nine: adding up one visit along its parallax (fifth session)
+
+**Why.** One SPHEREx photo reaches about 179 µJy (5 sigma, 0.75–1.6 µm, in these patches). Planet Nine is predicted at 7.2 µJy (V 22.0 at 550 AU; Brown, Holman & Batygin 2024), and at most 26 µJy. Adding N photos lowers the noise by the square root of N, but only if each photo is shifted so that the planet lands on the same spot. Over one SPHEREx visit (one to four weeks) a body 150–1500 AU away moves almost only because the Earth moves, so its path is set by its distance; its own orbital motion is allowed for along the predicted track.
+
+| Patch | RA, Dec | Galactic latitude | Photos (0.75–1.6 µm) | Visits |
+|---|---|---:|---:|---:|
+| p9-033-02 | 33.0°, -2.0° | -58° | 114 | 4 |
+| p9-074+16 | 74.0°, 16.0° | -17° | 134 | 3 |
+
+Both patches sit on the predicted Planet Nine track. p9-074+16 had the most photos in one visit of the track points checked, but lies near the Milky Way, where stars are crowded; p9-033-02 is far from it.
+
+**Method.** (1) Each photo is registered to Gaia and filtered with its own point-spread function at 3 × 3 sub-pixel offsets (the SPHEREx PSF is sharp and undersampled), then resampled to a common 4″ sky grid. (2) The fixed sky (stars, galaxies) is fitted at every grid pixel as a quadratic in wavelength from the OTHER visits only, months away, when a distant planet is somewhere else, so it cannot subtract itself. Each photo's flux scale and noise are measured against that template. (3) Masked: SPHEREx's own artifact flags (CROSSTALK and GHOST widened by one pixel), sky brighter than 400 µJy (with a 12″ border), dark holes in the template (3 sigma below the ring around them and 15 µJy below the field), and a disc around every 4-sigma outlier in each photo. (4) The photos are added along the path of every trial distance from 150 to 1500 AU, spaced so that no photo's predicted position moves by more than half a pixel between trials. (5) The same is done twice more with motions no distant body can have: the parallax reversed, and the parallax turned by 90°. A peak is planet-like only if it beats both at the same spot by 1.5 in S/N; a still source scores the same in all three. The threshold is the highest planet-like peak of the two controls.
+
+**How the method was set (before the locked runs).** It was developed on patch p9-074+16 looking only at the controls and at synthetic planets, never at the real search map. A Gaussian filter recovered about half the flux of synthetic planets; the sub-pixel PSF filter about 70%. Most false control peaks were dark crosstalk echoes in the August visits (flagged by SPHEREx as CROSSTALK): subtracting a dark spot leaves a bright one. Masking the flags, the dark holes and the outlier discs brought the control peaks above S/N 5 from 33 to a few. Patch p9-033-02 was then run with the method frozen.
+
+| Patch | Visit | Photos searched | Area (deg²) | One photo, 5σ (µJy) | Threshold S/N | Planet-like candidates | Still changes |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| p9-033-02 | 1 | 36 | 0.158 | 186 | 5.1 | 0 | 0 |
+| p9-033-02 | 3 | 36 | 0.165 | 179 | 5.8 | 1 | 0 |
+| p9-033-02 | 4 | 40 | 0.160 | 186 | 5.1 | 1 | 0 |
+| p9-074+16 | 1 | 38 | 0.100 | 220 | 5.0 | 0 | 1 |
+| p9-074+16 | 2 | 57 | 0.075 | 203 | 5.0 | 0 | 1 |
+| p9-074+16 | 3 | 39 | 0.109 | 217 | 6.3 | 0 | 2 |
+
+Every candidate list was written and hashed into the ledger before any check (p9-033-02: entry 34, p9-074+16: entry 32).
+
+**Depth: synthetic planets (SYNTHETIC, never real).** Planets built from each photo's own PSF were added to every real photo, at the place their distance puts them, and the largest visit of each patch was searched again with exactly the same steps.
+
+| Patch | Distance (AU) | Brightness (µJy) | Found / tried |
+|---|---:|---:|---:|
+| p9-033-02 | 550 | 80 | 10 / 20 |
+| p9-033-02 | 550 | 60 | 4 / 20 |
+| p9-033-02 | 550 | 40 | 0 / 20 |
+| p9-033-02 | 550 | 26 | 0 / 20 |
+| p9-033-02 | 550 | 15 | 0 / 20 |
+| p9-033-02 | 300 | 40 | 2 / 20 |
+| p9-033-02 | 1000 | 40 | 0 / 20 |
+| p9-074+16 | 550 | 80 | 16 / 16 |
+| p9-074+16 | 550 | 60 | 13 / 16 |
+| p9-074+16 | 550 | 40 | 7 / 17 |
+| p9-074+16 | 550 | 26 | 3 / 17 |
+| p9-074+16 | 550 | 15 | 0 / 16 |
+| p9-074+16 | 300 | 40 | 13 / 15 |
+| p9-074+16 | 1000 | 40 | 2 / 17 |
+
+Half of the synthetic planets at 550 AU are found down to 60 µJy in the better patch: about 3.4 times fainter than one photo reaches, and 8 times brighter than the predicted Planet Nine.
+
+**The candidates.** 2 planet-like peak(s) passed the locked rule. With no planet at all, the real search and its two controls are alike, so the real map's top peak beats both controls' top peaks one time in three: the rule expects about 2.0 chance candidates in these 6 visits. After the lock, each candidate was checked: a real source shows in both halves of its visit and in both detectors, and does not rest on one photo.
+
+| Patch | Visit | S/N | Margin | Best distance (AU) | First / second half | Detector 1 / 2 | Largest one-photo drop | Passes |
+|---|---:|---:|---:|---:|---|---|---:|---|
+| p9-033-02 | 3 | 5.9 | 2.21 | 151 | 6.31 / 2.3 | 2.89 / 6.36 | 0.41 | no |
+| p9-033-02 | 4 | 6.11 | 1.84 | 150 | 5.53 / 4.6 | 4.98 / 5.36 | 0.46 | yes |
+
+The p9-033-02 visit-4 candidate, looked for in visit 1 where its distance and speed put it: highest S/N there 3.13 (87% of those places searchable); the same shape at 125 random places gives as much 44% of the time. Verdict: not seen where it must be: not a planet.
+
+Visit 1 and visit 4 of p9-033-02 are one year apart, so the Earth was in nearly the same place and parallax cancels; only the body's own motion along its orbit moves it, which keeps it inside the patch. The other visits put a body this close tens of arcminutes away, outside these patches.
+
+**Disclosed approximation.** The direction of a body's own orbital motion was taken from the predicted track between RA 60° and 90° in both patches. Projected onto p9-033-02 (RA 33°), it differs from the local track direction by 0.5°, which changes nothing measurable; it was noticed after the lock and is left as it was.
+
+**Still changes.** 4 still sources were brighter in one visit than in the others (S/N 7 or more). They are not planet candidates: a still source scores the same in all three searches. All of them sit next to masked bright stars.
+
+**What this is and is not.** A method that reaches several times deeper than one photo, with its depth measured, its false alarms counted by controls, and its candidates locked before checking. It covered about 0.13 deg² per visit in 2 patches, a tiny part of the region where Planet Nine is predicted, and its depth is still above the predicted brightness. It is not a search that could have found the predicted Planet Nine, and nothing found here is reported as a planet. Nothing has been sent to anyone.
+
+**Reproduce.** `python -m validation.p9_deepstack fetch|stack|inject|vet|cross <patch>`, then `python -m validation.p9_deepstack_md`.
+<!-- /P9DEEP -->

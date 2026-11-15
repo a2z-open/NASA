@@ -54,9 +54,10 @@ as NASA asks, and its use here does not imply NASA's endorsement. Files are in `
 | `spherex-vela.webp`, `spherex-vela-wide.webp` | PIA26354 | The Vela Molecular Ridge, SPHEREx | NASA/JPL-Caltech |
 | `spherex-orbit.webp` | PIA26531 | SPHEREx in orbit, artist's concept (not currently shown) | NASA/JPL-Caltech |
 | `spherex-assembly.webp` | PIA26543 | SPHEREx in final assembly, March 2024 | NASA/JPL-Caltech/BAE Systems |
+| `spherex-glow.webp`, `spherex-glow-soft.webp` | (unknown) | SPHEREx as a silhouette above the glowing edge of Earth, illustration; opening picture of the home page; the soft file is a blurred copy used as a tint | Supplied by the team on 14 Nov 2026 as "SPHEREx Silhouette Above Earth's Glow". **TEAM TODO: confirm who made it and its licence, then fix this credit and the home-page footer.** It was not found among NASA/JPL-Caltech releases. |
 
-The design direction was dealt with the `design-taste-frontend` skill; no code, fonts or images from the reference
-sites the team supplied were copied.
+The design direction was dealt with the `design-taste-frontend` skill. The home page follows the section order of
+eclipse.space (a reference the team supplied); no code, fonts, text or images from the reference sites were copied.
 
 ## External services called at runtime
 

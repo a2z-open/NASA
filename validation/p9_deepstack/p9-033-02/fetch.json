@@ -1,0 +1,37 @@
+{
+ "field": {
+  "ra": 33.0,
+  "dec": -2.0,
+  "why": "on the predicted Planet Nine track at Galactic latitude -60 deg: few stars, so deeper."
+ },
+ "size_arcmin": 30.0,
+ "n_images": 114,
+ "n_downloaded": 114,
+ "failed": [],
+ "visits": [
+  {
+   "n_images": 36,
+   "mjd_start": 60871.79,
+   "span_days": 8.7
+  },
+  {
+   "n_images": 2,
+   "mjd_start": 60903.99,
+   "span_days": 0.41
+  },
+  {
+   "n_images": 36,
+   "mjd_start": 61036.93,
+   "span_days": 25.47
+  },
+  {
+   "n_images": 40,
+   "mjd_start": 61237.58,
+   "span_days": 22.13
+  }
+ ],
+ "detectors": [
+  1,
+  2
+ ]
+}

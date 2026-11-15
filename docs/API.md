@@ -218,3 +218,13 @@ Malformed JSON, a non-object body or a non-numeric field of view return 400.
   (letters, digits, spaces; 24 characters at most) and the time. Nothing else is stored.
 - `GET /api/resolve?q=` now also resolves Solar System bodies (Sun, Moon, planets, dwarf planets, numbered and named asteroids) through
   JPL Horizons and returns `moves: true` with today's position.
+
+## "How we find them" (fifth session)
+
+- `GET /api/how` → `{still, track, stack, deep, planet_nine, ledger}`, every part optional. `still`: dots found, kept still and left
+  over in the asteroid-hunt patches (`validation/asteroids/tracks.json`). `track`: the blind track of a known asteroid from the
+  calibration patches (points in arcsec from the patch centre). `stack`: known asteroids seen in single photos and when photos are
+  added along their paths, with real S/N pictures (`examples`, 15 × 15 native pixels, running stacks after 1, 2, 4, ... photos, and a
+  control path 60″ away) from `validation/asteroids/stack.json`. `deep`: each Planet Nine deep-stack patch (photos per visit, area,
+  single-photo depth, candidate counts, synthetic-planet results) from `validation/p9_deepstack/<patch>/`. `planet_nine`: the predicted
+  brightness. `ledger`: whether every seal checks out, how many there are, and the last four. Used by the page at `/how`.

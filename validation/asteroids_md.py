@@ -67,6 +67,29 @@ def section() -> tuple[str, str]:
                  'The linker was then tuned on these patches (version 3) and, on them, recovered 2 of the 3 known asteroids brighter than V 17.\n')
     L.append('**Conclusion.** Single SPHEREx images, linked this way, catch only asteroids brighter than about magnitude 17, and only some of those. '
              'Every asteroid that bright was catalogued long ago, so this channel cannot find a new asteroid. It is reported as a measured limit, not a discovery.\n')
+    sk = OUT / 'stack.json'
+    if sk.is_file():
+        k = json.loads(sk.read_text())
+        L.append(f"**Adding photos along known paths (fifth session).** {k['n_asteroids']} known asteroids (V up to {k['rule']['v_max']}) were measured at their "
+                 'exact predicted positions in every photo, with no search, after subtracting the same sky spot in photos taken more than 6 hours '
+                 'away. Adding the photos along each path was compared with the single-photo search of section 13, and with 4 control paths per '
+                 f"asteroid 60″ away ({k['n_control_paths']} in all). Threshold: the stacked S/N that 1% of control paths reach ({k['threshold_stack_snr']}).\n")
+        L.append('| V | Known asteroids | Seen in single photos (S/N 5 in two photos) | Added up, S/N 5 | Added up, 1% false-alarm threshold |\n|---|---:|---:|---:|---:|')
+        for r in k['by_V']:
+            if r['n']:
+                lo, hi = (float(x) for x in r['V'].split('-'))
+                n5 = sum(1 for a in k['asteroids'] if lo <= a['V'] < (hi if hi < 21 else 21.51) and a['stack_snr'] >= 5)
+                L.append(f"| {r['V']} | {r['n']} | {r['single']} | {n5} | {r['stack']} |")
+        L.append('')
+        n5 = sum(1 for a in k['asteroids'] if a['stack_snr'] >= 5)
+        c5 = sum(1 for a in k['asteroids'] for c in a['controls'] if c >= 5)
+        L.append(f"At S/N 5, where only {c5} of {k['n_control_paths']} control paths land (about {c5 / k['n_control_paths'] * k['n_asteroids']:.1f} false ones expected), "
+                 f"{n5} are seen when photos are added, against {k['n_seen_single']} in single photos. At the 1% threshold, {k['n_seen_stack']}, of which "
+                 f"about {0.01 * k['n_asteroids']:.0f} would be expected by chance. The faintest gains are at V 19-20. The pictures on the /how page "
+                 'are of asteroids that never pass S/N 4 in any single photo (re-picked after the lock: the first pick showed one-photo artefacts).\n')
+        L.append(f"In total {k['n_seen_single']} were seen in single photos and {k['n_seen_stack']} when the photos were added. This measures what "
+                 'stacking adds for objects whose path is known; it discovers nothing. `python -m validation.asteroids_stack` (ledger label asteroids:stack).\n')
+        line += f" Adding photos along known paths: {k['n_seen_single']} -> {n5} known asteroids seen at S/N 5."
     if tracks.get('history'):
         L.append('**History.** ' + tracks['history'] + ' A one-line fix to the report step (brightness values given as text) is recorded as its own ledger entry.\n')
     L.append('**Reproduce.** `python -m validation.asteroids plan | fetch | detect | link | known | report`, then `python -m validation.asteroids_md`.')

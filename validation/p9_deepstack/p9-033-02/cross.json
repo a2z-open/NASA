@@ -1,0 +1,37 @@
+{
+ "generated_utc": "2026-11-15T01:33:29+00:00",
+ "field": {
+  "ra": 33.0,
+  "dec": -2.0,
+  "why": "on the predicted Planet Nine track at Galactic latitude -60 deg: few stars, so deeper."
+ },
+ "candidates": [
+  {
+   "visit": 4,
+   "ra": 32.94275,
+   "dec": -1.84389,
+   "snr": 6.11,
+   "distance_au": 150.0,
+   "rate_arcsec_day": 1.49,
+   "other_visits": [
+    {
+     "visit": 1,
+     "checkable": true,
+     "places_px": 111,
+     "unmasked_fraction": 0.87,
+     "max_snr_there": 3.13,
+     "n_random_shapes": 125,
+     "chance_of_as_much": 0.44
+    },
+    {
+     "visit": 3,
+     "checkable": false,
+     "why": "all the places it could be are outside this patch"
+    }
+   ],
+   "verdict": "not seen where it must be: not a planet"
+  }
+ ],
+ "rule": "A real distant body must also show in another visit where its distance and speed put it. Seen there: the highest S/N over those places is 5 or more and noise gives as much less than 5% of the time. Not seen: below that.",
+ "note": "Speeds along the track use one direction per patch; for p9-033-02 it is the direction of the track near RA 60-90 deg projected here (an approximation, disclosed)."
+}

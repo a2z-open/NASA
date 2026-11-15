@@ -877,6 +877,67 @@ def asteroid_results():
     return d
 
 
+def _p9_survivors(vet: dict, cross_path: Path) -> int:
+    """Deep-stack candidates still standing: they passed the split checks and were not missing from another visit where they must be."""
+    passed = [c for c in vet['candidates'] if c['checks']['passes_split_tests'] and not c['checks']['rests_on_one_image']]
+    if cross_path.exists():
+        gone = {(r['visit'], r['ra'], r['dec']) for r in read_json(cross_path)['candidates'] if r['verdict'].startswith('not seen')}
+        passed = [c for c in passed if (c['visit'], c['ra'], c['dec']) not in gone]
+    return len(passed)
+
+
+@app.get('/api/how')
+def how_we_find_them():
+    """Real numbers and pictures for the step-by-step page that explains the method (web: /how). Every part is optional."""
+    base = ROOT / 'validation'
+    out: dict = {}
+    tr = base / 'asteroids' / 'tracks.json'
+    if tr.exists():
+        s = read_json(tr)['summary']
+        out['still'] = {'patches': len(s), 'dots': sum(v.get('paired_detections', 0) for v in s.values()),
+                        'still': sum(v.get('fixed_sources_removed', 0) for v in s.values()),
+                        'left': sum(v.get('night_detections', 0) for v in s.values()),
+                        'example': next(({'id': k, **v} for k, v in s.items()), None)}
+    cal = base / 'asteroids' / 'v2_calibration' / 'results.json'
+    if cal.exists():
+        c = read_json(cal)
+        t = next((t for t in c['tracks'] if t.get('known')), None)
+        if t:
+            out['track'] = {'name': t['known']['name'], 'V': t['known']['V'], 'rate_arcsec_h': t['rate_arcsec_h'], 'rms_arcsec': t['rms_arcsec'],
+                            'points': [{'mjd': p['mjd'], 'x': p['x'], 'y': p['y']} for p in t['points']],
+                            'chance_tracks_expected': c.get('chance_tracks_expected')}
+    st = base / 'asteroids' / 'stack.json'
+    if st.exists():
+        d = read_json(st)
+        out['stack'] = {k: d[k] for k in ('by_V', 'n_asteroids', 'n_seen_single', 'n_seen_stack', 'threshold_stack_snr', 'examples', 'n_control_paths')}
+        out['stack']['n_seen_stack_snr5'] = sum(1 for r in d['asteroids'] if r['stack_snr'] >= 5)
+        out['stack']['n_control_snr5'] = sum(1 for r in d['asteroids'] for c in r['controls'] if c >= 5)
+    deep = []
+    for f in sorted((base / 'p9_deepstack').glob('*/search.json')):
+        d = read_json(f)
+        inj = read_json(f.with_name('injection.json')) if f.with_name('injection.json').exists() else None
+        fe = read_json(f.with_name('fetch.json')) if f.with_name('fetch.json').exists() else {'visits': []}
+        vet = read_json(f.with_name('vet.json')) if f.with_name('vet.json').exists() else None
+        deep.append({'field': f.parent.name, 'ra': d['field']['ra'], 'dec': d['field']['dec'], 'visits': fe['visits'], 'n_photos': fe.get('n_downloaded'),
+                     'n_images': sum(v['images']['n_target'] for v in d['visits']), 'n_visits': len(d['visits']),
+                     'area_deg2': round(sum(v['area_deg2'] for v in d['visits']) / max(len(d['visits']), 1), 3),
+                     'single_5sigma_ujy': min(v['noise']['single_5sigma_ujy'] for v in d['visits']),
+                     'n_candidates': d['n_candidates'], 'n_still_changes': len(d.get('still_changes', [])),
+                     'n_passed_checks': None if vet is None else _p9_survivors(vet, f.with_name('cross.json')),
+                     'chance_expected': round(len(d['visits']) / 3, 2),
+                     'injection': inj['results'] if inj else None, 'injection_visit_images': None if not inj else
+                     next((v['images']['n_target'] for v in d['visits'] if v['visit'] == inj['visit']), None)})
+    out['deep'] = deep
+    p9 = base / 'planet_nine.json'
+    if p9.exists():
+        out['planet_nine'] = read_json(p9)['nominal']
+    from validation import ledger
+    ok, _ = ledger.verify()
+    es = ledger.entries()
+    out['ledger'] = {'ok': ok, 'n': len(es), 'last': [{'seq': e['seq'], 'label': e['label'], 'hash': e['hash'][:12], 'time_utc': e['time_utc']} for e in es[-4:]]}
+    return out
+
+
 @app.get('/api/ml')
 def ml_results():
     """The machine-learning real/artefact test (validation/ml_realbogus.py)."""

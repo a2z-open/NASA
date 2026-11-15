@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { huntApi, loadFrame, type HuntField, type HuntFieldRow, type HuntIndex, type HuntInjection, type HuntMover } from '../api.ts';
 import { Page, PageHero } from '../components/Shell.tsx';
-import { DistantWorlds, PlanetNineReach, VanishedPanel } from './Distant.tsx';
+import { DistantWorlds, PlanetNineDeep, PlanetNineReach, VanishedPanel } from './Distant.tsx';
 import { ColdSpec } from './ColdSpec.tsx';
 import { AsteroidHunt } from './Asteroids.tsx';
 import { paint } from '../components/FieldImage.tsx';
@@ -226,6 +226,7 @@ export function Hunt() {
       <ColdSpec />
       <AsteroidHunt />
       <PlanetNineReach />
+      <PlanetNineDeep />
       <VanishedPanel />
 
       <section className="band2" aria-labelledby="nb-h">

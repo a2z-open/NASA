@@ -197,6 +197,47 @@ const OUTCOME: Record<string, string> = {
   recovered: 'found', too_faint: 'too faint', seen_not_linked: 'seen, not linked', wrong_distance: 'found, wrong distance', outside_field: 'left the field',
 };
 
+interface DeepPatch { field: string; ra: number; dec: number; n_photos: number | null; n_visits: number; single_5sigma_ujy: number; n_candidates: number;
+  n_passed_checks?: number | null; chance_expected?: number; injection: { distance_au: number; flux_ujy: number; n_measured: number; n_recovered: number }[] | null }
+
+/** Search 3: one visit's photos added up along every path a distant planet could take (validation/p9_deepstack.py). */
+export function PlanetNineDeep() {
+  const [d, setD] = useState<{ deep: DeepPatch[]; planet_nine?: { flux_ujy: number } } | null>(null);
+  useEffect(() => { fetch('/api/how').then(r => (r.ok ? r.json() : null)).then(setD).catch(() => undefined); }, []);
+  if (!d || !d.deep.length) return null;
+  const half = (p: DeepPatch) => {
+    const at = (p.injection ?? []).filter(r => r.distance_au === 550 && r.n_measured).sort((a, b) => a.flux_ujy - b.flux_ujy);
+    return at.find(r => r.n_recovered / r.n_measured >= 0.5)?.flux_ujy ?? null;
+  };
+  const flagged = d.deep.reduce((s, p) => s + p.n_candidates, 0);
+  const checked = d.deep.every(p => p.n_candidates === 0 || typeof p.n_passed_checks === 'number');
+  const passed = d.deep.reduce((s, p) => s + (p.n_passed_checks ?? 0), 0);
+  const chance = d.deep.reduce((s, p) => s + (p.chance_expected ?? p.n_visits / 3), 0);
+  return (
+    <section className="band2" aria-labelledby="p9d-h">
+      <h2 className="test-h" id="p9d-h"><span>Search 3</span>Adding photos together, along its path</h2>
+      <p className="test-p">One photo is too noisy. So we shifted every photo of a visit to follow each path a distant planet could take, and added them up. Two patches on Planet Nine's predicted path.</p>
+      <div className="rows">
+        {d.deep.map(p => {
+          const h = half(p);
+          return (
+            <div key={p.field} className="row row--static">
+              <span className="row__name">RA {p.ra}°, Dec {p.dec}°</span>
+              <span className="row__what">{p.n_photos} photos, {p.n_visits} visits. One photo: {Math.round(p.single_5sigma_ujy)} µJy.{h ? ` Added up: ${h} µJy.` : ''}</span>
+              <span className="row__num">{p.n_candidates} flagged</span>
+            </div>
+          );
+        })}
+      </div>
+      <p className="verdict">
+        <strong>{checked ? (passed === 0 ? 'No planet.' : `${passed} flag(s) pass our checks so far, unconfirmed.`) : `${flagged} flagged, being checked.`}</strong>
+        {' '}Chance alone flags about {Math.round(chance)} in these visits.{d.planet_nine ? ` The predicted Planet Nine is ${d.planet_nine.flux_ujy.toFixed(1)} µJy, still fainter than we reach.` : ''}
+        {' '}<Link href="/how#s8">How this works</Link>.
+      </p>
+    </section>
+  );
+}
+
 /** Planet Nine mode: what was searched, what could have been found, and what could not. */
 export function PlanetNineReach() {
   const [p, setP] = useState<PlanetNine | null>(null);

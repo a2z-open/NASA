@@ -57,3 +57,12 @@ the cold-world spectral search with its locked protocol and literature vetting (
 candidate" page. The spectral search found no new object: all five objects it flagged are T dwarfs already typed in the
 literature (VALIDATION.md, section 12). The earlier work was pushed to the private repository `a2z-open/NASA` at the team's
 request; this session's work is not committed yet.
+
+## Fifth session (Sat 14 Nov 2026, evening Pacific; 15 Nov UTC)
+
+Built in this session: the asteroid hunt and its forced measurement of known asteroids (ledger entries 24 to 31), the
+Planet Nine deep stack (`validation/p9_deepstack.py`: two patches on the predicted track, every photo of a visit added along
+each path a distant planet could take, with two impossible-motion controls and synthetic planets; entries 32 onward), the
+stacking test along known asteroid paths (`validation/asteroids_stack.py`), and the page "How we find them" (`/how`) that
+walks through the method with the real numbers. The deep-stack method was tuned on the first patch using only its controls and
+synthetic planets, then frozen for the second patch; VALIDATION.md, section 14, records the steps.

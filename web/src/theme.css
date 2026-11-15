@@ -272,6 +272,14 @@ a:hover { color: #fff; text-decoration-color: #fff; }
   .result__facts b { font-size: 24px; }
 }
 
+@media (max-width: 480px) {
+  .header__inner { gap: 12px; }
+  .wordmark span { display: none !important; }
+  .nav { overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav__link { padding: 8px 7px; letter-spacing: 0.08em; white-space: nowrap; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .result, .game__toast, .game__ping, .game__hint { animation: none; }
   .bento .tile, .bento .tile__img img { transition: none; }

@@ -1,0 +1,286 @@
+{
+ "generated_utc": "2026-11-15T01:14:39+00:00",
+ "field": {
+  "ra": 33.0,
+  "dec": -2.0,
+  "why": "on the predicted Planet Nine track at Galactic latitude -60 deg: few stars, so deeper."
+ },
+ "distance_au": [
+  150.0,
+  1500.0
+ ],
+ "settings": {
+  "grid_arcsec": 4.0,
+  "clip_sigma": 4.0,
+  "star_mask_ujy": 400.0,
+  "min_cover": 0.6,
+  "peak_box_px": 7,
+  "template": "per-pixel quadratic in wavelength fitted to the OTHER two visits, 4-sigma clipped, 3 passes"
+ },
+ "visits": [
+  {
+   "visit": 1,
+   "images": {
+    "n_files": 114,
+    "n_used": 114,
+    "dropped": [],
+    "t_ref_mjd": 60876.82055540709,
+    "n_target": 36,
+    "n_template": 78
+   },
+   "noise": {
+    "single_5sigma_ujy": 186.0,
+    "noise_scale_median": 1.04,
+    "gain_range": [
+     0.913,
+     1.68
+    ],
+    "outlier_fraction": 0.0392,
+    "masked_star_fraction": 0.141
+   },
+   "mjd_span": [
+    60871.792,
+    60880.49
+   ],
+   "area_deg2": 0.1576,
+   "n_trials": 30,
+   "parallax_reach_arcsec_au": 4547.0,
+   "max_snr": {
+    "real": 6.82,
+    "reversed": 5.05,
+    "rotated": 6.15
+   },
+   "threshold_snr": 5.1,
+   "peaks_by_threshold": {
+    "real": {
+     "4.5": 6,
+     "5.0": 2,
+     "5.5": 2,
+     "6.0": 1
+    },
+    "reversed": {
+     "4.5": 5,
+     "5.0": 1,
+     "5.5": 0,
+     "6.0": 0
+    },
+    "rotated": {
+     "4.5": 4,
+     "5.0": 2,
+     "5.5": 2,
+     "6.0": 1
+    }
+   },
+   "control_planet_like": [
+    {
+     "mode": "reversed",
+     "snr": 5.05,
+     "margin": 1.68
+    }
+   ],
+   "candidates": [],
+   "still_changes": []
+  },
+  {
+   "visit": 3,
+   "images": {
+    "n_files": 114,
+    "n_used": 114,
+    "dropped": [],
+    "t_ref_mjd": 61056.14695296265,
+    "n_target": 36,
+    "n_template": 78
+   },
+   "noise": {
+    "single_5sigma_ujy": 179.0,
+    "noise_scale_median": 1.05,
+    "gain_range": [
+     0.745,
+     1.534
+    ],
+    "outlier_fraction": 0.0417,
+    "masked_star_fraction": 0.148
+   },
+   "mjd_span": [
+    61036.931,
+    61062.402
+   ],
+   "area_deg2": 0.1647,
+   "n_trials": 495,
+   "parallax_reach_arcsec_au": 23768.0,
+   "max_snr": {
+    "real": 6.54,
+    "reversed": 6.75,
+    "rotated": 7.02
+   },
+   "threshold_snr": 5.8,
+   "peaks_by_threshold": {
+    "real": {
+     "4.5": 34,
+     "5.0": 12,
+     "5.5": 4,
+     "6.0": 1
+    },
+    "reversed": {
+     "4.5": 25,
+     "5.0": 12,
+     "5.5": 8,
+     "6.0": 3
+    },
+    "rotated": {
+     "4.5": 31,
+     "5.0": 13,
+     "5.5": 4,
+     "6.0": 2
+    }
+   },
+   "control_planet_like": [
+    {
+     "mode": "reversed",
+     "snr": 5.79,
+     "margin": 3.28
+    },
+    {
+     "mode": "reversed",
+     "snr": 5.43,
+     "margin": 1.89
+    },
+    {
+     "mode": "reversed",
+     "snr": 5.4,
+     "margin": 2.78
+    },
+    {
+     "mode": "rotated",
+     "snr": 5.3,
+     "margin": 1.61
+    },
+    {
+     "mode": "reversed",
+     "snr": 5.13,
+     "margin": 1.84
+    }
+   ],
+   "candidates": [
+    {
+     "visit": 3,
+     "snr": 5.9,
+     "margin_over_controls": 2.21,
+     "ra": 32.89828,
+     "dec": -1.79278,
+     "xi": -366.0,
+     "eta": 746.0,
+     "distance_au": 151.0,
+     "rate_arcsec_day": -0.48,
+     "near_masked_star": false
+    }
+   ],
+   "still_changes": []
+  },
+  {
+   "visit": 4,
+   "images": {
+    "n_files": 114,
+    "n_used": 114,
+    "dropped": [],
+    "t_ref_mjd": 61241.184203163466,
+    "n_target": 40,
+    "n_template": 74
+   },
+   "noise": {
+    "single_5sigma_ujy": 186.0,
+    "noise_scale_median": 1.04,
+    "gain_range": [
+     0.841,
+     1.469
+    ],
+    "outlier_fraction": 0.0364,
+    "masked_star_fraction": 0.14
+   },
+   "mjd_span": [
+    61237.583,
+    61259.712
+   ],
+   "area_deg2": 0.1602,
+   "n_trials": 363,
+   "parallax_reach_arcsec_au": 17418.0,
+   "max_snr": {
+    "real": 6.4,
+    "reversed": 5.68,
+    "rotated": 6.07
+   },
+   "threshold_snr": 5.1,
+   "peaks_by_threshold": {
+    "real": {
+     "4.5": 14,
+     "5.0": 5,
+     "5.5": 2,
+     "6.0": 2
+    },
+    "reversed": {
+     "4.5": 7,
+     "5.0": 2,
+     "5.5": 1,
+     "6.0": 0
+    },
+    "rotated": {
+     "4.5": 10,
+     "5.0": 2,
+     "5.5": 1,
+     "6.0": 1
+    }
+   },
+   "control_planet_like": [
+    {
+     "mode": "rotated",
+     "snr": 5.09,
+     "margin": 2.11
+    }
+   ],
+   "candidates": [
+    {
+     "visit": 4,
+     "snr": 6.11,
+     "margin_over_controls": 1.84,
+     "ra": 32.94275,
+     "dec": -1.84389,
+     "xi": -206.0,
+     "eta": 562.0,
+     "distance_au": 150.0,
+     "rate_arcsec_day": 1.49,
+     "near_masked_star": false
+    }
+   ],
+   "still_changes": []
+  }
+ ],
+ "candidates": [
+  {
+   "visit": 3,
+   "snr": 5.9,
+   "margin_over_controls": 2.21,
+   "ra": 32.89828,
+   "dec": -1.79278,
+   "xi": -366.0,
+   "eta": 746.0,
+   "distance_au": 151.0,
+   "rate_arcsec_day": -0.48,
+   "near_masked_star": false
+  },
+  {
+   "visit": 4,
+   "snr": 6.11,
+   "margin_over_controls": 1.84,
+   "ra": 32.94275,
+   "dec": -1.84389,
+   "xi": -206.0,
+   "eta": 562.0,
+   "distance_au": 150.0,
+   "rate_arcsec_day": 1.49,
+   "near_masked_star": false
+  }
+ ],
+ "n_candidates": 2,
+ "still_changes": [],
+ "rule": "Each visit is searched on its own, three ways: along the real parallax, along the parallax reversed, and along the parallax turned by 90 degrees (no distant body can move in the last two ways). A peak is planet-like only if its S/N beats both other ways at the same spot by 1.5; a still source scores the same in all three. The threshold is the highest planet-like peak of the two controls. A real planet-like peak above it is a candidate. Still sources that are brighter in one visit than in the others (S/N 7.0+) are listed apart: they are not planets (variable stars, supernovae, optical ghosts). Everything is written here and locked in the ledger before any checking."
+}

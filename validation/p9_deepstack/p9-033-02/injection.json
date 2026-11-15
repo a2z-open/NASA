@@ -1,0 +1,72 @@
+{
+ "generated_utc": "2026-11-15T01:23:24+00:00",
+ "synthetic": true,
+ "visit": 4,
+ "threshold_snr": 5.1,
+ "results": [
+  {
+   "distance_au": 550.0,
+   "flux_ujy": 80.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 10,
+   "median_snr": 7.25,
+   "distance_ratio_median": 0.956
+  },
+  {
+   "distance_au": 550.0,
+   "flux_ujy": 60.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 4,
+   "median_snr": 5.54,
+   "distance_ratio_median": 0.964
+  },
+  {
+   "distance_au": 550.0,
+   "flux_ujy": 40.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 0,
+   "median_snr": 4.05,
+   "distance_ratio_median": null
+  },
+  {
+   "distance_au": 550.0,
+   "flux_ujy": 26.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 0,
+   "median_snr": 2.99,
+   "distance_ratio_median": null
+  },
+  {
+   "distance_au": 550.0,
+   "flux_ujy": 15.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 0,
+   "median_snr": 2.48,
+   "distance_ratio_median": null
+  },
+  {
+   "distance_au": 300.0,
+   "flux_ujy": 40.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 2,
+   "median_snr": 4.39,
+   "distance_ratio_median": 0.98
+  },
+  {
+   "distance_au": 1000.0,
+   "flux_ujy": 40.0,
+   "n_injected": 20,
+   "n_measured": 20,
+   "n_recovered": 0,
+   "median_snr": 3.39,
+   "distance_ratio_median": null
+  }
+ ],
+ "note": "SYNTHETIC planets built from each image's own ePSF (flat spectrum) and added to the real images of this patch, then searched for with exactly the same steps. They measure the depth the stack reaches. Never real."
+}

@@ -12,7 +12,12 @@ const ECL: [number, number][] = Array.from({ length: 73 }, (_, i) => {
 });
 
 /** The sky as a line-drawn sphere, seen from outside. Drag to turn it. Dots are places PARALLAX searched. */
-export function SkyGlobe({ points }: { points: GlobePoint[] }) {
+const LIGHT = { front: 'rgba(10,10,10,0.55)', back: 'rgba(10,10,10,0.12)', rim: '#0a0a0a', ecl: 'rgba(10,10,10,0.9)', eclBack: 'rgba(10,10,10,0.2)', p9: 'rgba(10,10,10,0.95)', p9Back: 'rgba(10,10,10,0.2)', dot: '#0a0a0a', dotBack: 'rgba(10,10,10,0.18)', big: '#0a0a0a', ring: 'rgba(10,10,10,0.5)', tag: 'rgba(244,244,244,0.9)', text: '#0a0a0a', p9Text: '#0a0a0a' };
+// on the navy block: pale blue lines, sky-blue patches, orange for named worlds and the Planet Nine track
+const DARK = { front: 'rgba(205,218,255,0.5)', back: 'rgba(205,218,255,0.1)', rim: 'rgba(225,233,255,0.95)', ecl: 'rgba(255,255,255,0.75)', eclBack: 'rgba(255,255,255,0.16)', p9: '#ff7a3d', p9Back: 'rgba(255,122,61,0.25)', dot: '#9fbcff', dotBack: 'rgba(159,188,255,0.22)', big: '#ff6a2b', ring: 'rgba(255,150,100,0.65)', tag: 'rgba(11,21,48,0.88)', text: '#ffffff', p9Text: '#ffb08a' };
+
+export function SkyGlobe({ points, dark = false }: { points: GlobePoint[]; dark?: boolean }) {
+  const C = dark ? DARK : LIGHT;
   const ref = useRef<HTMLCanvasElement>(null);
   const pts = useRef(points);
   pts.current = points;
@@ -55,29 +60,29 @@ export function SkyGlobe({ points }: { points: GlobePoint[] }) {
         ctx.setLineDash([]);
       };
       // graticule
-      for (let dec = -60; dec <= 60; dec += 30) line(Array.from({ length: 121 }, (_, i) => [i * 3, dec] as [number, number]), 'rgba(10,10,10,0.55)', 'rgba(10,10,10,0.12)', dec === 0 ? 1.3 : 0.9);
-      for (let ra = 0; ra < 360; ra += 30) line(Array.from({ length: 61 }, (_, i) => [ra, -90 + i * 3] as [number, number]), 'rgba(10,10,10,0.55)', 'rgba(10,10,10,0.12)', 0.9);
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.strokeStyle = '#0a0a0a'; ctx.lineWidth = 1.6; ctx.stroke();
-      line(ECL, 'rgba(10,10,10,0.9)', 'rgba(10,10,10,0.2)', 1.2, [5, 5]);
-      line(P9, 'rgba(10,10,10,0.95)', 'rgba(10,10,10,0.2)', 3);
+      for (let dec = -60; dec <= 60; dec += 30) line(Array.from({ length: 121 }, (_, i) => [i * 3, dec] as [number, number]), C.front, C.back, dec === 0 ? 1.3 : 0.9);
+      for (let ra = 0; ra < 360; ra += 30) line(Array.from({ length: 61 }, (_, i) => [ra, -90 + i * 3] as [number, number]), C.front, C.back, 0.9);
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.strokeStyle = C.rim; ctx.lineWidth = 1.6; ctx.stroke();
+      line(ECL, C.ecl, C.eclBack, 1.2, [5, 5]);
+      line(P9, C.p9, C.p9Back, 3);
       // places
       ctx.font = '600 11px Barlow, sans-serif';
       for (const p of pts.current) {
         const q = project(p.ra, p.dec, R, cx, cy);
         const front = q.z >= 0;
         ctx.beginPath(); ctx.arc(q.x, q.y, p.big ? 5 : 2.6, 0, Math.PI * 2);
-        ctx.fillStyle = front ? '#0a0a0a' : 'rgba(10,10,10,0.18)'; ctx.fill();
+        ctx.fillStyle = front ? (p.big ? C.big : C.dot) : C.dotBack; ctx.fill();
         if (p.big && front) {
-          ctx.beginPath(); ctx.arc(q.x, q.y, 10, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(10,10,10,0.5)'; ctx.lineWidth = 1; ctx.stroke();
+          ctx.beginPath(); ctx.arc(q.x, q.y, 10, 0, Math.PI * 2); ctx.strokeStyle = C.ring; ctx.lineWidth = 1; ctx.stroke();
           if (p.label) {
             const right = q.x >= cx;
             const tx = q.x + (right ? 18 : -18);
-            ctx.beginPath(); ctx.moveTo(q.x + (right ? 10 : -10), q.y); ctx.lineTo(tx - (right ? 3 : -3), q.y); ctx.strokeStyle = 'rgba(10,10,10,0.5)'; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(q.x + (right ? 10 : -10), q.y); ctx.lineTo(tx - (right ? 3 : -3), q.y); ctx.strokeStyle = C.ring; ctx.stroke();
             ctx.textAlign = right ? 'left' : 'right'; ctx.textBaseline = 'middle';
             const text = p.label.toUpperCase();
             const tw = ctx.measureText(text).width + 12;
-            ctx.fillStyle = 'rgba(244,244,244,0.9)'; ctx.fillRect(right ? tx - 3 : tx - tw + 3, q.y - 9, tw, 18);
-            ctx.fillStyle = '#0a0a0a';
+            ctx.fillStyle = C.tag; ctx.fillRect(right ? tx - 3 : tx - tw + 3, q.y - 9, tw, 18);
+            ctx.fillStyle = C.text;
             // letter-spaced capitals
             (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = '1.6px';
             ctx.fillText(text, tx + (right ? 3 : -3), q.y + 0.5);
@@ -86,17 +91,21 @@ export function SkyGlobe({ points }: { points: GlobePoint[] }) {
       }
       const pn = project(60, 11, R, cx, cy);
       if (pn.z >= 0) {
-        ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#0a0a0a';
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = C.p9Text;
         ctx.fillText('PLANET NINE ZONE', pn.x + 12, pn.y - 14);
       }
     };
 
+    let seen = true;
     const loop = () => {
-      if (!alive) return;
+      raf = 0;
+      if (!alive || !seen) return;
       if (!drag && !still) yaw += vel;
       draw();
       raf = requestAnimationFrame(loop);
     };
+    const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting; if (seen && !raf) raf = requestAnimationFrame(loop); });
+    io.observe(c);
     const down = (e: PointerEvent) => { drag = { x: e.clientX, y: e.clientY }; c.setPointerCapture(e.pointerId); };
     const move = (e: PointerEvent) => {
       if (!drag) return;
@@ -111,8 +120,8 @@ export function SkyGlobe({ points }: { points: GlobePoint[] }) {
     c.addEventListener('pointerup', up);
     c.addEventListener('pointercancel', up);
     loop();
-    return () => { alive = false; cancelAnimationFrame(raf); c.removeEventListener('pointerdown', down); c.removeEventListener('pointermove', move); c.removeEventListener('pointerup', up); c.removeEventListener('pointercancel', up); };
-  }, []);
+    return () => { alive = false; io.disconnect(); cancelAnimationFrame(raf); c.removeEventListener('pointerdown', down); c.removeEventListener('pointermove', move); c.removeEventListener('pointerup', up); c.removeEventListener('pointercancel', up); };
+  }, [C]);
 
   return <canvas ref={ref} role="img" aria-label="A line-drawn sphere of the whole sky that slowly turns. Dots mark the patches PARALLAX searched; labels mark Makemake, Eris, the coldest brown dwarf and the zone where Planet Nine is predicted." />;
 }
