@@ -334,8 +334,8 @@ export function Home() {
           <div className="e-wrap e-found">
             <div className="e-found__head">
               <p className="e-label e-label--dot">What it found</p>
-              <h2 id="fd-h" className="e-found__h">No hints. Every answer checked against NASA's JPL.</h2>
-              <p className="e-found__p">We gave the software real images and never told it where to look.</p>
+              <h2 id="fd-h" className="e-found__h">No hints. Every answer checked against what astronomers already know.</h2>
+              <p className="e-found__p">We gave the software real images and never told it where to look. Then we checked it against NASA's JPL and published catalogues.</p>
               <div className="e-row">
                 <Link className="e-btn e-btn--ink" href="/how">How we find them <Arrow /></Link>
                 <Link className="e-btn e-btn--line" href="/proof">See the proof <Arrow /></Link>
@@ -373,7 +373,7 @@ export function Home() {
                     <span className="e-card__k">{cold.wide?.candidates ? 'First spectra' : newCold > 0 ? 'New candidates' : 'Blind test'}</span>
                     <span className="e-card__v">{cold.wide?.candidates ? cold.wide.candidates.n_strong : newCold > 0 ? newCold : `${knownCold} of ${cold.results.n_candidates}`}</span>
                     <span className="e-card__t">{cold.wide?.candidates
-                      ? 'Brown dwarfs a survey had only guessed from colours. SPHEREx shows their methane. No spectrum of them was ever published.'
+                      ? 'Brown dwarfs a survey had only guessed from colours. SPHEREx shows their methane. We found no published spectrum of any of them.'
                       : newCold > 0
                         ? `Possible new cold worlds among ${cold.results.n_pass_quality.toLocaleString('en-US')} objects nobody had classified. Candidates, not confirmed discoveries.`
                         : `It flagged ${cold.results.n_candidates} of ${cold.results.n_pass_quality.toLocaleString('en-US')} unclassified objects. All were methane dwarfs astronomers had already typed.`}</span>
@@ -399,7 +399,7 @@ export function Home() {
               <img src="/img/spherex-dust.webp" alt="" loading="lazy" decoding="async" />
               <div className="e-dark__in">
                 <h2 className="e-dark__h">Help check the candidates.</h2>
-                <p className="e-dark__p">Our search flags real objects nobody has classified. Look at one and tell us what you see. Ten seconds, no account.</p>
+                <p className="e-dark__p">Our search flags real objects that have no published spectrum. Look at one and tell us what you see. Ten seconds, no account.</p>
                 <Link className="e-btn e-btn--white" href="/check">Check a candidate <Arrow /></Link>
               </div>
             </div>

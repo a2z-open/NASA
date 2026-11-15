@@ -1,5 +1,5 @@
 /* "How we find them" (/how). Black, white and grey only, like the rest of the site.
-   Line style carries meaning: dashed = before / predicted, solid = now / measured. */
+   Line style carries meaning, as on every page: dashed = a model or a prediction, solid = a measurement. */
 
 .how-hero { max-width: 1100px; margin: 0 auto; padding: clamp(40px, 8vh, 96px) 0 clamp(40px, 6vh, 72px); text-align: center; }
 .how-label, .how-step__n {
@@ -43,7 +43,7 @@
 .how-w--on { fill: var(--text); }
 
 .how-track { stroke: var(--text-2); stroke-width: 1.4; }
-.how-dot { fill: none; stroke: var(--text); stroke-width: 1.6; stroke-dasharray: 3 3; }
+.how-dot { fill: none; stroke: var(--text); stroke-width: 1.6; }
 .how-dot--now { fill: var(--text); stroke-dasharray: none; }
 .how-scale { stroke: var(--text-3); stroke-width: 2; }
 

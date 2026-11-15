@@ -46,6 +46,9 @@ Everything here comes from this repository's code and data. Details: [VALIDATION
 | **Waiting for the next images** | A watcher checks NASA's archive for new SPHEREx images of every locked prediction (python -m pipeline.watch). Makemake's next position is locked from the blind orbit alone; SPHEREx should next see it between 2026-12-22 and 2027-01-17, and JPL's ephemeris, checked after locking, agrees to 3″. |
 | **Machine learning, tested honestly** | A machine-learning real/artefact model, trained on synthetic stars in real SPHEREx images and tested on the real detections of four dwarf planets it never saw, ranks them with AUC 0.87; signal-to-noise alone gives 0.88. It does not beat the simple rule yet, so it is not used in any result. |
 <!-- DISTANT_ROWS:end -->
+| **Cold worlds from 102 colours** | A machine-learning model reads a spectral type from a SPHEREx spectrum (±1.5 subtypes on objects it never saw) and recognises **59 of 66 known T dwarfs with 0 false alarms in 414** warmer dwarfs. Locked, then run on 448 unclassified objects: the 5 it flagged are all T dwarfs already typed in the literature (a blind test, no new object). On 845 more candidates, mostly picked by other surveys from colours alone, **10 brown dwarfs show strong methane in a SPHEREx spectrum, with no published spectrum that we could find**: candidates for a first spectroscopic type, not new objects (VALIDATION.md, section 12). |
+| **Asteroids** | Joining dots blind across a week found 1 of the 6 known asteroids brighter than magnitude 17 in view, and nothing fainter: no new asteroid. Adding photos together along the paths of known asteroids shows **53 of 715 clearly (S/N 5), against 27 in single photos**; empty sky does that on 5 of 2,792 test paths (section 13). |
+| **Planet Nine, photos added up** | Two patches on the predicted track (248 photos): each visit's photos added along every path a body at 150–1,500 AU could take, with two impossible-motion controls. Pretend planets are found half the time at **60 µJy; the prediction is 7.2 µJy**. 2 spots were flagged, about what chance gives; both failed the checks made after locking (section 14). |
 | **No false alarms** | 33 stars that Gaia says are still: 0 flagged as moving, and the error bars behave as quoted (pull spread 0.93). |
 
 No new object is claimed. Sources the search cannot explain are called candidates, and movers that an older catalogue
@@ -180,11 +183,15 @@ data/           targets/ (the five NASA targets), hunt/ (every searched field), 
   the image's own coordinates with a larger error.
 - The hunt's recovery fields were chosen because a known mover is there. They measure completeness, not discovery.
 - The Planet Nine mode is a method and a limit, not a real chance of discovery: about 2 square degrees searched out of
-  thousands, and the predicted planet is about 40 times fainter than the faintest synthetic planet we can link.
+  thousands, and the predicted planet is about 40 times fainter than the faintest synthetic planet we can link. Adding the
+  photos of one visit together along each possible path (VALIDATION.md, section 14) reaches 60 µJy: still about 8 times too
+  bright for the predicted planet, on about 0.13 square degrees per visit.
 - The distant-world fields were chosen from JPL's positions. That tests whether the search works; it cannot find an unknown world.
-- The distant-world search found 1 of 4 known worlds. It needs at least four single-exposure detections in each of two visits, so it
-  misses worlds fainter than about magnitude 18, worlds in crowded star fields, and worlds imaged in one visit only.
-- Locks made in the third session are in a local file, not in Git, so their times are this computer's own.
+- The distant-world search found 2 of 4 known worlds: Makemake from single exposures, and Eris only by adding exposures
+  together along trial paths. It needs detections in at least two visits, so it misses worlds in crowded star fields and
+  worlds imaged in one visit only (Pluto and Haumea).
+- Locks from the third session on are in a local hash chain (`validation/ledger.jsonl`), now also in the Git history. Their
+  times are this computer's own clock.
 - Live queries download at most 48 cutouts to stay polite to the archive, and about one in five can fail when it is busy.
 
 ## Documents
@@ -196,8 +203,9 @@ data/           targets/ (the five NASA targets), hunt/ (every searched field), 
 [DEMO_SCRIPT.md](DEMO_SCRIPT.md) · [docs/API.md](docs/API.md) · [docs/COMPETITORS.md](docs/COMPETITORS.md) ·
 [docs/REVIEW_CHECKLIST.md](docs/REVIEW_CHECKLIST.md)
 
-Data: NASA SPHEREx DR1 Spectral Images (doi:10.26131/IRSA678) and QR3 from NASA/IPAC IRSA; Gaia DR3 (ESA);
-CatWISE2020. *This publication makes use of data products from the Spectro-Photometer for the History of the Universe,
+Data: NASA SPHEREx DR1 Spectral Images (doi:10.26131/IRSA678), QR3 and the DR1 all-sky spectral cube from NASA/IPAC IRSA;
+Gaia DR3 (ESA); CatWISE2020, AllWISE and 2MASS; SIMBAD and VizieR (CDS); NASA JPL Horizons; IMCCE SkyBoT. Full list in
+[DATA_SOURCES.md](DATA_SOURCES.md). *This publication makes use of data products from the Spectro-Photometer for the History of the Universe,
 Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the
 California Institute of Technology, and is funded by the National Aeronautics and Space Administration.* PARALLAX is
 not affiliated with or endorsed by NASA.

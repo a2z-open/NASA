@@ -61,7 +61,7 @@ Nothing from this session is committed. The team asked that Git not be used for 
       the wavy path, the spectrum. Check that the misses are shown as misses.
 - [ ] **"The same search, pointed at Planet Nine":** it must read as *not found, and could not have been*. Read the reach table,
       the pretend-planet grid and the false alarms.
-- [ ] **Proof page, Test 6:** Barnard's Star from its halo, on the visit that had been sealed.
+- [ ] **Proof page, Test 5:** Barnard's Star from its halo, on the visit that had been sealed.
 - [ ] `python -m validation.ledger verify` prints "OK". Read `validation/distant/PROTOCOL.md` and `PROTOCOL_P9.md`.
 - [ ] `docs/DISTANT_WORLDS.md` (generated), `docs/PLANET_NINE_RESEARCH.md` and `docs/JUDGING_NOTES.md` (written by AI helpers from
       public sources; both list what they could not confirm).

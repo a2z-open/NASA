@@ -197,10 +197,10 @@ const OUTCOME: Record<string, string> = {
   recovered: 'found', too_faint: 'too faint', seen_not_linked: 'seen, not linked', wrong_distance: 'found, wrong distance', outside_field: 'left the field',
 };
 
-interface DeepPatch { field: string; ra: number; dec: number; n_photos: number | null; n_visits: number; single_5sigma_ujy: number; n_candidates: number;
+interface DeepPatch { field: string; ra: number; dec: number; n_photos: number | null; n_visits: number; n_visits_all?: number; single_5sigma_ujy: number; n_candidates: number;
   n_passed_checks?: number | null; chance_expected?: number; injection: { distance_au: number; flux_ujy: number; n_measured: number; n_recovered: number }[] | null }
 
-/** Search 3: one visit's photos added up along every path a distant planet could take (validation/p9_deepstack.py). */
+/** Search 5: one visit's photos added up along every path a distant planet could take (validation/p9_deepstack.py). */
 export function PlanetNineDeep() {
   const [d, setD] = useState<{ deep: DeepPatch[]; planet_nine?: { flux_ujy: number } } | null>(null);
   useEffect(() => { fetch('/api/how').then(r => (r.ok ? r.json() : null)).then(setD).catch(() => undefined); }, []);
@@ -215,7 +215,7 @@ export function PlanetNineDeep() {
   const chance = d.deep.reduce((s, p) => s + (p.chance_expected ?? p.n_visits / 3), 0);
   return (
     <section className="band2" aria-labelledby="p9d-h">
-      <h2 className="test-h" id="p9d-h"><span>Search 3</span>Adding photos together, along its path</h2>
+      <h2 className="test-h" id="p9d-h"><span>Search 5</span>Planet Nine again: adding photos together, along its path</h2>
       <p className="test-p">One photo is too noisy. So we shifted every photo of a visit to follow each path a distant planet could take, and added them up. Two patches on Planet Nine's predicted path.</p>
       <div className="rows">
         {d.deep.map(p => {
@@ -223,7 +223,7 @@ export function PlanetNineDeep() {
           return (
             <div key={p.field} className="row row--static">
               <span className="row__name">RA {p.ra}°, Dec {p.dec}°</span>
-              <span className="row__what">{p.n_photos} photos, {p.n_visits} visits. One photo: {Math.round(p.single_5sigma_ujy)} µJy.{h ? ` Added up: ${h} µJy.` : ''}</span>
+              <span className="row__what">{p.n_photos} photos, {(p.n_visits_all ?? p.n_visits) > p.n_visits ? `${p.n_visits_all} visits (${p.n_visits} big enough to search)` : `${p.n_visits} visits`}. One photo: {Math.round(p.single_5sigma_ujy)} µJy.{h ? ` Added up: ${h} µJy.` : ''}</span>
               <span className="row__num">{p.n_candidates} flagged</span>
             </div>
           );
@@ -248,7 +248,7 @@ export function PlanetNineReach() {
   const limit = p.faintest_synthetic_recovered_ujy;
   return (
     <section className="band2" aria-labelledby="p9-h">
-      <h2 className="test-h" id="p9-h"><span>Search 2</span>The same search, pointed at Planet Nine</h2>
+      <h2 className="test-h" id="p9-h"><span>Search 4</span>The same search, pointed at Planet Nine</h2>
       <p className="test-p">A planet 500 AU away would jump 14 arcminutes between visits and come back. We looked for that pattern in every field we hold.</p>
       <p className="verdict">
         <strong>{p.search.accepted.length === 0 ? 'Not found. And it could not have been.' : `${p.search.accepted.length} unconfirmed candidate${p.search.accepted.length === 1 ? '' : 's'}.`}</strong>
@@ -330,7 +330,7 @@ export function BarnardHalo() {
   const worst = Math.max(...r.per_detector.map(p => p.difference_arcsec));
   return (
     <section className="band2" aria-labelledby="bh-h">
-      <h2 className="test-h" id="bh-h"><span>Test 6 · on sealed images</span>Track a star too bright to pin down</h2>
+      <h2 className="test-h" id="bh-h"><span>Test 5 · on sealed images</span>Track a star too bright to pin down</h2>
       <p className="test-p">Barnard's Star, the first target NASA named, overloads the camera in every exposure. We followed the centre of the ring of light around it, locked the rule, and only then opened a visit that had been sealed since the first session.</p>
       <div className="tiles tiles--3">
         <div className={`tile ${r.passed ? 'tile--hot' : ''}`}><span className="tile__n">{r.measured_total_arcsec.toFixed(1)}″</span><span className="tile__t">how far the halo's centre moved in {r.years_between.toFixed(2)} years. {r.passed ? 'Pass.' : 'Outside the limit.'}</span></div>
@@ -393,7 +393,7 @@ export function VanishedPanel() {
   const unexplained = d.counts.faded + d.counts.vanished;
   return (
     <section className="band2" aria-labelledby="gone-h">
-      <h2 className="test-h" id="gone-h"><span>Search 4</span>What has disappeared since WISE?</h2>
+      <h2 className="test-h" id="gone-h"><span>Search 6</span>What has disappeared since WISE?</h2>
       <p className="test-p">A world that moves leaves an empty spot behind. We took every bright source NASA's WISE telescope saw around 2015 in our fields, and looked at the same spot in SPHEREx's images today.</p>
       <div className="tiles tiles--3">
         <div className="tile"><span className="tile__n">{d.n_tested.toLocaleString('en-US')}</span><span className="tile__t">bright WISE sources checked in {d.n_fields} fields</span></div>
@@ -428,7 +428,7 @@ export function MLPanel() {
   const pct = (x: number | null) => (x == null ? '—' : `${Math.round(x * 100)}%`);
   return (
     <section className="band2" aria-labelledby="ml-h">
-      <h2 className="test-h" id="ml-h"><span>Test 8</span>Does machine learning help? {better ? 'Yes, a little.' : 'Not yet.'}</h2>
+      <h2 className="test-h" id="ml-h"><span>Test 6</span>Does machine learning help? {better ? 'Yes, a little.' : 'Not yet.'}</h2>
       <p className="test-p">We trained a model to tell a real point of light from an artefact, the way big sky surveys do. It learned from pretend stars hidden in real SPHEREx images, then had to rank the real detections of four dwarf planets it had never seen.</p>
       <div className="tiles tiles--3">
         <div className="tile"><span className="tile__n">{pct(d.mean_auc_synthetic)}</span><span className="tile__t">pretend stars told apart from artefacts, on fields it never saw</span></div>

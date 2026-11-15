@@ -12,17 +12,24 @@ interface Doc {
   history?: string; chance_tracks_expected?: number;
 }
 
+interface Stack { n_asteroids: number; n_seen_single: number; n_seen_stack_snr5: number; n_control_snr5: number; n_control_paths: number;
+  by_V: { V: string; n: number; single: number; stack: number }[] }
+
 /** The asteroid hunt: tracks from SPHEREx alone, locked, then matched to the known-asteroid catalogue. */
 export function AsteroidHunt() {
   const [d, setD] = useState<Doc | null>(null);
-  useEffect(() => { fetch('/api/asteroids').then(r => (r.ok ? r.json() : null)).then(setD).catch(() => undefined); }, []);
+  const [st, setSt] = useState<Stack | null>(null);
+  useEffect(() => {
+    fetch('/api/asteroids').then(r => (r.ok ? r.json() : null)).then(setD).catch(() => undefined);
+    fetch('/api/how').then(r => (r.ok ? r.json() : null)).then(h => setSt(h?.stack ?? null)).catch(() => undefined);
+  }, []);
   if (!d) return null;
   const unmatched = d.tracks.filter(t => !t.known);
   const known = d.tracks.filter(t => t.known).sort((a, b) => (a.known!.V ?? 99) - (b.known!.V ?? 99));
   const fieldOf = (id: string) => d.fields?.find(f => f.id === id);
   return (
     <section className="band2 cs" aria-labelledby="ah-h">
-      <h2 className="test-h" id="ah-h"><span>New search</span>{d.n_tracks_known > 0 ? 'Asteroids, found blind.' : 'Asteroids: a measured limit.'}</h2>
+      <h2 className="test-h" id="ah-h"><span>Search 3</span>{d.n_tracks_known > 0 ? 'Asteroids, found blind.' : 'Asteroids: a measured limit.'}</h2>
       <p className="test-p">
         We took {d.n_fields} patches of sky along the path of the planets, each imaged by SPHEREx on several nights in one week. Software joined dots that move along a smooth path from night to night, after removing everything that stays put.
         The tracks were hash-locked before we asked the international asteroid catalogue (IMCCE SkyBoT) what was there.
@@ -34,12 +41,20 @@ export function AsteroidHunt() {
           const n = bright.reduce((a, r) => a + r.n, 0), f = bright.reduce((a, r) => a + r.found, 0);
           return <div className="tile"><span className="tile__n">{f} of {n}</span><span className="tile__t">known asteroids brighter than magnitude 19 that were in view were found blind. Fainter ones are beyond single SPHEREx images.</span></div>;
         })()}
-        <div className="tile"><span className="tile__n">{d.n_tracks_unmatched}</span><span className="tile__t">{d.n_tracks_unmatched === 1 ? 'track matches' : 'tracks match'} no known asteroid{d.chance_tracks_expected != null ? ` (chance alone: ${d.chance_tracks_expected})` : ''}. {d.n_tracks_unmatched > 0 ? 'Candidates, not discoveries: they need follow-up images.' : 'No new asteroid. Single SPHEREx images reach about magnitude 17 here, and every asteroid that bright was found long ago.'}</span></div>
+        <div className="tile"><span className="tile__n">{d.n_tracks_unmatched}</span><span className="tile__t">{d.n_tracks_unmatched === 1 ? 'track matches' : 'tracks match'} no known asteroid{d.chance_tracks_expected != null ? ` (chance alone: ${d.chance_tracks_expected})` : ''}. {d.n_tracks_unmatched > 0 ? 'Candidates, not discoveries: they need follow-up images.' : 'No new asteroid. Joining dots blind works only for asteroids brighter than about magnitude 17 here, and every asteroid that bright was found long ago.'}</span></div>
       </div>
       <div className="cs-table" role="table" aria-label="Known asteroids recovered, by brightness" style={{ marginTop: 16 }}>
         <div role="row" className="cs-tr cs-tr--h"><span role="columnheader">Brightness (V)</span><span role="columnheader">Known asteroids in view on 3+ nights</span><span role="columnheader">Found blind</span></div>
         {d.recovery_by_V.filter(r => r.n > 0).map(r => <div role="row" className="cs-tr" key={r.V}><span role="cell">{r.V}</span><span role="cell">{r.n}</span><span role="cell">{r.found} ({Math.round((r.found / r.n) * 100)}%)</span></div>)}
       </div>
+      {st && (
+        <p className="test-p" style={{ marginTop: 16 }}>
+          <strong>Adding photos helps.</strong> Where the catalogue says a known asteroid is, we added up its photos along its path.
+          {' '}{st.n_seen_stack_snr5} of {st.n_asteroids.toLocaleString('en-US')} then show clearly (S/N 5), against {st.n_seen_single} in single photos; empty sky
+          does that on only {st.n_control_snr5} of {st.n_control_paths.toLocaleString('en-US')} test paths. This is a test on known asteroids, not a discovery.
+          {' '}<Link href="/how#s5">See it happen</Link>.
+        </p>
+      )}
       {known.length > 0 && (
         <p className="small dim" style={{ marginTop: 12 }}>Recovered, brightest first: {known.slice(0, 12).map(t => `${t.known!.name} (V ${t.known!.V})`).join(', ')}{known.length > 12 ? `, and ${known.length - 12} more` : ''}.</p>
       )}

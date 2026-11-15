@@ -113,3 +113,17 @@ PARALLAX is an independent hackathon project. It is not affiliated with or endor
 | **Best et al. 2020**, AJ 159, 257, table 1 (VizieR J/AJ/159/257) | Published spectral types, consulted only after the model's scores were locked, to vet what it flagged. | https://vizier.cfa.harvard.edu |
 | **JPL Horizons** (Giorgini et al. 1996) | Today's position of the Sun, Moon, planets, dwarf planets and asteroids for the search box (`pipeline/ephem.py`, `where_now`). | https://ssd.jpl.nasa.gov/api/horizons.api |
 | **HiPS previews of AllWISE, 2MASS, DSS2 and IRAS** (made by CDS, served by IRSA) | Thumbnails on the sky map's Layers tile. | https://irsa.ipac.caltech.edu/data/hips/CDS/ |
+
+## Added in the fifth session (wider spectral search, asteroid hunt, Planet Nine deep stack)
+
+| Source | Used for | How it is reached |
+|---|---|---|
+| **Dark Energy Survey** ultracool candidates: Carnero Rosell et al. 2019, MNRAS 489, 5301 (Y3; VizieR J/MNRAS/489/5301) and Dal Ponte et al. 2023, MNRAS 522, 1951 (Y6; VizieR J/MNRAS/522/1951) | Brown-dwarf candidates picked from colours, given a SPHEREx spectrum and scored by the locked model (`validation/coldspec_after.py`). | VizieR, CfA mirror |
+| **UKIDSS** photometric L and T dwarfs: Skrzypek et al. 2016, A&A 589, A49 (VizieR J/A+A/589/A49) | More colour-picked candidates for the same wider search. | VizieR, CfA mirror |
+| **Best et al. 2018** (ApJS 234, 1), **Best et al. 2021** (AJ 161, 42) and **Kirkpatrick et al. 2021** (ApJS 253, 7), with Best et al. 2020 | Published spectral types, consulted only after the scores were locked, to say which flagged objects were already typed. | VizieR, CfA mirror |
+| **SIMBAD** main and measurement tables (Wenger et al. 2000) | Any spectral type within 12″ of a flagged object (after the lock), and faint brown-dwarf candidates with no type. | SIMBAD TAP, CfA mirror |
+| **IMCCE SkyBoT** (Berthier et al. 2006) | Which known asteroids were in each asteroid-hunt patch at each epoch, asked only after the tracks were locked; their predicted positions for the forced and stacked measurements (`validation/asteroids*.py`). | https://ssp.imcce.fr/webservices/skybot/ |
+| **SPHEREx DR1 and QR3 Level 2 images** (IRSA), cutouts | The asteroid-hunt patches (60′) and the two Planet Nine deep-stack patches (30′, every 0.75–1.6 µm image of every visit). | IRSA SIA2 and cutout service |
+| **Gaia DR3** (ESA) | Lining up every image (registration) before measuring or adding images. | Gaia archive, cached per patch |
+| **Brown, Holman & Batygin 2024** and the track of Brown & Batygin 2021 | The predicted brightness (V 22.0 at 550 AU, range V 20.6–23.1) and sky track of Planet Nine that choose the deep-stack patches and set the comparison. | Published papers (docs/PLANET_NINE_RESEARCH.md) |
+

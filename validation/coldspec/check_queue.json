@@ -6402,5 +6402,5 @@
    ]
   }
  ],
- "note": "Spectra: SPHEREx DR1 all-sky cube. Known answers are spectral types from SIMBAD. A check is a human opinion on a real object; it does not confirm anything by itself."
+ "note": "Spectra: SPHEREx DR1 all-sky cube. Known answers are spectral types from SIMBAD and, for objects the model flagged, from Best et al. 2020. A check is a human opinion on a real object; it does not confirm anything by itself."
 }

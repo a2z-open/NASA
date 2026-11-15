@@ -143,7 +143,7 @@ export function ColdSpec() {
   const pct = (dex: number) => Math.round((10 ** dex - 1) * 100);
   return (
     <section className="band2 cs" aria-labelledby="cs-h">
-      <h2 className="test-h" id="cs-h"><span>New search</span>Reading 102 colours.</h2>
+      <h2 className="test-h" id="cs-h"><span>Search 2</span>Reading 102 colours.</h2>
       <p className="test-p">
         SPHEREx sees every object in 102 infrared colours. Cold worlds have a fingerprint there: methane swallows the light at 1.7 and 3.3 microns.
         We trained a model on {cv.n_used.toLocaleString('en-US')} dwarfs whose type astronomers already know

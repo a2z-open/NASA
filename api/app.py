@@ -918,7 +918,7 @@ def how_we_find_them():
         inj = read_json(f.with_name('injection.json')) if f.with_name('injection.json').exists() else None
         fe = read_json(f.with_name('fetch.json')) if f.with_name('fetch.json').exists() else {'visits': []}
         vet = read_json(f.with_name('vet.json')) if f.with_name('vet.json').exists() else None
-        deep.append({'field': f.parent.name, 'ra': d['field']['ra'], 'dec': d['field']['dec'], 'visits': fe['visits'], 'n_photos': fe.get('n_downloaded'),
+        deep.append({'field': f.parent.name, 'ra': d['field']['ra'], 'dec': d['field']['dec'], 'visits': fe['visits'], 'n_photos': fe.get('n_downloaded'), 'n_visits_all': len(fe['visits']),
                      'n_images': sum(v['images']['n_target'] for v in d['visits']), 'n_visits': len(d['visits']),
                      'area_deg2': round(sum(v['area_deg2'] for v in d['visits']) / max(len(d['visits']), 1), 3),
                      'single_5sigma_ujy': min(v['noise']['single_5sigma_ujy'] for v in d['visits']),

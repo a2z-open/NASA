@@ -187,7 +187,7 @@ def check_queue(log=print) -> dict:
            'question': 'Does the light almost vanish inside the two grey bands?',
            'reference': {'cold': shape(cold), 'warm': shape(warm)}, 'bands_um': [[1.63, 1.78], [3.10, 3.45]],
            'items': warmup + rest,
-           'note': 'Spectra: SPHEREx DR1 all-sky cube. Known answers are spectral types from SIMBAD. A check is a human opinion on a real object; it does not confirm anything by itself.'}
+           'note': 'Spectra: SPHEREx DR1 all-sky cube. Known answers are spectral types from SIMBAD and, for objects the model flagged, from Best et al. 2020. A check is a human opinion on a real object; it does not confirm anything by itself.'}
     (OUT / 'check_queue.json').write_text(json.dumps(doc, indent=1))
     log(f"check queue: {len(doc['items'])} objects ({sum(1 for i in doc['items'] if i['kind'] == 'unknown')} with no known answer, "
         f"{sum(1 for i in doc['items'] if i.get('flagged'))} flagged by the model)")

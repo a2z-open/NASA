@@ -216,7 +216,7 @@ export function Hunt() {
     <Page>
       <PageHero
         title="The Planet X hunt"
-        lede="Three blind searches. One finds distant worlds by their parallax. One looks for Planet Nine the same way. One finds cold neighbours of the Sun by their motion. None is told where to look."
+        lede="Seven searches, none told where in the image its object is: distant worlds by their parallax, cold worlds by their colours, asteroids by their motion, Planet Nine two ways, what has vanished since WISE, and cold neighbours of the Sun."
         img="/img/spherex-vela-wide.webp"
         alt="Stars and dark dust clouds in the Vela Molecular Ridge, imaged in infrared by SPHEREx"
         caption="The Vela Molecular Ridge, as NASA's SPHEREx sees it."
@@ -230,7 +230,7 @@ export function Hunt() {
       <VanishedPanel />
 
       <section className="band2" aria-labelledby="nb-h">
-        <h2 className="test-h" id="nb-h"><span>Search 3</span>Cold neighbours of the Sun</h2>
+        <h2 className="test-h" id="nb-h"><span>Search 7</span>Cold neighbours of the Sun</h2>
         <p className="test-p">Nearby brown dwarfs and free-floating planets drift a few arcseconds a year. This search gets a patch of sky, finds every source, tests each one for motion, and only then looks it up.</p>
       </section>
 

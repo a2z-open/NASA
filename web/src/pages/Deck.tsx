@@ -119,7 +119,7 @@ export function Deck() {
           <div><b>{worlds ? `${worlds.n_passed} of ${worlds.n_tested}` : '—'}</b><span>known distant worlds found and placed at the right distance, with {worlds?.false_objects ?? '—'} false objects</span></div>
           <div><b>{hunt ? `${hunt.recovery.n_recovered} of ${hunt.recovery.n_known}` : '—'}</b><span>cold neighbours of the Sun found by their motion{hunt ? `; ${rejected} false alarm${rejected === 1 ? '' : 's'} caught` : ''}</span></div>
         </div>
-        <p className="slide__foot">Each blind result was locked before the truth was opened. The same search, pointed at Planet Nine, found nothing, and we show why these images could not have. {nc ? `Separately, ${nc.false_positives} of ${nc.n_measured} still stars were flagged as moving.` : ''}</p>
+        <p className="slide__foot">Each blind result was locked before the truth was opened. Pointed at Planet Nine, it found nothing; even with photos added up along its path, Planet Nine would be about 8 times too faint, and we show how we measured that. Reading SPHEREx's 102 colours, a locked model recognised 59 of 66 known methane dwarfs. {nc ? `Separately, ${nc.false_positives} of ${nc.n_measured} still stars were flagged as moving.` : ''}</p>
       </section>
 
       <section className="slide slide--split">
@@ -141,10 +141,10 @@ export function Deck() {
         <ul className="slide__list slide__list--cols">
           <li>Three of NASA's five targets saturate. The app says so instead of forcing a number.</li>
           <li>No new world yet. Unexplained movers are called candidates, never discoveries.</li>
-          <li>Planet Nine itself would be too faint and would move too far between visits for this search.</li>
+          <li>Planet Nine would be too faint: even with photos added up along its path, about 8 times too faint. We measured that with pretend planets.</li>
           <li>No AI runs inside the app. AI helped write the code, and that is disclosed.</li>
         </ul>
-        <p className="slide__foot">Data: NASA SPHEREx DR1 and QR3 (IRSA), ESA Gaia DR3, CatWISE2020. Brown-dwarf templates: SPIFF (Gagné et al. 2026).</p>
+        <p className="slide__foot">Data: NASA SPHEREx DR1 and QR3 (IRSA), ESA Gaia DR3, CatWISE2020, 2MASS, AllWISE, SIMBAD, NASA JPL Horizons, IMCCE SkyBoT. Brown-dwarf templates: SPIFF (Gagné et al. 2026).</p>
       </section>
 
       <section className="slide">

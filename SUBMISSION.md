@@ -120,7 +120,7 @@ NASA branding are used. See AI_USAGE.md. TEAM TODO: complete it with your own to
 - The hunt's vetting rules were tuned on the same 25 fields it is scored on. The distant-world test was scored out of sample.
 - The hunt's fields were chosen around known objects and blank sky. It measures how well the search works, not how
   many new objects exist.
-- The Planet Nine mode is a working method and an honest limit, not a real chance of discovery: the predicted planet is about 40 times fainter than what these images can link.
+- The Planet Nine mode is a working method and an honest limit, not a real chance of discovery: the predicted planet is about 40 times fainter than what these images can link, and still about 8 times fainter after adding the photos of a visit together along its possible paths.
 
 ## Future work
 

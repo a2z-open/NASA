@@ -140,7 +140,7 @@ export function Check() {
             <aside className="ck-side">
               <div className="ck-stat"><b>{score.checked}</b><span>objects you checked</span></div>
               <div className="ck-stat"><b>{score.knownSeen ? `${score.knownRight} of ${score.knownSeen}` : '—'}</b><span>times you agreed with astronomers, on objects they have already typed</span></div>
-              <div className="ck-stat"><b>{score.unknown}</b><span>of your checks were on objects nobody has typed</span></div>
+              <div className="ck-stat"><b>{score.unknown}</b><span>of your checks were on objects with no published spectrum</span></div>
               <label className="ck-name">
                 <span>Your first name, to credit your checks (optional)</span>
                 <input value={name} maxLength={24} onChange={e => { setName(e.target.value); store.set('parallax.name', e.target.value); }} placeholder="Anonymous" autoComplete="given-name" />

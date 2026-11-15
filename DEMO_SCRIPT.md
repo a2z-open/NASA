@@ -72,10 +72,12 @@ what moves. Then prove it."
 - **How did you get a distance?** Parallax. SPHEREx sees every patch of sky twice a year from opposite sides of the Earth's
   orbit. Makemake jumped 2.8 degrees between visits. One orbit through all three visits gives 52.72 AU; JPL says 52.72.
 - **Did it find Pluto?** No, and we show it. Pluto sits in a crowded star field and two of its three visits have few
-  exposures, so only one visit gave enough detections. Haumea was imaged in one visit only. Eris is too faint for a single
-  exposure. One of four found, three misses, each with its reason.
-- **Then how could it find Planet Nine?** With these images it cannot, and we say so: Planet Nine is about 40 times fainter
-  than the faintest pretend planet we can link. The method is right; the depth needs stacking along trial orbits.
+  exposures, so only one visit gave enough detections. Haumea was imaged in one visit only. Eris was too faint for a single
+  exposure, so we added exposures together along trial paths and found it. Two of four found, two misses, each with its reason.
+- **Then how could it find Planet Nine?** With these images it cannot, and we say so. We tried the next step: adding up
+  every photo of a visit along each path a distant planet could take. Pretend planets are then found down to 60 µJy, but
+  the predicted Planet Nine is 7.2 µJy, about 8 times fainter. The two spots it flagged failed our checks. The page /how
+  shows each step.
 - **How do you know the blind search works?** Known movers were hidden in the fields. It found 13 of
   19. We also hid 16 fake cold sources in a blank field: it found the ones bright and fast enough, and called
   none of the still ones movers.

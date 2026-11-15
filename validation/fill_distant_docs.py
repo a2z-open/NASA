@@ -101,7 +101,7 @@ def main() -> None:
               f"- **Live forecasts.** {live}\n"
               f"- **Machine learning.** {mlt} Results in `validation/ml_realbogus.json`.\n"
               "- **What this does not show.** It does not show that SPHEREx can find Planet Nine: the predicted planet is about 40 times fainter than the faintest "
-              "synthetic planet recovered. It does not show discovery power for unknown worlds either: every field was chosen because a known body is in it.")
+              "synthetic planet this search recovered, and still about 8 times fainter after adding photos together along its path (section 14). It does not show discovery power for unknown worlds either: every field was chosen because a known body is in it.")
     p.write_text(t)
 
     p = ROOT / 'DEMO_SCRIPT.md'
