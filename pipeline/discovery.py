@@ -9,6 +9,7 @@ from math import asin, degrees
 import os
 from pathlib import Path
 import re
+from shutil import copyfile
 from typing import Callable, Literal
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -21,6 +22,7 @@ BENCHMARK_END = date(2026, 11, 13)
 BENCHMARK_REGION = {'ra_min': 24, 'ra_max': 38, 'dec_min': -6, 'dec_max': 24}
 MAX_SEARCH_DAYS = 90
 PlannerModel = Literal['gpt-6.1-terra', 'gpt-6.1-sol']
+SearchTask = Literal['search', 'search_followup']
 PLANNER_MODELS = {'gpt-6.1-terra': 'GPT-6.1 Terra', 'gpt-6.1-sol': 'GPT-6.1 Sol'}
 MODEL_FAILURES = {401: 'authentication', 403: 'model_access', 404: 'model_access', 429: 'rate_limit'}
 
@@ -64,7 +66,7 @@ class SearchRequest(BaseModel):
     benchmark: bool = False
     use_ai: bool = True
     planner_model: PlannerModel | None = None
-    task: Literal['search', 'search_followup'] = 'search'
+    task: SearchTask = 'search'
 
     @model_validator(mode='after')
     def scope(self):
@@ -108,8 +110,8 @@ def evidence_order(first: Literal['catalog', 'pixels']) -> tuple[str, str]:
 
 
 def plan_evidence(candidates: list[dict], enabled: bool, selected_model: PlannerModel | None = None,
-                  followups: list[dict] | None = None) -> dict:
-    default = {'order': list(evidence_order('catalog'))}
+                  followups: list[dict] | None = None, *, archive_only: bool = False) -> dict:
+    default = {'order': [] if archive_only else list(evidence_order('catalog'))}
     if followups:
         default['followup_first'] = 0
     if not enabled:
@@ -118,6 +120,8 @@ def plan_evidence(candidates: list[dict], enabled: bool, selected_model: Planner
     default['requested_model'] = model
     if not candidates:
         return default | {'status': 'no_candidates'}
+    if archive_only and not followups:
+        return default | {'status': 'no_predictions'}
     key = os.getenv('OPENAI_API_KEY', '').strip()
     if not key:
         return default | {'status': 'unconfigured'}
@@ -135,6 +139,9 @@ def plan_evidence(candidates: list[dict], enabled: bool, selected_model: Planner
         'Give one short reason. You cannot change measurements, fits, scores, or identification verdicts.'
     )
     properties = {'first': {'type': 'string', 'enum': ['catalog', 'pixels']}, 'reason': {'type': 'string'}}
+    if archive_only:
+        instructions = 'Choose the first public image archive query for this asteroid candidate. Give one short reason.'
+        properties.pop('first')
     model_input = summary
     if followups:
         instructions += (
@@ -169,7 +176,8 @@ def plan_evidence(candidates: list[dict], enabled: bool, selected_model: Planner
                    for part in item['content'] if part['type'] == 'output_text')
         decision = json.loads(raw)
         plan = {'status': 'used', 'requested_model': model, 'model': doc.get('model') or model,
-                'order': list(evidence_order(decision['first'])), 'reason': decision['reason'].strip()[:280],
+                'order': [] if archive_only else list(evidence_order(decision['first'])),
+                'reason': decision['reason'].strip()[:280],
                 'response_id': doc.get('id')}
         if followups:
             index = decision['followup_first']
@@ -191,20 +199,25 @@ def write_json(path: Path, payload: dict) -> None:
     pending.replace(path)
 
 
-def bundle_evidence(output: Path, result: dict) -> Path:
-    files = {'evidence.json', *result['artifacts']}
+def evidence_assets(result: dict) -> set[str]:
+    files = set(result['artifacts'])
     for candidate in result['candidates']:
         files.update(frame['file'] for frame in candidate['images']['frames'])
+    return files
+
+
+def bundle_evidence(output: Path, result: dict) -> Path:
     target = output / 'evidence.zip'
     pending = target.with_suffix('.zip.tmp')
     with ZipFile(pending, 'w', compression=ZIP_DEFLATED) as packet:
-        for name in sorted(files):
+        for name in sorted({'evidence.json', *evidence_assets(result)}):
             packet.write(output / name, arcname=name)
     pending.replace(target)
     return target
 
 
-def run(request: SearchRequest, output: Path, report: Callable[[str], None] = lambda _: None) -> dict:
+def run(request: SearchRequest, output: Path, report: Callable[[str], None] = lambda _: None,
+        *, reuse: Path | None = None) -> dict:
     from .discovery_engine import run_search
     from .discovery_evidence import attach_evidence
     from .discovery_followup import predicted_fields, run_followup
@@ -217,14 +230,28 @@ def run(request: SearchRequest, output: Path, report: Callable[[str], None] = la
         activity.append(message)
         report(message)
 
-    step('Opening the pinned MPC archive')
-    result = run_search(spec, output, step)
+    if reuse is None:
+        step('Opening the pinned MPC archive')
+        result = run_search(spec, output, step)
+    else:
+        step('Loading the saved linkages and frozen predictions')
+        result = json.loads((reuse / 'evidence.json').read_text())
+        for name in evidence_assets(result):
+            source, target = (reuse / name).resolve(), (output / name).resolve()
+            if reuse.resolve() not in source.parents or output.resolve() not in target.parents:
+                raise ValueError('Invalid saved evidence path.')
+            target.parent.mkdir(parents=True, exist_ok=True)
+            copyfile(source, target)
+        spec = result['request']
+        result['reused_from'] = reuse.name
     fields = predicted_fields(result['candidates']) if request.task == 'search_followup' else []
     step('Choosing the next evidence check')
-    planner = plan_evidence(result['candidates'], request.use_ai, request.planner_model, fields)
-    labels = {'catalog': 'catalog comparisons', 'pixels': 'original images'}
-    step('Checking ' + ' and '.join(labels[action] for action in planner['order']))
-    attach_evidence(result, output, order=tuple(planner['order']))
+    planner = plan_evidence(result['candidates'], request.use_ai, request.planner_model, fields,
+                            archive_only=reuse is not None)
+    if reuse is None:
+        labels = {'catalog': 'catalog comparisons', 'pixels': 'original images'}
+        step('Checking ' + ' and '.join(labels[action] for action in planner['order']))
+        attach_evidence(result, output, order=tuple(planner['order']))
     if request.task == 'search_followup':
         result['followup'] = run_followup(fields, planner.get('followup_first', 0), step)
     step('Saving the evidence packet')

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { chunkFromId } from '../lib/skyChunks.ts';
 import './DiscoveryPanel.css';
 
 interface Observation {
@@ -69,7 +68,22 @@ interface SearchRun {
   evidence?: Packet;
 }
 
+interface TaskDraft {
+  chunks: string[];
+  start: string | null;
+  end: string | null;
+  task: 'search' | 'search_followup';
+  benchmark: boolean;
+}
+
+interface Conversation {
+  turns: { role: 'user' | 'agent'; text: string }[];
+  draft?: TaskDraft;
+}
+
 const STORAGE_KEY = 'parallax-discovery-run';
+const CHAT_STORAGE_KEY = 'parallax-discovery-chat';
+const REPLAY_EXAMPLE = 'Replay NW034 and look for follow-up images.';
 const plannerFailures: Record<string, string> = {
   authentication: 'OpenAI rejected the server credential.',
   model_access: 'OpenAI did not grant this project access to the selected model.',
@@ -82,6 +96,14 @@ const toArcseconds = (ra: number, dec: number, origin: Observation) => [
 ];
 const utc = (mjd: number) => new Date((mjd - 40587) * 86400000).toISOString();
 const utcTime = (mjd: number) => utc(mjd).slice(11, 19);
+
+function readConversation(): Conversation {
+  try {
+    const data = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY) ?? 'null');
+    if (Array.isArray(data?.turns)) return data;
+  } catch { /* Start a fresh conversation when browser storage is unavailable. */ }
+  return { turns: [] };
+}
 
 async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`/api/discovery${path}`, options);
@@ -251,11 +273,10 @@ function FollowupReport({ result }: { result: Followup }) {
 
 export function DiscoveryPanel({ initialChunk, onClose }: { initialChunk: string; onClose: () => void }) {
   const heading = useRef<HTMLHeadingElement>(null);
-  const [primary, setPrimary] = useState(initialChunk);
-  const [secondary, setSecondary] = useState('');
-  const [start, setStart] = useState('2026-10-20');
-  const [end, setEnd] = useState('2026-11-13');
-  const [task, setTask] = useState<'search' | 'search_followup'>('search');
+  const recentTurn = useRef<HTMLDivElement>(null);
+  const composer = useRef<HTMLTextAreaElement>(null);
+  const [chat, setChat] = useState(readConversation);
+  const [message, setMessage] = useState('');
   const [settings, setSettings] = useState<Settings>();
   const [plannerModel, setPlannerModel] = useState<string>();
   const [runId, setRunId] = useState(() => localStorage.getItem(STORAGE_KEY));
@@ -279,6 +300,11 @@ export function DiscoveryPanel({ initialChunk, onClose }: { initialChunk: string
   }, []);
 
   useEffect(() => {
+    if (chat.turns.length) recentTurn.current?.scrollIntoView({ block: 'nearest' });
+    try { localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat)); } catch { /* Keep this session usable. */ }
+  }, [chat]);
+
+  useEffect(() => {
     if (!runId) return;
     const controller = new AbortController();
     let timer: number | undefined;
@@ -297,26 +323,32 @@ export function DiscoveryPanel({ initialChunk, onClose }: { initialChunk: string
     return () => { controller.abort(); window.clearTimeout(timer); };
   }, [runId]);
 
-  async function launch(benchmark: boolean) {
+  async function send(raw: string) {
     setError('');
-    const a = chunkFromId(primary), b = chunkFromId(secondary);
-    if (!benchmark && (!a || (secondary.trim() && (!b || b.id === a.id)))) {
-      setError('Enter one or two different chunk IDs, such as H-02.');
-      return;
-    }
+    const text = raw.trim();
+    if (!text || pending) return;
     setSubmitting(true);
     try {
-      const scope = benchmark ? { benchmark: true } : { chunks: [a!.id, ...(b ? [b.id] : [])], start, end };
-      const request = { ...scope, planner_model: plannerModel, task };
-      const next = await api<SearchRun>('/runs', {
+      const request = { message: text, draft: chat.draft, previous_run: runId ?? undefined,
+        map_chunk: initialChunk || undefined, planner_model: plannerModel };
+      const next = await api<{ reply: string; draft?: TaskDraft; run?: SearchRun }>('/tasks', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(request),
       });
-      localStorage.setItem(STORAGE_KEY, next.id);
-      setSelected('');
-      setRun(next);
-      setRunId(next.id);
+      setChat(current => ({
+        turns: [...current.turns, { role: 'user' as const, text }, { role: 'agent' as const, text: next.reply }].slice(-16),
+        draft: next.draft,
+      }));
+      setMessage('');
+      if (next.run) {
+        localStorage.setItem(STORAGE_KEY, next.run.id);
+        setSelected('');
+        setRun(next.run);
+        setRunId(next.run.id);
+      } else {
+        window.requestAnimationFrame(() => composer.current?.focus());
+      }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Couldn’t start the search.');
+      setError(cause instanceof Error ? cause.message : 'Couldn’t send the task.');
     } finally {
       setSubmitting(false);
     }
@@ -332,46 +364,19 @@ export function DiscoveryPanel({ initialChunk, onClose }: { initialChunk: string
       </button>
     </div>
     <div className="gm-card__scroll discovery-scroll">
-      <p className="discovery-intro">Search archived asteroid sightings. Review the fitted orbit, held-out observations and original images when available.</p>
-      {settings?.archive_ready === false && <p role="alert">This server needs the MPC snapshot and HelioLinC3D tools.</p>}
-      <form className="discovery-form" onSubmit={(event: FormEvent) => { event.preventDefault(); void launch(false); }}>
-        <label className="discovery-field">Task
-          <select value={task} disabled={pending}
-            onChange={event => setTask(event.target.value === 'search_followup' ? 'search_followup' : 'search')}>
-            <option value="search">Search for moving objects</option>
-            <option value="search_followup">Search and find follow-up images</option>
-          </select>
-        </label>
-        <div className="discovery-pair">
-          <label className="discovery-field">Sky chunk<input value={primary} onChange={e => setPrimary(e.target.value.toUpperCase())} placeholder="H-02" maxLength={4} required /></label>
-          <label className="discovery-field">Second chunk (optional)<input value={secondary} onChange={e => setSecondary(e.target.value.toUpperCase())} placeholder="H-03" maxLength={4} /></label>
-        </div>
-        <div className="discovery-pair">
-          <label className="discovery-field">Start date (UTC)<input type="date" value={start} onChange={e => setStart(e.target.value)} required /></label>
-          <label className="discovery-field">End date (UTC)<input type="date" value={end} min={start} onChange={e => setEnd(e.target.value)} required /></label>
-        </div>
-        {settings && <div className="discovery-planner">
-          <label className="discovery-field">Planner model
-            <select value={plannerModel ?? ''} disabled={pending} aria-describedby="discovery-planner-status"
-              onChange={event => setPlannerModel(event.target.value || undefined)}>
-              <option value="">{modelLabel(settings.planner_default_model)} (default)</option>
-              {Object.entries(settings.planner_models).filter(([id]) => id !== settings.planner_default_model)
-                .map(([id, label]) => <option key={id} value={id}>{label}</option>)}
-            </select>
-          </label>
-          <p id="discovery-planner-status" className="discovery-mode">{settings.planner_ready
-            ? 'Chooses which evidence check runs first.'
-            : 'Configure a server key to use the planner. Searches currently use a fixed evidence order.'}</p>
-        </div>}
-        <div className="discovery-actions">
-          <button className="gm-btn" type="submit" disabled={pending || !settings?.archive_ready}>
-            {task === 'search_followup' ? 'Run search and follow-up' : 'Search chunks'}
-          </button>
-          <button className="discovery-secondary" type="button" disabled={pending || !settings?.archive_ready} onClick={() => void launch(true)}>Replay NW034</button>
-        </div>
-      </form>
-      {error && <p className="discovery-error" role="alert">{error}</p>}
-      {(pending || run?.state === 'error') && <p className="discovery-progress" role={run?.state === 'error' ? 'alert' : 'status'}>{submitting ? 'Starting archive search…' : run?.message ?? 'Loading search…'}</p>}
+      {!chat.turns.length && <div className="discovery-start">
+        <p>Tell me which chunks and dates to search. I can look for moving objects or check archived images near a saved prediction.</p>
+        <button className="discovery-secondary" type="button" disabled={pending || !settings?.archive_ready}
+          onClick={() => void send(REPLAY_EXAMPLE)}>Replay NW034 with follow-up</button>
+      </div>}
+      <div role="log" aria-label="Task conversation" className="discovery-conversation">
+        {chat.turns.map((turn, index) => <p className="discovery-message" data-role={turn.role} key={index}>
+          <span className="visually-hidden">{turn.role === 'user' ? 'You' : 'Search agent'} </span>{turn.text}
+        </p>)}
+        <div ref={recentTurn} />
+      </div>
+      {settings?.archive_ready === false && <p role="alert">This server needs the MPC snapshot and HelioLinC3D tools to start a new search.</p>}
+      {(pending || run?.state === 'error') && <p className="discovery-progress" role={run?.state === 'error' ? 'alert' : 'status'}>{submitting ? 'Reading the task…' : run?.message ?? 'Loading search…'}</p>}
       {activity.length > 0 && <details className="discovery-activity" open={pending}>
         <summary>Work log</summary>
         <ol>{activity.map((item, index) => <li key={index}>{item}</li>)}</ol>
@@ -398,5 +403,34 @@ export function DiscoveryPanel({ initialChunk, onClose }: { initialChunk: string
         </> : <p>No linkages passed the orbit checks in this archive snapshot and date range.</p>}
       </section>}
     </div>
+    <form className="discovery-composer" onSubmit={(event: FormEvent) => { event.preventDefault(); void send(message); }}>
+      <label className="discovery-field">Describe the task
+        <textarea ref={composer} value={message} maxLength={800} rows={3}
+          placeholder="Search H-02 and H-03 from Oct 20 to Nov 13, 2026, and look for follow-up images."
+          onChange={event => setMessage(event.target.value)}
+          onKeyDown={event => {
+            if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+              event.preventDefault();
+              void send(message);
+            }
+          }} />
+      </label>
+      {error && <p className="discovery-error" role="alert">{error}</p>}
+      <div className="discovery-composer__actions">
+        {settings && <label className="discovery-field">
+          <span className="visually-hidden">Planner model</span>
+          <select value={plannerModel ?? ''} disabled={pending} aria-describedby="discovery-planner-status"
+            onChange={event => setPlannerModel(event.target.value || undefined)}>
+            <option value="">{modelLabel(settings.planner_default_model)} (default)</option>
+            {Object.entries(settings.planner_models).filter(([id]) => id !== settings.planner_default_model)
+              .map(([id, label]) => <option key={id} value={id}>{label}</option>)}
+          </select>
+        </label>}
+        <button className="gm-btn" type="submit" disabled={pending || !message.trim()}>Send task</button>
+      </div>
+      {settings && <p id="discovery-planner-status" className="discovery-mode">{settings.planner_ready
+        ? 'The model chooses which evidence to check first.'
+        : 'The server uses a fixed evidence order until a key is configured.'}</p>}
+    </form>
   </aside>;
 }

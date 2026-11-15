@@ -15,6 +15,9 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
 
 from pipeline.discovery import PLANNER_MODELS, SearchRequest, default_planner_model, run, write_json
+from pipeline.discovery_tasks import (
+    RESULT_QUESTION, SECRET, TaskMessage, TaskScope, assigned_reply, interpret_task, result_reply,
+)
 from pipeline.spherex import CACHE
 
 router = APIRouter(prefix='/api/discovery')
@@ -41,7 +44,7 @@ def settings():
                          'planner_models': PLANNER_MODELS}, headers=no_cache)
 
 
-def perform(run_id: str, folder: Path, request: SearchRequest) -> None:
+def perform(run_id: str, folder: Path, request: SearchRequest, reuse: Path | None = None) -> None:
     global active
     activity = []
 
@@ -50,7 +53,7 @@ def perform(run_id: str, folder: Path, request: SearchRequest) -> None:
         write_json(folder / 'status.json', {'id': run_id, 'state': state, 'message': message, 'activity': activity})
 
     try:
-        run(request, folder, lambda message: status('running', message))
+        run(request, folder, lambda message: status('running', message), reuse=reuse)
         status('complete', 'Evidence ready')
     except Exception as error:
         logger.exception('Discovery run %s failed', run_id)
@@ -63,10 +66,9 @@ def perform(run_id: str, folder: Path, request: SearchRequest) -> None:
             active = None
 
 
-@router.post('/runs', status_code=202)
-def start_search(request: SearchRequest):
+def queue_search(request: SearchRequest, reuse: Path | None = None) -> dict:
     global active
-    if not source_ready():
+    if reuse is None and not source_ready():
         raise HTTPException(503, 'This server needs an MPC snapshot and the HelioLinC3D tools.')
     with lock:
         if active:
@@ -74,11 +76,46 @@ def start_search(request: SearchRequest):
         run_id = uuid4().hex
         folder = RUNS / run_id
         folder.mkdir(parents=True)
-        status = {'id': run_id, 'state': 'running', 'message': 'Opening the archive'}
+        status = {'id': run_id, 'state': 'running',
+                  'message': 'Loading saved predictions' if reuse else 'Opening the archive'}
         write_json(folder / 'status.json', status)
         active = run_id
-        pool.submit(perform, run_id, folder, request)
-    return JSONResponse(status, status_code=202, headers=no_cache)
+        pool.submit(perform, run_id, folder, request, reuse)
+    return status
+
+
+@router.post('/runs', status_code=202)
+def start_search(request: SearchRequest):
+    return JSONResponse(queue_search(request), status_code=202, headers=no_cache)
+
+
+@router.post('/tasks')
+def assign_task(task: TaskMessage):
+    if SECRET.search(task.message):
+        raise HTTPException(400, 'Remove the API key from your message. Configure it on the server.')
+    previous = None
+    packet = None
+    prior = RUNS / task.previous_run if task.previous_run else None
+    if prior and (prior / 'evidence.json').is_file():
+        packet = json.loads((prior / 'evidence.json').read_text())
+        previous_request = packet['request']
+        values = {key: previous_request[key] for key in TaskScope.model_fields if key in previous_request}
+        if values.get('benchmark'):
+            values.pop('start', None)
+            values.pop('end', None)
+        previous = TaskScope.model_validate(values)
+    if RESULT_QUESTION.fullmatch(task.message):
+        return JSONResponse({'reply': result_reply(packet),
+                             'draft': task.draft.model_dump(mode='json') if task.draft else None}, headers=no_cache)
+    scope, question = interpret_task(task.message, draft=task.draft, previous=previous, map_chunk=task.map_chunk)
+    if question:
+        draft = scope.model_dump(mode='json') if scope != TaskScope() else None
+        return JSONResponse({'reply': question, 'draft': draft}, headers=no_cache)
+    same_scope = previous and scope.model_dump(exclude={'task'}) == previous.model_dump(exclude={'task'})
+    reuse = prior if same_scope and scope.task == 'search_followup' else None
+    status = queue_search(scope.search_request(task.planner_model), reuse)
+    return JSONResponse({'reply': assigned_reply(scope, reuse is not None), 'run': status},
+                        status_code=202, headers=no_cache)
 
 
 def run_folder(run_id: str) -> Path:

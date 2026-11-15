@@ -103,9 +103,11 @@ Set `PARALLAX_CHUNKS_DB` to a path on persistent storage when hosting it.
 
 ### Sky map search agent
 
-Open **Search agent** on the map, choose a task, and enter one or two chunk IDs and a UTC date range.
-**Replay NW034** uses the historical search region and dates with the selected task. The job runs on the
-server. Reopen the panel to see its work log and download the evidence packet.
+Open **Search agent** and send a task such as “Search H-02 and H-03 from Oct 20 to Nov 13, 2026,
+and look for follow-up images.” The chat asks for missing chunks or dates. “Replay NW034” runs the
+historical benchmark. Follow up with “Find images for that search” to use its saved predictions, or ask
+“What did you find?” for a summary. Jobs run on the server. Reopen the panel to see the work log and
+download the evidence packet.
 
 ```sh
 .venv/bin/python -m pipeline.discovery --benchmark --no-ai --output output/nw034-replay
