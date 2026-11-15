@@ -20,12 +20,13 @@ type Mode = 'animate' | 'blink' | 'difference' | 'stack' | 'spectral';
 const MODES: { id: Mode; label: string; hint: string }[] = [
   { id: 'animate', label: 'Play', hint: 'Play the images in the order they were taken' },
   { id: 'blink', label: 'Blink', hint: 'Flip between two dates. Anything that jumps has moved' },
-  { id: 'difference', label: 'Subtract', hint: 'Later minus earlier. A mover leaves a dark spot next to a bright one' },
-  { id: 'stack', label: 'Add', hint: 'Add all the images together to see fainter things' },
+  { id: 'difference', label: 'Subtract', hint: 'Subtract image A from image B to reveal what changed' },
+  { id: 'stack', label: 'Add', hint: 'Combine up to 240 images to see fainter things' },
   { id: 'spectral', label: 'Colour', hint: 'Order the images by infrared colour instead of time' },
 ];
 
 const STACK_ORDER = (id: string) => ({ 'stack-short': 0, 'stack-long': 1, 'stack-mid': 2 } as Record<string, number>)[id] ?? 3;
+const STACK_LIMIT = 240;
 
 function jyearToMjd(j: number) { return (j - 2000) * 365.25 + 51544.5; }
 
@@ -200,8 +201,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const [independent, setIndependent] = useState(false);
   const [smooth, setSmooth] = useState(params.get('smooth') !== '0');
   const [fade, setFade] = useState(params.get('fade') !== '0');
-  const [showGrid, setShowGrid] = useState(false);
-  const [showCatalog, setShowCatalog] = useState(false);
+  const [showGrid, setShowGrid] = useState(params.get('grid') === '1');
+  const [showCatalog, setShowCatalog] = useState(params.get('gaia') === '1');
   const [showWise, setShowWise] = useState(false);
   const [wise, setWise] = useState<{ ra: number; dec: number; mover: boolean; pm_arcsec_yr: number }[] | null>(null);
   const [wiseError, setWiseError] = useState<string | null>(null);
@@ -232,7 +233,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
 
   // Default detector for curated fields: the detector covering most visits.
   useEffect(() => {
-    if (dets === null && wmin === null && wmax === null && allFrames.length > 40) {
+    if (!urlHasView.current && dets === null && wmin === null && wmax === null && allFrames.length > 40) {
       const d = bestDetector(allFrames);
       if (d) setDets([d]);
     }
@@ -263,13 +264,14 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const bIdx = bId ? frames.findIndex(f => f.id === bId) : -1;
   const frameA = aIdx >= 0 ? frames[aIdx] : frames[0] ?? null;
   const frameB = bIdx >= 0 ? frames[bIdx] : frames[frames.length - 1] ?? null;
+  const canPlay = frames.length > 1 && mode !== 'stack' && mode !== 'difference';
 
   // ---------- load frames for the current filter (current first) ----------
   useEffect(() => {
     if (!grid || !frames.length) return;
     const ctl = new AbortController();
     const order = [...frames.slice(safeIndex), ...frames.slice(0, safeIndex)];
-    const urls = (mode === 'stack' ? order.slice(0, 240) : order).map(f => f.data_url);
+    const urls = (mode === 'stack' ? frames.slice(0, STACK_LIMIT) : order).map(f => f.data_url);
     let n = 0;
     loadFrames(urls, grid.dtype, () => {
       n++;
@@ -281,14 +283,14 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
 
   // ---------- playback ----------
   useEffect(() => {
-    if (!playing || frames.length < 2) return;
+    if (!playing || !canPlay) return;
     if (mode === 'blink') {
       const id = window.setInterval(() => setBlinkPhase(p => 1 - p), 700);
       return () => window.clearInterval(id);
     }
     const id = window.setInterval(() => setIndex(i => (i + 1) % frames.length), 1000 / fps);
     return () => window.clearInterval(id);
-  }, [playing, fps, frames.length, mode]);
+  }, [playing, fps, frames.length, mode, canPlay]);
 
   useEffect(() => { if (reduced) setPlaying(false); }, [reduced]);
 
@@ -296,7 +298,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   useEffect(() => {
     replaceQuery({
       mode: mode === 'animate' ? null : mode,
-      det: dets?.length ? dets.join(',') : null,
+      det: dets?.length ? dets.join(',') : 'all',
       wmin: wmin != null ? wmin.toFixed(3) : null,
       wmax: wmax != null ? wmax.toFixed(3) : null,
       frame: current?.id ?? null,
@@ -308,17 +310,22 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       src_ra: selected ? selected.ra.toFixed(6) : null,
       src_dec: selected ? selected.dec.toFixed(6) : null,
       track: showTrack ? null : '0',
+      grid: showGrid ? '1' : null,
+      gaia: showCatalog ? '1' : null,
+      smooth: smooth ? null : '0',
+      fade: fade ? null : '0',
     });
-  }, [mode, dets, wmin, wmax, current?.id, stretch, cmap, frameA?.id, frameB?.id, invId, selected, showTrack]);
+  }, [mode, dets, wmin, wmax, current?.id, stretch, cmap, frameA?.id, frameB?.id, invId, selected, showTrack, showGrid, showCatalog, smooth, fade]);
 
   // ---------- compose pixels ----------
   const composed = useMemo(() => {
     if (!grid || !frames.length) return null;
     if (mode === 'stack') {
-      const loaded = frames.slice(0, 240).map(f => ({ f, d: cachedFrame(f.data_url) })).filter(x => x.d);
+      const loaded = frames.slice(0, STACK_LIMIT).map(f => ({ f, d: cachedFrame(f.data_url) })).filter(x => x.d);
       if (!loaded.length) return null;
       const s = stackFrames(loaded.map(x => ({ data: x.d!, median: x.f.stats.median })));
-      return { data: s.data, kind: 'stack' as const, n: loaded.length };
+      return { data: s.data, kind: 'stack' as const, n: loaded.length,
+        firstDate: loaded[0].f.time_utc.slice(0, 10), lastDate: loaded[loaded.length - 1].f.time_utc.slice(0, 10) };
     }
     if (mode === 'difference') {
       if (!frameA || !frameB) return null;
@@ -421,11 +428,11 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       if (e.metaKey || e.ctrlKey || e.altKey) return;                       // leave browser shortcuts alone
       const onControl = !!t && (t.tagName === 'BUTTON' || t.tagName === 'A' || t.tagName === 'SUMMARY');
       if (onControl && (e.key === ' ' || e.key === 'Enter')) return;      // Space and Enter press the focused control
-      if (e.key === ' ') { e.preventDefault(); setPlaying(p => !p); }
+      if (e.key === ' ') { if (canPlay) { e.preventDefault(); setPlaying(p => !p); } }
       else if (e.key === 'ArrowRight') { e.preventDefault(); setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }
       else if (e.key.toLowerCase() === 'b') setMode(m => (m === 'blink' ? 'animate' : 'blink'));
-      else if (e.key.toLowerCase() === 'd') setMode(m => (m === 'difference' ? 'animate' : 'difference'));
+      else if (e.key.toLowerCase() === 'd') { setPlaying(false); setMode(m => (m === 'difference' ? 'animate' : 'difference')); }
       else if (e.key === '+' || e.key === '=') canvasRef.current?.zoom(1.25);
       else if (e.key === '-') canvasRef.current?.zoom(0.8);
       else if (e.key === '0') canvasRef.current?.resetView();
@@ -433,7 +440,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [frames.length]);
+  }, [frames.length, canPlay]);
 
   // ---------- overlays ----------
   const overlays = useMemo<Overlays>(() => {
@@ -444,7 +451,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     }
     const m = showTrack && trackSource ? trackSource.motion : null;
     if (m && m.track.length > 1) {
-      const ref = m.models[m.reported_model ?? m.preferred_model]?.reference;
+      const modelId = m.reported_model ?? m.preferred_model;
+      const ref = modelId ? m.models[modelId]?.reference : undefined;
       if (ref) {
         o.track = { points: m.track.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), label: '', color: 'rgba(245,245,247,0.9)' };
         o.measured = { points: m.points.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), color: 'rgba(143,180,255,0.55)' };
@@ -552,7 +560,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               hint={hint}
               onPick={pick}
               emptyMessage={emptyMessage}
-              caption={`${mode === 'stack' ? `${composed?.n ?? 0} images added together` : mode === 'difference' ? 'Later image minus earlier image' : 'Aligned for viewing. Measurements use the original pixels.'}${overlays.track ? ' Dashed line: fitted path (a model, not an observation).' : ''}`}
+              caption={`${mode === 'stack' ? `${composed?.n ?? 0} images added together` : mode === 'difference' ? 'Image B minus image A' : 'Aligned for viewing. Measurements use the original pixels.'}${overlays.track ? ' Dashed line: fitted path (a model, not an observation).' : ''}`}
               ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}. Click a source to measure it.`}
             />
           ) : (
@@ -574,7 +582,11 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
                 </span>
               </>
             ) : mode === 'stack' ? (
-              <span className="mono">{composed?.n ?? 0} exposures · {frames[0] && frames[frames.length - 1] ? `${frames[0].time_utc.slice(0, 10)} → ${frames[frames.length - 1].time_utc.slice(0, 10)}` : ''} · moving sources smear in a sky-frame stack</span>
+              <span className="mono">{composed?.n ?? 0} exposures
+                {composed?.kind === 'stack' && ` · ${composed.firstDate} → ${composed.lastDate}`}
+                {frames.length > STACK_LIMIT && ` · first ${STACK_LIMIT} of ${frames.length} selected`}
+                {' · moving sources smear in a sky-frame stack'}
+              </span>
             ) : shownFrame ? (
               <>
                 <span className="mono">{dateTime(shownFrame.time_utc)}</span>
@@ -592,7 +604,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
           <div className="ws__transport">
             <div className="transport" role="group" aria-label="Playback">
               <button className="icon" onClick={() => { setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Previous exposure (←)">‹</button>
-              <button className="button button--primary button--play" onClick={() => setPlaying(p => !p)} disabled={frames.length < 2 || mode === 'stack' || mode === 'difference'} aria-label={playing ? 'Pause (space)' : 'Play (space)'}>{playing ? 'Pause' : 'Play'}</button>
+              <button className="button button--primary button--play" onClick={() => setPlaying(p => !p)} disabled={!canPlay} aria-label={playing ? 'Pause (space)' : 'Play (space)'}>{playing ? 'Pause' : 'Play'}</button>
               <button className="icon" onClick={() => { setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Next exposure (→)">›</button>
               <label className="transport__speed"><span className="visually-hidden">Speed</span>
                 <select value={fps} onChange={e => setFps(Number(e.target.value))} aria-label="Playback speed">

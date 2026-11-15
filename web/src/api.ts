@@ -86,7 +86,7 @@ export interface MotionModel {
 
 export interface Motion {
   status: 'significant' | 'not_significant' | 'insufficient';
-  preferred_model: string;
+  preferred_model: string | null;
   reported_model?: string;
   n_visits?: number;
   thresholds?: Record<string, number>;

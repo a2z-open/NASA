@@ -6,7 +6,7 @@ export function navigate(to: string, { replace = false } = {}) {
   if (replace) history.replaceState(null, '', to);
   else history.pushState(null, '', to);
   window.dispatchEvent(new Event(EVENT));
-  if (!replace) window.scrollTo({ top: 0 });
+  if (!replace && !window.location.hash) window.scrollTo({ top: 0 });
 }
 
 /** Update the query string without creating history entries (keeps share links current). */
@@ -21,13 +21,16 @@ export function replaceQuery(params: Record<string, string | number | null | und
 }
 
 export function useLocation() {
-  const [loc, setLoc] = useState(() => ({ path: window.location.pathname, search: window.location.search }));
+  const read = () => ({ path: window.location.pathname, search: window.location.search, hash: window.location.hash });
+  const [loc, setLoc] = useState(read);
   useEffect(() => {
-    const update = () => setLoc({ path: window.location.pathname, search: window.location.search });
+    const update = () => setLoc(read());
     window.addEventListener('popstate', update);
+    window.addEventListener('hashchange', update);
     window.addEventListener(EVENT, update);
     return () => {
       window.removeEventListener('popstate', update);
+      window.removeEventListener('hashchange', update);
       window.removeEventListener(EVENT, update);
     };
   }, []);

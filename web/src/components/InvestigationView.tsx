@@ -33,7 +33,8 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
   const [showRaw, setShowRaw] = useState(false);
   const [allRows, setAllRows] = useState(false);
   const m = inv.motion;
-  const pref = m?.models?.[m.reported_model ?? m.preferred_model];
+  const modelId = m?.reported_model ?? m?.preferred_model;
+  const pref = modelId ? m?.models[modelId] : undefined;
   const obs = inv.observations;
   const tmpl = inv.spectrum?.templates;
   const visits = useMemo(() => [...new Set((inv.detections ?? []).map(d => d.visit))], [inv.detections]);
@@ -107,8 +108,8 @@ export function InvestigationView({ inv, compact = false }: { inv: Investigation
             <thead><tr><th>Model</th><th>μα cos δ (mas/yr)</th><th>μδ (mas/yr)</th><th>Parallax (mas)</th><th><Term t="reduced chi-square">χ²ᵣ</Term></th><th>N</th></tr></thead>
             <tbody>
               {Object.entries(m.models).map(([k, v]) => (
-                <tr key={k} className={k === (m.reported_model ?? m.preferred_model) ? 'is-preferred' : ''}>
-                  <td>{humanize(k)}{k === (m.reported_model ?? m.preferred_model) ? ' · reported' : ''}</td>
+                <tr key={k} className={k === modelId ? 'is-preferred' : ''}>
+                  <td>{humanize(k)}{k === modelId ? ' · reported' : ''}</td>
                   <td className="mono">{v.pmra_masyr != null ? pm(v.pmra_masyr, v.pmra_err_masyr) : '—'}</td>
                   <td className="mono">{v.pmdec_masyr != null ? pm(v.pmdec_masyr, v.pmdec_err_masyr) : '—'}</td>
                   <td className="mono">{v.parallax_mas != null ? pm(v.parallax_mas, v.parallax_err_mas) : v.fixed_parallax_mas != null ? `${num(v.fixed_parallax_mas, 1)} (fixed)` : '—'}</td>

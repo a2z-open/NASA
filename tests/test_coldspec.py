@@ -71,7 +71,7 @@ def test_check_queue_hides_answers_and_counts_votes(client):
     assert r['agrees_with_known'] is False and r['tally']['n'] == 2
     unknown = next(it for it in full['items'] if it['kind'] == 'unknown')
     r = client.post('/api/check', json={'id': unknown['id'], 'answer': 'unsure'}).json()
-    assert r['agrees_with_known'] is None and r['truth'] is None
+    assert r['agrees_with_known'] is None and r['truth'] is None and r['total_votes'] == 3
     assert client.get('/api/check').json()['total_votes'] == 3
     import api.app as appmod
     saved = [json.loads(line) for line in appmod.CHECK_VOTES.read_text().splitlines()]

@@ -10,9 +10,8 @@ The prediction experiment's manifests are in `validation/experiments/`.
 | Dataset | Release | Provider | Citation / DOI | How PARALLAX uses it |
 |---|---|---|---|---|
 | SPHEREx Spectral Images (Level 2) | DR1 (`spherex_dr1` SIA2 collection) | NASA/IPAC Infrared Science Archive (IRSA) | **doi:10.26131/IRSA678** | Search, cutouts, playback frames, and all astrometry, photometry and spectra |
-| SPHEREx Spectral Images (Level 2) | QR3 (`spherex_qr3` SIA2 collection) | NASA/IPAC IRSA | Cite according to IRSA's current SPHEREx release guidance. **TEAM TODO:** confirm the QR DOI on the IRSA SPHEREx page before submission. | Same as DR1. The Epsilon Indi B held-out visit (Sep–Oct 2026) is QR3. |
-
-The DR1 Spectral All-Sky Cube (doi:10.26131/IRSA679) is **not** used, so it is not cited as a data source.
+| SPHEREx Spectral Images (Level 2) | QR3 (`spherex_qr3` SIA2 collection) | NASA/IPAC IRSA | **doi:10.26131/IRSA662** | Same as DR1. The Epsilon Indi B held-out visit (Sep–Oct 2026) is QR3. |
+| SPHEREx DR1 Spectral All-Sky Cube | DR1 | NASA/IPAC IRSA | **doi:10.26131/IRSA679** | Sky map wavelength layers and the cold-world spectral checks |
 
 **Required acknowledgement (from the IRSA SPHEREx DR1 overview):**
 

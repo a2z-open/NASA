@@ -496,14 +496,16 @@ input[type='checkbox'] { accent-color: var(--accent); }
   .ws__panel { max-height: none; border-top: 1px solid var(--line); }
   .ws__panel-toggle { display: inline-flex; }
   .drawer { position: fixed; inset: var(--header-h) 0 0 0; z-index: 35; max-height: none; }
-  .ws__transport { grid-template-columns: 1fr; }
+  .ws__transport { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 640px) {
   :root { font-size: 14.5px; }
   .header__inner { flex-wrap: nowrap; }
   .nav__link { padding: 6px 7px; font-size: 0.82rem; }
   .wordmark span { display: none; }
-  .topsearch__fov { display: none; }
+  .topsearch { gap: 6px; }
+  .topsearch__fov input { width: 52px; padding-inline: 6px; }
+  .transport { flex-wrap: wrap; }
   .hero { min-height: auto; }
   .hero__inner { padding-top: 40px; padding-bottom: 40px; }
   .kv { grid-template-columns: 1fr; gap: 2px; }

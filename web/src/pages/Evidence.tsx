@@ -11,7 +11,8 @@ export function Evidence({ id }: { id: string }) {
   if (error) return <Page><p className="notice notice--bad">{error}</p></Page>;
   if (loading || !inv) return <Page><p className="muted">Loading evidence dossier…</p></Page>;
   const m = inv.motion;
-  const rep = m ? m.models[m.reported_model ?? m.preferred_model] : null;
+  const modelId = m?.reported_model ?? m?.preferred_model;
+  const rep = modelId ? m?.models[modelId] : null;
   const t = inv.spectrum?.templates;
   const used = inv.detections.filter(d => d.used_for_motion);
   return (
@@ -60,7 +61,7 @@ export function Evidence({ id }: { id: string }) {
         {m && (
           <section>
             <h2>Motion</h2>
-            <p>Status: <strong>{humanize(m.status)}</strong>. Reported model: {humanize(m.reported_model ?? m.preferred_model)}.</p>
+            <p>Status: <strong>{humanize(m.status)}</strong>. Reported model: {modelId ? humanize(modelId) : NA}.</p>
             <dl className="kv">
               <dt>μα cos δ</dt><dd className="mono">{pm(rep?.pmra_masyr, rep?.pmra_err_masyr, 1, 'mas/yr')}</dd>
               <dt>μδ</dt><dd className="mono">{pm(rep?.pmdec_masyr, rep?.pmdec_err_masyr, 1, 'mas/yr')}</dd>

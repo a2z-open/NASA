@@ -10,8 +10,8 @@ to keep it, or add a subtitle such as "PARALLAX: find what moves, then prove it"
 **Challenge:** Planet X and SPHEREx (NASA Space Apps Challenge 2026)
 **Local event:** Seattle
 **Public demo:** TEAM TODO (deploy only after approval; see docs/DEPLOYMENT.md)
-**Repository:** TEAM TODO. `github.com/a2z-open/NASA` is public and its README describes an older state; branch
-`parallax-build` is local only until approved.
+**Repository:** TEAM TODO. `github.com/a2z-open/NASA` contains the current project on `main`. Verify a public
+open-source release link before submission.
 **Demo:** TEAM TODO. Either a 30-second video (DEMO_SCRIPT.md, part A) or the seven slides built into the app at `/deck`
 (print to PDF from the browser).
 
@@ -107,9 +107,10 @@ no other SPHEREx tool that does either.
 
 ## AI disclosure
 
-AI coding assistants (Claude Code; ChatGPT for planning and research) helped write the code and documents. No AI runs
-inside the app: every measurement comes from fixed, readable code with rules set in advance. No AI-generated images or
-NASA branding are used. See AI_USAGE.md. TEAM TODO: complete it with your own tools and checks.
+Claude Code, ChatGPT, and OpenAI Codex helped with research, planning, implementation, and testing. The Sky Map search
+agent can use a configured OpenAI model to prioritize follow-up checks. The team preview runs a fixed evidence workflow.
+Archive searches, measurements, and orbit fits produce the evidence. See AI_USAGE.md for the spectral classifier,
+image provenance, and the remaining team disclosures.
 
 ## Limitations
 
@@ -124,11 +125,11 @@ NASA branding are used. See AI_USAGE.md. TEAM TODO: complete it with your own to
 
 ## Future work
 
-- Shift-and-stack along trial orbits, to reach worlds too faint for one exposure (Eris was missed for that reason).
+- Expand shift-and-stack across more trial orbits and fields. Stacking recovered Eris after the single-exposure search missed it.
 - A purpose-built Planet Nine run: wider fields along the predicted band and every short-wavelength exposure.
 - Search wider fields from the bulk archive instead of small cutouts.
 - Check the 2027 forecasts when the next SPHEREx visit is released.
-- A queue where volunteers vet candidates, as in Backyard Worlds.
+- Expand the existing volunteer spectrum review queue to cover more candidates.
 
 ## References
 

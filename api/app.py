@@ -33,7 +33,7 @@ from api.chunks import router as chunks_router
 from api.discovery import router as discovery_router
 from pipeline import ephem
 from pipeline.astrometry import CoordinateError, mjd_to_iso, parse_dec, parse_position, parse_ra, propagate, to_tangent
-from pipeline.spherex import CACHE, ROOT, ArchiveUnavailable, field_key, group_visits, search, fetch_many
+from pipeline.spherex import CACHE, RELEASES, ROOT, ArchiveUnavailable, field_key, group_visits, search, fetch_many
 from pipeline.targets import ORDER, TARGETS
 
 VERSION = '1.0.0'
@@ -146,8 +146,9 @@ def resolve(q: str):
     try:
         ra, dec = parse_position(q)
         return {'name': None, 'ra': ra, 'dec': dec, 'source': 'coordinates', 'epoch_note': 'as entered (ICRS)'}
-    except CoordinateError:
-        pass
+    except CoordinateError as error:
+        if re.match(r'^[+−-]?\d', q) and re.fullmatch(r'''[\d\s.,:+−hdms°'"′″-]+''', q, re.IGNORECASE) and re.search(r'[\s,]', q):
+            raise HTTPException(400, str(error)) from error
     key = re.sub(r'\s+', ' ', q.lower().replace('’', "'"))
     if key in ('earth', 'the earth'):
         raise HTTPException(400, 'This sky map looks outward from Earth, so Earth itself has no position on it.')
@@ -188,7 +189,7 @@ def resolve(q: str):
                 except Exception:  # noqa: BLE001
                     pass
             raise HTTPException(404, f'Couldn\'t find "{q}". Try a star like Vega, a planet like Mars, or coordinates.')
-        ra, dec = float(res.findtext('jradeg')), float(res.findtext('jdedeg'))
+        ra, dec = parse_ra(float(res.findtext('jradeg'))), parse_dec(float(res.findtext('jdedeg')))
         pmra = res.findtext('pm/pmRA')
         pmdec = res.findtext('pm/pmDE')
         plx = res.findtext('plx/v')
@@ -278,7 +279,7 @@ async def create_field(request: Request):
     if fp.exists():
         doc = read_json(fp)
         # A 'processing' document with no live job was interrupted (e.g. a server restart): run it again.
-        if doc['data_state'] not in ('archive_unavailable', 'failed', 'processing'):
+        if doc['data_state'] not in ('archive_unavailable', 'failed', 'processing') and not (doc.get('archive') or {}).get('unavailable_collections'):
             return {'field_id': fid, 'status': 'ready', 'job_id': None}
     job = new_job('field', fid)
     from pipeline.frames import grid_doc
@@ -329,15 +330,19 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
 
     try:
         job_update(job_id, status='running', progress={'stage': 'Querying IRSA SIA2 (spherex_dr1, spherex_qr3)', 'done': 0, 'total': 0})
+        unavailable = []
         try:
-            products = search(ra, dec)
+            products = search(ra, dec, on_unavailable=unavailable.append)
         except ArchiveUnavailable as error:
             save(base | {'data_state': 'archive_unavailable', 'message': f'IRSA did not respond: {error}'})
             job_update(job_id, status='done', message='archive_unavailable')
             return
         if not products:
-            save(base | {'data_state': 'no_coverage', 'message': 'IRSA returned no SPHEREx DR1/QR3 spectral images covering this position.'})
-            job_update(job_id, status='done', message='no_coverage')
+            state = 'archive_unavailable' if unavailable else 'no_coverage'
+            message = ('IRSA returned no images from the release that responded. Coverage is unknown for the unavailable release.'
+                       if unavailable else 'IRSA returned no SPHEREx DR1/QR3 spectral images covering this position.')
+            save(base | {'data_state': state, 'message': message})
+            job_update(job_id, status='done', message=state)
             return
         chosen, visits = choose_products(products, max_frames, wmin, wmax)
         vis_doc = [{'id': f'visit-{i + 1}', 'start_utc': mjd_to_iso(v[0].t_min), 'end_utc': mjd_to_iso(v[-1].t_max),
@@ -345,7 +350,8 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
                     'releases': sorted({p.release for p in v}), 'per_detector': {f'D{d}': sum(1 for p in v if p.detector == d) for d in range(1, 7)},
                     'sealed': False} for i, v in enumerate(visits)]
         vmap = {p.id: f'visit-{i + 1}' for i, v in enumerate(visits) for p in v}
-        archive = {'n_products': len(products), 'collections': sorted({p.collection for p in products}), 'queried_utc': now(), 'visits': vis_doc}
+        archive = {'n_products': len(products), 'collections': sorted({p.collection for p in products}),
+                   'unavailable_collections': unavailable, 'queried_utc': now(), 'visits': vis_doc}
         total = len(chosen)
 
         def prog(n, tot):
@@ -370,6 +376,9 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
         n_vis = len({f['visit'] for f in frames})
         state = 'live' if n_vis >= 2 else 'insufficient'
         msg = None if n_vis >= 2 else 'Only one SPHEREx visit covers this position so far; a time comparison needs at least two.'
+        if unavailable:
+            releases = ', '.join(RELEASES[c]['release'] for c in unavailable)
+            msg = (msg + ' ' if msg else '') + f'IRSA {releases} did not respond. Showing observations from the available release.'
         if failures:
             msg = (msg + ' ' if msg else '') + f'{len(failures)} of {total} cutouts failed to download and are omitted.'
         save(base | {'data_state': state, 'message': msg, 'archive': archive, 'frames': frames, 'frame_errors': len(errors),
@@ -881,10 +890,12 @@ async def check_vote(request: Request):
         CHECK_VOTES.parent.mkdir(parents=True, exist_ok=True)
         with CHECK_VOTES.open('a') as f:
             f.write(json.dumps({'id': item['id'], 'answer': answer, 'name': name, 'utc': now()}) + '\n')
-        tally = _check_tallies()[item['id']]
+        tallies = _check_tallies()
+        tally = tallies[item['id']]
     return {'id': item['id'], 'tally': tally, 'kind': item['kind'], 'name': item['name'], 'truth': item['truth'], 'truth_label': item['truth_label'],
             'model': item['model'], 'flagged': bool(item.get('flagged')), 'first_spectrum': bool(item.get('first_spectrum')),
-            'agrees_with_known': (answer == item['truth']) if item['truth'] and answer != 'unsure' else None}
+            'agrees_with_known': (answer == item['truth']) if item['truth'] and answer != 'unsure' else None,
+            'total_votes': sum(t['n'] for t in tallies.values())}
 
 
 @app.get('/api/asteroids')

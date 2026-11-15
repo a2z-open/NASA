@@ -12,6 +12,8 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from functools import lru_cache
 import json
+import fcntl
+import os
 import re
 
 import numpy as np
@@ -21,6 +23,19 @@ from astropy.time import Time
 from .spherex import CACHE, USER_AGENT
 
 HORIZONS_URL = 'https://ssd.jpl.nasa.gov/api/horizons.api'
+
+
+def _request_horizons(params: dict, *, timeout: int) -> requests.Response:
+    """Serialize JPL requests across app processes that share the cache."""
+    folder = CACHE / 'horizons'
+    folder.mkdir(parents=True, exist_ok=True)
+    contact = os.getenv('PARALLAX_JPL_CONTACT')
+    agent = f'{USER_AGENT} ({contact})' if contact else USER_AGENT
+    with (folder / '.request.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        response = requests.get(HORIZONS_URL, params=params, timeout=timeout, headers={'User-Agent': agent})
+        response.raise_for_status()
+    return response
 
 # COMMAND strings: a trailing semicolon means "small-body lookup by number".
 BODIES = {
@@ -53,8 +68,7 @@ def horizons(command: str, start: str, stop: str, step: str = '6 h', *, cache: b
         'CENTER': "'500@399'", 'START_TIME': f"'{start}'", 'STOP_TIME': f"'{stop}'", 'STEP_SIZE': f"'{step}'",
         'QUANTITIES': "'1,9,19,20,23'", 'ANG_FORMAT': 'DEG', 'CAL_FORMAT': 'JD', 'CSV_FORMAT': 'YES', 'EXTRA_PREC': 'YES',
     }
-    r = requests.get(HORIZONS_URL, params=params, timeout=120, headers={'User-Agent': USER_AGENT})
-    r.raise_for_status()
+    r = _request_horizons(params, timeout=120)
     text = r.text
     if '$$SOE' not in text:
         raise RuntimeError('Horizons returned no ephemeris: ' + text[:300].replace('\n', ' '))
@@ -114,8 +128,7 @@ def _where_at(command: str, epoch: datetime) -> dict:
         'CENTER': "'500@399'", 'TLIST': f"'{jd:.9f}'", 'TLIST_TYPE': 'JD', 'REF_SYSTEM': 'ICRF',
         'QUANTITIES': "'1,20'", 'ANG_FORMAT': 'DEG', 'CAL_FORMAT': 'JD', 'CSV_FORMAT': 'YES', 'EXTRA_PREC': 'YES',
     }
-    r = requests.get(HORIZONS_URL, params=params, timeout=15, headers={'User-Agent': USER_AGENT})
-    r.raise_for_status()
+    r = _request_horizons(params, timeout=15)
     text = r.text
     if '$$SOE' not in text or '$$EOE' not in text:
         raise LookupError('Horizons found no single match for ' + command)

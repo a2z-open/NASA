@@ -40,6 +40,17 @@ def test_resolve_coordinates_and_known_alias(client):
     assert abs(r['ra'] - 133.7951292) * 3600 * 0.992 > 60
 
 
+@pytest.mark.parametrize(('query', 'axis'), [('421,91', 'Right Ascension'), ('187.5 +91', 'Declination'), ('12:30:00 -91:00:00', 'Declination')])
+def test_resolve_rejects_out_of_range_coordinates_without_catalogue(client, monkeypatch, query, axis):
+    def unexpected_lookup(*args, **kwargs):
+        pytest.fail('Coordinate errors must be reported before contacting a catalogue')
+
+    monkeypatch.setattr('api.app.requests.get', unexpected_lookup)
+    r = client.get('/api/resolve', params={'q': query})
+    assert r.status_code == 400
+    assert axis in r.json()['message']
+
+
 @pytest.mark.skipif(not (ROOT / 'data/targets/epsilon-indi-b/investigation.json').exists(), reason='curated data not built')
 def test_curated_field_and_investigation_contract(client):
     f = client.get('/api/fields/epsilon-indi-b').json()

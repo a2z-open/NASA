@@ -9,9 +9,11 @@ interface Queue { question: string; reference: { cold: { um: number; v: number }
 interface Reply {
   id: string; tally: { dips: number; smooth: number; unsure: number; n: number }; kind: 'known' | 'unknown'; name: string; truth: Answer | null; truth_label: string | null;
   model: { type: string; p_T: number } | null; flagged: boolean; first_spectrum?: boolean; agrees_with_known: boolean | null;
+  total_votes: number;
 }
 
 const LABEL: Record<Answer, string> = { dips: 'Yes, it goes dark', smooth: 'No, it stays bright', unsure: "Can't tell" };
+const EMPTY_SCORE = { checked: 0, knownRight: 0, knownSeen: 0, unknown: 0 };
 const store = {
   get: (k: string) => { try { return window.localStorage.getItem(k); } catch { return null; } },
   set: (k: string, v: string) => { try { window.localStorage.setItem(k, v); } catch { /* private window: fine */ } },
@@ -63,7 +65,7 @@ export function Check() {
   const [reply, setReply] = useState<Reply | null>(null);
   const [busy, setBusy] = useState(false);
   const [name, setName] = useState(() => store.get('parallax.name') ?? '');
-  const [score, setScore] = useState({ checked: 0, knownRight: 0, knownSeen: 0, unknown: 0 });
+  const [score, setScore] = useState(EMPTY_SCORE);
 
   useEffect(() => {
     fetch('/api/check').then(async r => (r.ok ? r.json() : Promise.reject(new Error((await r.json()).message ?? 'Not available')))).then(setQ).catch(e => setErr(String(e.message ?? e)));
@@ -72,11 +74,13 @@ export function Check() {
   async function answer(a: Answer) {
     if (!q || busy || reply) return;
     setBusy(true);
+    setErr(null);
     try {
       const r = await fetch('/api/check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: q.items[i].id, answer: a, name: name.trim() || undefined }) });
       if (!r.ok) throw new Error((await r.json()).message ?? 'Could not save');
       const d: Reply = await r.json();
       setReply(d);
+      setQ({ ...q, total_votes: d.total_votes });
       setScore(s => ({ checked: s.checked + 1, knownRight: s.knownRight + (d.agrees_with_known ? 1 : 0), knownSeen: s.knownSeen + (d.agrees_with_known != null ? 1 : 0), unknown: s.unknown + (d.kind === 'unknown' ? 1 : 0) }));
     } catch (e) { setErr(String((e as Error).message)); } finally { setBusy(false); }
   }
@@ -127,7 +131,7 @@ export function Check() {
                     {reply.model && <> Our model reads it as type {reply.model.type}, {Math.round(reply.model.p_T * 100)}% likely a methane dwarf.</>}
                   </p>
                   <p className="ck-tally">
-                    {reply.tally.n === 1 ? 'You are the first person to check this one.' : `${reply.tally.n} people have checked this one: ${reply.tally.dips} said it goes dark, ${reply.tally.smooth} said it stays bright, ${reply.tally.unsure} could not tell.`}
+                    {reply.tally.n === 1 ? 'You are the first person to check this one.' : `${reply.tally.n} checks recorded: ${reply.tally.dips} dark, ${reply.tally.smooth} bright, ${reply.tally.unsure} unsure.`}
                   </p>
                   <div className="ck-btns">
                     <button type="button" className="pill pill--solid" onClick={next}>{i + 1 < q.items.length ? 'Next object' : 'Finish'}</button>
@@ -156,7 +160,7 @@ export function Check() {
             <p className="lede-x" style={{ marginLeft: 0 }}>You checked {score.checked} real objects{score.knownSeen ? ` and agreed with astronomers on ${score.knownRight} of ${score.knownSeen} that already have a type` : ''}. {score.unknown} of them had never been typed. Your answers are saved with everyone else's.</p>
             <div className="ck-btns">
               <Link className="pill pill--solid" href="/hunt">See what the search found</Link>
-              <button type="button" className="pill pill--line" onClick={() => { setI(0); setReply(null); }}>Go again</button>
+              <button type="button" className="pill pill--line" onClick={() => { setI(0); setScore(EMPTY_SCORE); }}>Go again</button>
             </div>
           </section>
         )}

@@ -47,23 +47,34 @@ const TITLES: Record<string, string> = {
 };
 
 function App() {
-  const { path } = useLocation();
+  const { path: pathname, hash } = useLocation();
+  const path = pathname.replace(/\/+$/, '') || '/';
+  const detail = /^\/(investigation|evidence)\/([^/]+)$/.exec(path);
   useEffect(() => {
-    const key = Object.keys(TITLES).find(k => k !== '/' && path.startsWith(k)) ?? (path === '/' ? '/' : '');
+    const key = detail ? `/${detail[1]}` : path;
     document.title = TITLES[key] ?? 'PARALLAX';
-  }, [path]);
-  if (path === '/' || path === '') return <Home />;
-  if (path.startsWith('/explore')) return <Explore />;
-  if (path.startsWith('/map')) return <SkyMap />;
-  if (path.startsWith('/check')) return <Check />;
-  if (path.startsWith('/how')) return <How />;
-  if (path.startsWith('/investigation/')) return <InvestigationPage id={decodeURIComponent(path.slice('/investigation/'.length))} />;
-  if (path.startsWith('/evidence/')) return <Evidence id={decodeURIComponent(path.slice('/evidence/'.length))} />;
-  if (path.startsWith('/hunt')) return <Hunt />;
-  if (path.startsWith('/deck')) return <Deck />;
-  if (path.startsWith('/proof') || path.startsWith('/lab') || path.startsWith('/method')) return <Proof />;
-  if (path.startsWith('/targets')) return <Targets />;
-  if (path.startsWith('/about') || path.startsWith('/data')) return <DataAbout />;
+    if (!hash) return;
+    const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView());
+    return () => cancelAnimationFrame(frame);
+  }, [path, hash]);
+  if (path === '/') return <Home />;
+  if (path === '/explore') return <Explore />;
+  if (path === '/map') return <SkyMap />;
+  if (path === '/check') return <Check />;
+  if (path === '/how') return <How />;
+  if (detail) {
+    try {
+      const id = decodeURIComponent(detail[2]);
+      return detail[1] === 'investigation' ? <InvestigationPage id={id} /> : <Evidence id={id} />;
+    } catch (error) {
+      if (!(error instanceof URIError)) throw error;
+    }
+  }
+  if (path === '/hunt') return <Hunt />;
+  if (path === '/deck') return <Deck />;
+  if (path === '/proof' || path === '/lab' || path === '/method') return <Proof />;
+  if (path === '/targets') return <Targets />;
+  if (path === '/about' || path === '/data') return <DataAbout />;
   return <Page><h1>Not found</h1><p className="muted">That page does not exist. <Link href="/">Go home</Link>.</p></Page>;
 }
 

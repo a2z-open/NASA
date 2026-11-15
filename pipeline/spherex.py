@@ -7,6 +7,7 @@ with its SHA-256, retrieval URL and retrieval time (see `Provenance`).
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
@@ -43,8 +44,8 @@ RELEASES = {
         'citation': 'SPHEREx Science Team (2026). SPHEREx Data Release 1 Spectral Images. NASA/IPAC Infrared Science Archive. https://doi.org/10.26131/IRSA678',
     },
     'spherex_qr3': {
-        'release': 'QR3', 'doi': None,
-        'citation': 'SPHEREx Quick Release 3 Spectral Images, NASA/IPAC Infrared Science Archive (IRSA), retrieved via the spherex_qr3 SIA2 collection. Cite per IRSA SPHEREx data-release guidance.',
+        'release': 'QR3', 'doi': '10.26131/IRSA662',
+        'citation': 'SPHEREx Quick Release 3 Spectral Images. NASA/IPAC Infrared Science Archive. https://doi.org/10.26131/IRSA662',
     },
 }
 COLLECTIONS = tuple(RELEASES)
@@ -189,15 +190,28 @@ def parse_sia(raw: bytes, collection: str) -> list[Product]:
     return out
 
 
-def search(ra: float, dec: float, *, radius_deg: float = 0.0003, collections=COLLECTIONS) -> list[Product]:
-    """Query each configured SIA2 collection for images containing (ra, dec)."""
+def search(ra: float, dec: float, *, radius_deg: float = 0.0003, collections=COLLECTIONS,
+           on_unavailable: Callable[[str], None] | None = None) -> list[Product]:
+    """Query SIA2 for images; a caller that records outages may accept partial coverage."""
     def one(collection):
         r = _get(SIA_URL, params={'COLLECTION': collection, 'POS': f'CIRCLE {ra:.7f} {dec:.7f} {radius_deg}',
                                   'RESPONSEFORMAT': 'VOTABLE'}, timeout=45)
         return parse_sia(r.content, collection)
+    products = []
+    errors = []
     with ThreadPoolExecutor(max_workers=len(collections)) as ex:
-        results = list(ex.map(one, collections))
-    return dedupe([p for rs in results for p in rs])
+        pending = {collection: ex.submit(one, collection) for collection in collections}
+        for collection, future in pending.items():
+            try:
+                products.extend(future.result())
+            except ArchiveUnavailable as error:
+                if on_unavailable is None:
+                    raise
+                on_unavailable(collection)
+                errors.append(error)
+    if len(errors) == len(pending):
+        raise errors[0]
+    return dedupe(products)
 
 
 def dedupe(products: list[Product]) -> list[Product]:

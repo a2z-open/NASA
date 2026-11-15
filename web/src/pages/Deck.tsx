@@ -46,7 +46,8 @@ export function Deck() {
       window.setTimeout(() => { if (Math.abs(el.scrollTop - top) > 4) el.scrollTo({ top }); }, 700);
     };
     const key = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement)?.tagName === 'IFRAME') return;
+      const target = e.target as HTMLElement | null;
+      if (target?.tagName === 'IFRAME' || (e.key === ' ' && target?.closest('button, a'))) return;
       if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
       if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(-1); }
     };

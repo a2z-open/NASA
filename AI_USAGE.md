@@ -18,15 +18,18 @@ Commits that Claude Code helped write carry a `Co-Authored-By: Claude` trailer.
 
 ## Runtime AI
 
-**None.** PARALLAX calls no language model or other AI model at runtime. Every measurement, classification and verdict
-comes from deterministic, inspectable Python. The motion fits are weighted least squares and the template comparison is
-SPIFF's chi-square. The evidence model is a set of rules with thresholds fixed in `pipeline/analysis.py`. All text in
-the app's investigation summaries is generated from templates filled with measured numbers.
+The Sky Map search agent can use an OpenAI language model to prioritize follow-up checks when the server operator
+configures a credential. The team preview used the fixed evidence order during the November 15 audit. Deterministic
+astronomy tools query archives, measure images, link observations, fit orbits and record evidence. The site also
+displays cold-world rankings from a separately trained and validated spectral classifier.
+
+OpenAI Codex helped implement the search agent, audit the website and correct issues found in testing.
 
 ## AI-generated assets
 
-No AI-generated images, logos, video or audio are used. Every sky image in the app is a real SPHEREx exposure,
-reprojected for display. PARALLAX uses no NASA logos or mission branding.
+The sky map and viewer use real observations from SPHEREx and other credited archives. The object cards show
+dated spacecraft images. The team-supplied home illustration still needs a source, license, and AI-use check.
+See THIRD_PARTY_NOTICES.md.
 
 ## What AI did not do
 

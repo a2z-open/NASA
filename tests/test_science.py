@@ -17,6 +17,61 @@ from pipeline.astrometry import (CoordinateError, format_sexagesimal, from_tange
                                  parse_ra, propagate, to_tangent)
 from pipeline.motion import fit_motion, motion_significance
 from pipeline.spherex import EpsfZone, Observation, Product, decode_flags, dedupe, flag_mask, group_visits
+from pipeline import spherex
+
+
+def test_viewer_search_keeps_available_release_and_reports_outage(monkeypatch):
+    from types import SimpleNamespace
+
+    def get(url, *, params, timeout):
+        if params['COLLECTION'] == 'spherex_dr1':
+            raise spherex.ArchiveUnavailable('HTTP 502')
+        return SimpleNamespace(content=b'qr3')
+
+    product = Product('obs', 5, 'spherex_qr3', 'QR3', 'https://example.org/test.fits',
+                      61000., 61000.001, 10., 20., None, None)
+    monkeypatch.setattr(spherex, '_get', get)
+    monkeypatch.setattr(spherex, 'parse_sia', lambda content, collection: [product])
+    outages = []
+    assert spherex.search(10., 20., on_unavailable=outages.append) == [product]
+    assert outages == ['spherex_dr1']
+    with pytest.raises(spherex.ArchiveUnavailable):
+        spherex.search(10., 20.)
+    with pytest.raises(spherex.ArchiveUnavailable):
+        spherex.search(10., 20., collections=['spherex_dr1'], on_unavailable=outages.append)
+
+
+def test_horizons_requests_are_serialized(monkeypatch, tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from time import sleep
+    from types import SimpleNamespace
+
+    from pipeline import ephem
+
+    gate = Barrier(2)
+    simultaneous = 0
+
+    def request(*args, **kwargs):
+        nonlocal simultaneous
+        simultaneous += 1
+        try:
+            sleep(.025)
+            assert simultaneous == 1
+        finally:
+            simultaneous -= 1
+        return SimpleNamespace(raise_for_status=lambda: None)
+
+    def lookup():
+        gate.wait(timeout=2)
+        ephem._request_horizons({}, timeout=1)
+
+    monkeypatch.setattr(ephem, 'CACHE', tmp_path)
+    monkeypatch.setattr(ephem.requests, 'get', request)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(lookup) for _ in range(2)]
+        for future in futures:
+            future.result(timeout=2)
 
 
 # ---------------------------------------------------------------- coordinates

@@ -44,7 +44,7 @@ export function DataAbout() {
         <p><code>/explore?ra=331.0965&amp;dec=-56.8006&amp;fov=6&amp;embed=1</code></p>
 
         <h3>AI use</h3>
-        <p>AI tools helped build this: Claude Code (Anthropic) wrote and tested much of the code and documents under the team's direction, and ChatGPT helped with research and planning. No AI runs inside the app. Every measurement comes from fixed code you can read.</p>
+        <p>Claude Code, ChatGPT, and OpenAI Codex helped with research, implementation, and testing. The search agent can use an OpenAI model to prioritize follow-up checks. Astronomy software measures images and fits orbits. A separately trained spectral classifier ranks cold-world candidates.</p>
 
         <h3>Not NASA</h3>
         <p>PARALLAX is an independent NASA Space Apps Challenge 2026 project for the challenge “Planet X and SPHEREx”. It is not affiliated with or endorsed by NASA, JPL, Caltech or IPAC.</p>
