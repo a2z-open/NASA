@@ -33,6 +33,7 @@
 .gm__map .aladin-location, .gm__map .aladin-logo-container, .gm__map .aladin-fov, .gm__map .aladin-status-bar,
 .gm__map .aladin-zoomControl, .gm__map .aladin-stack-control, .gm__map .aladin-fullScreen-control { display: none !important; }
 .gm button { font-family: inherit; color: inherit; cursor: pointer; }
+.gm__map.is-over-pin, .gm__map.is-over-pin * { cursor: pointer !important; }   /* the mouse is over a pin you can click */
 .gm svg { flex: none; }
 
 /* ---------- search ---------- */

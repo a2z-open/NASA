@@ -45,6 +45,11 @@ a:hover { color: #b8cdff; }
 button, input, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: default; opacity: 0.45; }
+/* everything else you can click or drag with the mouse also shows the hand, not the arrow */
+select, summary, input[type='checkbox'], input[type='radio'], input[type='range'], input[type='file'], input[type='submit'], input[type='button'],
+label:has(input[type='checkbox'], input[type='radio'], input[type='range'], select),
+[role='button'], [role='tab'], [role='radio'], [role='checkbox'], [role='switch'], [role='option'], [role='menuitem'], [role='slider'] { cursor: pointer; }
+select:disabled, input:disabled, label:has(:disabled) { cursor: default; }
 code { font-family: var(--mono); font-size: 0.86em; background: var(--surface-2); padding: 0.1em 0.35em; border-radius: 4px; }
 ::selection { background: var(--accent); color: var(--accent-ink); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }

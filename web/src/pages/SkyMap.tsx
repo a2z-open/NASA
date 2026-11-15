@@ -350,6 +350,28 @@ export function SkyMap() {
           if (hit) setSel(hit);
           else setSel({ name: 'Dropped pin', kind: 'A spot in the sky', ra: e.ra, dec: e.dec, pin: true });
         });
+        // show the hand while the mouse is over a pin (the same shape test as the click above)
+        const host = box.current;
+        let hoverRaf = 0, hx = 0, hy = 0;
+        const overPin = () => {
+          hoverRaf = 0;
+          let over = false;
+          try {
+            for (const p of pins.current) {
+              if (showRef.current && !showRef.current[p.group]) continue;
+              const xy = a.world2pix(p.place.ra, p.place.dec);
+              if (!xy) continue;
+              if (Math.abs(hx - xy[0]) <= p.size / 2 + 3 && hy >= xy[1] - p.size * 1.32 - 3 && hy <= xy[1] + 5) { over = true; break; }
+            }
+          } catch { /* projection not ready */ }
+          host.classList.toggle('is-over-pin', over);
+        };
+        host.addEventListener('pointermove', (e: PointerEvent) => {
+          const r = host.getBoundingClientRect();
+          hx = e.clientX - r.left; hy = e.clientY - r.top;
+          if (!hoverRaf) hoverRaf = window.requestAnimationFrame(overPin);
+        });
+        host.addEventListener('pointerleave', () => host.classList.remove('is-over-pin'));
         await drawOverlays(Ali, a);
         if (alive) setState('ready');
       } catch (e) {
