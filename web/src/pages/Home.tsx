@@ -34,11 +34,6 @@ const DISK = { cx: 0.496, cy: 0.489, d: 0.85 };
 
 const Arrow = () => <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" /></svg>;
 const Search = () => <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><circle cx="8" cy="8" r="5.5" /><path d="M12.2 12.2 16 16" /></svg>;
-const Needle = () => (
-  <svg className="e-needle" viewBox="0 0 16 44" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true">
-    <path d="M8 1v7M2.5 10.5h11L12 13.5H4zM5 13.5l2 29M11 13.5l-2 29M6.2 24h3.6M3.5 42.5h9" />
-  </svg>
-);
 
 const RING = '\u25CB';   // stands in for the "o" in "close", which is drawn as a ring
 
@@ -267,7 +262,6 @@ export function Home() {
               <p className="e-hero__sub">A game and a search engine, built on real photos from NASA's SPHEREx telescope.</p>
               <div className="e-hero__meta">
                 <p className="e-label e-label--dot">SPHEREx · Day {days.toLocaleString('en-US')} in orbit · {utc} UTC</p>
-                <p className="e-label e-stamp"><Needle /><span>Built in Seattle<br />Space Apps 2026</span></p>
               </div>
             </div>
             <p className="e-hero__beside">NASA's SPHEREx photographs the whole sky, twice a year.</p>
