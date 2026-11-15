@@ -15,6 +15,7 @@ import numpy as np
 from astropy.wcs import WCS
 from scipy.ndimage import map_coordinates
 
+from .archive import atomic_write
 from .astrometry import mjd_to_iso
 from .spherex import Observation, load_observation
 
@@ -59,7 +60,7 @@ def frame_stats(arr: np.ndarray) -> dict:
     return {'median': med, 'sigma': sig, 'p995': float(np.percentile(v, 99.5)), 'finite_fraction': float(v.size / arr.size)}
 
 
-def make_frame(args):
+def make_frame(args, *, versioned=False):
     path, ra0, dec0, fov, out_dir, dtype, visit = args
     try:
         obs = load_observation(path, keep_epsf_zones=0)
@@ -71,13 +72,12 @@ def make_frame(args):
         return {'error': 'field mostly outside this exposure', 'path': path}
     prov = obs.meta.get('provenance', {})
     pid = prov.get('product_id', obs.product_id)
-    out = Path(out_dir) / f'{pid}.bin'
-    out.parent.mkdir(parents=True, exist_ok=True)
-    arr.astype('<f2' if dtype == 'float16' else '<f4').tofile(out)
+    suffix = f"-{prov['sha256'][:16]}" if versioned and prov.get('sha256') else ''
+    out = Path(out_dir) / f'{pid}{suffix}.bin'
     xc, yc = obs.wcs.world_to_pixel_values(ra0, dec0)
     lam, bw = obs.wavelength_at(float(xc), float(yc))
     finite_w = obs.wave[np.isfinite(obs.wave)]
-    return {
+    metadata = {
         'id': pid, 'obs_id': obs.obs_id, 'detector': obs.detector, 'release': obs.release or prov.get('release'),
         'processing_version': prov.get('processing_version'), 'mjd': obs.mjd, 'time_utc': mjd_to_iso(obs.mjd),
         'visit': visit, 'wavelength_um': lam if math.isfinite(lam) else None, 'bandwidth_um': bw if math.isfinite(bw) else None,
@@ -85,6 +85,8 @@ def make_frame(args):
         'file': out.name, 'stats': stats, 'flags_at_center': obs.flags_near(float(xc), float(yc), 1.5),
         'archive_url': prov.get('archive_url'), 'cutout_url': prov.get('cutout_url'), 'sha256': prov.get('sha256'),
     }
+    atomic_write(out, arr.astype('<f2' if dtype == 'float16' else '<f4').tobytes())
+    return metadata
 
 
 def make_frames(paths, ra0, dec0, fov, out_dir, *, visits=None, dtype='float16', workers=6):

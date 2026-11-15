@@ -39,6 +39,26 @@ def test_mast_counts_real_telescopes_and_skips_test_entries(monkeypatch):
     assert len(got['previews']) == 2 and all(p['url'].startswith('/api/telescopes/preview?uri=mast%3A') for p in got['previews'])
 
 
+def test_lookup_distinguishes_empty_failed_and_partial_archives(monkeypatch, tmp_path):
+    monkeypatch.setattr(A, 'CACHE', tmp_path)
+    attempts = []
+    row = {'key': 'chanmaster', 'name': 'Chandra X-ray Observatory', 'archive': 'NASA HEASARC', 'n': 2}
+
+    def mast_unavailable(*args):
+        attempts.append('mast')
+        raise TimeoutError
+
+    monkeypatch.setattr(A, 'mast', mast_unavailable)
+    monkeypatch.setattr(A, 'heasarc', lambda *args: {'rows': [row], 'errors': ['NICER: TimeoutError']})
+    monkeypatch.setattr(A, 'neossat', lambda *args: {'rows': []})
+    result = A.look(246.05986, 0.48773)
+    assert result['n_observations'] == 2
+    assert result['coverage'] == {'mast': 'unavailable', 'heasarc': 'partial', 'cadc': 'complete'}
+
+    A.look(246.05986, 0.48773)
+    assert len(attempts) == 2  # A failed lookup does not suppress a fresh attempt.
+
+
 def test_candidate_check_reads_motion_in_the_right_order(monkeypatch):
     def fake_vizier(source, ra, dec, r, cols):
         if source.startswith('II/365'):   # CatWISE2020 row of DES 1055175672, as VizieR gives it (arcsec/yr)

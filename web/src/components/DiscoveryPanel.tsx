@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Mark } from './Shell.tsx';
 import './DiscoveryPanel.css';
 
 interface Observation {
@@ -34,9 +35,9 @@ interface Candidate {
 }
 
 interface Packet {
+  kind?: 'linkage';
   candidates: Candidate[];
   request: { benchmark: boolean; start: string; end: string; chunks?: string[] };
-  planner: { status: string; model?: string; requested_model?: string; reason?: string; failure?: string; order: string[] };
   activity?: string[];
   followup?: Followup;
 }
@@ -53,11 +54,15 @@ interface Followup {
   }[];
 }
 
-interface Settings {
-  archive_ready: boolean;
-  planner_ready: boolean;
-  planner_default_model: string;
-  planner_models: Record<string, string>;
+interface OpticalPacket {
+  kind: 'optical';
+  request: { chunks: string[]; start: string; end: string };
+  eligible_exposures: number;
+  repeat_groups: number;
+  receipts: { chunk: string; status: string }[];
+  groups: { chunk: string; band: string; nights: number; first_night: string; last_night: string;
+    depth_floor_mag: number; exposures: { exposure_id: number; utc: string; ra: number; dec: number; url: string }[] }[];
+  limits: string[];
 }
 
 interface SearchRun {
@@ -65,7 +70,7 @@ interface SearchRun {
   state: 'running' | 'complete' | 'error';
   message: string;
   activity?: string[];
-  evidence?: Packet;
+  evidence?: Packet | OpticalPacket;
 }
 
 interface TaskDraft {
@@ -77,18 +82,23 @@ interface TaskDraft {
 }
 
 interface Conversation {
-  turns: { role: 'user' | 'agent'; text: string }[];
+  turns: Turn[];
   draft?: TaskDraft;
+  topic?: string;
 }
+
+interface Source { label: string; href: string }
+interface Turn { role: 'user' | 'agent'; text: string; sources?: Source[]; runId?: string }
+interface ChatReply { reply: string; sources?: Source[]; draft?: TaskDraft; space_topic?: string; run?: SearchRun }
 
 const STORAGE_KEY = 'parallax-discovery-run';
 const CHAT_STORAGE_KEY = 'parallax-discovery-chat';
-const REPLAY_EXAMPLE = 'Replay NW034 and look for follow-up images.';
-const plannerFailures: Record<string, string> = {
-  authentication: 'OpenAI rejected the server credential.',
-  model_access: 'OpenAI did not grant this project access to the selected model.',
-  rate_limit: 'OpenAI reported a request or quota limit.',
-};
+const STARTERS = [
+  ['Planet Nine', 'What do we know about Planet Nine?', 'question'],
+  ['Deep optical images', 'Check DECam for deep optical images.', 'archive'],
+  ['Replay NW034', 'Replay NW034 and look for follow-up images.', 'motion'],
+] as const;
+const secret = /\bsk-(?:proj-|svcacct-)?[\w-]{20,}/;
 const files = (id: string, name: string) => `/api/discovery/runs/${id}/files/${name.split('/').map(encodeURIComponent).join('/')}`;
 const toArcseconds = (ra: number, dec: number, origin: Observation) => [
   ((ra - origin.ra_deg + 540) % 360 - 180) * Math.cos(origin.dec_deg * Math.PI / 180) * 3600,
@@ -109,8 +119,8 @@ async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`/api/discovery${path}`, options);
   if (response.ok) return response.json();
   const error = await response.json().catch(() => ({}));
-  const message = error.message ?? error.detail?.[0]?.msg;
-  throw new Error(typeof message === 'string' ? message : 'The search service is unavailable.');
+  const message = error.message ?? (typeof error.detail === 'string' ? error.detail : error.detail?.[0]?.msg);
+  throw new Error(typeof message === 'string' ? message : 'Aiges couldn’t reach the service. Try again.');
 }
 
 function Blink({ runId, frames }: { runId: string; frames: Frame[] }) {
@@ -271,166 +281,262 @@ function FollowupReport({ result }: { result: Followup }) {
   </section>;
 }
 
+function OpticalReport({ packet }: { packet: OpticalPacket }) {
+  const failed = packet.receipts.every(item => item.status === 'unavailable');
+  const partial = packet.receipts.some(item => item.status !== 'complete');
+  return <div className="discovery-section">
+    <h3>{failed ? 'NOIRLab was unavailable' : `${packet.eligible_exposures} DECam exposures • ${packet.repeat_groups} repeat-night groups`}</h3>
+    <p>{packet.request.chunks.join(' and ')} · {packet.request.start} to {packet.request.end} UTC</p>
+    {partial && <p>Coverage is incomplete for this request.</p>}
+    <ul className="discovery-optical-list">
+      {packet.groups.slice(0, 3).map((group, index) => <li key={index}>
+        <strong>{group.chunk} · {group.band} band · {group.nights} {group.nights === 1 ? 'night' : 'nights'}</strong>
+        <p>RA {group.exposures[0].ra.toFixed(3)}°, Dec {group.exposures[0].dec.toFixed(3)}°</p>
+        <p>{group.first_night} to {group.last_night} · Reported depth ≥ {group.depth_floor_mag.toFixed(1)} mag</p>
+        <a href={group.exposures[0].url} target="_blank" rel="noreferrer">NOIRLab exposure {group.exposures[0].exposure_id}</a>
+      </li>)}
+    </ul>
+    <p>Next test: verify the CCD coverage and recover simulated objects in those images.</p>
+    <details className="discovery-activity">
+      <summary>Coverage and limits</summary>
+      <ul>{packet.receipts.map(item => <li key={item.chunk}>{item.chunk} · {item.status}</li>)}
+        {packet.limits.map(limit => <li key={limit}>{limit}</li>)}</ul>
+    </details>
+  </div>;
+}
+
+function RunReport({ run }: { run: SearchRun }) {
+  const packet = run.evidence;
+  const linkage = packet?.kind !== 'optical' ? packet : undefined;
+  const [selected, setSelected] = useState('');
+  const candidate = linkage?.candidates.find(item => item.id === selected) ?? linkage?.candidates[0];
+  const running = run.state === 'running';
+  return <section className="discovery-run" aria-label="Research run">
+    <div className="discovery-run__label">
+      <span className="discovery-run__dot" data-state={run.state} />
+      <strong>{running ? 'Research in progress' : run.state === 'error' ? 'Research interrupted' : 'Evidence ready'}</strong>
+      {packet && <a href={files(run.id, 'evidence.zip')} download>Download packet</a>}
+    </div>
+    <a className="discovery-run__link" href={`/map?agent=1&run=${encodeURIComponent(run.id)}`}>Run link</a>
+    {(running || run.state === 'error') && <p role={running ? 'status' : 'alert'}>{run.message}</p>}
+    {!!run.activity?.length && <details className="discovery-activity">
+      <summary>Work log</summary>
+      <ol>{run.activity.map((item, index) => <li key={index}>{item}</li>)}</ol>
+    </details>}
+    {packet?.kind === 'optical' && <OpticalReport packet={packet} />}
+    {linkage && <>
+      <p>{linkage.request.benchmark ? 'NW034 replay' : linkage.request.chunks?.join(' and ')} · {linkage.request.start} to {linkage.request.end}</p>
+      <details className="discovery-evidence">
+        <summary>{linkage.candidates.length} {linkage.candidates.length === 1 ? 'ranked linkage' : 'ranked linkages'}</summary>
+        {linkage.followup && <FollowupReport result={linkage.followup} />}
+        {candidate ? <>
+          <label className="discovery-field">Review candidate
+            <select value={candidate.id} onChange={event => setSelected(event.target.value)}>
+              {linkage.candidates.map((item, index) => <option key={item.id} value={item.id}>
+                {index + 1}. {item.display_label ?? item.id} · {item.observations.length} observations
+              </option>)}
+            </select>
+          </label>
+          <Review key={candidate.id} candidate={candidate} runId={run.id} />
+        </> : <p>No linkages passed the orbit checks in this snapshot and date range.</p>}
+      </details>
+    </>}
+  </section>;
+}
+
+function StarterIcon({ kind }: { kind: typeof STARTERS[number][2] }) {
+  return <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    {kind === 'question' ? <><circle cx="12" cy="12" r="5" /><path d="M4 14c-2 3 0 4 3 3s8-4 12-7 2-5-2-3" /></>
+      : kind === 'archive' ? <><rect x="5" y="4" width="14" height="16" rx="2" /><path d="M9 9h6M9 13h6M9 17h3" /></>
+      : <><circle cx="7" cy="16" r="2" /><circle cx="17" cy="7" r="2" /><path d="M9 14.5 15.5 9M4 20l.5-.5M20 4l.5-.5" /></>}
+  </svg>;
+}
+
+const safeSource = (href: string) => /^https:\/\//i.test(href) || /^\/(?!\/)/.test(href);
+
 export function DiscoveryPanel({ initialChunk, onClose }: { initialChunk: string; onClose: () => void }) {
   const heading = useRef<HTMLHeadingElement>(null);
-  const recentTurn = useRef<HTMLDivElement>(null);
+  const body = useRef<HTMLDivElement>(null);
   const composer = useRef<HTMLTextAreaElement>(null);
+  const utterance = useRef<SpeechSynthesisUtterance>();
+  const sending = useRef(false);
   const [chat, setChat] = useState(readConversation);
   const [message, setMessage] = useState('');
-  const [settings, setSettings] = useState<Settings>();
-  const [plannerModel, setPlannerModel] = useState<string>();
-  const [runId, setRunId] = useState(() => localStorage.getItem(STORAGE_KEY));
+  const [runId, setRunId] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get('run');
+    if (requested && /^[a-f0-9]{32}$/.test(requested)) return requested;
+    try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+  });
   const [run, setRun] = useState<SearchRun>();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [selected, setSelected] = useState('');
-  const pending = submitting || (!!runId && (!run || run.state === 'running'));
-  const candidate = run?.evidence?.candidates.find(item => item.id === selected) ?? run?.evidence?.candidates[0];
-  const planner = run?.evidence?.planner;
-  const activity = run?.activity ?? run?.evidence?.activity ?? [];
-  const modelLabel = (id: string) => settings?.planner_models[id] ?? id;
+  const [speaking, setSpeaking] = useState<number | null>(null);
+  const currentRun = run?.id === runId ? run : undefined;
+  const canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
 
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
-    const controller = new AbortController();
-    api<Settings>('/settings', { signal: controller.signal }).then(setSettings).catch(cause => {
-      if (!controller.signal.aborted) setError(cause.message);
-    });
-    return () => controller.abort();
+    return () => { if (utterance.current) window.speechSynthesis.cancel(); };
   }, []);
 
   useEffect(() => {
-    if (chat.turns.length) recentTurn.current?.scrollIntoView({ block: 'nearest' });
-    try { localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat)); } catch { /* Keep this session usable. */ }
+    try { localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat)); } catch { /* Browser storage is optional. */ }
   }, [chat]);
+
+  useEffect(() => {
+    const el = body.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [chat.turns, submitting]);
 
   useEffect(() => {
     if (!runId) return;
     const controller = new AbortController();
     let timer: number | undefined;
+    let failures = 0;
     const refresh = async () => {
       try {
         const next = await api<SearchRun>(`/runs/${encodeURIComponent(runId)}`, { signal: controller.signal });
         if (controller.signal.aborted) return;
+        failures = 0;
         setRun(next);
         if (next.state === 'running') timer = window.setTimeout(refresh, 1800);
       } catch (cause) {
         if (controller.signal.aborted) return;
-        setRun({ id: runId, state: 'error', message: cause instanceof Error ? cause.message : 'Couldn’t load the search run.' });
+        if (++failures < 3) timer = window.setTimeout(refresh, 2400);
+        else setRun({ id: runId, state: 'error', message: cause instanceof Error ? cause.message : 'Couldn’t load this run.' });
       }
     };
     void refresh();
     return () => { controller.abort(); window.clearTimeout(timer); };
   }, [runId]);
 
+  function openRun(id: string) {
+    setRunId(id);
+    try { localStorage.setItem(STORAGE_KEY, id); } catch { /* The run stays available in this view. */ }
+  }
+
+  function readAloud(index: number, text: string) {
+    if (!canSpeak) return;
+    window.speechSynthesis.cancel();
+    if (speaking === index) {
+      utterance.current = undefined;
+      setSpeaking(null);
+      return;
+    }
+    const next = new SpeechSynthesisUtterance(text);
+    next.lang = 'en-US';
+    next.onend = next.onerror = () => {
+      if (utterance.current === next) {
+        utterance.current = undefined;
+        setSpeaking(null);
+      }
+    };
+    utterance.current = next;
+    setSpeaking(index);
+    window.speechSynthesis.speak(next);
+  }
+
   async function send(raw: string) {
-    setError('');
     const text = raw.trim();
-    if (!text || pending) return;
+    if (!text || sending.current) return;
+    if (secret.test(text)) { setError('Remove the API key before sending.'); return; }
+    const userTurn = { role: 'user' as const, text };
+    const recent = chat.turns.slice(-8).map(turn => ({ role: turn.role, text: turn.text.slice(0, 2200) }));
+    setError('');
+    sending.current = true;
     setSubmitting(true);
+    setMessage('');
+    setChat(current => ({ ...current, turns: [...current.turns, userTurn].slice(-32) }));
     try {
-      const request = { message: text, draft: chat.draft, previous_run: runId ?? undefined,
-        map_chunk: initialChunk || undefined, planner_model: plannerModel };
-      const next = await api<{ reply: string; draft?: TaskDraft; run?: SearchRun }>('/tasks', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(request),
+      const next = await api<ChatReply>('/tasks', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, draft: chat.draft, previous_run: runId ?? undefined,
+          map_chunk: initialChunk || undefined, history: recent, space_topic: chat.topic }),
       });
       setChat(current => ({
-        turns: [...current.turns, { role: 'user' as const, text }, { role: 'agent' as const, text: next.reply }].slice(-16),
-        draft: next.draft,
+        turns: [...current.turns, { role: 'agent' as const, text: next.reply, sources: next.sources, runId: next.run?.id }].slice(-32),
+        draft: next.draft, topic: next.space_topic || current.topic,
       }));
-      setMessage('');
-      if (next.run) {
-        localStorage.setItem(STORAGE_KEY, next.run.id);
-        setSelected('');
+      if (next.run?.id) {
         setRun(next.run);
-        setRunId(next.run.id);
-      } else {
-        window.requestAnimationFrame(() => composer.current?.focus());
+        openRun(next.run.id);
       }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Couldn’t send the task.');
+      setChat(current => ({ ...current, turns: current.turns.filter(turn => turn !== userTurn) }));
+      setMessage(current => current || text);
+      setError(cause instanceof Error ? cause.message : 'Couldn’t send your message.');
     } finally {
+      sending.current = false;
       setSubmitting(false);
     }
   }
 
+  const linkedRun = chat.turns.some(turn => turn.runId === runId);
   return <aside className="gm-card discovery-panel" aria-labelledby="discovery-heading" onKeyDown={event => {
-    if (event.key === 'Escape') onClose();
+    if (event.key === 'Escape') { event.stopPropagation(); onClose(); }
   }}>
-    <div className="gm-list__hd">
-      <h2 id="discovery-heading" ref={heading} tabIndex={-1}>Search agent</h2>
-      <button type="button" className="gm-ic" aria-label="Close search agent" onClick={onClose}>
+    <header className="discovery-header">
+      <div className="discovery-header__mark"><Mark size={22} /></div>
+      <div className="discovery-header__title">
+        <h2 id="discovery-heading" ref={heading} tabIndex={-1}>Aiges</h2>
+        <p>Astronomy research</p>
+      </div>
+      {initialChunk && <span className="discovery-context">Chunk {initialChunk}</span>}
+      <button className="gm-ic discovery-close" type="button" aria-label="Close Aiges" onClick={onClose}>
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="m6 6 12 12M18 6 6 18" /></svg>
       </button>
-    </div>
-    <div className="gm-card__scroll discovery-scroll">
+    </header>
+    <div className="discovery-scroll" ref={body}>
       {!chat.turns.length && <div className="discovery-start">
-        <p>Tell me which chunks and dates to search. I can look for moving objects or check archived images near a saved prediction.</p>
-        <button className="discovery-secondary" type="button" disabled={pending || !settings?.archive_ready}
-          onClick={() => void send(REPLAY_EXAMPLE)}>Replay NW034 with follow-up</button>
-      </div>}
-      <div role="log" aria-label="Task conversation" className="discovery-conversation">
-        {chat.turns.map((turn, index) => <p className="discovery-message" data-role={turn.role} key={index}>
-          <span className="visually-hidden">{turn.role === 'user' ? 'You' : 'Search agent'} </span>{turn.text}
-        </p>)}
-        <div ref={recentTurn} />
-      </div>
-      {settings?.archive_ready === false && <p role="alert">This server needs the MPC snapshot and HelioLinC3D tools to start a new search.</p>}
-      {(pending || run?.state === 'error') && <p className="discovery-progress" role={run?.state === 'error' ? 'alert' : 'status'}>{submitting ? 'Reading the task…' : run?.message ?? 'Loading search…'}</p>}
-      {activity.length > 0 && <details className="discovery-activity" open={pending}>
-        <summary>Work log</summary>
-        <ol>{activity.map((item, index) => <li key={index}>{item}</li>)}</ol>
-      </details>}
-      {runId && run?.evidence && <section className="discovery-results">
-        <div className="discovery-results__head">
-          <h3>{run.evidence.candidates.length} ranked linkages</h3>
-          <a href={files(runId, 'evidence.zip')} download>Download evidence</a>
+        <h3>What are you curious about?</h3>
+        <p>Ask about space, find a paper, or investigate a patch of sky.</p>
+        <div className="discovery-starters">
+          {STARTERS.map(([label, example, icon]) => <button type="button" key={label} disabled={submitting} onClick={() => void send(example)}>
+            <StarterIcon kind={icon} /><span>{label}</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M6 12h12m-5-5 5 5-5 5" /></svg>
+          </button>)}
         </div>
-        <p>{run.evidence.request.benchmark ? 'NW034 replay' : run.evidence.request.chunks?.join(' and ')} · {run.evidence.request.start} to {run.evidence.request.end}</p>
-        {planner?.status === 'used' && <p>{planner.model ? modelLabel(planner.model) : 'OpenAI planner'} · {planner.reason}</p>}
-        {planner?.status === 'fallback' && <p>{plannerFailures[planner.failure ?? ''] ?? 'The planner was unavailable.'} The search used the fixed evidence order.</p>}
-        {planner?.status === 'unconfigured' && planner.requested_model && <p>Requested {modelLabel(planner.requested_model)} · Fixed evidence order used</p>}
-        {run.evidence.followup && <FollowupReport result={run.evidence.followup} />}
-        {candidate ? <>
-          <label className="discovery-field">Review candidate
-            <select value={candidate.id} onChange={event => setSelected(event.target.value)}>
-              {run.evidence.candidates.map((item, index) => <option key={item.id} value={item.id}>
-                {index + 1}. {item.display_label ?? item.id} · {item.observations.length} observations
-              </option>)}
-            </select>
-          </label>
-          <Review key={`${runId}/${candidate.id}`} candidate={candidate} runId={runId} />
-        </> : <p>No linkages passed the orbit checks in this archive snapshot and date range.</p>}
-      </section>}
+      </div>}
+      <div role="log" aria-label="Conversation with Aiges" className="discovery-conversation">
+        {chat.turns.map((turn, index) => <div className="discovery-turn" data-role={turn.role} key={index}>
+          <p className="discovery-message"><span className="visually-hidden">{turn.role === 'user' ? 'You: ' : 'Aiges: '}</span>{turn.text}</p>
+          {!!turn.sources?.length && <ul className="discovery-sources" aria-label="Sources">
+            {turn.sources.filter(item => safeSource(item.href)).map((item, n) => <li key={item.href}>
+              <a href={item.href} target={item.href.startsWith('/') ? undefined : '_blank'} rel="noreferrer">
+                <span>{n + 1}</span>{item.label}
+              </a>
+            </li>)}
+          </ul>}
+          {turn.runId && (turn.runId === runId && currentRun
+            ? <RunReport key={currentRun.id} run={currentRun} />
+            : <button className="discovery-secondary" type="button" onClick={() => openRun(turn.runId!)}>Open research run</button>)}
+          {turn.role === 'agent' && canSpeak && <button type="button" className="discovery-listen" aria-label={speaking === index ? 'Stop reading aloud' : 'Read reply aloud'} onClick={() => readAloud(index, turn.text)}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12" />
+            </svg>
+            {speaking === index ? 'Stop reading' : 'Listen'}
+          </button>}
+        </div>)}
+        {submitting && <p className="discovery-pending" role="status"><span />Aiges is working on your message</p>}
+      </div>
+      {currentRun && !linkedRun && <RunReport key={currentRun.id} run={currentRun} />}
     </div>
     <form className="discovery-composer" onSubmit={(event: FormEvent) => { event.preventDefault(); void send(message); }}>
-      <label className="discovery-field">Describe the task
-        <textarea ref={composer} value={message} maxLength={800} rows={3}
-          placeholder="Search H-02 and H-03 from Oct 20 to Nov 13, 2026, and look for follow-up images."
+      {error && <p className="discovery-error" role="alert">{error}</p>}
+      <div className="discovery-composer__input">
+        <label className="visually-hidden" htmlFor="aiges-input">Message Aiges</label>
+        <textarea id="aiges-input" ref={composer} value={message} maxLength={1600} rows={2}
+          placeholder="Ask Aiges or describe a search…"
           onChange={event => setMessage(event.target.value)}
           onKeyDown={event => {
             if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
-              event.preventDefault();
-              void send(message);
+              event.preventDefault(); void send(message);
             }
           }} />
-      </label>
-      {error && <p className="discovery-error" role="alert">{error}</p>}
-      <div className="discovery-composer__actions">
-        {settings && <label className="discovery-field">
-          <span className="visually-hidden">Planner model</span>
-          <select value={plannerModel ?? ''} disabled={pending} aria-describedby="discovery-planner-status"
-            onChange={event => setPlannerModel(event.target.value || undefined)}>
-            <option value="">{modelLabel(settings.planner_default_model)} (default)</option>
-            {Object.entries(settings.planner_models).filter(([id]) => id !== settings.planner_default_model)
-              .map(([id, label]) => <option key={id} value={id}>{label}</option>)}
-          </select>
-        </label>}
-        <button className="gm-btn" type="submit" disabled={pending || !message.trim()}>Send task</button>
+        <button className="discovery-send" type="submit" disabled={submitting || !message.trim()} aria-label="Send message">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 19V5m-5 5 5-5 5 5" /></svg>
+        </button>
       </div>
-      {settings && <p id="discovery-planner-status" className="discovery-mode">{settings.planner_ready
-        ? 'The model chooses which evidence to check first.'
-        : 'The server uses a fixed evidence order until a key is configured.'}</p>}
     </form>
   </aside>;
 }

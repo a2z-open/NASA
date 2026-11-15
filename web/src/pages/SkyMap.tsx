@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Mark } from '../components/Shell.tsx';
 import { Link, navigate } from '../router.tsx';
 import { huntApi } from '../api.ts';
 import { resolveQuery } from '../components/SearchBox.tsx';
@@ -111,8 +110,10 @@ const CATS: { id: Cat; label: string }[] = [
 // The five objects the challenge asks every tool to be tested on, in the order the challenge lists them.
 // They keep their own categories too; this chip just gathers them in one place.
 const NASA_FIVE = ["Barnard's Star", 'Epsilon Indi B', 'WISE 0855', 'RW Aurigae', 'R Draconis'];
-// The five NASA test targets have saved pages with every SPHEREx photo; open those, not a new archive download.
-const NASA_SLUG: Record<string, string> = { "Barnard's Star": 'barnards-star', 'Epsilon Indi B': 'epsilon-indi-b', 'WISE 0855': 'wise-0855', 'RW Aurigae': 'rw-aurigae', 'R Draconis': 'r-draconis' };
+const NASA_SLUG = new Map([
+  ["Barnard's Star", 'barnards-star'], ['Epsilon Indi B', 'epsilon-indi-b'], ['WISE 0855', 'wise-0855'],
+  ['RW Aurigae', 'rw-aurigae'], ['R Draconis', 'r-draconis'],
+]);
 const inList = (c: Cat) => (c === 'nasa' ? NASA_FIVE.flatMap(n => PLACES.filter(p => p.name === n)) : PLACES.filter(p => p.cat === c));
 const POPULAR = ['Makemake, where we found it', 'Pluto', 'WISE 0855', 'Orion Nebula', 'Planet Nine zone', 'Andromeda Galaxy'];
 
@@ -122,6 +123,7 @@ interface Toggles { finds: boolean; fields: boolean; nine: boolean; forecasts: b
 // ---- icons (one stroke weight, one family) ----
 const I = (d: ReactNode) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{d}</svg>;
 const IcSearch = () => I(<><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" /></>);
+const IcBack = () => I(<path d="M20 12H4m6-6-6 6 6 6" />);
 const IcX = () => I(<path d="M6 6l12 12M18 6 6 18" />);
 const IcPin = () => I(<><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></>);
 const IcPlanet = () => I(<><circle cx="12" cy="12" r="5.5" /><path d="M3 15.5c2 2.2 16-4.2 18-7" /></>);
@@ -165,44 +167,50 @@ function pinCanvas(size = 30, hollow = false) {
   return c;
 }
 
-/** Aladin supplies the projected pixel of the source. Leave its center open to show the sky underneath. */
-function drawEphemerisMarker(source: { x: number; y: number; data: { name: string } }, ctx: CanvasRenderingContext2D) {
-  ctx.save();
-  ctx.translate(source.x, source.y);
-  ctx.beginPath();
-  ctx.arc(0, 0, 9, 0, Math.PI * 2);
-  ctx.moveTo(-14, 0); ctx.lineTo(-9, 0);
-  ctx.moveTo(9, 0); ctx.lineTo(14, 0);
-  ctx.moveTo(0, -14); ctx.lineTo(0, -9);
-  ctx.moveTo(0, 9); ctx.lineTo(0, 14);
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#161617';
-  ctx.stroke();
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = '#ffd39a';
-  ctx.stroke();
-
-  const label = `${source.data.name} · JPL position`;
-  ctx.font = '600 12px system-ui';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  const labelWidth = Math.min(ctx.measureText(label).width, 232);
-  ctx.beginPath();
-  ctx.roundRect(-labelWidth / 2 - 8, 19, labelWidth + 16, 24, 5);
-  ctx.fillStyle = '#1e1f20';
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = '#ffd39a';
-  ctx.fillText(label, 0, 31, labelWidth);
-  ctx.restore();
-}
-
 const fmtCoord = (ra: number, dec: number) => `${(Number(ra.toFixed(4)) % 360).toFixed(4)}°, ${dec >= 0 ? '+' : '−'}${Math.abs(dec).toFixed(4)}°`;
 const fmtFov = (f: number) => f >= 1 ? `${f.toFixed(f >= 10 ? 0 : 1)}° wide` : `${(f * 60).toFixed(0)}′ wide`;
 const openHere = (ra: number, dec: number, fov = 10) => `/explore?ra=${ra.toFixed(5)}&dec=${dec.toFixed(5)}&fov=${fov}`;
 const ephemerisTime = new Intl.DateTimeFormat('en-GB', {
   timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
 });
+function SolarPosition({ body }: { body: Sel }) {
+  return (
+    <div className="gm-solar-position">
+      <p>Predicted position from <a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noreferrer">JPL Horizons</a></p>
+      <p className="gm-solar-position__coord">{fmtCoord(body.ra, body.dec)}</p>
+      <p>RA / Dec · Earth center (ICRF)</p>
+      {body.positionUtc && <time dateTime={body.positionUtc}>{ephemerisTime.format(new Date(body.positionUtc))} UTC</time>}
+    </div>
+  );
+}
+
+function SolarPortrait({ body, onShowField, onShare, onClose }: { body: Sel; onShowField: () => void; onShare: () => void; onClose: () => void }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const image = body.bodyId ? SOLAR_IMAGES[body.bodyId] : undefined;
+  return (
+    <section className="gm-portrait" aria-labelledby="gm-portrait-title">
+      <div className="gm-portrait__head">
+        <h1 id="gm-portrait-title" tabIndex={-1}>{body.name}</h1>
+        <p>{body.kind}</p>
+      </div>
+      <button type="button" className="gm-ic gm-portrait__close" aria-label="Close object and return to sky map" onClick={onClose}><IcX /></button>
+      <figure className="gm-portrait__figure">
+        {image && !imageFailed ? <img src={`/img/${image.file}-archive.webp`} alt={`${body.name} in an archival NASA image`} onError={() => setImageFailed(true)} />
+          : <p className="gm-portrait__empty">{imageFailed ? 'The archival image could not load.' : 'No verified archival portrait is available for this object.'}</p>}
+        {image && <figcaption><a href={image.source} target="_blank" rel="noreferrer">NASA archival image</a> · {image.caption}</figcaption>}
+      </figure>
+      <div className="gm-portrait__details">
+        {body.blurb && <p className="gm-portrait__description">{body.blurb}</p>}
+        <SolarPosition body={body} />
+        <div className="gm-portrait__actions">
+          <button type="button" className="gm-btn" onClick={onShowField}><IcGlobe />View survey field</button>
+          <button type="button" className="gm-btn gm-btn--line" onClick={onShare}><IcShare />Share</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const CHUNK_GRID_FOV = 45;
 const CHUNK_SEARCH_FOV = 28;
 
@@ -230,7 +238,6 @@ export function SkyMap() {
   const bandIndex = useRef(41);
   const groups = useRef<Record<keyof Toggles, any[]>>({ finds: [], fields: [], nine: [], forecasts: [] });
   const selCat = useRef<any>(null);
-  const ephemerisCat = useRef<any>(null);
   const pins = useRef<{ place: Sel; size: number; group: keyof Toggles }[]>([]);
   const showRef = useRef<Toggles | null>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -250,11 +257,15 @@ export function SkyMap() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [sel, setSel] = useState<Sel | null>(null);
+  const [fieldFor, setFieldFor] = useState<Sel | null>(null);
+  const solar = sel?.solarQuery ? sel : null;
+  const showPortrait = solar !== null && solar !== fieldFor;
   const [list, setList] = useState<Cat | null>(null);
   const [layersOpen, setLayersOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [scopes, setScopes] = useState<{ ra: number; dec: number; name: string } | null>(null);
-  const [discoveryChunk, setDiscoveryChunk] = useState<string | null>(null);
+  const [scopes, setScopes] = useState<{ ra: number; dec: number } | null>(null);
+  const [discoveryChunk, setDiscoveryChunk] = useState<string | null>(() =>
+    new URLSearchParams(window.location.search).get('agent') === '1' ? '' : null);
   const discoveryOpener = useRef<HTMLButtonElement>(null);
 
   // ---- start the map ----
@@ -335,6 +346,7 @@ export function SkyMap() {
           setList(null);
           setLayersOpen(false);
           setActiveChunk(null);
+          setScopes(null);
           if (hit) setSel(hit);
           else setSel({ name: 'Dropped pin', kind: 'A spot in the sky', ra: e.ra, dec: e.dec, pin: true });
         });
@@ -421,8 +433,6 @@ export function SkyMap() {
     // the pin for whatever is selected
     selCat.current = Ali.catalog({ name: 'Selected', shape: pinCanvas(38), sourceSize: 38 });
     a.addCatalog(selCat.current);
-    ephemerisCat.current = Ali.catalog({ name: 'JPL position', shape: drawEphemerisMarker, sourceSize: 28 });
-    a.addCatalog(ephemerisCat.current);
   }
 
   // ---- layers ----
@@ -458,13 +468,11 @@ export function SkyMap() {
 
   // ---- the selected place: fly there and plant the big pin ----
   useEffect(() => {
-    const a = al.current, Ali = A.current, cat = selCat.current, movingCat = ephemerisCat.current;
-    if (!a || !Ali || !cat || !movingCat) return;
+    const a = al.current, Ali = A.current, cat = selCat.current;
+    if (!a || !Ali || !cat) return;
     cat.removeAll();
-    movingCat.removeAll();
     if (!sel) return;
-    const destination = sel.solarQuery ? movingCat : cat;
-    destination.addSources([Ali.source(sel.ra, sel.dec, { name: sel.name })]);
+    if (!sel.solarQuery) cat.addSources([Ali.source(sel.ra, sel.dec, { name: sel.name })]);
     if (!sel.pin) { a.gotoRaDec(sel.ra, sel.dec); if (sel.fov) a.setFoV(sel.fov); }
   }, [sel, state]);
 
@@ -530,11 +538,22 @@ export function SkyMap() {
     return copyLink(url);
   }
   const imagesFov = (s: Sel) => Math.min(20, Math.max(4, Math.round(((s.fov ?? centre?.fov ?? 0.2) * 60) / 3)));
-  const objectImage = sel?.solarQuery && sel.bodyId ? SOLAR_IMAGES[sel.bodyId] : undefined;
-  const hasCard = !!(sel && !sel.pin) || !!list || !!(scopes && sel?.pin) || discoveryChunk !== null;
+  const curatedSlug = sel ? NASA_SLUG.get(sel.name) : undefined;
+  const activeScopes = scopes && sel?.pin && scopes.ra === sel.ra && scopes.dec === sel.dec ? scopes : null;
+  const hasCard = !!(sel && !sel.pin) || !!list || !!activeScopes || discoveryChunk !== null;
   const centreChunk = centre && centre.fov <= CHUNK_GRID_FOV ? chunkAt(centre.ra, centre.dec) : null;
   const centreStatus = centreChunk && chunkTeam.assignments?.[centreChunk.id]?.status;
   const suggestedChunk = chunkFromId(q);
+
+  function switchSolarField(body: Sel | null) {
+    setLayersOpen(false);
+    if (body) {
+      al.current?.gotoRaDec(body.ra, body.dec);
+      if (body.fov) al.current?.setFoV(body.fov);
+    }
+    setFieldFor(body);
+    window.requestAnimationFrame(() => document.getElementById(body ? 'gm-solar-field-title' : 'gm-portrait-title')?.focus());
+  }
 
   function openChunk(id: string, opener: HTMLButtonElement) {
     chunkOpener.current = opener;
@@ -551,7 +570,7 @@ export function SkyMap() {
   }
 
   return (
-    <div className={`gm${hasCard ? ' has-card' : ''}${centreChunk ? ' gm--chunks' : ''}${sel?.solarQuery ? ' gm--solar' : ''}`}>
+    <main id="main" className={`gm${hasCard ? ' has-card' : ''}${centreChunk ? ' gm--chunks' : ''}${showPortrait ? ' gm--portrait' : solar ? ' gm--solar-field' : ''}`}>
       <div ref={box} className="gm__map" aria-label="Interactive map of the whole sky. Drag to pan, scroll to zoom, click to drop a pin." role="application" />
       {chunkLabels.length > 0 && <div className="gm-chunk-labels" role="group" aria-label="Visible sky chunks">
         {chunkLabels.map(({ id, x, y }) => {
@@ -574,7 +593,7 @@ export function SkyMap() {
 
       <div className="gm-search">
         <form className="gm-search__box" onSubmit={submit} role="search">
-          <Link href="/" className="gm-search__home" aria-label="PARALLAX home"><Mark size={22} /></Link>
+          <Link href="/" className="gm-search__home"><IcBack />Home</Link>
           <label className="visually-hidden" htmlFor="gm-q">Search the sky by object, coordinates or chunk ID</label>
           <input id="gm-q" value={q} onChange={e => { setQ(e.target.value); setFocus(true); }} onFocus={() => setFocus(true)} onBlur={() => window.setTimeout(() => setFocus(false), 160)}
             placeholder="Search the sky" autoComplete="off" spellCheck={false} />
@@ -604,7 +623,7 @@ export function SkyMap() {
             if (discoveryChunk !== null) { closeDiscovery(); return; }
             setDiscoveryChunk(activeChunk ?? centreChunk?.id ?? '');
             setSel(null); setList(null); setActiveChunk(null); setLayersOpen(false); setFocus(false); setErr(null);
-          }}><IcTarget />Search agent</button>
+          }}><IcTarget />Aiges</button>
         {CATS.map(c => (
           <button key={c.id} type="button" className={`gm-chip${list === c.id ? ' is-on' : ''}`} onClick={() => { setSel(null); setErr(null); setActiveChunk(null); setDiscoveryChunk(null); setList(list === c.id ? null : c.id); }}>
             {catIcon(c.id)}{c.label}
@@ -627,37 +646,47 @@ export function SkyMap() {
         </section>
       )}
 
-      {sel && !sel.pin && !list && (
-        <section className="gm-card" aria-label={sel.name}>
-          <div className="gm-card__scroll">
-            <div className={`gm-card__pic${objectImage ? ' gm-card__pic--object' : ''}`}>
-              {objectImage ? <img src={`/img/${objectImage.file}-archive.webp`} alt={`${sel.name} in an archival NASA image`} /> : catIcon(sel.cat)}
-              <button type="button" className="gm-ic gm-card__close" aria-label="Close" onClick={() => setSel(null)}><IcX /></button>
+      {showPortrait && solar && <SolarPortrait key={solar.solarQuery} body={solar} onShowField={() => switchSolarField(solar)}
+        onShare={() => void share()} onClose={() => { setSel(null); document.getElementById('gm-q')?.focus(); }} />}
+
+      {solar && !showPortrait && (
+        <section className="gm-card gm-card--solar-field" aria-labelledby="gm-solar-field-title">
+          <div className="gm-list__hd"><h2 id="gm-solar-field-title" tabIndex={-1}>{solar.name} · Survey field</h2>
+            <button type="button" className="gm-ic" aria-label="Close" onClick={() => setSel(null)}><IcX /></button>
+          </div>
+          <div className="gm-card__scroll gm-card__pad">
+            <p className="gm-solar-field__caption">{activeLayer.label} · {activeLayer.host}. Fixed sky imagery from the survey’s own dates.</p>
+            <SolarPosition body={solar} />
+            <div className="gm-portrait__actions">
+              <button type="button" className="gm-btn" onClick={() => switchSolarField(null)}>Object details</button>
+              <Link className="gm-btn gm-btn--line" href={openHere(solar.ra, solar.dec, imagesFov(solar))}>SPHEREx archive field</Link>
             </div>
-            <div className="gm-card__body">
-              <h2 className="gm-card__title">{sel.name}</h2>
+          </div>
+        </section>
+      )}
+
+      {sel && !solar && !sel.pin && !list && (
+        <section className="gm-card" aria-label={sel.name}>
+          <div className="gm-list__hd">
+            <div className="gm-card__summary">
+              <h2>{sel.name}</h2>
               <p className="gm-card__kind">{sel.kind}</p>
-              {objectImage && <p className="gm-card__meta gm-card__image-credit">Archive image · {objectImage.caption}</p>}
-              {sel.solarQuery && <div className="gm-card__ephemeris">
-                <p>{fmtCoord(sel.ra, sel.dec)} <small>RA, Dec · Earth center (ICRF)</small></p>
-                <p><small>JPL Horizons{sel.positionUtc && <> · <time dateTime={sel.positionUtc}>{ephemerisTime.format(new Date(sel.positionUtc))} UTC</time></>}</small></p>
-                <p><small>The crosshair marks the calculated position over the survey image.</small></p>
-              </div>}
               {sel.ours && <p className="gm-card__meta">PARALLAX result</p>}
             </div>
+            <button type="button" className="gm-ic" aria-label="Close" onClick={() => setSel(null)}><IcX /></button>
+          </div>
+          <div className="gm-card__scroll">
             <div className="gm-acts">
-              {objectImage && <a className="gm-act gm-act--main" href={objectImage.source} target="_blank" rel="noreferrer"><i><IcImages /></i>NASA image</a>}
-              {!sel.solarQuery && <button type="button" className="gm-act gm-act--main" onClick={() => navigate(NASA_SLUG[sel.name] ? `/explore?target=${NASA_SLUG[sel.name]}` : openHere(sel.ra, sel.dec, imagesFov(sel)))}><i><IcImages /></i>SPHEREx photos</button>}
+              <Link className="gm-act gm-act--main" href={curatedSlug ? `/explore?target=${curatedSlug}` : openHere(sel.ra, sel.dec, imagesFov(sel))}><i><IcImages /></i>SPHEREx photos</Link>
               <button type="button" className="gm-act" onClick={() => zoom(0.4)}><i><IcPlus /></i>Zoom in</button>
               <button type="button" className="gm-act" onClick={() => zoom(2.5)}><i><IcMinus /></i>Zoom out</button>
               <button type="button" className="gm-act" onClick={() => void share()}><i><IcShare /></i>Share</button>
             </div>
             <div className="gm-rows">
               {sel.blurb && <div className="gm-row"><IcInfo /><span>{sel.blurb}</span></div>}
-              {!sel.solarQuery && <div className="gm-row"><IcPin /><span>{fmtCoord(sel.ra, sel.dec)}<small>Right ascension, declination</small></span></div>}
-              {sel.solarQuery && !objectImage && <div className="gm-row"><IcImages /><span>No verified object image in PARALLAX.</span></div>}
-              {!sel.solarQuery && sel.source && <div className="gm-row"><IcInfo /><span>Position from {sel.source}{sel.epochNote && <small>{sel.epochNote}</small>}</span></div>}
-              {!sel.solarQuery && <div className="gm-row gm-row--os"><IcLayers /><OtherScopes ra={sel.ra} dec={sel.dec} /></div>}
+              <div className="gm-row"><IcPin /><span>{fmtCoord(sel.ra, sel.dec)}<small>Right ascension, declination</small></span></div>
+              {sel.source && <div className="gm-row"><IcInfo /><span>Position from {sel.source}{sel.epochNote && <small>{sel.epochNote}</small>}</span></div>}
+              <div className="gm-row gm-row--os"><IcLayers /><OtherScopes ra={sel.ra} dec={sel.dec} /></div>
             </div>
           </div>
         </section>
@@ -719,14 +748,14 @@ export function SkyMap() {
           <IcPin />
           <span><b>Dropped pin</b><span>{fmtCoord(sel.ra, sel.dec)}</span></span>
           <button type="button" className="gm-btn" onClick={() => navigate(openHere(sel.ra, sel.dec, 10))}>Open archive field</button>
-          <button type="button" className="gm-btn gm-btn--line" onClick={() => setScopes({ ra: sel.ra, dec: sel.dec, name: 'Dropped pin' })}>Other telescopes</button>
+          <button type="button" className="gm-btn gm-btn--line" onClick={() => setScopes({ ra: sel.ra, dec: sel.dec })}>Other telescopes</button>
           <button type="button" className="gm-ic" aria-label="Remove pin" onClick={() => setSel(null)}><IcX /></button>
         </div>
       )}
-      {scopes && sel?.pin && Math.abs(scopes.ra - sel.ra) < 1e-9 && (
+      {activeScopes && (
         <section className="gm-card" aria-label="Other telescopes at the dropped pin">
           <div className="gm-list__hd"><h2>Other telescopes here</h2><button type="button" className="gm-ic" aria-label="Close" onClick={() => setScopes(null)}><IcX /></button></div>
-          <div className="gm-card__scroll gm-card__pad"><p className="gm-card__kind">{fmtCoord(scopes.ra, scopes.dec)}</p><OtherScopes ra={scopes.ra} dec={scopes.dec} auto /></div>
+          <div className="gm-card__scroll gm-card__pad"><p className="gm-card__kind">{fmtCoord(activeScopes.ra, activeScopes.dec)}</p><OtherScopes ra={activeScopes.ra} dec={activeScopes.dec} auto /></div>
         </section>
       )}
       {toast && <p className="gm-toast" role="status">{toast}</p>}
@@ -743,7 +772,11 @@ export function SkyMap() {
           onClick={event => openChunk(centreChunk.id, event.currentTarget)}>
           <IcGlobe />Chunk {centreChunk.id}{centreStatus && <i className="gm-chunk-dot" data-status={centreStatus} />}
         </button>}
-        <span className="gm-status__coords">{centre ? `Center RA/Dec · ${fmtCoord(centre.ra, centre.dec)} · ${fmtFov(centre.fov)}` : ''}</span>
+        {centre && <>
+          <span className="gm-status__coords">Center RA/Dec · {fmtCoord(centre.ra, centre.dec)} · {fmtFov(centre.fov)}</span>
+          {!solar && <Link className="gm-status__archive" href={openHere(centre.ra, centre.dec)}
+            aria-label="Open the map center in the SPHEREx archive">Archive field</Link>}
+        </>}
         <span className="gm-status__credits">
           <span>Survey: {activeLayer.label}{layer === SPHEREX.id ? ` DR1 · ${SPHEREX_MAP_BANDS[slice].wavelength.toFixed(3)} µm` : ''}{layerStatus === 'loading' ? ' · loading' : layerStatus === 'error' ? ' · unavailable' : ''} · {activeLayer.host} · <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite</a> ·</span>
           <Link href="/about">Sources</Link>
@@ -752,6 +785,6 @@ export function SkyMap() {
       {activeChunk && <ChunkReview key={activeChunk} id={activeChunk} team={chunkTeam}
         onClose={() => { setActiveChunk(null); chunkOpener.current?.focus(); }}
         onCopy={() => void copyLink(`${window.location.origin}/map?chunk=${activeChunk}`)} />}
-    </div>
+    </main>
   );
 }

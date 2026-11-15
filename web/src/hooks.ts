@@ -27,7 +27,7 @@ export function useTargets(): Loadable<Target[]> {
 const fieldCache = new Map<string, Field>();
 
 /** Load a field; poll every 1.5 s while the backend is still processing it. */
-export function useField(fieldId: string | null): Loadable<Field> & { refresh: () => void } {
+export function useField(fieldId: string | null, jobId?: string): Loadable<Field> & { refresh: () => void } {
   const [state, setState] = useState<Loadable<Field>>({ data: fieldId ? fieldCache.get(fieldId) ?? null : null, error: null, loading: !!fieldId });
   const [tick, setTick] = useState(0);
   const timer = useRef<number | undefined>(undefined);
@@ -35,17 +35,18 @@ export function useField(fieldId: string | null): Loadable<Field> & { refresh: (
     if (!fieldId) { setState({ data: null, error: null, loading: false }); return; }
     let alive = true;
     const cached = fieldCache.get(fieldId);
-    if (cached && cached.data_state !== 'processing') {
+    if (!jobId && cached) {
       setState({ data: cached, error: null, loading: false });
       return;
     }
+    setState({ data: null, error: null, loading: true });
     async function poll() {
       try {
         const f = await api.field(fieldId!);
         if (!alive) return;
         setState({ data: f, error: null, loading: false });
-        if (f.data_state === 'processing') timer.current = window.setTimeout(poll, 1500);
-        else fieldCache.set(fieldId!, f);
+        if (f.data_state === 'processing' || f.catalog_status === 'loading') timer.current = window.setTimeout(poll, 1500);
+        else if (f.data_state !== 'archive_unavailable' && f.data_state !== 'failed') fieldCache.set(fieldId!, f);
       } catch (err) {
         if (!alive) return;
         const e = err as ApiError;
@@ -54,7 +55,7 @@ export function useField(fieldId: string | null): Loadable<Field> & { refresh: (
     }
     poll();
     return () => { alive = false; window.clearTimeout(timer.current); };
-  }, [fieldId, tick]);
+  }, [fieldId, jobId, tick]);
   return { ...state, refresh: () => { if (fieldId) fieldCache.delete(fieldId); setTick(t => t + 1); } };
 }
 

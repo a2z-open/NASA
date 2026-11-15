@@ -5,7 +5,7 @@ Run:  .venv/bin/python -m uvicorn api.app:app --host 127.0.0.1 --port 8000
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from base64 import b64encode
 import csv
 from datetime import datetime, timezone
@@ -32,8 +32,9 @@ import requests
 from api.chunks import router as chunks_router
 from api.discovery import router as discovery_router
 from pipeline import ephem
+from pipeline.archive import SkyPosition, is_reserved, load_reservation, near_barnard, reserved_observation, write_json
 from pipeline.astrometry import CoordinateError, mjd_to_iso, parse_dec, parse_position, parse_ra, propagate, to_tangent
-from pipeline.spherex import CACHE, RELEASES, ROOT, ArchiveUnavailable, field_key, group_visits, search, fetch_many
+from pipeline.spherex import CACHE, RELEASES, ROOT, ArchiveUnavailable, fetch_cutout, field_key, group_visits, search
 from pipeline.targets import ORDER, TARGETS
 
 VERSION = '1.0.0'
@@ -41,6 +42,7 @@ DATA = ROOT / 'data' / 'targets'
 FIELDS = CACHE / 'fields'
 INVESTIGATIONS = CACHE / 'investigations'
 EXPERIMENTS = ROOT / 'validation' / 'experiments'
+RESERVATION = ROOT / 'validation' / 'barnards-star-archive.json'
 FIELDS.mkdir(parents=True, exist_ok=True)
 INVESTIGATIONS.mkdir(parents=True, exist_ok=True)
 
@@ -63,8 +65,9 @@ async def team_access(request: Request, call_next):
     return response
 
 _jobs: dict[str, dict] = {}
-_jobs_lock = threading.Lock()
+_jobs_lock = threading.RLock()
 _pool = ThreadPoolExecutor(max_workers=3)
+_catalog_pool = ThreadPoolExecutor(max_workers=3)
 _json_cache: dict[str, tuple[float, object]] = {}
 
 
@@ -226,6 +229,16 @@ def raw_dir(field_id: str) -> Path:
     return CACHE / 'targets' / field_id / 'raw' if field_id in TARGETS else FIELDS / field_id / 'raw'
 
 
+def _unsafe_live_cache(field):
+    if not field.get('frames'):
+        return False
+    pos = SkyPosition(field['ra'], field['dec'])
+    reservation = load_reservation(RESERVATION)
+    if reservation is None:
+        return near_barnard(pos)
+    return any(reserved_observation(f['obs_id'], f['mjd'], pos, reservation) for f in field['frames'])
+
+
 async def _json_body(request: Request) -> dict:
     """The request body as a JSON object, or a 400 (never a 500) when it is missing or malformed."""
     try:
@@ -274,17 +287,20 @@ async def create_field(request: Request):
     fp = FIELDS / fid / 'field.json'
     with _jobs_lock:
         running = next((j for j in _jobs.values() if j['result_id'] == fid and j['status'] in ('queued', 'running')), None)
-    if running:
-        return {'field_id': fid, 'status': 'processing', 'job_id': running['job_id']}
-    if fp.exists():
-        doc = read_json(fp)
-        # A 'processing' document with no live job was interrupted (e.g. a server restart): run it again.
-        if doc['data_state'] not in ('archive_unavailable', 'failed', 'processing') and not (doc.get('archive') or {}).get('unavailable_collections'):
-            return {'field_id': fid, 'status': 'ready', 'job_id': None}
-    job = new_job('field', fid)
-    from pipeline.frames import grid_doc
-    job_update(job, field_meta={'ra': ra, 'dec': dec, 'fov_arcmin': fov, 'grid': grid_doc(ra, dec, fov), 'catalog': [],
-                                'catalog_epoch_mjd': 57388.5, 'archive': None, 'stacks': [], 'title': None})
+        if running:
+            return {'field_id': fid, 'status': 'processing', 'job_id': running['job_id']}
+        if fp.exists():
+            doc = read_json(fp)
+            # Interrupted, unavailable, or partial-release documents may be retried.
+            if (doc['data_state'] not in ('archive_unavailable', 'failed', 'processing')
+                    and not (doc.get('archive') or {}).get('unavailable_collections') and not _unsafe_live_cache(doc)):
+                return {'field_id': fid, 'status': 'ready', 'job_id': None}
+        from pipeline.frames import grid_doc
+        # Publish the pending document before returning the job, including retries of cached failures.
+        write_json(fp, {'field_id': fid, 'kind': 'live', 'data_state': 'processing', 'frames': [], 'message': None,
+                        'ra': ra, 'dec': dec, 'fov_arcmin': fov, 'grid': grid_doc(ra, dec, fov), 'catalog': [],
+                        'catalog_epoch_mjd': 57388.5, 'archive': None, 'stacks': [], 'title': None})
+        job = new_job('field', fid)
     _pool.submit(_field_job, job, fid, ra, dec, fov, max_frames, wmin, wmax)
     return {'field_id': fid, 'status': 'processing', 'job_id': job}
 
@@ -317,7 +333,7 @@ def choose_products(products, max_frames, wmin=None, wmax=None):
 
 
 def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
-    from pipeline.frames import grid_doc, make_frames
+    from pipeline.frames import grid_doc, make_frame
     from pipeline.measure import gaia_field
     folder = FIELDS / fid
     folder.mkdir(parents=True, exist_ok=True)
@@ -326,10 +342,17 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
             'stacks': [], 'investigation_id': None}
 
     def save(doc):
-        (folder / 'field.json').write_text(json.dumps(doc, allow_nan=False, default=lambda o: None))
+        write_json(folder / 'field.json', doc)
 
     try:
-        job_update(job_id, status='running', progress={'stage': 'Querying IRSA SIA2 (spherex_dr1, spherex_qr3)', 'done': 0, 'total': 0})
+        job_update(job_id, status='running', progress={'stage': 'Searching NASA/IPAC IRSA for DR1 and QR3 observations', 'done': 0, 'total': 0})
+        save(base | {'data_state': 'processing', 'message': None})
+        pos = SkyPosition(ra, dec)
+        reservation = load_reservation(RESERVATION)
+        if reservation is None and near_barnard(pos):
+            save(base | {'data_state': 'archive_unavailable', 'message': 'The reserved Barnard’s Star visit could not be checked. Open the saved case to view earlier observations.'})
+            job_update(job_id, status='done', message='archive_unavailable')
+            return
         unavailable = []
         try:
             products = search(ra, dec, on_unavailable=unavailable.append)
@@ -344,7 +367,8 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
             save(base | {'data_state': state, 'message': message})
             job_update(job_id, status='done', message=state)
             return
-        chosen, visits = choose_products(products, max_frames, wmin, wmax)
+        eligible = [p for p in products if not is_reserved(p, pos, reservation or {})]
+        chosen, visits = choose_products(eligible, max_frames, wmin, wmax)
         vis_doc = [{'id': f'visit-{i + 1}', 'start_utc': mjd_to_iso(v[0].t_min), 'end_utc': mjd_to_iso(v[-1].t_max),
                     'mjd_start': v[0].t_min, 'mjd_end': v[-1].t_max, 'n_products': len(v),
                     'releases': sorted({p.release for p in v}), 'per_detector': {f'D{d}': sum(1 for p in v if p.detector == d) for d in range(1, 7)},
@@ -352,38 +376,86 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
         vmap = {p.id: f'visit-{i + 1}' for i, v in enumerate(visits) for p in v}
         archive = {'n_products': len(products), 'collections': sorted({p.collection for p in products}),
                    'unavailable_collections': unavailable, 'queried_utc': now(), 'visits': vis_doc}
-        total = len(chosen)
+        if not chosen:
+            save(base | {'data_state': 'no_coverage', 'archive': archive, 'message': 'The responding releases have no eligible SPHEREx exposures for this field and wavelength range.'})
+            job_update(job_id, status='done', message='no_coverage')
+            return
 
-        def prog(n, tot):
-            job_update(job_id, progress={'stage': 'Downloading SPHEREx cutouts from IRSA', 'done': n, 'total': tot})
-        save(base | {'data_state': 'processing', 'message': None, 'archive': archive, 'progress': {'stage': 'download', 'done': 0, 'total': total}})
-        done, failures = fetch_many(chosen, ra, dec, fov, folder / 'raw', workers=6, progress=prog)
-        if not done:
+        total = len(chosen)
+        processing = base | {'data_state': 'processing', 'message': None, 'archive': archive}
+        save(processing)
+        job_update(job_id, progress={'stage': 'Downloading and aligning SPHEREx cutouts', 'done': 0, 'total': total})
+
+        def extract(product):
+            try:
+                prov = fetch_cutout(product, ra, dec, fov, folder / 'raw')
+            except Exception:  # A failed cutout leaves other products eligible.
+                return None, None
+            path = folder / 'raw' / f'{prov.product_id}.fits'
+            try:
+                frame = make_frame((str(path), ra, dec, fov, folder / 'frames', base['grid']['dtype'], vmap[product.id]),
+                                   versioned=True)
+            except Exception as error:  # Astrometry and FITS failures are reported per exposure.
+                frame = {'error': str(error)[:200]}
+            return prov.product_id, frame
+
+        catalogue = _catalog_pool.submit(gaia_field, ra, dec, fov / 60 * 0.75, gmax=19.0, cache=folder / 'gaia_field.json')
+        frames, native_ids = [], []
+        failures, errors = 0, 0
+        with ThreadPoolExecutor(max_workers=6) as executor:
+            work = [executor.submit(extract, p) for p in chosen]
+            for completed, future in enumerate(as_completed(work), start=1):
+                product_id, frame = future.result()
+                if product_id is None:
+                    failures += 1
+                else:
+                    native_ids.append(product_id)
+                    if 'error' in frame:
+                        errors += 1
+                    else:
+                        frame['data_url'] = f"/files/fields/{fid}/frames/{frame.pop('file')}"
+                        frames.append(frame)
+                        frames.sort(key=lambda f: (f['mjd'], f['id']))
+                        save(processing | {'frames': frames})
+                job_update(job_id, progress={'stage': 'Downloading and aligning SPHEREx cutouts', 'done': completed, 'total': total})
+
+        if not native_ids:
+            catalogue.cancel()
             save(base | {'data_state': 'archive_unavailable', 'archive': archive,
                          'message': f'All {total} cutout downloads failed; IRSA may be busy. Try again shortly.'})
             job_update(job_id, status='done', message='archive_unavailable')
             return
-        job_update(job_id, progress={'stage': 'Reprojecting frames onto a common sky grid', 'done': 0, 'total': len(done)})
-        paths = [folder / 'raw' / f'{p.product_id}.fits' for p in done]
-        frames, errors = make_frames(paths, ra, dec, fov, folder / 'frames', visits=vmap, workers=4)
-        for fr in frames:
-            fr['data_url'] = f"/files/fields/{fid}/frames/{fr.pop('file')}"
-        job_update(job_id, progress={'stage': 'Fetching Gaia DR3 catalogue overlay', 'done': 0, 'total': 1})
-        try:
-            cat = gaia_field(ra, dec, fov / 60 * 0.75, gmax=19.0, cache=folder / 'gaia_field.json')
-        except Exception:  # noqa: BLE001
-            cat = []
+        if not frames:
+            catalogue.cancel()
+            save(base | {'data_state': 'insufficient', 'archive': archive, 'frame_errors': errors,
+                         'message': 'The archive returned cutouts, but none could be aligned with enough coverage of this field.'})
+            job_update(job_id, status='done', message='insufficient')
+            return
+
         n_vis = len({f['visit'] for f in frames})
         state = 'live' if n_vis >= 2 else 'insufficient'
         msg = None if n_vis >= 2 else 'Only one SPHEREx visit covers this position so far; a time comparison needs at least two.'
         if unavailable:
             releases = ', '.join(RELEASES[c]['release'] for c in unavailable)
             msg = (msg + ' ' if msg else '') + f'IRSA {releases} did not respond. Showing observations from the available release.'
-        if failures:
-            msg = (msg + ' ' if msg else '') + f'{len(failures)} of {total} cutouts failed to download and are omitted.'
-        save(base | {'data_state': state, 'message': msg, 'archive': archive, 'frames': frames, 'frame_errors': len(errors),
-                     'catalog': [s for s in cat if s.get('ra') is not None]})
-        job_update(job_id, status='done', progress={'stage': 'done', 'done': len(frames), 'total': len(frames)})
+        if failures or errors:
+            msg = (msg + ' ' if msg else '') + f'{failures + errors} of {total} cutouts could not be downloaded or aligned.'
+        ready = base | {'data_state': state, 'message': msg, 'archive': archive, 'frames': frames,
+                        'frame_errors': errors, 'native_product_ids': native_ids}
+
+        def finish_catalog(result):
+            try:
+                stars = [s for s in result.result() if s.get('ra') is not None]
+            except Exception:
+                save(ready | {'catalog_status': 'unavailable'})
+            else:
+                save(ready | {'catalog': stars, 'catalog_status': 'ready'})
+            finally:
+                job_update(job_id, status='done', progress={'stage': 'done', 'done': len(frames), 'total': len(frames)})
+
+        save(ready | {'catalog_status': 'loading'})
+        job_update(job_id, progress={'stage': 'Loading Gaia DR3 overlay', 'done': 0, 'total': 0})
+        catalogue.add_done_callback(finish_catalog)
     except Exception as error:  # noqa: BLE001
         traceback.print_exc()
         save(base | {'data_state': 'failed', 'message': f'Processing failed: {type(error).__name__}: {error}'})
@@ -394,17 +466,20 @@ def _field_job(job_id, fid, ra, dec, fov, max_frames, wmin, wmax):
 def get_field(field_id: str):
     p = field_path(field_id)
     if not p.exists():
-        with _jobs_lock:
-            j = next((j for j in _jobs.values() if j['result_id'] == field_id), None)
-        if j:
-            return {'field_id': field_id, 'kind': 'live', 'data_state': 'processing', 'progress': j['progress'], 'frames': [],
-                    'message': None, **j.get('field_meta', {})}
         raise HTTPException(404, 'Unknown field.')
     doc = dict(read_json(p))
-    if doc.get('data_state') == 'processing':
+    if field_id not in TARGETS and _unsafe_live_cache(doc):
+        return doc | {'data_state': 'failed', 'frames': [], 'archive': None, 'progress': None,
+                      'message': 'This cached field predates the reserve check. Search these coordinates again to refresh it.'}
+    if doc.get('data_state') == 'processing' or doc.get('catalog_status') == 'loading':
         with _jobs_lock:
             j = next((j for j in _jobs.values() if j['result_id'] == field_id and j['status'] in ('queued', 'running')), None)
-        if j:
+        if doc['data_state'] != 'processing':
+            if not j:
+                doc = read_json(p).copy()
+                if doc.get('catalog_status') == 'loading':
+                    doc['catalog_status'] = 'unavailable'
+        elif j:
             doc['progress'] = j['progress']
         else:
             doc['data_state'] = 'failed'
@@ -483,6 +558,8 @@ async def create_investigation(request: Request):
     if not fp.exists():
         raise HTTPException(404, 'Field not found or still processing.')
     field = read_json(fp)
+    if fid not in TARGETS and (field['data_state'] in ('processing', 'failed') or _unsafe_live_cache(field)):
+        raise HTTPException(409, 'Wait for the field to finish processing, or search this position again before measuring it.')
     # Clicking on a curated target opens its precomputed investigation.
     if fid in TARGETS:
         inv = read_json(DATA / fid / 'investigation.json')
@@ -550,6 +627,9 @@ def _investigation_job(job_id, inv_id, fid, field, ra, dec, label):
             sealed = {p['id'] for p in man['products'] if p.get('sealed')}
             if not (EXPERIMENTS / fid / 'result.json').exists():
                 files = [f for f in files if Path(f).stem not in sealed]
+        else:
+            eligible = set(field.get('native_product_ids', [frame['id'] for frame in field['frames']]))
+            files = [f for f in files if Path(f).stem in eligible]
         gcache = (DATA / fid / 'gaia_field.json') if fid in TARGETS else (FIELDS / fid / 'gaia_field.json')
         try:
             stars = gaia_field(field['ra'], field['dec'], field['fov_arcmin'] / 60 * 0.75, gmax=19.0, cache=gcache)
@@ -1094,6 +1174,9 @@ def field_frame(fid: str, name: str):
         raise HTTPException(404)
     p = FIELDS / fid / 'frames' / name
     if not p.is_file():
+        raise HTTPException(404)
+    field = get_field(fid)
+    if not any(f['data_url'] == f'/files/fields/{fid}/frames/{name}' for f in field['frames']):
         raise HTTPException(404)
     return FileResponse(p, media_type='application/octet-stream', headers={'Cache-Control': 'public, max-age=86400'})
 

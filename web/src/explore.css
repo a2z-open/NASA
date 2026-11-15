@@ -71,8 +71,7 @@
 .xp-chip--dim { background: transparent; color: #86868b; }
 .xp-chip .term { border-bottom-color: rgba(245, 245, 247, 0.5); }
 .xp-stage > .sky { height: clamp(380px, 58vh, 760px); border-radius: 14px; }
-.xp-progress { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); width: min(400px, 86%); padding: 10px 14px; border-radius: 12px; background: rgba(0, 0, 0, 0.82); border: 1px solid rgba(255, 255, 255, 0.14); }
-.xp-progress .progress { margin: 0; width: 100%; }
+.xp-progress { border-top: 1px solid rgba(255, 255, 255, 0.14); padding-top: 8px; }
 
 /* playback row */
 .xp-transport { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; }

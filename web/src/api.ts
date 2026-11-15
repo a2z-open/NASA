@@ -62,6 +62,7 @@ export interface Field {
   archive: { n_products: number; collections: string[]; queried_utc: string; visits: Visit[] } | null;
   frames: Frame[];
   catalog: CatalogStar[];
+  catalog_status?: 'loading' | 'ready' | 'unavailable';
   catalog_epoch_mjd: number;
 }
 

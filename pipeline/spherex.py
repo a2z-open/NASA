@@ -28,6 +28,8 @@ from astropy.io.votable import parse_single_table
 from astropy.wcs import WCS, FITSFixedWarning
 from astropy import log as _astropy_log
 
+from .archive import atomic_write, write_json
+
 # SPHEREx headers carry SIP coefficients without a '-SIP' CTYPE suffix; astropy applies them (as intended) and
 # logs an INFO message for every WCS it builds.  Silence that one known, expected message.
 _astropy_log.setLevel('WARNING')
@@ -293,17 +295,22 @@ def fetch_cutout(p: Product, ra: float, dec: float, size_arcmin: float, folder: 
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / f'{p.id}.fits'
     meta_path = folder / f'{p.id}.prov.json'
-    if path.is_file() and meta_path.is_file():
-        return Provenance(**json.loads(meta_path.read_text()))
     url = cutout_url(p, ra, dec, size_arcmin)
+    if path.is_file() and meta_path.is_file():
+        try:
+            cached = Provenance(**json.loads(meta_path.read_text()))
+            if cached.cutout_url == url and cached.bytes == path.stat().st_size:
+                return cached
+        except (OSError, TypeError, ValueError):
+            pass
     r = _get(url, timeout=90, retries=5)
     raw = r.content
     if len(raw) > 40 * 1024 * 1024:
         raise ValueError('cutout response unexpectedly large')
     validate_fits(raw)
-    tmp = path.with_suffix('.part')
-    tmp.write_bytes(raw)
-    tmp.replace(path)
+    # Neither a completed FITS nor an older sidecar should be reused across a release change.
+    meta_path.unlink(missing_ok=True)
+    atomic_write(path, raw)
     prov = Provenance(
         product_id=p.id, obs_id=p.obs_id, detector=p.detector, release=p.release, collection=p.collection,
         doi=RELEASES.get(p.collection, {}).get('doi'), archive_url=p.access_url, cutout_url=url,
@@ -311,7 +318,7 @@ def fetch_cutout(p: Product, ra: float, dec: float, size_arcmin: float, folder: 
         bytes=len(raw), retrieved_utc=datetime.now(timezone.utc).isoformat(timespec='seconds'),
         processing_version=p.processing_version, path=str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
     )
-    meta_path.write_text(json.dumps(asdict(prov), indent=1))
+    write_json(meta_path, asdict(prov))
     return prov
 
 

@@ -5,6 +5,7 @@ import { SkyCanvas, type Colormap, type Overlays, type SkyCanvasHandle } from '.
 import { Timeline } from '../components/Timeline.tsx';
 import { DataStatePill } from '../components/DataState.tsx';
 import { InvestigationView, Progress } from '../components/InvestigationView.tsx';
+import { ArchiveFlight, ArchiveProgressText } from '../components/ArchiveFlight.tsx';
 import { StackStill } from '../components/FieldImage.tsx';
 import { resolveQuery } from '../components/SearchBox.tsx';
 import { Term } from '../components/Term.tsx';
@@ -90,26 +91,27 @@ export function Explore() {
   const embed = params.get('embed') === '1';
 
   const [targets, setTargets] = useState<Target[] | null>(null);
-  const [liveFieldId, setLiveFieldId] = useState<string | null>(null);
-  const [startError, setStartError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+  const [live, setLive] = useState<{ key: string; field_id?: string; job_id?: string; error?: string } | null>(null);
+  const liveKey = !targetSlug && !fieldParam && raParam && decParam ? `${raParam},${decParam},${fovParam},${attempt}` : null;
   const target = targets?.find(t => t.slug === targetSlug) ?? null;
 
   useEffect(() => { fetchTargets().then(setTargets).catch(() => setTargets([])); }, []);
 
   // Live query: create (or reuse) a field for the requested coordinates.
   useEffect(() => {
-    if (targetSlug || fieldParam || !raParam || !decParam) { setLiveFieldId(null); return; }
+    if (!liveKey || !raParam || !decParam) return;
     let alive = true;
-    setStartError(null);
-    setLiveFieldId(null);
     api.createField({ ra: raParam, dec: decParam, fov_arcmin: fovParam ?? 6 })
-      .then(r => { if (alive) setLiveFieldId(r.field_id); })
-      .catch(err => { if (alive) setStartError(err.message); });
+      .then(r => { if (alive) setLive({ key: liveKey, ...r }); })
+      .catch(err => { if (alive) setLive({ key: liveKey, error: err.message }); });
     return () => { alive = false; };
-  }, [targetSlug, fieldParam, raParam, decParam, fovParam]);
+  }, [liveKey, raParam, decParam, fovParam]);
 
-  const fieldId = fieldParam ?? (targetSlug ? (target?.field?.field_id ?? (targets ? targetSlug : null)) : liveFieldId);
-  const { data: field, error: fieldError } = useField(fieldId);
+  const liveResult = live?.key === liveKey ? live : null;
+  const fieldId = fieldParam ?? (targetSlug ? (target?.field?.field_id ?? (targets ? targetSlug : null)) : liveResult?.field_id ?? null);
+  const { data, error: fieldError } = useField(fieldId, liveResult?.job_id);
+  const field = data?.field_id === fieldId ? data : null;
 
   const idle = !targetSlug && !fieldParam && !raParam;
 
@@ -119,15 +121,17 @@ export function Explore() {
       {embed && <a className="embed-link" href={window.location.pathname + window.location.search.replace(/[?&]embed=1/, '')} target="_blank" rel="noreferrer">Open in PARALLAX ↗</a>}
       {idle ? <ExploreIdle targets={targets} /> : (
         <ExploreWorkspace
-          key={fieldId ?? 'pending'}
+          key={liveKey ?? fieldId ?? 'pending'}
           field={field}
-          fieldError={fieldError ?? startError}
+          fieldError={(fieldId ? fieldError : null) ?? liveResult?.error ?? null}
           target={target}
           params={params}
           invParam={invParam}
           embed={embed}
           fov={fovParam ?? field?.fov_arcmin ?? 6}
           pendingLabel={raParam && decParam ? `${raParam}, ${decParam}` : targetSlug ?? ''}
+          coordinateSearch={!!liveKey}
+          onCoordinateSubmit={() => setAttempt(value => value + 1)}
         />
       )}
     </div>
@@ -135,7 +139,7 @@ export function Explore() {
 }
 
 /** The search pill and the sky-width chips. With a field open, a width chip reopens the same spot at that width. */
-function ExploreSearch({ fov, here }: { fov: number; here?: SkyPoint | null }) {
+function ExploreSearch({ fov, here, onCoordinateSubmit }: { fov: number; here?: SkyPoint | null; onCoordinateSubmit?: () => void }) {
   const [q, setQ] = useState('');
   const [f, setF] = useState(Math.round(fov));
   const [err, setErr] = useState<string | null>(null);
@@ -151,7 +155,10 @@ function ExploreSearch({ fov, here }: { fov: number; here?: SkyPoint | null }) {
       const fv = Math.min(30, Math.max(2, f || 6));
       if (r.moves) navigate(`/map?q=${encodeURIComponent(q.trim())}`);
       else if (r.target) navigate(`/explore?target=${r.target}`);
-      else navigate(`/explore?ra=${r.ra.toFixed(6)}&dec=${r.dec.toFixed(6)}&fov=${fv}`);
+      else {
+        onCoordinateSubmit?.();
+        navigate(`/explore?ra=${r.ra.toFixed(6)}&dec=${r.dec.toFixed(6)}&fov=${fv}`);
+      }
       setQ('');
     } catch (ex) { setErr((ex as Error).message); } finally { setBusy(false); }
   }
@@ -232,10 +239,13 @@ interface WorkspaceProps {
   pendingLabel: string;
   embed: boolean;
   fov: number;
+  coordinateSearch: boolean;
+  onCoordinateSubmit: () => void;
 }
 
-function ExploreWorkspace({ field, fieldError, target, params, invParam, pendingLabel, embed, fov }: WorkspaceProps) {
+function ExploreWorkspace({ field, fieldError, target, params, invParam, pendingLabel, embed, fov, coordinateSearch, onCoordinateSubmit }: WorkspaceProps) {
   const reduced = usePrefersReducedMotion();
+  const state = field?.data_state ?? (fieldError ? 'failed' : 'processing');
   const canvasRef = useRef<SkyCanvasHandle>(null);
   const grid = field?.grid ?? null;
   const allFrames = useMemo(() => (field?.frames ?? []).filter(f => f && f.data_url && f.stats).slice().sort((a, b) => a.mjd - b.mjd), [field]);
@@ -266,7 +276,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   }, [showWise, wise, field?.field_id]);
   const [fps, setFps] = useState(4);
   const [playing, setPlaying] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [activeFrameId, setActiveFrameId] = useState<string | null>(params.get('frame'));
   const [aId, setAId] = useState<string | null>(params.get('a'));
   const [bId, setBId] = useState<string | null>(params.get('b'));
   const [blinkPhase, setBlinkPhase] = useState(0);
@@ -276,7 +286,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const [invError, setInvError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const initialFrameId = useRef(params.get('frame'));
-  const urlHasView = useRef(['mode', 'det', 'wmin', 'wmax', 'a', 'b'].some(k => params.has(k)));
+  const urlHasView = useRef(['mode', 'det', 'wmin', 'wmax', 'frame', 'a', 'b'].some(k => params.has(k)));
   const defaultsDone = useRef(false);
   const [pendingPair, setPendingPair] = useState(false);
   const [showTrack, setShowTrack] = useState(params.get('track') !== '0');
@@ -299,17 +309,28 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     return f;
   }, [allFrames, dets, wmin, wmax, mode]);
 
-  // Restore the shared frame from the URL once.
+  // Keep the active photo selected as earlier exposures arrive.
   useEffect(() => {
-    if (initialFrameId.current && frames.length) {
-      const i = frames.findIndex(f => f.id === initialFrameId.current);
-      if (i >= 0) setIndex(i);
+    if (!frames.length) return;
+    if (initialFrameId.current && frames.some(f => f.id === initialFrameId.current)) {
+      setActiveFrameId(initialFrameId.current);
       initialFrameId.current = null;
+    } else {
+      if (state !== 'processing') initialFrameId.current = null;
+      if (!frames.some(f => f.id === activeFrameId)) setActiveFrameId(frames[0].id);
     }
-  }, [frames]);
+  }, [frames, state, activeFrameId]);
 
-  const safeIndex = Math.min(index, Math.max(frames.length - 1, 0));
+  const safeIndex = Math.max(0, frames.findIndex(f => f.id === activeFrameId));
   const current = frames[safeIndex] ?? null;
+  const step = useCallback((offset: number) => {
+    if (!frames.length) return;
+    initialFrameId.current = null;
+    setActiveFrameId(id => {
+      const index = Math.max(0, frames.findIndex(f => f.id === id));
+      return frames[(index + offset + frames.length) % frames.length].id;
+    });
+  }, [frames]);
   const aIdx = aId ? frames.findIndex(f => f.id === aId) : -1;
   const bIdx = bId ? frames.findIndex(f => f.id === bId) : -1;
   const frameA = aIdx >= 0 ? frames[aIdx] : frames[0] ?? null;
@@ -338,9 +359,9 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       const id = window.setInterval(() => setBlinkPhase(p => 1 - p), 700);
       return () => window.clearInterval(id);
     }
-    const id = window.setInterval(() => setIndex(i => (i + 1) % frames.length), 1000 / fps);
+    const id = window.setInterval(() => step(1), 1000 / fps);
     return () => window.clearInterval(id);
-  }, [playing, fps, frames.length, mode, canPlay]);
+  }, [playing, fps, step, mode, canPlay]);
 
   useEffect(() => { if (reduced) setPlaying(false); }, [reduced]);
 
@@ -351,7 +372,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       det: dets?.length ? dets.join(',') : 'all',
       wmin: wmin != null ? wmin.toFixed(3) : null,
       wmax: wmax != null ? wmax.toFixed(3) : null,
-      frame: current?.id ?? null,
+      frame: initialFrameId.current ?? current?.id ?? null,
       stretch: stretch === 'asinh' ? null : stretch,
       cmap: cmap === 'gray' ? null : cmap,
       a: mode === 'blink' || mode === 'difference' ? frameA?.id ?? null : null,
@@ -365,7 +386,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       smooth: smooth ? null : '0',
       fade: fade ? null : '0',
     });
-  }, [mode, dets, wmin, wmax, current?.id, stretch, cmap, frameA?.id, frameB?.id, invId, selected, showTrack, showGrid, showCatalog, smooth, fade]);
+  }, [mode, dets, wmin, wmax, current?.id, state, stretch, cmap, frameA?.id, frameB?.id, invId, selected, showTrack, showGrid, showCatalog, smooth, fade]);
 
   // ---------- compose pixels ----------
   const composed = useMemo(() => {
@@ -452,7 +473,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const targetHere = target && epochForHint != null ? targetPosition(target, epochForHint) : null;
 
   const pick = useCallback(async (p: SkyPoint) => {
-    if (!field || !grid) return;
+    if (!field || !grid || state === 'processing' || state === 'failed') return;
     setSelected(p);
     setInvError(null);
     // Near the curated target? open its precomputed investigation.
@@ -468,7 +489,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       setInvError((err as Error).message);
       setInvId(null);
     }
-  }, [field, grid, targetHere, curatedInvId]);
+  }, [field, grid, state, targetHere, curatedInvId]);
 
   // ---------- keyboard ----------
   useEffect(() => {
@@ -479,8 +500,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       const onControl = !!t && (t.tagName === 'BUTTON' || t.tagName === 'A' || t.tagName === 'SUMMARY');
       if (onControl && (e.key === ' ' || e.key === 'Enter')) return;      // Space and Enter press the focused control
       if (e.key === ' ') { if (canPlay) { e.preventDefault(); setPlaying(p => !p); } }
-      else if (e.key === 'ArrowRight') { e.preventDefault(); setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); setPlaying(false); step(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); setPlaying(false); step(-1); }
       else if (e.key.toLowerCase() === 'b') setMode(m => (m === 'blink' ? 'animate' : 'blink'));
       else if (e.key.toLowerCase() === 'd') { setPlaying(false); setMode(m => (m === 'difference' ? 'animate' : 'difference')); }
       else if (e.key === '+' || e.key === '=') canvasRef.current?.zoom(1.25);
@@ -490,7 +511,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [frames.length, canPlay]);
+  }, [step, canPlay]);
 
   // ---------- overlays ----------
   const overlays = useMemo<Overlays>(() => {
@@ -552,7 +573,6 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   }
 
   const matched = frameA && frameB ? wavelengthMatched(frameA, frameB) : null;
-  const state = field?.data_state ?? (fieldError ? 'failed' : 'processing');
   const detCounts = useMemo(() => {
     const c = new Map<number, number>();
     allFrames.forEach(f => c.set(f.detector, (c.get(f.detector) ?? 0) + 1));
@@ -563,14 +583,18 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   let emptyMessage: { title: string; detail?: string; loading?: boolean } | null = null;
   if (fieldError) emptyMessage = { title: 'Could not open this patch of sky', detail: fieldError };
   else if (!field) emptyMessage = { title: "Asking NASA's archive…", detail: pendingLabel ? `Position: ${pendingLabel}` : undefined, loading: true };
-  else if (state === 'processing' && !allFrames.length) emptyMessage = { title: 'Getting SPHEREx photos from NASA', detail: field.message ?? "Finding every photo of this spot in NASA's IRSA archive (DR1 and QR3), downloading them and lining them up. This takes 10 to 60 seconds.", loading: true };
+  else if (state === 'processing' && !allFrames.length) emptyMessage = { title: 'Getting SPHEREx photos from NASA', loading: true };
   else if (state === 'no_coverage') emptyMessage = { title: 'SPHEREx has no photos of this spot yet', detail: field.message ?? "NASA's archive (DR1 and QR3) has no SPHEREx images covering this position yet." };
   else if (state === 'archive_unavailable') emptyMessage = { title: "NASA's archive is not answering", detail: field.message ?? 'Try one of the five test targets (they are saved here), or try again in a minute.' };
   else if (state === 'failed') emptyMessage = { title: 'Something went wrong', detail: field.message ?? undefined };
+  else if (state === 'insufficient' && !allFrames.length) emptyMessage = { title: 'No usable exposures', detail: field.message ?? undefined };
   else if (!frames.length && allFrames.length) emptyMessage = { title: 'No photos in these colours', detail: 'Choose more detectors or a wider colour range under More tools.' };
   else if (!pixels && frames.length) emptyMessage = { title: 'Loading photos…', loading: true };
 
-
+  const progress = field?.progress ?? null;
+  const archiveFlight = !pixels && (coordinateSearch || field?.kind === 'live')
+    && (state === 'processing' || (emptyMessage?.loading && frames.length > 0));
+  const canMeasure = !!pixels && state !== 'processing' && state !== 'failed';
   const shownFrame = composed?.kind === 'single' ? composed.frame : mode === 'difference' ? null : current;
   const modeInfo = MODES.find(m => m.id === mode) ?? MODES[0];
   const here: SkyPoint | null = field && Number.isFinite(field.ra) && Number.isFinite(field.dec) ? { ra: field.ra, dec: field.dec } : null;
@@ -601,7 +625,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               <button className="xp-share" type="button" onClick={share}>{copied ? 'Link copied' : 'Share this view'}</button>
             </div>
           </div>
-          <ExploreSearch fov={fov} here={here} />
+          <ExploreSearch fov={fov} here={here} onCoordinateSubmit={onCoordinateSubmit} />
         </section>
       )}
 
@@ -630,7 +654,9 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               ) : null}
             </div>
 
-            {grid ? (
+            {archiveFlight ? (
+              <ArchiveFlight reducedMotion={reduced} progress={progress} coordinates={pendingLabel || null} />
+            ) : grid ? (
               <SkyCanvas
                 ref={canvasRef}
                 grid={grid}
@@ -643,10 +669,10 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
                 fadeMs={fade && mode !== 'difference' && mode !== 'stack' ? Math.min(900 / fps, mode === 'blink' ? 350 : 600) : 0}
                 hint={hint}
                 wheelZoom={false}
-                onPick={pick}
+                onPick={canMeasure ? pick : undefined}
                 emptyMessage={emptyMessage}
                 caption={overlays.track ? 'Dashed line: the fitted path (a model, not a photo)' : undefined}
-                ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}. Click a source to measure it.`}
+                ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}.${canMeasure ? ' Click a source to measure it.' : ''}`}
               />
             ) : (
               <div className="sky"><div className="sky__message" data-loading={emptyMessage?.loading ? 'true' : 'false'}>
@@ -655,20 +681,20 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
                 {field?.progress && <Progress {...field.progress} />}
               </div></div>
             )}
-            {field?.progress && state === 'processing' && grid && <div className="xp-progress"><Progress {...field.progress} /></div>}
+            {!archiveFlight && progress && state === 'processing' && <div className="xp-progress"><ArchiveProgressText progress={progress} /></div>}
 
             <div className="xp-transport">
               <div className="xp-transport__btns" role="group" aria-label="Playback">
-                <button className="xp-round" onClick={() => { setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Previous photo (←)">‹</button>
+                <button className="xp-round" onClick={() => { setPlaying(false); step(-1); }} disabled={frames.length < 2} aria-label="Previous photo (←)">‹</button>
                 <button className="e-btn e-btn--white xp-play" onClick={() => setPlaying(p => !p)} disabled={!canPlay} aria-label={playing ? 'Pause (space)' : 'Play (space)'}>{playing ? 'Pause' : 'Play'}</button>
-                <button className="xp-round" onClick={() => { setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Next photo (→)">›</button>
+                <button className="xp-round" onClick={() => { setPlaying(false); step(1); }} disabled={frames.length < 2} aria-label="Next photo (→)">›</button>
                 <label className="xp-speed"><span className="visually-hidden">Speed</span>
                   <select value={fps} onChange={e => setFps(Number(e.target.value))} aria-label="Playback speed, photos per second">
                     {[1, 2, 4, 8, 12, 20, 30].map(v => <option key={v} value={v}>{v} per sec</option>)}
                   </select>
                 </label>
               </div>
-              <Timeline frames={frames} index={safeIndex} onSelect={i => { setPlaying(false); setIndex(i); }} axis={mode === 'spectral' ? 'wavelength' : 'time'}
+              <Timeline frames={frames} index={safeIndex} onSelect={i => { initialFrameId.current = null; setPlaying(false); setActiveFrameId(frames[i].id); }} axis={mode === 'spectral' ? 'wavelength' : 'time'}
                 markA={pairMode ? (aIdx >= 0 ? aIdx : 0) : null}
                 markB={pairMode ? (bIdx >= 0 ? bIdx : frames.length - 1) : null} />
               <span className="xp-count">{frames.length ? `${safeIndex + 1} of ${frames.length}` : '0 of 0'}</span>
@@ -817,6 +843,8 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
               <div className="xp-tool__body">
                 <div className="xp-checks">
                   <label><input type="checkbox" checked={showCatalog} onChange={e => setShowCatalog(e.target.checked)} /><span>Known stars (ESA Gaia DR3)<small>Moved to each photo's date using their measured motion.</small></span></label>
+                  {showCatalog && field?.catalog_status === 'loading' && <p className="xp-small" role="status">Loading the Gaia overlay…</p>}
+                  {showCatalog && field?.catalog_status === 'unavailable' && <p className="xp-small" role="status">Gaia overlay unavailable for this field.</p>}
                   <label><input type="checkbox" checked={showWise} onChange={e => setShowWise(e.target.checked)} /><span>What NASA's WISE saw around 2015{showWise && !wise ? ' (loading…)' : ''}<small>Diamonds mark things WISE saw moving.</small></span></label>
                   {wiseError && <span className="xp-small">{wiseError}</span>}
                   <label><input type="checkbox" checked={showTrack} onChange={e => setShowTrack(e.target.checked)} disabled={!trackSource?.motion} /><span>Fitted path<small>A model, drawn dashed. Not a photo.</small></span></label>

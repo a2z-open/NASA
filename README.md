@@ -101,13 +101,21 @@ Set `PARALLAX_CHUNKS_DB` to a path on persistent storage when hosting it.
 
 **Docker:** `docker build -t parallax . && docker run -p 8000:8000 parallax`.
 
-### Sky map search agent
+### Aiges on the sky map
 
-Open **Search agent** and send a task such as “Search H-02 and H-03 from Oct 20 to Nov 13, 2026,
-and look for follow-up images.” The chat asks for missing chunks or dates. “Replay NW034” runs the
-historical benchmark. Follow up with “Find images for that search” to use its saved predictions, or ask
-“What did you find?” for a summary. Jobs run on the server. Reopen the panel to see the work log and
-download the evidence packet.
+Open **Aiges** on the sky map. Try “What do we know about Planet Nine?” or “Find papers about Planet Nine.”
+The chat links its astronomy references, including arXiv preprints and primary sources outside NASA.
+“Check DECam in G-05 from 2024-10-01 to 2025-02-01” runs an NSF NOIRLab archive search.
+An unspecified sky search also starts with optical archive coverage. Ask explicitly for an asteroid
+or MPC search to run the linkage worker.
+“Replay NW034” runs the historical linkage benchmark. Follow up with “Find images for that search”
+to use its saved predictions, or ask “What did you find?” for a summary. A run link opens the same work log
+and downloadable evidence packet.
+
+The DECam worker selects public calibrated optical image records before examining detections. It ranks
+pointing groups by independent UTC nights, temporal span and the archive’s reported depth. Receipts
+record filters, row limits and response hashes. This reconnaissance does not test pixel depth, CCD
+gaps, source crowding, or recovery of injected objects. It cannot find or rule out a new planet by itself.
 
 ```sh
 .venv/bin/python -m pipeline.discovery --benchmark --no-ai --output output/nw034-replay
@@ -129,16 +137,17 @@ with compiled `src/make_tracklets` and `src/heliolinc`. Set `PARALLAX_HELIOLINC_
 `PARALLAX_DISCOVERY_EVIDENCE_DIR` points at the historical expansion folder with the corresponding archive
 receipts and FITS exposures. Keep these inputs and `.parallax-cache/discovery/runs` on the API host.
 
-Set `OPENAI_API_KEY` in the API server's secret environment and restart the API to enable planning. Choose
-**GPT-6.1 Terra** (default) or **GPT-6.1 Sol** for each run in the map panel or with
-`--planner-model gpt-6.1-terra` or `--planner-model gpt-6.1-sol` in the CLI. Set
-`PARALLAX_OPENAI_MODEL` to override the server default. The model receives counts and fit summaries and
+Set `OPENAI_API_KEY` in the API server's secret environment and restart the API to enable model-assisted answers
+and evidence planning. The application selects the model automatically. Use `PARALLAX_OPENAI_CHAT_MODEL`
+for ordinary answers and `PARALLAX_OPENAI_MODEL` for research synthesis and evidence planning to override
+the defaults on the server. The planner receives counts and fit summaries and
 chooses which evidence check runs first. Both checks run, and the packet records the requested model and
 planner outcome. For **Search and find follow-up images**, it also chooses which saved holdout prediction
 to query first. The server searches the SPHEREx DR1 and QR3 wide-survey archives within 3 arcminutes and
 30 minutes of that prediction. It tries a second night when the first query yields no images. The evidence
 includes query receipts and FITS links for possible exposures. A metadata match still requires pixel review.
-With no server key, the search uses the latest eligible prediction first and a fixed evidence order.
+With no server key, chat uses public references and the search uses the latest eligible prediction first
+and a fixed evidence order.
 
 This release screens archived main-belt asteroid linkages. Catalog and pixel evidence is limited to matches in
 the pinned historical packet. Live follow-up searches product metadata and keeps failed queries distinct from

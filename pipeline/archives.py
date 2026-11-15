@@ -100,7 +100,7 @@ def _circle(ra_col: str, dec_col: str, ra: float, dec: float, r_deg: float) -> s
     return f"CONTAINS(POINT('ICRS', {ra_col}, {dec_col}), CIRCLE('ICRS', {ra:.6f}, {dec:.6f}, {r_deg:.6f}))=1"
 
 
-def mast(ra: float, dec: float, r_deg: float, timeout: float = 45.0) -> dict:
+def mast(ra: float, dec: float, r_deg: float, timeout: float = 15.0) -> dict:
     where = _circle('s_ra', 's_dec', ra, dec, r_deg)
     tb = _tap(MAST_TAP, f"SELECT obs_collection, COUNT(*) AS n, MIN(t_min) AS t0, MAX(t_min) AS t1 FROM dbo.ObsPointing WHERE {where} "
                         f"GROUP BY obs_collection", timeout)
@@ -114,26 +114,33 @@ def mast(ra: float, dec: float, r_deg: float, timeout: float = 45.0) -> dict:
                          'first_year': _mjd_year(r['t0']), 'last_year': _mjd_year(r['t1'])})
         else:
             skipped.append({'collection': c, 'n': n, 'why': NOT_COUNTED.get(c, 'not a telescope we list')})
-    previews = []
-    for coll, label in (('JWST', 'JWST'), ('HST', 'Hubble')):
-        if not any(x['key'] == coll for x in rows):
-            continue
+    def sample(coll: str, label: str) -> list:
+        previews = []
         try:
             pv = _tap(MAST_TAP, f"SELECT TOP 4 instrument_name, target_name, t_min, jpegURL FROM dbo.ObsPointing WHERE {where} "
-                                f"AND obs_collection='{coll}' AND jpegURL IS NOT NULL AND dataproduct_type='image' ORDER BY t_min DESC", timeout)
-        except Exception:  # noqa: BLE001 - previews are optional
-            continue
-        col = {c.lower(): c for c in pv.colnames}              # archives differ in the case of column names
-        for r in pv:
-            uri = str(r[col['jpegurl']]).strip()
-            if PREVIEW_URI.match(uri):
-                previews.append({'telescope': label, 'instrument': str(r[col['instrument_name']]).strip(),
-                                 'target': str(r[col['target_name']]).strip(), 'year': _mjd_year(r[col['t_min']]),
-                                 'url': '/api/telescopes/preview?uri=' + quote(uri, safe='')})
+                                f"AND obs_collection='{coll}' AND jpegURL IS NOT NULL AND dataproduct_type='image' ORDER BY t_min DESC",
+                      min(timeout, 7.0))
+            col = {c.lower(): c for c in pv.colnames}
+            for r in pv:
+                uri = str(r[col['jpegurl']]).strip()
+                if PREVIEW_URI.fullmatch(uri):
+                    previews.append({'telescope': label, 'instrument': str(r[col['instrument_name']]).strip(),
+                                     'target': str(r[col['target_name']]).strip(), 'year': _mjd_year(r[col['t_min']]),
+                                     'url': '/api/telescopes/preview?uri=' + quote(uri, safe='')})
+        except Exception:  # Optional previews must not suppress the returned counts.
+            pass
+        return previews
+
+    previews = []
+    collections = {row['key'] for row in rows}
+    with ThreadPoolExecutor(max_workers=2) as ex:
+        tasks = [ex.submit(sample, coll, label) for coll, label in (('JWST', 'JWST'), ('HST', 'Hubble')) if coll in collections]
+        for task in tasks:
+            previews.extend(task.result())
     return {'rows': rows, 'skipped': skipped, 'previews': previews}
 
 
-def heasarc(ra: float, dec: float, r_deg: float, timeout: float = 45.0) -> dict:
+def heasarc(ra: float, dec: float, r_deg: float, timeout: float = 15.0) -> dict:
     rows = []
 
     def one(item):
@@ -154,10 +161,10 @@ def heasarc(ra: float, dec: float, r_deg: float, timeout: float = 45.0) -> dict:
                     rows.append(row)
             except Exception as error:  # noqa: BLE001
                 errors.append(f"{HEASARC[table][0]}: {type(error).__name__}")
-    return {'rows': rows, 'errors': errors}
+    return {'rows': rows, 'errors': errors, 'available': len(errors) < len(HEASARC)}
 
 
-def neossat(ra: float, dec: float, r_deg: float, timeout: float = 30.0) -> dict:
+def neossat(ra: float, dec: float, r_deg: float, timeout: float = 15.0) -> dict:
     q = (f"SELECT COUNT(*) AS n, MIN(p.time_bounds_lower) AS t0, MAX(p.time_bounds_lower) AS t1 FROM caom2.Observation AS o "
          f"JOIN caom2.Plane AS p ON p.obsID = o.obsID WHERE o.collection = 'NEOSSAT' "
          f"AND INTERSECTS(CIRCLE('ICRS', {ra:.6f}, {dec:.6f}, {r_deg:.6f}), p.position_bounds)=1")
@@ -170,42 +177,53 @@ def neossat(ra: float, dec: float, r_deg: float, timeout: float = 30.0) -> dict:
 
 def look(ra: float, dec: float, radius_arcmin: float = 3.0, *, refresh: bool = False) -> dict:
     """Every archive at once.  Returns telescopes with counts (largest first), previews, and which archives did not answer."""
-    ra, dec = float(ra) % 360.0, float(dec)
+    ra, dec, radius_arcmin = float(ra), float(dec), float(radius_arcmin)
+    if not all(map(math.isfinite, (ra, dec, radius_arcmin))):
+        raise ValueError('coordinates and radius must be finite')
+    ra %= 360.0
     if not -90 <= dec <= 90:
         raise ValueError('declination must be between -90 and +90 degrees')
-    radius_arcmin = min(max(float(radius_arcmin), 0.1), 30.0)
+    radius_arcmin = min(max(radius_arcmin, 0.1), 30.0)
     r_deg = radius_arcmin / 60.0
-    key = hashlib.sha1(f'{ra:.4f},{dec:.4f},{radius_arcmin:.2f}'.encode()).hexdigest()[:16]
+    key = hashlib.sha1(f'{ra:.6f},{dec:.6f},{r_deg:.6f}'.encode()).hexdigest()[:16]
     path = CACHE / f'{key}.json'
     if path.is_file() and not refresh:
         doc = json.loads(path.read_text())
-        if time.time() - doc.get('asked_unix', 0) < CACHE_DAYS * 86400 and not doc.get('unanswered'):
+        if (time.time() - doc.get('asked_unix', 0) < CACHE_DAYS * 86400
+                and doc.get('coverage') and not doc.get('unanswered')):
             return doc | {'from_cache': True}
-    jobs = {'NASA MAST (Hubble, JWST, TESS, GALEX, Pan-STARRS and more)': lambda: mast(ra, dec, r_deg),
-            'NASA HEASARC (Chandra, XMM-Newton, Swift, NuSTAR, NICER)': lambda: heasarc(ra, dec, r_deg),
-            'CADC (NEOSSat)': lambda: neossat(ra, dec, r_deg)}
+    jobs = {'mast': ('NASA MAST', mast), 'heasarc': ('NASA HEASARC', heasarc), 'cadc': ('CADC (NEOSSat)', neossat)}
     rows, previews, skipped, unanswered = [], [], [], []
+    coverage = {}
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=3) as ex:
-        futs = {ex.submit(fn): name for name, fn in jobs.items()}
-        for f, name in futs.items():
+        futs = {key: ex.submit(fn, ra, dec, r_deg) for key, (_, fn) in jobs.items()}
+        for key, f in futs.items():
             try:
                 got = f.result()
                 rows += got['rows']
                 previews += got.get('previews', [])
                 skipped += got.get('skipped', [])
-                unanswered += got.get('errors', [])
+                errors = got.get('errors', [])
+                unanswered += errors
+                coverage[key] = 'unavailable' if not got.get('available', True) else 'partial' if errors else 'complete'
             except Exception as error:  # noqa: BLE001
-                unanswered.append(f'{name}: {type(error).__name__}')
+                unanswered.append(f'{jobs[key][0]}: {type(error).__name__}')
+                coverage[key] = 'unavailable'
     rows.sort(key=lambda r: -r['n'])
     doc = {'ra': ra, 'dec': dec, 'radius_arcmin': radius_arcmin, 'asked_unix': time.time(), 'seconds': round(time.time() - t0, 1),
            'telescopes': rows, 'n_telescopes': len(rows), 'n_observations': sum(r['n'] for r in rows), 'previews': previews,
-           'not_counted': skipped, 'unanswered': unanswered,
+           'not_counted': skipped, 'unanswered': unanswered, 'coverage': coverage,
            'links': {k: v.format(ra=ra, dec=dec) for k, v in LINKS.items()},
-           'note': ('Counts of observations whose pointing centre is within the radius, as each archive lists them. Large '
-                    'mosaics centred farther away can still cover this spot. Processed products and test entries are not counted.')}
-    CACHE.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(doc))
+           'note': ('MAST and HEASARC match pointing centers; CADC matches NEOSSat image footprints. '
+                    'The search covers selected collections. Images centered farther away can still cover this spot.')}
+    if not unanswered:
+        CACHE.mkdir(parents=True, exist_ok=True)
+        # If another search writes the same key, readers still see a complete document.
+        from tempfile import NamedTemporaryFile
+        with NamedTemporaryFile(mode='w', dir=CACHE, delete=False) as tmp:
+            json.dump(doc, tmp)
+        Path(tmp.name).replace(path)
     return doc
 
 

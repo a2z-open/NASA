@@ -208,11 +208,25 @@ def choose_frames(visits, position, *, limit, detector=None):
 
 
 def is_reserved(item, position, reservation):
-    if item.obs_id in reservation.get('obs_ids', []):
+    return reserved_observation(item.obs_id, item.t_min, position, reservation)
+
+
+def reserved_observation(obs_id, mjd, position, reservation):
+    if obs_id in reservation.get('obs_ids', []):
         return True
-    if not reservation.get('t_min', float('inf')) <= item.t_min <= reservation.get('t_max', -1):
+    if not reservation.get('t_min', float('inf')) <= mjd <= reservation.get('t_max', -1):
         return False
     return near_barnard(position)
+
+
+def load_reservation(path):
+    try:
+        reserve = json.loads(path.read_text())['reserve']
+        if reserve['obs_ids'] and reserve['t_min'] < reserve['t_max']:
+            return reserve
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return None
 
 
 def near_barnard(position):

@@ -1,7 +1,6 @@
 """Web service for the local PARALLAX viewer and coordinate lookup."""
 
 from contextlib import asynccontextmanager
-import json
 from pathlib import Path
 import re
 
@@ -9,7 +8,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from pipeline.archive import IrsaArchive, SkyPosition, build_sequence, near_barnard, sequence_payload
+from pipeline.archive import IrsaArchive, SkyPosition, build_sequence, load_reservation, near_barnard, sequence_payload
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,13 +16,7 @@ RESERVATION = ROOT / 'validation/barnards-star-archive.json'
 
 
 def active_reservation():
-    try:
-        reserve = json.loads(RESERVATION.read_text())['reserve']
-        if not reserve['obs_ids'] or not reserve['t_min'] < reserve['t_max']:
-            return None
-        return reserve
-    except (OSError, ValueError, KeyError, TypeError):
-        return None
+    return load_reservation(RESERVATION)
 
 
 def create_app(*, cache=None, archive=None):
