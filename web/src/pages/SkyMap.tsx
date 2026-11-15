@@ -29,7 +29,7 @@ const BLANK = new Set([50, 51]);
 // The track itself is derived from their orbit (inclination 16, node 97) in docs/PLANET_NINE_RESEARCH.md. Approximate.
 const P9_TRACK: [number, number][] = [[33, -2], [46, 4], [60, 11], [74, 16], [90, 21], [107, 25]];
 
-type Cat = 'planets' | 'dwarfs' | 'finds' | 'cold' | 'deep' | 'stars';
+type Cat = 'planets' | 'dwarfs' | 'finds' | 'nasa' | 'cold' | 'deep' | 'stars';
 interface Place {
   name: string; kind: string; cat: Cat; blurb: string;
   q?: string;                       // looked up live (it moves): NASA JPL Horizons
@@ -65,11 +65,17 @@ const PLACES: Place[] = [
   { name: 'Sirius', kind: 'Star', cat: 'stars', ra: 101.2872, dec: -16.7161, fov: 2, blurb: 'The brightest star in the night sky.' },
   { name: 'Betelgeuse', kind: 'Star', cat: 'stars', ra: 88.7929, dec: 7.4071, fov: 2, blurb: "A red supergiant in Orion's shoulder." },
   { name: 'Polaris', kind: 'Star', cat: 'stars', ra: 37.9546, dec: 89.2641, fov: 4, blurb: 'The North Star.' },
+  { name: 'RW Aurigae', kind: 'Variable star', cat: 'stars', ra: 76.9565, dec: 30.4014, fov: 0.6, blurb: "A young star that dims when dust drifts in front of it. One of NASA's five test targets. Too bright for the camera, so we measure the ring of light around it." },
+  { name: 'R Draconis', kind: 'Variable star', cat: 'stars', ra: 248.1676, dec: 66.755, fov: 0.6, blurb: "A red giant that swells and shrinks, brightening and fading about every eight months. One of NASA's five test targets. Too bright for the camera, so we measure the ring of light around it." },
 ];
 const CATS: { id: Cat; label: string }[] = [
-  { id: 'finds', label: 'Our finds' }, { id: 'planets', label: 'Planets' }, { id: 'dwarfs', label: 'Dwarf planets' },
+  { id: 'finds', label: 'Our finds' }, { id: 'nasa', label: "NASA's 5 targets" }, { id: 'planets', label: 'Planets' }, { id: 'dwarfs', label: 'Dwarf planets' },
   { id: 'cold', label: 'Cold neighbours' }, { id: 'deep', label: 'Nebulae and galaxies' }, { id: 'stars', label: 'Stars' },
 ];
+// The five objects the challenge asks every tool to be tested on, in the order the challenge lists them.
+// They keep their own categories too; this chip just gathers them in one place.
+const NASA_FIVE = ["Barnard's Star", 'Epsilon Indi B', 'WISE 0855', 'RW Aurigae', 'R Draconis'];
+const inList = (c: Cat) => (c === 'nasa' ? NASA_FIVE.flatMap(n => PLACES.filter(p => p.name === n)) : PLACES.filter(p => p.cat === c));
 const POPULAR = ['Makemake, where we found it', 'Pluto', 'WISE 0855', 'Orion Nebula', 'Planet Nine zone', 'Andromeda Galaxy'];
 
 interface Sel { name: string; kind: string; blurb?: string; ra: number; dec: number; fov?: number; img?: string; moves?: boolean; source?: string; ours?: boolean; cat?: Cat; pin?: boolean }
@@ -93,7 +99,8 @@ const IcGlobe = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M3.500 12
 const IcLayers = () => I(<><path d="m12 4 8.500 4.500L12 13 3.500 8.500z" /><path d="m3.500 12.500 8.500 4.500 8.500-4.500" /></>);
 const IcClock = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M12 7.500V12l3 2" /></>);
 const IcInfo = () => I(<><circle cx="12" cy="12" r="8.500" /><path d="M12 11v5.500M12 7.800v.2" /></>);
-const catIcon = (c?: Cat) => c === 'planets' || c === 'dwarfs' ? <IcPlanet /> : c === 'deep' ? <IcSpiral /> : c === 'stars' ? <IcStar /> : c === 'cold' ? <IcSnow /> : c === 'finds' ? <IcFlag /> : <IcPin />;
+const IcTarget = () => I(<><circle cx="12" cy="12" r="7.5" /><circle cx="12" cy="12" r="2.6" /><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22" /></>);
+const catIcon = (c?: Cat) => c === 'nasa' ? <IcTarget /> : c === 'planets' || c === 'dwarfs' ? <IcPlanet /> : c === 'deep' ? <IcSpiral /> : c === 'stars' ? <IcStar /> : c === 'cold' ? <IcSnow /> : c === 'finds' ? <IcFlag /> : <IcPin />;
 
 function hips(Ali: AladinNS, a: any, l: typeof LAYERS[number]) {
   const opts = { name: l.label, imgFormat: l.fmt };
@@ -484,7 +491,7 @@ export function SkyMap() {
         <section className="gm-card" aria-label={CATS.find(c => c.id === list)?.label}>
           <div className="gm-list__hd"><h2>{CATS.find(c => c.id === list)?.label}</h2><button type="button" className="gm-ic" aria-label="Close" onClick={() => setList(null)}><IcX /></button></div>
           <div className="gm-card__scroll">
-            {PLACES.filter(p => p.cat === list).map(p => (
+            {inList(list).map(p => (
               <button key={p.name} type="button" className="gm-list__row" onClick={() => void pick(p)}>
                 {catIcon(p.cat)}<span><b>{p.name}</b><span>{p.kind}{p.ours ? ' · PARALLAX result' : ''}</span></span>
               </button>

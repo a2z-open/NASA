@@ -258,8 +258,8 @@ export function Home() {
               <div className="e-hero__shade" />
             </div>
             <div className="e-hero__text">
-              <h1 id="hero-h" className="e-hero__h">Help find<br /><em>Planet X.</em></h1>
-              <p className="e-hero__sub">A game and a search engine, built on real photos from NASA's SPHEREx telescope.</p>
+              <h1 id="hero-h" className="e-hero__h">You could spot<br /><em>something new.</em></h1>
+              <p className="e-hero__sub">Use real NASA telescope images to hunt for undiscovered planets, asteroids, and comets.</p>
               <div className="e-hero__go">
                 <Link className="e-btn e-btn--white" href="/map">Start hunting <Arrow /></Link>
               </div>
