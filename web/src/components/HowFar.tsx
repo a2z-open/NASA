@@ -57,7 +57,7 @@ export function HowFar() {
         <p className="far2__say"><strong>{t.name.replace('?', '')}</strong> {t.say}</p>
         <p className="far2__note">
           {t.au < 1000 ? `${t.au.toFixed(0)} times farther from the Sun than Earth.` : '4.2 light-years away.'}
-          {' '}Measure the jump and you know the distance. That's how PARALLAX measured Makemake at 52.7 AU and Eris at 95.5 AU. NASA's JPL agrees.
+          {' '}Measure the jump and you know the distance. That's how Aiges measured Makemake at 52.7 AU and Eris at 95.5 AU. NASA's JPL agrees.
         </p>
       </div>
       <figure className="far2__fig">

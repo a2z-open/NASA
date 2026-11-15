@@ -25,7 +25,7 @@ export function Evidence({ id }: { id: string }) {
           <button className="button button--primary button--small" onClick={() => window.print()}>Print / save PDF</button>
         </div>
         <header className="dossier__head">
-          <p className="eyebrow">PARALLAX evidence dossier</p>
+          <p className="eyebrow">Aiges evidence dossier</p>
           <h1>{inv.title}</h1>
           <p className="mono small">Candidate ID: {inv.id} · generated {dateTime(inv.created_utc)}</p>
         </header>
@@ -128,7 +128,7 @@ export function Evidence({ id }: { id: string }) {
             <li>Software: {inv.provenance?.software.map(s => `${s.name}${s.version ? ' ' + s.version : ''}`).join(', ')}</li>
           </ul>
           {inv.provenance && <p className="small">Per-file SHA-256 manifest: <a href={inv.provenance.manifest_url}>{inv.provenance.manifest_url}</a></p>}
-          <p className="small dim">PARALLAX is not affiliated with or endorsed by NASA. Measurements are deterministic and reproducible from the listed files; no AI model produced any number in this dossier.</p>
+          <p className="small dim">Aiges is not affiliated with or endorsed by NASA. Measurements are deterministic and reproducible from the listed files; no AI model produced any number in this dossier.</p>
         </section>
       </div>
     </Page>

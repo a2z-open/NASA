@@ -118,7 +118,7 @@ export function Explore() {
   return (
     <div className={`e xp${embed ? ' xp--embed' : ''}`}>
       {!embed && <Header />}
-      {embed && <a className="embed-link" href={window.location.pathname + window.location.search.replace(/[?&]embed=1/, '')} target="_blank" rel="noreferrer">Open in PARALLAX ↗</a>}
+      {embed && <a className="embed-link" href={window.location.pathname + window.location.search.replace(/[?&]embed=1/, '')} target="_blank" rel="noreferrer">Open in Aiges ↗</a>}
       {idle ? <ExploreIdle targets={targets} /> : (
         <ExploreWorkspace
           key={liveKey ?? fieldId ?? 'pending'}

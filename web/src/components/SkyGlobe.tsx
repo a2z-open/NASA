@@ -11,7 +11,7 @@ const ECL: [number, number][] = Array.from({ length: 73 }, (_, i) => {
   return [Math.atan2(Math.sin(l) * Math.cos(e), Math.cos(l)) / RAD, Math.asin(Math.sin(e) * Math.sin(l)) / RAD] as [number, number];
 });
 
-/** The sky as a line-drawn sphere, seen from outside. Drag to turn it. Dots are places PARALLAX searched. */
+/** The sky as a line-drawn sphere, seen from outside. Drag to turn it. Dots are places Aiges searched. */
 const LIGHT = { front: 'rgba(10,10,10,0.55)', back: 'rgba(10,10,10,0.12)', rim: '#0a0a0a', ecl: 'rgba(10,10,10,0.9)', eclBack: 'rgba(10,10,10,0.2)', p9: 'rgba(10,10,10,0.95)', p9Back: 'rgba(10,10,10,0.2)', dot: '#0a0a0a', dotBack: 'rgba(10,10,10,0.18)', big: '#0a0a0a', ring: 'rgba(10,10,10,0.5)', tag: 'rgba(244,244,244,0.9)', text: '#0a0a0a', p9Text: '#0a0a0a' };
 // on the navy block: pale blue lines, sky-blue patches, orange for named worlds and the Planet Nine track
 const DARK = { front: 'rgba(205,218,255,0.5)', back: 'rgba(205,218,255,0.1)', rim: 'rgba(225,233,255,0.95)', ecl: 'rgba(255,255,255,0.75)', eclBack: 'rgba(255,255,255,0.16)', p9: '#ff7a3d', p9Back: 'rgba(255,122,61,0.25)', dot: '#9fbcff', dotBack: 'rgba(159,188,255,0.22)', big: '#ff6a2b', ring: 'rgba(255,150,100,0.65)', tag: 'rgba(11,21,48,0.88)', text: '#ffffff', p9Text: '#ffb08a' };
@@ -123,5 +123,5 @@ export function SkyGlobe({ points, dark = false }: { points: GlobePoint[]; dark?
     return () => { alive = false; io.disconnect(); cancelAnimationFrame(raf); c.removeEventListener('pointerdown', down); c.removeEventListener('pointermove', move); c.removeEventListener('pointerup', up); c.removeEventListener('pointercancel', up); };
   }, [C]);
 
-  return <canvas ref={ref} role="img" aria-label="A line-drawn sphere of the whole sky that slowly turns. Dots mark the patches PARALLAX searched; labels mark Makemake, Eris, the coldest brown dwarf and the zone where Planet Nine is predicted." />;
+  return <canvas ref={ref} role="img" aria-label="A line-drawn sphere of the whole sky that slowly turns. Dots mark the patches Aiges searched; labels mark Makemake, Eris, the coldest brown dwarf and the zone where Planet Nine is predicted." />;
 }

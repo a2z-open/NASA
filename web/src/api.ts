@@ -263,7 +263,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   try {
     response = await fetch(url, init);
   } catch {
-    throw new ApiError('The PARALLAX service is not reachable. Check your connection and retry.', 0);
+    throw new ApiError('The Aiges service is not reachable. Check your connection and retry.', 0);
   }
   const text = await response.text();
   let body: any = null;

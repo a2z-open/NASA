@@ -87,7 +87,7 @@ function ParallaxChart({ o, title }: { o: NonNullable<DistantBody['object']>; ti
       </svg>
       <figcaption>
         <span><i className="pchart__key pchart__key--pt" /> where SPHEREx saw it</span>
-        <span><i className="pchart__key pchart__key--fit" /> the orbit PARALLAX fitted</span>
+        <span><i className="pchart__key pchart__key--fit" /> the orbit Aiges fitted</span>
         <span><i className="pchart__key pchart__key--sun" /> the same orbit seen from the Sun</span>
       </figcaption>
     </figure>
@@ -133,7 +133,7 @@ function BodyCard({ b }: { b: DistantBody }) {
             <p className="world__n">{m.r_fit_au.toFixed(2)}<small> AU{m.r_err_au != null ? ` ± ${m.r_err_au.toFixed(2)}` : ''}</small></p>
             <p className="world__vs">from the Sun, measured from SPHEREx images alone. NASA's JPL says <strong>{m.r_true_au.toFixed(2)} AU</strong>.</p>
             {b.method === 'shift-and-stack' && b.shiftstack ? (
-              <p className="small"><strong>Too faint for any single image.</strong> PARALLAX added {b.shiftstack.n_exposures_stacked} exposures together along thousands of trial paths, and it appeared in all three visits at {b.shiftstack.snr.map(x => x.toFixed(0)).join(', ')}σ. One orbit through the three gives the distance. Between visits it jumped {o.jump_deg.toFixed(1)}° on the sky. The way visits are joined was changed twice before this worked, without looking at JPL's positions; all three versions are on record.</p>
+              <p className="small"><strong>Too faint for any single image.</strong> Aiges added {b.shiftstack.n_exposures_stacked} exposures together along thousands of trial paths, and it appeared in all three visits at {b.shiftstack.snr.map(x => x.toFixed(0)).join(', ')}σ. One orbit through the three gives the distance. Between visits it jumped {o.jump_deg.toFixed(1)}° on the sky. The way visits are joined was changed twice before this worked, without looking at JPL's positions; all three versions are on record.</p>
             ) : (
               <p className="small">{o.n} detections in {o.n_visits} visits, a median {m.median_sep_arcsec.toFixed(1)}″ from JPL's track. Between visits it jumped {o.jump_deg.toFixed(1)}° on the sky.{o.a_au != null && o.inclination_deg != null ? ` The fit also gives an orbit about ${o.a_au.toFixed(0)} AU across its long half, tilted ${o.inclination_deg.toFixed(0)}°.` : ''}</p>
             )}
@@ -359,7 +359,7 @@ export function WatchPanel() {
   return (
     <section className="band2" aria-labelledby="watch-h">
       <h2 className="test-h" id="watch-h"><span>Live</span>Waiting for the next images</h2>
-      <p className="test-p">NASA releases new SPHEREx images every week. PARALLAX checks the archive for every prediction it has locked. When the images arrive, the forecast is scored, pass or fail.</p>
+      <p className="test-p">NASA releases new SPHEREx images every week. Aiges checks the archive for every prediction it has locked. When the images arrive, the forecast is scored, pass or fail.</p>
       <div className="rows">
         {fc.map(i => (
           <div key={i.target} className="row row--static">

@@ -32,18 +32,18 @@ class Boundary extends Component<{ children: ReactNode; resetKey: string }, { er
 }
 
 const TITLES: Record<string, string> = {
-  '/': 'PARALLAX · Spot what moves in space',
-  '/map': 'Sky map · PARALLAX',
-  '/check': 'Check a candidate · PARALLAX',
-  '/how': 'How we find them · PARALLAX',
-  '/explore': 'Explore · PARALLAX',
-  '/hunt': 'Planet X hunt · PARALLAX',
-  '/deck': 'PARALLAX in seven slides',
-  '/proof': 'Proof · PARALLAX',
-  '/about': 'About · PARALLAX',
-  '/targets': 'Targets · PARALLAX',
-  '/investigation': 'Investigation · PARALLAX',
-  '/evidence': 'Evidence · PARALLAX',
+  '/': 'Aiges · Spot what moves in space',
+  '/map': 'Sky map · Aiges',
+  '/check': 'Check a candidate · Aiges',
+  '/how': 'How we find them · Aiges',
+  '/explore': 'Explore · Aiges',
+  '/hunt': 'Planet X hunt · Aiges',
+  '/deck': 'Aiges in seven slides',
+  '/proof': 'Proof · Aiges',
+  '/about': 'About · Aiges',
+  '/targets': 'Targets · Aiges',
+  '/investigation': 'Investigation · Aiges',
+  '/evidence': 'Evidence · Aiges',
 };
 
 function App() {
@@ -52,7 +52,7 @@ function App() {
   const detail = /^\/(investigation|evidence)\/([^/]+)$/.exec(path);
   useEffect(() => {
     const key = detail ? `/${detail[1]}` : path;
-    document.title = TITLES[key] ?? 'PARALLAX';
+    document.title = TITLES[key] ?? 'Aiges';
     if (!hash) return;
     const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView());
     return () => cancelAnimationFrame(frame);

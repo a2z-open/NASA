@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Ambient star layers that shift against each other when the pointer moves. That shift is
- * parallax, the effect the app is named after. Purely decorative: it is not data.
+ * parallax, the apparent shift caused by a change in viewpoint. The starfield is decorative.
  */
 export function Starfield() {
   const ref = useRef<HTMLCanvasElement>(null);

@@ -70,7 +70,7 @@ export function Deck() {
   return (
     <div className="deck" ref={root}>
       <Starfield />
-      <Link href="/" className="deck__home" aria-label="Leave the slides">PARALLAX</Link>
+      <Link href="/" className="deck__home" aria-label="Leave the slides">Aiges</Link>
       <span className="deck__count mono" aria-hidden="true">{n} / {TOTAL}</span>
       <div className="deck__nav">
         <button className="icon" onClick={() => goRef.current(-1)} disabled={n <= 1} aria-label="Previous slide">‹</button>
@@ -98,7 +98,7 @@ export function Deck() {
             <li>Every view is a link you can share or embed.</li>
           </ul>
         </div>
-        <div className="slide__frame"><iframe title="Live PARALLAX viewer" src="/explore?target=epsilon-indi-b&embed=1" loading="lazy" /></div>
+        <div className="slide__frame"><iframe title="Live Aiges viewer" src="/explore?target=epsilon-indi-b&embed=1" loading="lazy" /></div>
       </section>
 
       <section className="slide">
@@ -151,7 +151,7 @@ export function Deck() {
       <section className="slide">
         <p className="kicker">Why it matters</p>
         <h2 className="slide__title slide__title--xl">Anyone can <span>check a claim.</span></h2>
-        <p className="slide__lede">Pluto was found by blinking two photographs. SPHEREx photographs the whole sky, again and again, in 102 colours. PARALLAX lets anyone look, measure, and show their evidence.</p>
+        <p className="slide__lede">Pluto was found by blinking two photographs. SPHEREx photographs the whole sky, again and again, in 102 colours. Aiges lets anyone look, measure, and show their evidence.</p>
         <p className="slide__links"><Link className="button button--primary" href="/explore">Try it</Link> <Link className="button button--ghost" href="/hunt">The hunt</Link> <Link className="button button--ghost" href="/proof">The proof</Link></p>
       </section>
     </div>

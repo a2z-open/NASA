@@ -26,9 +26,9 @@ export function Mark({ size = 22 }: { size?: number }) {
 
 export function Wordmark() {
   return (
-    <Link href="/" className="wordmark" aria-label="PARALLAX home">
+    <Link href="/" className="wordmark" aria-label="Aiges home">
       <Mark />
-      <span>PARALLAX</span>
+      <span>Aiges</span>
     </Link>
   );
 }

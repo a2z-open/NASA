@@ -79,15 +79,15 @@ const PLACES: Place[] = [
   { name: 'Uranus', kind: 'Planet', cat: 'planets', q: 'Uranus', blurb: 'An ice giant, 19 times farther from the Sun than Earth.' },
   { name: 'Neptune', kind: 'Planet', cat: 'planets', q: 'Neptune', blurb: 'Found in 1846, right where the maths said it would be.' },
   { name: 'Pluto', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Pluto', blurb: 'Found in 1930 by comparing two photos of the same sky.' },
-  { name: 'Makemake', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Makemake', blurb: 'PARALLAX found it with no hints and measured its distance: 52.7 AU.', ours: true },
-  { name: 'Eris', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Eris', blurb: 'PARALLAX recovered Eris by stacking images along its path and measured its distance: 95.5 AU.', ours: true },
+  { name: 'Makemake', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Makemake', blurb: 'Aiges found it with no hints and measured its distance: 52.7 AU.', ours: true },
+  { name: 'Eris', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Eris', blurb: 'Aiges recovered Eris by stacking images along its path and measured its distance: 95.5 AU.', ours: true },
   { name: 'Haumea', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Haumea', blurb: 'An egg-shaped dwarf planet with a ring.' },
   { name: 'Ceres', kind: 'Dwarf planet', cat: 'dwarfs', q: 'Ceres', blurb: 'The largest body in the asteroid belt.' },
   { name: 'Sedna', kind: 'Distant world', cat: 'dwarfs', q: 'Sedna', blurb: 'One of the most distant known worlds. Its odd orbit is a clue in the Planet Nine debate.' },
-  { name: 'Makemake, where we found it', kind: 'Our find', cat: 'finds', ra: 201.3, dec: 20.6, fov: 6, blurb: 'The path PARALLAX fitted through three SPHEREx visits. It loops because Earth moves.', ours: true },
+  { name: 'Makemake, where we found it', kind: 'Our find', cat: 'finds', ra: 201.3, dec: 20.6, fov: 6, blurb: 'The path Aiges fitted through three SPHEREx visits. It loops because Earth moves.', ours: true },
   { name: 'Epsilon Indi B', kind: 'Brown dwarf pair', cat: 'finds', q: 'Epsilon Indi B', ra: 331.0976, dec: -56.8012, fov: 0.6, blurb: 'We locked a prediction of where it would be, then opened the images. It landed 0.07″ away.', ours: true },
   { name: 'Planet Nine zone', kind: 'Model estimate', cat: 'finds', ra: 60, dec: 11, fov: 60, blurb: 'The dashed lines show an approximate search corridor based on Brown and Batygin’s 2021 model. Planet Nine remains unconfirmed.' },
-  { name: 'WISE 0855', kind: 'Brown dwarf', cat: 'cold', q: 'WISE 0855', ra: 133.787, dec: -7.2445, fov: 0.6, blurb: 'The coldest known brown dwarf, near the freezing point of water. PARALLAX found it by its motion alone.', ours: true },
+  { name: 'WISE 0855', kind: 'Brown dwarf', cat: 'cold', q: 'WISE 0855', ra: 133.787, dec: -7.2445, fov: 0.6, blurb: 'The coldest known brown dwarf, near the freezing point of water. Aiges found it by its motion alone.', ours: true },
   { name: "Barnard's Star", kind: 'Red dwarf', cat: 'cold', q: "Barnard's Star", ra: 269.4486, dec: 4.7379, fov: 0.6, blurb: 'The fastest-moving star in our sky. Too bright for the camera, so we measured its halo.', ours: true },
   { name: 'Luhman 16', kind: 'Brown dwarf pair', cat: 'cold', q: 'Luhman 16', fov: 0.6, blurb: 'The closest brown dwarfs to the Sun, 6.5 light-years away.' },
   { name: 'Orion Nebula', kind: 'Nebula', cat: 'deep', ra: 83.8221, dec: -5.3911, fov: 2, blurb: 'A cloud where stars are being born, 1,300 light-years away.' },
@@ -366,7 +366,7 @@ export function SkyMap() {
       cat.addSources(places.map(p => Ali.source(p.ra, p.dec, { place: p, name: p.name })));
       for (const place of places) pins.current.push({ place, size, group });
     };
-    // the patches PARALLAX searched
+    // the patches Aiges searched
     try {
       const idx = await huntApi.index();
       const ov = Ali.graphicOverlay({ name: 'Searched patches', color: 'rgba(255,255,255,0.55)', lineWidth: 1 });
@@ -378,7 +378,7 @@ export function SkyMap() {
       const cat = Ali.catalog({ name: 'Searched patches', shape: small, sourceSize: 20 });
       a.addCatalog(cat);
       mk(cat, idx.fields.map(f => ({ name: f.title, kind: 'A patch we searched', ra: f.ra, dec: f.dec, fov: 1, ours: true, cat: 'finds' as Cat,
-        blurb: `PARALLAX tested ${f.n_motion_tested.toLocaleString('en-US')} sources here for motion, across ${f.n_visits} SPHEREx visits.` })), 'fields', 20);
+        blurb: `Aiges tested ${f.n_motion_tested.toLocaleString('en-US')} sources here for motion, across ${f.n_visits} SPHEREx visits.` })), 'fields', 20);
       g.fields.push(ov, cat);
     } catch { /* hunt unavailable */ }
     // distant worlds found with no hints: the real detections and the fitted path
@@ -402,7 +402,7 @@ export function SkyMap() {
         dots.addSources(o.detections.map((p: any) => { const [r, dd] = toSky(p); return Ali.source(r, dd, {}); }));
         const [r0, d0] = toSky(o.detections[0]);
         mk(cat, [{ name: `${b.title}, found with no hints`, kind: 'Our find · dwarf planet', ra: r0, dec: d0, fov: 5, ours: true, cat: 'finds',
-          blurb: `PARALLAX measured ${b.match?.r_fit_au.toFixed(1)} AU from the Sun. NASA JPL says ${b.match?.r_true_au.toFixed(1)}. The line is the path it fitted; it loops because Earth moves.` }]);
+          blurb: `Aiges measured ${b.match?.r_fit_au.toFixed(1)} AU from the Sun. NASA JPL says ${b.match?.r_true_au.toFixed(1)}. The line is the path it fitted; it loops because Earth moves.` }]);
         g.finds.push(ov, dots);
       }
     } catch { /* distant results unavailable */ }
@@ -639,7 +639,7 @@ export function SkyMap() {
           <div className="gm-card__scroll">
             {inList(list).map(p => (
               <button key={p.name} type="button" className="gm-list__row" onClick={() => void pick(p)}>
-                {catIcon(p.cat)}<span><b>{p.name}</b><span>{p.kind}{p.ours ? ' · PARALLAX result' : ''}</span></span>
+                {catIcon(p.cat)}<span><b>{p.name}</b><span>{p.kind}{p.ours ? ' · Aiges result' : ''}</span></span>
               </button>
             ))}
           </div>
@@ -671,7 +671,7 @@ export function SkyMap() {
             <div className="gm-card__summary">
               <h2>{sel.name}</h2>
               <p className="gm-card__kind">{sel.kind}</p>
-              {sel.ours && <p className="gm-card__meta">PARALLAX result</p>}
+              {sel.ours && <p className="gm-card__meta">Aiges result</p>}
             </div>
             <button type="button" className="gm-ic" aria-label="Close" onClick={() => setSel(null)}><IcX /></button>
           </div>

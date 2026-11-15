@@ -14,8 +14,8 @@ export function DataAbout() {
 
       <div className="plain">
         <h3>How it works</h3>
-        <p>SPHEREx is a NASA space telescope that photographs the whole sky in 102 infrared colours, again and again. PARALLAX lines up every image of one patch of sky and plays them in order. Anything that shifts between images stands out.</p>
-        <p>Click a source and PARALLAX measures where it is in every image, fits how fast it moves and how far away it is, and builds its spectrum. The <Link href="/hunt">Planet X hunt</Link> does this for every source in a field at once.</p>
+        <p>SPHEREx is a NASA space telescope that photographs the whole sky in 102 infrared colours, again and again. Aiges lines up every image of one patch of sky and plays them in order. Anything that shifts between images stands out.</p>
+        <p>Click a source and Aiges measures where it is in every image, fits how fast it moves and how far away it is, and builds its spectrum. The <Link href="/hunt">Planet X hunt</Link> does this for every source in a field at once.</p>
 
         <h3>Data</h3>
         <ul className="bullets">
@@ -47,7 +47,7 @@ export function DataAbout() {
         <p>Claude Code, ChatGPT, and OpenAI Codex helped with research, implementation, and testing. The search agent can use an OpenAI model to prioritize follow-up checks. Astronomy software measures images and fits orbits. A separately trained spectral classifier ranks cold-world candidates.</p>
 
         <h3>Not NASA</h3>
-        <p>PARALLAX is an independent NASA Space Apps Challenge 2026 project for the challenge “Planet X and SPHEREx”. It is not affiliated with or endorsed by NASA, JPL, Caltech or IPAC.</p>
+        <p>Aiges is an independent NASA Space Apps Challenge 2026 project for the challenge “Planet X and SPHEREx”. It is not affiliated with or endorsed by NASA, JPL, Caltech or IPAC.</p>
       </div>
     </Page>
   );
