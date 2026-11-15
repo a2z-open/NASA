@@ -91,6 +91,14 @@ npm --prefix web run build
 Open http://127.0.0.1:8000. The five NASA targets, the hunt results and the proofs work offline. Any other
 coordinates query the NASA archive live.
 
+In **Sky map**, zoom in and select a chunk to claim it with a display name or join its team. The lead and teammates
+can start work and mark it reviewed. The roster and status are shared by everyone on the server. A browser cookie
+remembers which chunks you joined from that browser profile.
+
+To share the map, run a single instance behind HTTPS and give teammates its URL. Set `PARALLAX_TEAM_PASSWORD`
+for a browser sign-in prompt with username `team`. Assignments are stored in `.parallax-cache/chunks.sqlite3`.
+Set `PARALLAX_CHUNKS_DB` to a path on persistent storage when hosting it.
+
 **Docker:** `docker build -t parallax . && docker run -p 8000:8000 parallax`.
 
 ## Reproduce the science

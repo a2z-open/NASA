@@ -6,12 +6,15 @@ Run:  .venv/bin/python -m uvicorn api.app:app --host 127.0.0.1 --port 8000
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+from base64 import b64encode
 import csv
 from datetime import datetime, timezone
 import hashlib
+from hmac import compare_digest
 import io
 import json
 import math
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -26,6 +29,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 import requests
 
+from api.chunks import router as chunks_router
 from pipeline import ephem
 from pipeline.astrometry import CoordinateError, mjd_to_iso, parse_dec, parse_position, parse_ra, propagate, to_tangent
 from pipeline.spherex import CACHE, ROOT, ArchiveUnavailable, field_key, group_visits, search, fetch_many
@@ -41,6 +45,20 @@ INVESTIGATIONS.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title='PARALLAX', version=VERSION)
 app.add_middleware(GZipMiddleware, minimum_size=2000)
+app.include_router(chunks_router)
+
+
+@app.middleware('http')
+async def team_access(request: Request, call_next):
+    password = os.getenv('PARALLAX_TEAM_PASSWORD')
+    if not password:
+        return await call_next(request)
+    expected = b'Basic ' + b64encode(f'team:{password}'.encode())
+    if not compare_digest(request.headers.get('Authorization', '').encode(), expected):
+        return Response(status_code=401, headers={'WWW-Authenticate': 'Basic realm="PARALLAX team"', 'Cache-Control': 'no-store'})
+    response = await call_next(request)
+    response.headers.setdefault('Cache-Control', 'private')
+    return response
 
 _jobs: dict[str, dict] = {}
 _jobs_lock = threading.Lock()

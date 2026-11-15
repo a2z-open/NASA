@@ -276,6 +276,21 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 
 const post = (body: unknown): RequestInit => ({ method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 
+export type ChunkAssignmentStatus = 'claimed' | 'in_progress' | 'reviewed';
+export type ChunkAction = 'claim' | 'join' | 'leave' | 'start' | 'review' | 'reopen' | 'release';
+export interface ChunkAssignment {
+  status: ChunkAssignmentStatus;
+  name: string;
+  mine: boolean;
+  teammates: { name: string; mine: boolean }[];
+}
+
+export const chunkApi = {
+  list: (signal?: AbortSignal) => request<Record<string, ChunkAssignment>>('/api/chunks', { signal }),
+  update: (id: string, action: ChunkAction, name?: string) =>
+    request<ChunkAssignment | null>(`/api/chunks/${encodeURIComponent(id)}`, post({ action, name })),
+};
+
 export const api = {
   health: () => request<{ ok: boolean; version: string; cache?: Record<string, number>; services?: Record<string, string> }>('/api/health'),
   targets: () => request<Target[]>('/api/targets'),

@@ -3,6 +3,8 @@ import { Mark } from '../components/Shell.tsx';
 import { Link, navigate } from '../router.tsx';
 import { huntApi } from '../api.ts';
 import { resolveQuery } from '../components/SearchBox.tsx';
+import { CHUNK_STATUS_LABEL, ChunkReview, useChunkAssignments } from '../components/ChunkReview.tsx';
+import { CHUNKS, chunkAt, chunkFromId, chunkGridLines } from '../lib/skyChunks.ts';
 import { distantApi } from './Distant.tsx';
 import '../map.css';
 
@@ -122,6 +124,22 @@ function pinCanvas(size = 30, hollow = false) {
 const fmtCoord = (ra: number, dec: number) => `${ra.toFixed(4)}°, ${dec >= 0 ? '+' : '−'}${Math.abs(dec).toFixed(4)}°`;
 const fmtFov = (f: number) => f >= 1 ? `${f.toFixed(f >= 10 ? 0 : 1)}° wide` : `${(f * 60).toFixed(0)}′ wide`;
 const openHere = (ra: number, dec: number, fov = 10) => `/explore?ra=${ra.toFixed(5)}&dec=${dec.toFixed(5)}&fov=${fov}`;
+const CHUNK_GRID_FOV = 45;
+const CHUNK_SEARCH_FOV = 28;
+
+interface ChunkLabel { id: string; x: number; y: number }
+const NO_LABELS: ChunkLabel[] = [];
+
+function visibleChunkLabels(project: (ra: number, dec: number) => number[] | undefined, width: number, height: number) {
+  const labels: ChunkLabel[] = [];
+  const top = width <= 760 ? 124 : 80;
+  for (const { id, ra, dec } of CHUNKS) {
+    const [x, y] = project(ra, dec) ?? [];
+    if (!(x >= 44 && x <= width - 44 && y >= top && y <= height - 62)) continue;
+    if (!labels.some(label => Math.abs(label.x - x) < 92 && Math.abs(label.y - y) < 42)) labels.push({ id, x, y });
+  }
+  return labels;
+}
 
 /** The sky, used like a map app: search, tap a pin, switch layers, drop a pin anywhere. */
 export function SkyMap() {
@@ -139,6 +157,10 @@ export function SkyMap() {
   const [sweep, setSweep] = useState(false);
   const [show, setShow] = useState<Toggles>({ finds: true, fields: true, nine: true, forecasts: false });
   const [centre, setCentre] = useState<{ ra: number; dec: number; fov: number } | null>(null);
+  const [chunkLabels, setChunkLabels] = useState(NO_LABELS);
+  const [activeChunk, setActiveChunk] = useState<string | null>(null);
+  const chunkOpener = useRef<HTMLButtonElement | null>(null);
+  const chunkTeam = useChunkAssignments();
   const [q, setQ] = useState('');
   const [focus, setFocus] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -160,17 +182,41 @@ export function SkyMap() {
         A.current = Ali;
         const params = new URLSearchParams(window.location.search);
         const ra = Number(params.get('ra')), dec = Number(params.get('dec')), fov = Number(params.get('fov'));
-        const target = Number.isFinite(ra) && params.get('ra') ? `${ra} ${dec}` : '201.3 +20.6';
+        const chunk = chunkFromId(params.get('chunk') ?? '');
+        const target = chunk ? `${chunk.ra} ${chunk.dec}`
+          : Number.isFinite(ra) && params.get('ra') ? `${ra} ${dec}` : '201.3 +20.6';
         const a = Ali.aladin(box.current, {
-          survey: SPHEREX.id, fov: Number.isFinite(fov) && fov > 0 ? fov : 60, target, projection: 'SIN', cooFrame: 'ICRS', log: false,
+          survey: SPHEREX.id, fov: chunk ? CHUNK_SEARCH_FOV : Number.isFinite(fov) && fov > 0 ? fov : 60, target, projection: 'SIN', cooFrame: 'ICRS', log: false,
           showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false,
           showFrame: false, showCooGridControl: false, showSimbadPointerControl: false, showContextMenu: false, showProjectionControl: false,
           showCooGrid: false, showStatusBar: false, showShareControl: false, showSettingsControl: false,
         });
         al.current = a;
-        const report = () => { try { const [r, d] = a.getRaDec(); setCentre({ ra: r, dec: d, fov: a.getFov()[0] }); } catch { /* not ready */ } };
+        const grid = Ali.graphicOverlay({ name: 'Sky chunks', color: 'rgba(230,240,255,0.5)', lineWidth: 1 });
+        a.addOverlay(grid);
+        grid.addFootprints(chunkGridLines().map(line => Ali.polyline(line)));
+        let gridVisible = true;
+        const report = () => {
+          if (!alive) return;
+          try {
+            const [r, d] = a.getRaDec();
+            const widthDegrees = a.getFov()[0];
+            setCentre({ ra: r, dec: d, fov: widthDegrees });
+            const visible = widthDegrees <= CHUNK_GRID_FOV;
+            if (visible !== gridVisible) {
+              if (visible) grid.show();
+              else grid.hide();
+              gridVisible = visible;
+            }
+            if (visible) {
+              const [width, height] = a.getSize();
+              setChunkLabels(visibleChunkLabels((lon, lat) => a.world2pix(lon, lat), width, height));
+            } else setChunkLabels(NO_LABELS);
+          } catch { /* projection not ready */ }
+        };
         a.on('positionChanged', report);
         a.on('zoomChanged', report);
+        a.on('resizeChanged', () => window.requestAnimationFrame(report));
         report();
         // tap a pin (anywhere on its shape): open its card.  tap empty sky: drop a pin.
         a.on('click', (e: any) => {
@@ -188,6 +234,7 @@ export function SkyMap() {
           } catch { /* projection not ready */ }
           setList(null);
           setLayersOpen(false);
+          setActiveChunk(null);
           if (hit) setSel(hit);
           else setSel(s => (s && !s.pin ? null : { name: 'Dropped pin', kind: 'A spot in the sky', ra: e.ra, dec: e.dec, pin: true }));
         });
@@ -311,7 +358,16 @@ export function SkyMap() {
   async function find(text: string, known?: Place) {
     const t = text.trim();
     if (!t) return;
-    setErr(null); setBusy(true); setFocus(false); setList(null);
+    setErr(null); setFocus(false); setList(null); setActiveChunk(null);
+    const chunk = chunkFromId(t);
+    if (chunk && al.current) {
+      setSel(null);
+      setQ(chunk.id);
+      al.current.gotoRaDec(chunk.ra, chunk.dec);
+      al.current.setFoV(CHUNK_SEARCH_FOV);
+      return;
+    }
+    setBusy(true);
     try {
       const r = await resolveQuery(t);
       const k = known ?? PLACES.find(p => p.name.toLowerCase() === t.toLowerCase() || p.q?.toLowerCase() === t.toLowerCase());
@@ -345,39 +401,72 @@ export function SkyMap() {
     return PLACES.map(p => ({ p, r: rank(p) })).filter(x => x.r < 9).sort((a, b) => a.r - b.r).slice(0, 7).map(x => x.p);
   }, [q]);
 
-  async function share() {
+  async function copyLink(url: string) {
+    try { await navigator.clipboard.writeText(url); flash('Link copied'); } catch { flash(url); }
+  }
+  function share() {
     if (!sel) return;
     const url = `${window.location.origin}/map?ra=${sel.ra.toFixed(5)}&dec=${sel.dec.toFixed(5)}&fov=${(sel.fov ?? centre?.fov ?? 3).toFixed(2)}`;
-    try { await navigator.clipboard.writeText(url); flash('Link copied'); } catch { flash(url); }
+    return copyLink(url);
   }
   const imagesFov = (s: Sel) => Math.min(20, Math.max(4, Math.round(((s.fov ?? centre?.fov ?? 0.2) * 60) / 3)));
   const today = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   const hasCard = !!(sel && !sel.pin) || !!list;
+  const centreChunk = centre && centre.fov <= CHUNK_GRID_FOV ? chunkAt(centre.ra, centre.dec) : null;
+  const centreStatus = centreChunk && chunkTeam.assignments?.[centreChunk.id]?.status;
+  const suggestedChunk = chunkFromId(q);
+
+  function openChunk(id: string, opener: HTMLButtonElement) {
+    chunkOpener.current = opener;
+    setSel(null);
+    setList(null);
+    setLayersOpen(false);
+    setActiveChunk(id);
+  }
 
   return (
-    <div className={`gm${hasCard ? ' has-card' : ''}`}>
+    <div className={`gm${hasCard ? ' has-card' : ''}${centreChunk ? ' gm--chunks' : ''}`}>
       <div ref={box} className="gm__map" aria-label="Interactive map of the whole sky. Drag to pan, scroll to zoom, click to drop a pin." role="application" />
+      {chunkLabels.length > 0 && <div className="gm-chunk-labels" role="group" aria-label="Visible sky chunks">
+        {chunkLabels.map(({ id, x, y }) => {
+          const assignment = chunkTeam.assignments?.[id];
+          const status = assignment?.status ?? 'unclaimed';
+          const names = assignment ? [assignment.name, ...assignment.teammates.map(person => person.name)].join(', ') : '';
+          const details = chunkTeam.assignments ? `, ${CHUNK_STATUS_LABEL[status]}${names ? `, ${names}` : ''}` : '';
+          return <button key={id} type="button" style={{ left: x, top: y }} aria-label={`Chunk ${id}${details}`}
+            title={names ? `${CHUNK_STATUS_LABEL[status]} · ${names}` : undefined}
+            aria-expanded={activeChunk === id} onClick={event => openChunk(id, event.currentTarget)}>
+            <span>{assignment && <i className="gm-chunk-dot" data-status={status} />}{id}</span>
+            {assignment && <small className="gm-chunk-names"><span>{assignment.name}</span>
+              {assignment.teammates.length > 0 && <b>+{assignment.teammates.length}</b>}
+            </small>}
+          </button>;
+        })}
+      </div>}
       {state === 'loading' && <p className="gm-load">Opening the sky…</p>}
       {state === 'error' && <p className="gm-load">The sky map needs WebGL 2 and a network connection. {err}</p>}
 
       <div className="gm-search">
         <form className="gm-search__box" onSubmit={submit} role="search">
           <Link href="/" className="gm-search__home" aria-label="PARALLAX home"><Mark size={22} /></Link>
-          <label className="visually-hidden" htmlFor="gm-q">Search the sky</label>
+          <label className="visually-hidden" htmlFor="gm-q">Search the sky by object, coordinates or chunk ID</label>
           <input id="gm-q" value={q} onChange={e => { setQ(e.target.value); setFocus(true); }} onFocus={() => setFocus(true)} onBlur={() => window.setTimeout(() => setFocus(false), 160)}
             placeholder="Search the sky" autoComplete="off" spellCheck={false} />
           <button type="submit" className="gm-ic" aria-label="Search" disabled={busy}><IcSearch /></button>
           {(q || sel || list) && <><span className="gm-search__sep" /><button type="button" className="gm-ic" aria-label="Clear" onClick={() => { setQ(''); setSel(null); setList(null); setErr(null); }}><IcX /></button></>}
         </form>
-        {focus && sugg.length > 0 && (
+        {focus && (suggestedChunk || sugg.length > 0) && (
           <div className="gm-sugg">
             {!q.trim() && <p className="gm-sugg__hd">Popular places</p>}
+            {suggestedChunk && <button type="button" className="gm-sugg__row" onMouseDown={e => e.preventDefault()} onClick={() => void find(suggestedChunk.id)}>
+              <IcGlobe /><span><b>{suggestedChunk.id}</b><span>Sky chunk</span></span>
+            </button>}
             {sugg.map(p => (
               <button key={p.name} type="button" className="gm-sugg__row" onMouseDown={e => e.preventDefault()} onClick={() => void pick(p)}>
                 {catIcon(p.cat)}<span style={{ margin: 0 }}><b>{p.name}</b><span>{p.kind}</span></span>
               </button>
             ))}
-            {q.trim() && <button type="button" className="gm-sugg__row" onMouseDown={e => e.preventDefault()} onClick={() => void find(q)}><IcSearch /><span style={{ margin: 0 }}><b>Search for “{q.trim()}”</b><span>any star, planet or coordinates</span></span></button>}
+            {q.trim() && !suggestedChunk && <button type="button" className="gm-sugg__row" onMouseDown={e => e.preventDefault()} onClick={() => void find(q)}><IcSearch /><span style={{ margin: 0 }}><b>Search for “{q.trim()}”</b><span>star, planet, coordinates or chunk ID</span></span></button>}
           </div>
         )}
         {err && !focus && <p className="gm-err" role="alert">{err}</p>}
@@ -385,7 +474,7 @@ export function SkyMap() {
 
       <div className="gm-chips" role="group" aria-label="Kinds of places">
         {CATS.map(c => (
-          <button key={c.id} type="button" className={`gm-chip${list === c.id ? ' is-on' : ''}`} onClick={() => { setSel(null); setErr(null); setList(list === c.id ? null : c.id); }}>
+          <button key={c.id} type="button" className={`gm-chip${list === c.id ? ' is-on' : ''}`} onClick={() => { setSel(null); setErr(null); setActiveChunk(null); setList(list === c.id ? null : c.id); }}>
             {catIcon(c.id)}{c.label}
           </button>
         ))}
@@ -433,7 +522,7 @@ export function SkyMap() {
       )}
 
       <div className="gm-layers">
-        <button type="button" className="gm-tile" aria-expanded={layersOpen} aria-label="Layers: choose which telescope's sky to show" onClick={() => setLayersOpen(v => !v)}>
+        <button type="button" className="gm-tile" aria-expanded={layersOpen} aria-label="Layers: choose which telescope's sky to show" onClick={() => { setActiveChunk(null); setLayersOpen(v => !v); }}>
           <img src={(LAYERS.find(l => l.id !== layer && l.id !== SPHEREX.id) ?? LAYERS[1]).thumb} alt="" />
           <span className="gm-tile__lb"><IcLayers />Layers</span>
         </button>
@@ -476,16 +565,26 @@ export function SkyMap() {
       {toast && <p className="gm-toast" role="status">{toast}</p>}
 
       <div className="gm-ctl">
-        <button type="button" className="gm-ctl__one" aria-label="Show the whole sky" onClick={() => al.current?.setFoV(180)}><IcGlobe /></button>
+        <button type="button" className="gm-ctl__one" aria-label="Show the whole sky" onClick={() => { setActiveChunk(null); al.current?.setFoV(180); }}><IcGlobe /></button>
         <div className="gm-ctl__grp">
           <button type="button" aria-label="Zoom in" onClick={() => zoom(0.5)}><IcPlus /></button>
           <button type="button" aria-label="Zoom out" onClick={() => zoom(2)}><IcMinus /></button>
         </div>
       </div>
-      <p className="gm-status">
-        <span>{centre ? `${fmtCoord(centre.ra, centre.dec)} · ${fmtFov(centre.fov)}` : ''}</span>
-        <span>Sky: NASA/IPAC IRSA (SPHEREx DR1, WISE, 2MASS, DSS2, IRAS) · Map: Aladin Lite · <Link href="/about">Sources</Link></span>
-      </p>
+      <div className="gm-status">
+        {centreChunk && <button type="button" className="gm-status__chunk" aria-expanded={activeChunk === centreChunk.id}
+          onClick={event => openChunk(centreChunk.id, event.currentTarget)}>
+          <IcGlobe />Chunk {centreChunk.id}{centreStatus && <i className="gm-chunk-dot" data-status={centreStatus} />}
+        </button>}
+        <span className="gm-status__coords">{centre ? `${fmtCoord(centre.ra, centre.dec)} · ${fmtFov(centre.fov)}` : ''}</span>
+        <span className="gm-status__credits">
+          <span>Sky: NASA/IPAC IRSA (SPHEREx DR1, WISE, 2MASS, DSS2, IRAS) · Map: Aladin Lite ·</span>
+          <Link href="/about">Sources</Link>
+        </span>
+      </div>
+      {activeChunk && <ChunkReview key={activeChunk} id={activeChunk} team={chunkTeam}
+        onClose={() => { setActiveChunk(null); chunkOpener.current?.focus(); }}
+        onCopy={() => void copyLink(`${window.location.origin}/map?chunk=${activeChunk}`)} />}
     </div>
   );
 }
