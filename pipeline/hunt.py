@@ -36,7 +36,7 @@ from .analysis import MOTION_PM_SNR, MOTION_SIGMA, analyse_motion, visit_of
 from .astrometry import JULIAN_YEAR_DAYS, mjd_to_iso
 from .frames import display_wcs
 from .investigate import usable_positions
-from .measure import GAIA_EPOCH_MJD, gaia_field, gaia_positions, measure_position, reference_candidates, register
+from .measure import GAIA_EPOCH_MJD, gaia_field, gaia_positions, gaia_query, measure_position, reference_candidates, register
 from .motion import fit_motion
 from .spherex import CACHE, ROOT, SR_PER_ARCSEC2, flag_mask, load_observation
 
@@ -776,7 +776,6 @@ def classify(o, rows, visits_doc, gaia, grid_wcs, n_grid, epoch_mjd, gaia_pos=No
 
 IRSA_TAP = 'https://irsa.ipac.caltech.edu/TAP/sync'
 NOIRLAB_TAP = 'https://datalab.noirlab.edu/tap/sync'
-GAIA_TAP_URL = 'https://gea.esac.esa.int/tap-server/tap/sync'
 
 
 def _csv_rows(text):
@@ -823,9 +822,7 @@ def external_checks(doc, epoch_mjd, session=None):
         rad = min((8 + max(pm, 1.0) * dt_g) / 3600, 0.08)
         q = ('SELECT source_id, ra, dec, pmra, pmdec, parallax, phot_g_mean_mag FROM gaiadr3.gaia_source '
              f'WHERE 1=CONTAINS(POINT(ra, dec), CIRCLE({ra:.7f}, {dec:.7f}, {rad:.5f}))')
-        r = http.post(GAIA_TAP_URL, data={'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv', 'QUERY': q}, timeout=60)
-        r.raise_for_status()
-        rows = _csv_rows(r.text)
+        rows = gaia_query(q, http=session, timeout=60)   # ESA first, NASA MAST mirror if ESA is down
         best = None
         for x in rows:
             gra, gdec, gpa, gpd = _num(x['ra']), _num(x['dec']), _num(x['pmra']) or 0.0, _num(x['pmdec']) or 0.0

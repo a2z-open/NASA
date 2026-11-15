@@ -4,6 +4,7 @@ import { Starfield } from './Starfield.tsx';
 
 const NAV = [
   { href: '/map', label: 'Sky map' },
+  { href: '/explore', label: 'Explore' },
   { href: '/how', label: 'How' },
   { href: '/check', label: 'Check' },
   { href: '/hunt', label: 'Finds' },
@@ -58,7 +59,6 @@ export function Footer() {
           <nav aria-label="Footer">
             <Link href="/">Play</Link>
             {NAV.map(n => <Link key={n.href} href={n.href}>{n.label}</Link>)}
-            <Link href="/explore">Images</Link>
             <Link href="/about">Sources</Link>
           </nav>
         </div>

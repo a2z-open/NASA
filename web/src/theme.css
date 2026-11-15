@@ -273,11 +273,11 @@ a:hover { color: #fff; text-decoration-color: #fff; }
 }
 
 @media (max-width: 480px) {
-  .header__inner { gap: 12px; }
+  .header__inner { gap: 10px; padding-left: 16px; padding-right: 16px; }
   .wordmark span { display: none !important; }
   .nav { overflow-x: auto; scrollbar-width: none; }
   .nav::-webkit-scrollbar { display: none; }
-  .nav__link { padding: 8px 7px; letter-spacing: 0.08em; white-space: nowrap; }
+  .nav__link { padding: 8px 4px; letter-spacing: 0.05em; white-space: nowrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {

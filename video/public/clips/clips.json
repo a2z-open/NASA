@@ -1,0 +1,62 @@
+{
+ "sky-colours": {
+  "file": "clips/sky-colours.mp4",
+  "seconds": 21.98,
+  "recorded_utc": "2026-11-15T03:56:39.490Z"
+ },
+ "proof-scorecard": {
+  "file": "clips/proof-scorecard.mp4",
+  "seconds": 13.97,
+  "recorded_utc": "2026-11-15T03:58:26.998Z"
+ },
+ "finds-worlds": {
+  "file": "clips/finds-worlds.mp4",
+  "seconds": 24.27,
+  "recorded_utc": "2026-11-15T03:59:06.658Z"
+ },
+ "finds-spectra": {
+  "file": "clips/finds-spectra.mp4",
+  "seconds": 29.66,
+  "recorded_utc": "2026-11-15T03:59:53.388Z"
+ },
+ "map-telescopes": {
+  "file": "clips/map-telescopes.mp4",
+  "seconds": 36.52,
+  "recorded_utc": "2026-11-15T04:00:44.275Z"
+ },
+ "map-scopes": {
+  "file": "clips/map-scopes.mp4",
+  "seconds": 23.3,
+  "recorded_utc": "2026-11-15T04:01:21.697Z"
+ },
+ "how-stack": {
+  "file": "clips/how-stack.mp4",
+  "seconds": 213.11,
+  "recorded_utc": "2026-11-15T04:06:54.969Z"
+ },
+ "how-limits": {
+  "file": "clips/how-limits.mp4",
+  "seconds": 5.83,
+  "recorded_utc": "2026-11-15T04:07:16.820Z"
+ },
+ "check": {
+  "file": "clips/check.mp4",
+  "seconds": 1990.42,
+  "recorded_utc": "2026-11-15T05:48:32.486Z"
+ },
+ "how-overview": {
+  "file": "clips/how-overview.mp4",
+  "seconds": 21.83,
+  "recorded_utc": "2026-11-15T05:49:01.145Z"
+ },
+ "map-chunks": {
+  "file": "clips/map-chunks.mp4",
+  "seconds": 12.58,
+  "recorded_utc": "2026-11-15T05:49:23.555Z"
+ },
+ "home": {
+  "file": "clips/home.mp4",
+  "seconds": 11.45,
+  "recorded_utc": "2026-11-15T05:49:39.915Z"
+ }
+}

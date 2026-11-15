@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, cachedFrame, loadFrames, type Field, type Frame, type Investigation, type Target } from '../api.ts';
-import { Header, PageHero } from '../components/Shell.tsx';
+import { Header } from '../components/Shell.tsx';
 import { SkyCanvas, type Colormap, type Overlays, type SkyCanvasHandle } from '../components/SkyCanvas.tsx';
 import { Timeline } from '../components/Timeline.tsx';
 import { DataStatePill } from '../components/DataState.tsx';
@@ -11,19 +11,39 @@ import { Term } from '../components/Term.tsx';
 import { fetchTargets, useField, useInvestigation, usePrefersReducedMotion } from '../hooks.ts';
 import { Link, navigate, replaceQuery, useLocation } from '../router.tsx';
 import {
-  angularSeparationArcsec, formatDec, formatRA, fromTangent, percentile, propagateLinear, wavelengthColor, wavelengthMatched, type SkyPoint, type StretchKind,
+  angularSeparationArcsec, formatDec, formatRA, fromTangent, percentile, propagateLinear, wavelengthMatched, type SkyPoint, type StretchKind,
 } from '../lib/astro.ts';
 import { difference, sharedLimits, stack as stackFrames, subtractBackground } from '../lib/compose.ts';
-import { NA, dateTime, num, um } from '../lib/format.ts';
+import { NA, date, dateTime, month, num, um } from '../lib/format.ts';
+import '../home.css';
+import '../explore.css';
+
+/* The Explore page (v2, 14 Nov 2026). Same look as the home page: a light grey page, data in black rounded cards,
+   explanations on a light panel with pill tabs. Black, white and grey only. All viewing logic is unchanged from v1. */
 
 type Mode = 'animate' | 'blink' | 'difference' | 'stack' | 'spectral';
-const MODES: { id: Mode; label: string; hint: string }[] = [
-  { id: 'animate', label: 'Play', hint: 'Play the images in the order they were taken' },
-  { id: 'blink', label: 'Blink', hint: 'Flip between two dates. Anything that jumps has moved' },
-  { id: 'difference', label: 'Subtract', hint: 'Subtract image A from image B to reveal what changed' },
-  { id: 'stack', label: 'Add', hint: 'Combine up to 240 images to see fainter things' },
-  { id: 'spectral', label: 'Colour', hint: 'Order the images by infrared colour instead of time' },
+const MODES: { id: Mode; label: string; title: string; say: string }[] = [
+  { id: 'animate', label: 'Play', title: 'Watch it like a flip-book.', say: 'Every photo of this spot, in the order SPHEREx took them. Look for a dot that slides.' },
+  { id: 'blink', label: 'Blink', title: 'Spot the jump.', say: 'Two dates flip back and forth. Stars stay still. The dot that jumps is moving.' },
+  { id: 'difference', label: 'Subtract', title: 'Only changes are left.', say: 'Photo B minus photo A. Stars that stayed still cancel out. A mover leaves a dark spot beside a bright one.' },
+  { id: 'stack', label: 'Add', title: 'See fainter things.', say: 'All the photos added together, so faint things show up. Anything that moves smears into a streak.' },
+  { id: 'spectral', label: 'Colours', title: 'Short to long infrared.', say: 'The same spot in SPHEREx’s infrared colours, sorted by colour instead of date. Cold things glow at the long end.' },
 ];
+
+/** NASA's five test targets, in NASA's order, each with one plain sentence and what to look for. */
+const TARGET_ORDER = ['barnards-star', 'epsilon-indi-b', 'wise-0855', 'rw-aurigae', 'r-draconis'];
+const ABOUT: Record<string, { say: string; look: string }> = {
+  'barnards-star': { say: 'The fastest-moving star in our sky.', look: 'Look for motion' },
+  'epsilon-indi-b': { say: 'Two cold brown dwarfs next door.', look: 'Look for motion' },
+  'wise-0855': { say: 'The coldest brown dwarf known.', look: 'Look for motion' },
+  'rw-aurigae': { say: 'A young star that flickers.', look: 'Look for brightness' },
+  'r-draconis': { say: 'A giant star that brightens and fades.', look: 'Look for brightness' },
+};
+
+/** SPHEREx's six detectors and the infrared range each one covers (pipeline/spherex.py DETECTOR_RANGES). */
+const DETECTORS: [number, number][] = [[0.75, 1.09], [1.10, 1.62], [1.63, 2.41], [2.42, 3.82], [3.83, 4.41], [4.42, 5.00]];
+
+const WIDTHS = [6, 10, 20, 30];
 
 const STACK_ORDER = (id: string) => ({ 'stack-short': 0, 'stack-long': 1, 'stack-mid': 2 } as Record<string, number>)[id] ?? 3;
 const STACK_LIMIT = 240;
@@ -94,12 +114,8 @@ export function Explore() {
   const idle = !targetSlug && !fieldParam && !raParam;
 
   return (
-    <div className={`explore${embed ? ' explore--embed' : ''}`}>
-      {!embed && (
-        <Header>
-          <ExploreSearch fov={fovParam ?? field?.fov_arcmin ?? 6} />
-        </Header>
-      )}
+    <div className={`e xp${embed ? ' xp--embed' : ''}`}>
+      {!embed && <Header />}
       {embed && <a className="embed-link" href={window.location.pathname + window.location.search.replace(/[?&]embed=1/, '')} target="_blank" rel="noreferrer">Open in PARALLAX ↗</a>}
       {idle ? <ExploreIdle targets={targets} /> : (
         <ExploreWorkspace
@@ -109,6 +125,8 @@ export function Explore() {
           target={target}
           params={params}
           invParam={invParam}
+          embed={embed}
+          fov={fovParam ?? field?.fov_arcmin ?? 6}
           pendingLabel={raParam && decParam ? `${raParam}, ${decParam}` : targetSlug ?? ''}
         />
       )}
@@ -116,61 +134,92 @@ export function Explore() {
   );
 }
 
-function ExploreSearch({ fov }: { fov: number }) {
+/** The search pill and the sky-width chips. With a field open, a width chip reopens the same spot at that width. */
+function ExploreSearch({ fov, here }: { fov: number; here?: SkyPoint | null }) {
   const [q, setQ] = useState('');
-  const [f, setF] = useState(String(fov));
+  const [f, setF] = useState(Math.round(fov));
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  useEffect(() => setF(String(fov)), [fov]);
+  useEffect(() => setF(Math.round(fov)), [fov]);
+  const widths = WIDTHS.includes(f) ? WIDTHS : [...WIDTHS, f].sort((a, b) => a - b);
   async function go(e: React.FormEvent) {
     e.preventDefault();
     if (!q.trim()) return;
     setBusy(true); setErr(null);
     try {
       const r = await resolveQuery(q.trim());
-      const fv = Math.min(30, Math.max(2, Number(f) || 6));
+      const fv = Math.min(30, Math.max(2, f || 6));
       if (r.moves) navigate(`/map?q=${encodeURIComponent(q.trim())}`);
       else if (r.target) navigate(`/explore?target=${r.target}`);
       else navigate(`/explore?ra=${r.ra.toFixed(6)}&dec=${r.dec.toFixed(6)}&fov=${fv}`);
       setQ('');
     } catch (ex) { setErr((ex as Error).message); } finally { setBusy(false); }
   }
+  function pickWidth(v: number) {
+    setF(v);
+    if (here && v !== Math.round(fov)) navigate(`/explore?ra=${here.ra.toFixed(6)}&dec=${here.dec.toFixed(6)}&fov=${v}`);
+  }
   return (
-    <form className="topsearch" onSubmit={go} role="search">
-      <label className="visually-hidden" htmlFor="topq">Object name or coordinates</label>
-      <input id="topq" value={q} onChange={e => setQ(e.target.value)} placeholder="A name or coordinates" autoComplete="off" spellCheck={false} aria-invalid={!!err} />
-      <label className="topsearch__fov" title="Field of view for new queries (arcmin). Larger fields mean bigger downloads.">
-        <span>Width</span>
-        <input type="number" min={2} max={30} step={1} value={f} onChange={e => setF(e.target.value)} aria-label="Field of view in arcminutes" />
-        <span>′</span>
-      </label>
-      <button className="button button--primary button--small" disabled={busy}>{busy ? '…' : 'Go'}</button>
-      {err && <span className="topsearch__error" role="alert">{err}</span>}
-    </form>
+    <div className="xp-find">
+      <form className="e-search xp-search" onSubmit={go} role="search">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" stroke="currentColor" strokeWidth="1.8" /><path d="M13 13l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
+        <label className="visually-hidden" htmlFor="topq">Star name or sky position (right ascension and declination)</label>
+        <input id="topq" value={q} onChange={e => setQ(e.target.value)} placeholder="Star name or sky position" autoComplete="off" spellCheck={false} aria-invalid={!!err} aria-describedby="topq-help" />
+        <button className="e-btn e-btn--ink" disabled={busy}>{busy ? 'Finding…' : 'Go'}</button>
+      </form>
+      {err ? <p id="topq-help" className="xp-err" role="alert">{err}</p>
+        : <p id="topq-help" className="xp-help">For example <em>Barnard's Star</em>, or <em>08h55m10.8s -07d14m42s</em>, or <em>133.795 -7.245</em></p>}
+      <div className="xp-width" role="group" aria-label="Sky width (field of view, in arcminutes)">
+        <span className="xp-width__k">Sky width</span>
+        {widths.map(v => (
+          <button key={v} type="button" aria-pressed={f === v} onClick={() => pickWidth(v)} title={`${v} arcminutes across`}>{v}′</button>
+        ))}
+        <span className="xp-width__note">Wider shows more sky but loads slower.</span>
+      </div>
+    </div>
   );
 }
 
 function ExploreIdle({ targets }: { targets: Target[] | null }) {
+  const rank = (s: string) => { const i = TARGET_ORDER.indexOf(s); return i < 0 ? 99 : i; };
+  const sorted = targets ? [...targets].sort((a, b) => rank(a.slug) - rank(b.slug)) : null;
   return (
-    <main id="main" className="page"><div className="page__inner">
-      <PageHero
-        title="Pick a patch of sky"
-        lede="Type a name or coordinates in the bar above. Or start with one of NASA's five test targets."
-        img="/img/spherex-dust.webp"
-        alt="A cloud of glowing dust among thousands of stars, imaged in infrared by SPHEREx"
-        caption="Dust in the Large Magellanic Cloud, seen by SPHEREx at 3.29 microns."
-      />
-      <div className="idle">
-        <div className="idle__targets">
-          {targets?.map(t => (
-            <Link key={t.slug} href={`/explore?target=${t.slug}`} className="idle__target">
-              <strong>{t.title}</strong><span>{t.kind}</span>
-            </Link>
-          ))}
+    <main id="main" className="xp-idle">
+      <section className="xp-idle__top">
+        <div className="xp-idle__text">
+          <p className="e-label e-label--dot">Explore</p>
+          <h1 className="xp-idle__h">Pick a patch of sky.</h1>
+          <p className="xp-idle__p">Type a star's name or a sky position. You'll see every SPHEREx photo of that spot, played in order like a flip-book.</p>
+          <ExploreSearch fov={6} />
+          <div className="xp-try">
+            <span>Or try</span>
+            <Link className="xp-chiplink" href="/explore?ra=266.4168&dec=-29.0078&fov=6">The centre of the Milky Way</Link>
+            <Link className="xp-chiplink" href="/explore?ra=10.6847&dec=41.269&fov=8">The Andromeda galaxy</Link>
+          </div>
         </div>
-        <p className="small dim">Or try anywhere: <Link href="/explore?ra=266.4168&dec=-29.0078&fov=6">the centre of the Milky Way</Link> · <Link href="/explore?ra=10.6847&dec=41.269&fov=8">the Andromeda galaxy</Link></p>
-      </div>
-    </div></main>
+        <figure className="xp-idle__pic">
+          <img src="/img/spherex-dust.webp" alt="A cloud of glowing dust among thousands of stars, imaged in infrared by SPHEREx" decoding="async" />
+          <figcaption>Dust in the Large Magellanic Cloud, seen by SPHEREx at 3.29 microns.</figcaption>
+        </figure>
+      </section>
+
+      <section className="xp-idle__targets" aria-labelledby="xp-targets-h">
+        <div className="xp-idle__head">
+          <h2 id="xp-targets-h" className="e-label">NASA's five test targets</h2>
+          <p className="xp-idle__note">Start with one. Each opens with its real SPHEREx photos.</p>
+        </div>
+        <div className="xp-cards">
+          {sorted ? sorted.map(t => (
+            <Link key={t.slug} href={`/explore?target=${t.slug}`} className="e-card xp-card">
+              <span className="e-card__n">{ABOUT[t.slug]?.look ?? 'Look closely'}</span>
+              <span className="e-card__k">{t.title}</span>
+              <span className="e-card__t">{ABOUT[t.slug]?.say ?? t.kind}</span>
+              <span className="xp-card__go" aria-hidden="true">Open <span>→</span></span>
+            </Link>
+          )) : TARGET_ORDER.map(s => <div key={s} className="e-card xp-card xp-card--wait" aria-hidden="true" />)}
+        </div>
+      </section>
+    </main>
   );
 }
 
@@ -181,9 +230,11 @@ interface WorkspaceProps {
   params: URLSearchParams;
   invParam: string | null;
   pendingLabel: string;
+  embed: boolean;
+  fov: number;
 }
 
-function ExploreWorkspace({ field, fieldError, target, params, invParam, pendingLabel }: WorkspaceProps) {
+function ExploreWorkspace({ field, fieldError, target, params, invParam, pendingLabel, embed, fov }: WorkspaceProps) {
   const reduced = usePrefersReducedMotion();
   const canvasRef = useRef<SkyCanvasHandle>(null);
   const grid = field?.grid ?? null;
@@ -223,7 +274,6 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const [selected, setSelected] = useState<SkyPoint | null>(params.get('src_ra') && params.get('src_dec') ? { ra: Number(params.get('src_ra')), dec: Number(params.get('src_dec')) } : null);
   const [invId, setInvId] = useState<string | null>(invParam);
   const [invError, setInvError] = useState<string | null>(null);
-  const [panelOpen, setPanelOpen] = useState(true);
   const [copied, setCopied] = useState(false);
   const initialFrameId = useRef(params.get('frame'));
   const urlHasView = useRef(['mode', 'det', 'wmin', 'wmax', 'a', 'b'].some(k => params.has(k)));
@@ -325,7 +375,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       if (!loaded.length) return null;
       const s = stackFrames(loaded.map(x => ({ data: x.d!, median: x.f.stats.median })));
       return { data: s.data, kind: 'stack' as const, n: loaded.length,
-        firstDate: loaded[0].f.time_utc.slice(0, 10), lastDate: loaded[loaded.length - 1].f.time_utc.slice(0, 10) };
+        firstDate: loaded[0].f.time_utc, lastDate: loaded[loaded.length - 1].f.time_utc };
     }
     if (mode === 'difference') {
       if (!frameA || !frameB) return null;
@@ -455,7 +505,7 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
       const ref = modelId ? m.models[modelId]?.reference : undefined;
       if (ref) {
         o.track = { points: m.track.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), label: '', color: 'rgba(245,245,247,0.9)' };
-        o.measured = { points: m.points.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), color: 'rgba(143,180,255,0.55)' };
+        o.measured = { points: m.points.map(p => fromTangent(p.xi, p.eta, ref.ra_deg, ref.dec_deg)), color: 'rgba(245,245,247,0.45)' };
         if (epoch != null && m.track.length) {
           // model position at this frame's epoch (nearest track sample)
           let best = m.track[0];
@@ -469,14 +519,14 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
     if (showWise && wise) {
       for (const w of wise) {
         o.markers!.push(w.mover
-          ? { ra: w.ra, dec: w.dec, color: '#7f97ff', shape: 'diamond', size: 9, label: `WISE saw a mover here in 2015 (${w.pm_arcsec_yr.toFixed(1)}″/yr)` }
-          : { ra: w.ra, dec: w.dec, color: 'rgba(127,151,255,0.75)', shape: 'circle', size: 5 });
+          ? { ra: w.ra, dec: w.dec, color: '#f5f5f7', shape: 'diamond', size: 9, label: `WISE saw a mover here in 2015 (${w.pm_arcsec_yr.toFixed(1)}″/yr)` }
+          : { ra: w.ra, dec: w.dec, color: 'rgba(245,245,247,0.55)', shape: 'circle', size: 5 });
       }
     }
     return o;
   }, [field, trackSource, showTrack, current?.mjd, composed, selected, invId, curatedInvId, showWise, wise]);
 
-  const hint = targetHere && !invId && field?.kind === 'curated' ? { ...targetHere, text: `${target?.title} · click to measure` } : null;
+  const hint = targetHere && !invId && field?.kind === 'curated' ? { ...targetHere, text: `${target?.title} · tap to measure` } : null;
 
   async function share() {
     try {
@@ -511,273 +561,327 @@ function ExploreWorkspace({ field, fieldError, target, params, invParam, pending
   const loadedNow = composed !== null;
 
   let emptyMessage: { title: string; detail?: string; loading?: boolean } | null = null;
-  if (fieldError) emptyMessage = { title: 'Could not open this field', detail: fieldError };
-  else if (!field) emptyMessage = { title: 'Contacting the archive…', detail: pendingLabel ? `Field: ${pendingLabel}` : undefined, loading: true };
-  else if (state === 'processing' && !allFrames.length) emptyMessage = { title: 'Retrieving real SPHEREx observations', detail: field.message ?? 'Querying IRSA (DR1 + QR3), downloading cutouts and aligning them on a common grid. This takes 10–60 s.', loading: true };
-  else if (state === 'no_coverage') emptyMessage = { title: 'No SPHEREx observations here yet', detail: field.message ?? 'IRSA returned no DR1/QR3 spectral images covering this position.' };
-  else if (state === 'archive_unavailable') emptyMessage = { title: 'Archive temporarily unavailable', detail: field.message ?? 'IRSA did not respond. Try a cached target or retry shortly.' };
-  else if (state === 'failed') emptyMessage = { title: 'Processing failed', detail: field.message ?? undefined };
-  else if (!frames.length && allFrames.length) emptyMessage = { title: 'No exposures match this filter', detail: 'Widen the wavelength range or select more detectors.' };
-  else if (!pixels && frames.length) emptyMessage = { title: 'Loading exposures…', loading: true };
+  if (fieldError) emptyMessage = { title: 'Could not open this patch of sky', detail: fieldError };
+  else if (!field) emptyMessage = { title: "Asking NASA's archive…", detail: pendingLabel ? `Position: ${pendingLabel}` : undefined, loading: true };
+  else if (state === 'processing' && !allFrames.length) emptyMessage = { title: 'Getting SPHEREx photos from NASA', detail: field.message ?? "Finding every photo of this spot in NASA's IRSA archive (DR1 and QR3), downloading them and lining them up. This takes 10 to 60 seconds.", loading: true };
+  else if (state === 'no_coverage') emptyMessage = { title: 'SPHEREx has no photos of this spot yet', detail: field.message ?? "NASA's archive (DR1 and QR3) has no SPHEREx images covering this position yet." };
+  else if (state === 'archive_unavailable') emptyMessage = { title: "NASA's archive is not answering", detail: field.message ?? 'Try one of the five test targets (they are saved here), or try again in a minute.' };
+  else if (state === 'failed') emptyMessage = { title: 'Something went wrong', detail: field.message ?? undefined };
+  else if (!frames.length && allFrames.length) emptyMessage = { title: 'No photos in these colours', detail: 'Choose more detectors or a wider colour range under More tools.' };
+  else if (!pixels && frames.length) emptyMessage = { title: 'Loading photos…', loading: true };
+
 
   const shownFrame = composed?.kind === 'single' ? composed.frame : mode === 'difference' ? null : current;
+  const modeInfo = MODES.find(m => m.id === mode) ?? MODES[0];
+  const here: SkyPoint | null = field && Number.isFinite(field.ra) && Number.isFinite(field.dec) ? { ra: field.ra, dec: field.dec } : null;
+  const title = field?.title ?? target?.title ?? (here ? `${formatRA(here.ra, 1)} ${formatDec(here.dec, 0)}` : 'Opening this patch of sky');
+  const firstF = allFrames[0] ?? null, lastF = allFrames[allFrames.length - 1] ?? null;
+  const blurb = target ? ABOUT[target.slug]?.say : null;
+  const lede = [
+    blurb,
+    firstF && lastF ? `${allFrames.length} SPHEREx photos, ${month(firstF.time_utc)} to ${month(lastF.time_utc)}.` : emptyMessage?.loading ? "Getting the photos from NASA's archive…" : null,
+    field?.kind === 'live' ? 'Photos of this exact sky position. Each one shows the date it was taken.' : null,
+  ].filter(Boolean).join(' ');
+  const showPill = state !== 'cached' && state !== 'live' && state !== 'ready' && state !== 'processing';   // loading shows its own progress on the image
+  const pairMode = mode === 'blink' || mode === 'difference';
+  const tapLine = target && field?.kind === 'curated' ? `Tap the ring to measure ${target.title}.` : 'Tap any dot to measure it.';
+  const closeMeasure = () => { setInvId(null); setInvError(null); };
 
   return (
-    <main id="main" className={`ws${invId ? ' ws--inv' : ''}${panelOpen ? '' : ' ws--panel-closed'}`}>
-      {/* Field bar */}
-      <div className="ws__bar">
-        <div className="ws__title">
-          <h1>{field?.title ?? target?.title ?? (field && Number.isFinite(field.ra) ? `${formatRA(field.ra, 1)} ${formatDec(field.dec, 0)}` : 'Opening field')}</h1>
-          {field?.kind === 'live' && <p className="small dim">SPHEREx archive field at fixed sky coordinates. Each frame shows its own observation date.</p>}
-          {field && Number.isFinite(field.ra) && <p className="mono small dim">{allFrames.length} images · {num(field.fov_arcmin, 0)}′ wide · {field.ra.toFixed(5)}°, {field.dec.toFixed(5)}°</p>}
-        </div>
-        <div className="ws__bar-right">
-          <DataStatePill state={state} progress={field?.progress} />
-          <button className="button button--ghost button--small" onClick={share}>{copied ? 'Link copied' : 'Share'}</button>
-          <button className="button button--ghost button--small ws__panel-toggle" onClick={() => setPanelOpen(o => !o)} aria-expanded={panelOpen}>{panelOpen ? 'Hide controls' : 'Controls'}</button>
-        </div>
+    <main id="main" className={`xp-ws${invId || invError ? ' xp-ws--inv' : ''}`}>
+      {!embed && (
+        <section className="xp-head">
+          <div className="xp-head__text">
+            <p className="e-label e-label--dot">Explore · NASA SPHEREx photos</p>
+            <h1 className="xp-h1">{title}</h1>
+            {lede && <p className="xp-lede">{lede}</p>}
+            <div className="xp-meta">
+              {here && <p className="xp-where"><span>RA {formatRA(here.ra, 1)}</span><span>Dec {formatDec(here.dec, 0)}</span>{field?.fov_arcmin ? <span>{num(field.fov_arcmin, 0)}′ wide</span> : null}</p>}
+              {showPill && <DataStatePill state={state} progress={field?.progress} />}
+              <button className="xp-share" type="button" onClick={share}>{copied ? 'Link copied' : 'Share this view'}</button>
+            </div>
+          </div>
+          <ExploreSearch fov={fov} here={here} />
+        </section>
+      )}
+
+      {field?.message && state !== 'processing' && allFrames.length > 0 && <p className="xp-note" role="status">{field.message}</p>}
+
+      <div className="xp-body">
+        <section className="xp-split">
+          <div className="xp-stage xp-dark" role="region" aria-label="Sky viewer">
+            <div className="xp-stage__top" aria-live="polite">
+              {mode === 'difference' && frameA && frameB ? (
+                <>
+                  <span className="xp-chip">{date(frameB.time_utc)} minus {date(frameA.time_utc)}</span>
+                  {matched === false && <span className="xp-chip xp-chip--warn"><Term t="wavelength-matched">Different colours: brightness can't be compared</Term></span>}
+                </>
+              ) : mode === 'stack' ? (
+                <span className="xp-chip">{composed?.n ?? 0} photos added{composed?.kind === 'stack' ? ` · ${month(composed.firstDate)} to ${month(composed.lastDate)}` : ''}{frames.length > STACK_LIMIT ? ` · first ${STACK_LIMIT} of ${frames.length}` : ''}</span>
+              ) : shownFrame ? (
+                <>
+                  <span className="xp-chip">{dateTime(shownFrame.time_utc)}</span>
+                  <span className="xp-chip">{um(shownFrame.wavelength_um, 2)} infrared</span>
+                  {mode === 'blink' && <span className="xp-chip xp-chip--on">{blinkPhase ? 'Later photo · B' : 'Earlier photo · A'}</span>}
+                  {mode === 'blink' && matched === false && <span className="xp-chip xp-chip--warn"><Term t="wavelength-matched">A and B are different colours</Term></span>}
+                  {independent && <span className="xp-chip xp-chip--warn">Each photo scaled on its own</span>}
+                  {!loadedNow && <span className="xp-chip xp-chip--dim">loading…</span>}
+                </>
+              ) : null}
+            </div>
+
+            {grid ? (
+              <SkyCanvas
+                ref={canvasRef}
+                grid={grid}
+                pixels={pixels}
+                display={display}
+                overlays={overlays}
+                showGrid={showGrid}
+                showCatalog={showCatalog}
+                smoothing={smooth}
+                fadeMs={fade && mode !== 'difference' && mode !== 'stack' ? Math.min(900 / fps, mode === 'blink' ? 350 : 600) : 0}
+                hint={hint}
+                wheelZoom={false}
+                onPick={pick}
+                emptyMessage={emptyMessage}
+                caption={overlays.track ? 'Dashed line: the fitted path (a model, not a photo)' : undefined}
+                ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}. Click a source to measure it.`}
+              />
+            ) : (
+              <div className="sky"><div className="sky__message" data-loading={emptyMessage?.loading ? 'true' : 'false'}>
+                <p className="sky__message-title">{emptyMessage?.title ?? 'Opening this patch of sky'}</p>
+                {emptyMessage?.detail && <p className="sky__message-detail">{emptyMessage.detail}</p>}
+                {field?.progress && <Progress {...field.progress} />}
+              </div></div>
+            )}
+            {field?.progress && state === 'processing' && grid && <div className="xp-progress"><Progress {...field.progress} /></div>}
+
+            <div className="xp-transport">
+              <div className="xp-transport__btns" role="group" aria-label="Playback">
+                <button className="xp-round" onClick={() => { setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Previous photo (←)">‹</button>
+                <button className="e-btn e-btn--white xp-play" onClick={() => setPlaying(p => !p)} disabled={!canPlay} aria-label={playing ? 'Pause (space)' : 'Play (space)'}>{playing ? 'Pause' : 'Play'}</button>
+                <button className="xp-round" onClick={() => { setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Next photo (→)">›</button>
+                <label className="xp-speed"><span className="visually-hidden">Speed</span>
+                  <select value={fps} onChange={e => setFps(Number(e.target.value))} aria-label="Playback speed, photos per second">
+                    {[1, 2, 4, 8, 12, 20, 30].map(v => <option key={v} value={v}>{v} per sec</option>)}
+                  </select>
+                </label>
+              </div>
+              <Timeline frames={frames} index={safeIndex} onSelect={i => { setPlaying(false); setIndex(i); }} axis={mode === 'spectral' ? 'wavelength' : 'time'}
+                markA={pairMode ? (aIdx >= 0 ? aIdx : 0) : null}
+                markB={pairMode ? (bIdx >= 0 ? bIdx : frames.length - 1) : null} />
+              <span className="xp-count">{frames.length ? `${safeIndex + 1} of ${frames.length}` : '0 of 0'}</span>
+            </div>
+          </div>
+
+          {invId || invError ? (
+            <aside className="xp-meas xp-dark" aria-label="Measurement">
+              <div className="xp-meas__bar">
+                <p className="e-label">Measurement</p>
+                <div className="xp-meas__acts">
+                  {invId && investigation?.status === 'ready' && <Link className="xp-ghost" href={`/investigation/${encodeURIComponent(invId)}`}>Full page</Link>}
+                  <button className="e-btn e-btn--white xp-close" type="button" onClick={closeMeasure} aria-label="Close the measurement (Esc)">Close</button>
+                </div>
+              </div>
+              <div className="xp-meas__body">
+                {invError && <p className="notice notice--bad">{invError}</p>}
+                {inv.error && <p className="notice notice--bad">{inv.error}</p>}
+                {!investigation && inv.loading && <div className="inv inv--processing"><p className="eyebrow">Measuring</p><Progress stage="loading" done={0} total={0} /></div>}
+                {investigation && <InvestigationView inv={investigation} compact />}
+              </div>
+            </aside>
+          ) : (
+            <aside className="xp-panel" aria-label="How to look">
+              <div className="e-tabs xp-tabs" role="radiogroup" aria-label="How to look at the photos">
+                {MODES.map(m => (
+                  <button key={m.id} type="button" role="radio" aria-checked={mode === m.id} title={m.say}
+                    onClick={() => { setMode(m.id); if (m.id === 'stack' || m.id === 'difference') setPlaying(false); }}>{m.label}</button>
+                ))}
+              </div>
+              <h2 className="xp-panel__h">{modeInfo.title}</h2>
+              <p className="xp-panel__p">{modeInfo.say}</p>
+
+              {pairMode && (
+                <div className="xp-ab">
+                  <div className="xp-ab__row">
+                    <span className="xp-ab__tag">A</span>
+                    <span className="xp-ab__d"><strong>{frameA ? date(frameA.time_utc) : NA}</strong><span>Earlier · {frameA ? um(frameA.wavelength_um, 2) : NA}</span></span>
+                    <button className="xp-mini" type="button" onClick={() => current && setAId(current.id)} title="Use the photo picked on the timeline">Use timeline photo</button>
+                  </div>
+                  <div className="xp-ab__row">
+                    <span className="xp-ab__tag">B</span>
+                    <span className="xp-ab__d"><strong>{frameB ? date(frameB.time_utc) : NA}</strong><span>Later · {frameB ? um(frameB.wavelength_um, 2) : NA}</span></span>
+                    <button className="xp-mini" type="button" onClick={() => current && setBId(current.id)} title="Use the photo picked on the timeline">Use timeline photo</button>
+                  </div>
+                  <button className="xp-link" type="button" onClick={() => { if (!autoMatchedPair()) alert('No two photos in the same colour were found.'); }}>Use the first and last dates</button>
+                </div>
+              )}
+
+              <div className="xp-tap">
+                <span className="xp-tap__ring" aria-hidden="true" />
+                <div>
+                  <p className="xp-tap__h">{tapLine}</p>
+                  <p className="xp-tap__p">See how far it moved and how its brightness changed.</p>
+                </div>
+              </div>
+              {!embed && (
+                <button className="xp-more" type="button" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' })}>
+                  More tools <span aria-hidden="true">↓</span>
+                </button>
+              )}
+            </aside>
+          )}
+        </section>
       </div>
 
-      {field?.message && state !== 'processing' && allFrames.length > 0 && <p className="ws__note small" role="status">{field.message}</p>}
-      {mode === 'blink' && frameA && frameB && matched && field?.kind === 'curated' && (
-        <p className="ws__hintbar small" role="status">
-          Flipping between {frameA.time_utc.slice(0, 7)} and {frameB.time_utc.slice(0, 7)}. Stars stay put. <strong>The dot that jumps is moving.</strong> Click it to measure it.
-        </p>
-      )}
-      <div className="ws__body">
-        <section className="ws__stage" aria-label="Sky viewer">
-          {grid ? (
-            <SkyCanvas
-              ref={canvasRef}
-              grid={grid}
-              pixels={pixels}
-              display={display}
-              overlays={overlays}
-              showGrid={showGrid}
-              showCatalog={showCatalog}
-              smoothing={smooth}
-              fadeMs={fade && mode !== 'difference' && mode !== 'stack' ? Math.min(900 / fps, mode === 'blink' ? 350 : 600) : 0}
-              hint={hint}
-              onPick={pick}
-              emptyMessage={emptyMessage}
-              caption={`${mode === 'stack' ? `${composed?.n ?? 0} images added together` : mode === 'difference' ? 'Image B minus image A' : 'Aligned for viewing. Measurements use the original pixels.'}${overlays.track ? ' Dashed line: fitted path (a model, not an observation).' : ''}`}
-              ariaLabel={`SPHEREx image of ${field?.title ?? 'the selected field'}. Click a source to measure it.`}
-            />
-          ) : (
-            <div className="sky"><div className="sky__message" data-loading={emptyMessage?.loading ? 'true' : 'false'}>
-              <p className="sky__message-title">{emptyMessage?.title ?? 'Opening field'}</p>
-              {emptyMessage?.detail && <p className="sky__message-detail">{emptyMessage.detail}</p>}
-              {field?.progress && <Progress {...field.progress} />}
-            </div></div>
-          )}
-          {field?.progress && state === 'processing' && grid && <div className="ws__progress"><Progress {...field.progress} /></div>}
-
-          {/* Frame readout */}
-          <div className="ws__readout">
-            {mode === 'difference' && frameA && frameB ? (
-              <>
-                <span className="mono">B {frameB.time_utc.slice(0, 10)} {um(frameB.wavelength_um, 3)} − A {frameA.time_utc.slice(0, 10)} {um(frameA.wavelength_um, 3)}</span>
-                <span className={`badge ${matched ? 'badge--ok' : 'badge--warn'}`}>
-                  <Term t="wavelength-matched">{matched === null ? 'Wavelength match unknown' : matched ? 'Wavelength-matched' : 'Different wavelengths: brightness not directly comparable'}</Term>
-                </span>
-              </>
-            ) : mode === 'stack' ? (
-              <span className="mono">{composed?.n ?? 0} exposures
-                {composed?.kind === 'stack' && ` · ${composed.firstDate} → ${composed.lastDate}`}
-                {frames.length > STACK_LIMIT && ` · first ${STACK_LIMIT} of ${frames.length} selected`}
-                {' · moving sources smear in a sky-frame stack'}
-              </span>
-            ) : shownFrame ? (
-              <>
-                <span className="mono">{dateTime(shownFrame.time_utc)}</span>
-                <span className="mono"><span className="swatch" style={{ background: wavelengthColor(shownFrame.wavelength_um) }} />{um(shownFrame.wavelength_um, 3)} <span className="dim">± {num((shownFrame.bandwidth_um ?? NaN) / 2, 3)}</span></span>
-                <span className="mono">D{shownFrame.detector} · {shownFrame.release} · {shownFrame.visit}</span>
-                {mode === 'blink' && <span className="badge">{blinkPhase ? 'B · later' : 'A · earlier'}</span>}
-                {mode === 'blink' && <span className={`badge ${matched ? 'badge--ok' : 'badge--warn'}`}>{matched ? 'A/B wavelength-matched' : 'A/B at different wavelengths'}</span>}
-                {independent && <span className="badge badge--warn">Independent scaling: brightness not comparable between frames</span>}
-                {!loadedNow && <span className="dim small">loading…</span>}
-              </>
-            ) : null}
+      {!embed && (
+        <section className="xp-tools" id="tools" aria-labelledby="xp-tools-h">
+          <div className="xp-tools__head">
+            <p className="e-label">More tools</p>
+            <h2 id="xp-tools-h" className="xp-tools__h">For a closer look.</h2>
+            <p className="xp-tools__p">All optional. Choose colours, change the brightness, add other telescopes, and see where every photo comes from.</p>
           </div>
-
-          {/* Transport + timeline */}
-          <div className="ws__transport">
-            <div className="transport" role="group" aria-label="Playback">
-              <button className="icon" onClick={() => { setPlaying(false); setIndex(i => (i - 1 + frames.length) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Previous exposure (←)">‹</button>
-              <button className="button button--primary button--play" onClick={() => setPlaying(p => !p)} disabled={!canPlay} aria-label={playing ? 'Pause (space)' : 'Play (space)'}>{playing ? 'Pause' : 'Play'}</button>
-              <button className="icon" onClick={() => { setPlaying(false); setIndex(i => (i + 1) % Math.max(frames.length, 1)); }} disabled={frames.length < 2} aria-label="Next exposure (→)">›</button>
-              <label className="transport__speed"><span className="visually-hidden">Speed</span>
-                <select value={fps} onChange={e => setFps(Number(e.target.value))} aria-label="Playback speed">
-                  {[1, 2, 4, 8, 12, 20, 30].map(v => <option key={v} value={v}>{v} fps</option>)}
-                </select>
-              </label>
-              <span className="transport__count mono">{frames.length ? `${safeIndex + 1} / ${frames.length}` : '0 / 0'}</span>
-            </div>
-            <Timeline frames={frames} index={safeIndex} onSelect={i => { setPlaying(false); setIndex(i); }} axis={mode === 'spectral' ? 'wavelength' : 'time'}
-              markA={mode === 'blink' || mode === 'difference' ? (aIdx >= 0 ? aIdx : 0) : null}
-              markB={mode === 'blink' || mode === 'difference' ? (bIdx >= 0 ? bIdx : frames.length - 1) : null} />
-          </div>
-        </section>
-
-        {/* Control panel */}
-        <aside className="ws__panel" aria-label="Viewer controls" hidden={!panelOpen}>
-          <div className="panel-sec">
-            <p className="panel-tip"><strong>Click any dot</strong> in the image to measure how it moves.</p>
-            <h2 className="panel-h">View</h2>
-            <div className="seg" role="radiogroup" aria-label="Display mode">
-              {MODES.map(m => (
-                <button key={m.id} role="radio" aria-checked={mode === m.id} className={`seg__btn${mode === m.id ? ' is-on' : ''}`} onClick={() => { setMode(m.id); if (m.id === 'stack' || m.id === 'difference') setPlaying(false); }} title={m.hint}>{m.label}</button>
-              ))}
-            </div>
-            <p className="small dim">{MODES.find(m => m.id === mode)?.hint}.</p>
-            {(mode === 'blink' || mode === 'difference') && (
-              <div className="ab">
-                <div className="ab__row"><span className="ab__tag">A</span><span className="mono small">{frameA ? `${frameA.time_utc.slice(0, 10)} · ${um(frameA.wavelength_um)}` : NA}</span><button className="button button--ghost button--tiny" onClick={() => current && setAId(current.id)}>Use current</button></div>
-                <div className="ab__row"><span className="ab__tag">B</span><span className="mono small">{frameB ? `${frameB.time_utc.slice(0, 10)} · ${um(frameB.wavelength_um)}` : NA}</span><button className="button button--ghost button--tiny" onClick={() => current && setBId(current.id)}>Use current</button></div>
-                <button className="button button--ghost button--small" onClick={() => { if (!autoMatchedPair()) alert('No two images of the same colour were found.'); }}>Use the first and last dates</button>
+          <div className="xp-tools__grid">
+            <details className="xp-tool">
+              <summary><span className="xp-tool__k">Infrared colours</span><span className="xp-tool__t">SPHEREx sees 102 infrared colours with 6 detectors. Pick which ones to show.</span></summary>
+              <div className="xp-tool__body">
+                <div className="xp-dets">
+                  {DETECTORS.map(([lo, hi], k) => {
+                    const d = k + 1;
+                    const on = !dets || dets.includes(d);
+                    const n = detCounts.get(d) ?? 0;
+                    return (
+                      <button key={d} type="button" className="xp-det" disabled={!n} aria-pressed={on}
+                        onClick={() => setDets(prev => {
+                          const cur = prev ?? [1, 2, 3, 4, 5, 6];
+                          const next = cur.includes(d) ? cur.filter(x => x !== d) : [...cur, d].sort();
+                          return next.length === 6 ? null : next.length ? next : [d];
+                        })}
+                        title={`Detector ${d}: ${n} photos`}>
+                        <strong>Detector {d}</strong><span>{lo.toFixed(2)}–{hi.toFixed(2)} µm</span><span>{n} photos</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="xp-grid2">
+                  <label>From (µm)<input type="number" step={0.01} min={0.7} max={5.1} value={wmin ?? ''} placeholder="0.75" onChange={e => setWmin(e.target.value ? Number(e.target.value) : null)} /></label>
+                  <label>To (µm)<input type="number" step={0.01} min={0.7} max={5.1} value={wmax ?? ''} placeholder="5.00" onChange={e => setWmax(e.target.value ? Number(e.target.value) : null)} /></label>
+                </div>
+                <div className="xp-row">
+                  <button className="xp-pill" type="button" disabled={!current?.wavelength_um} onClick={() => {
+                    if (!current?.wavelength_um) return;
+                    const hw = Math.max(current.bandwidth_um ?? 0.02, 0.01);
+                    setDets(null); setWmin(+(current.wavelength_um - hw).toFixed(3)); setWmax(+(current.wavelength_um + hw).toFixed(3));
+                  }}>Only this photo's colour</button>
+                  <button className="xp-pill" type="button" onClick={() => { setDets(null); setWmin(null); setWmax(null); }}>All colours</button>
+                </div>
+                <p className="xp-small">{frames.length} of {allFrames.length} photos shown. <Term t="wavelength-matched">Why the colour matters</Term></p>
               </div>
+            </details>
+
+            <details className="xp-tool">
+              <summary><span className="xp-tool__k">Brightness</span><span className="xp-tool__t">Make faint things easier to see.</span></summary>
+              <div className="xp-tool__body">
+                <div className="xp-grid2">
+                  <label>Stretch
+                    <select value={stretch} onChange={e => setStretch(e.target.value as StretchKind)}>
+                      <option value="asinh">asinh (default)</option><option value="linear">linear</option><option value="log">log</option>
+                    </select>
+                  </label>
+                  <label>Tint
+                    <select value={cmap} onChange={e => setCmap(e.target.value as Colormap)} disabled={mode === 'difference'}>
+                      <option value="gray">grey</option><option value="ember">ember</option>
+                    </select>
+                  </label>
+                  <label>Black point <span className="xp-val">−{black.toFixed(1)}σ</span>
+                    <input type="range" min={0} max={5} step={0.1} value={black} onChange={e => setBlack(Number(e.target.value))} />
+                  </label>
+                  <label>Contrast <span className="xp-val">{contrast.toFixed(2)}×</span>
+                    <input type="range" min={0.2} max={8} step={0.05} value={contrast} onChange={e => setContrast(Number(e.target.value))} />
+                  </label>
+                </div>
+                <div className="xp-checks">
+                  <label><input type="checkbox" checked={independent} onChange={e => setIndependent(e.target.checked)} /><span>Scale every photo on its own<small>Brightness can then no longer be compared between photos.</small></span></label>
+                </div>
+                <div className="xp-row">
+                  <button className="xp-pill" type="button" onClick={() => canvasRef.current?.zoom(1.4)} aria-label="Zoom in">Zoom in</button>
+                  <button className="xp-pill" type="button" onClick={() => canvasRef.current?.zoom(0.7)} aria-label="Zoom out">Zoom out</button>
+                  <button className="xp-pill" type="button" onClick={() => canvasRef.current?.resetView()}>Fit</button>
+                </div>
+              </div>
+            </details>
+
+            <details className="xp-tool">
+              <summary><span className="xp-tool__k">Show on the photo</span><span className="xp-tool__t">Known stars from ESA Gaia, what NASA's WISE saw, and the measured path.</span></summary>
+              <div className="xp-tool__body">
+                <div className="xp-checks">
+                  <label><input type="checkbox" checked={showCatalog} onChange={e => setShowCatalog(e.target.checked)} /><span>Known stars (ESA Gaia DR3)<small>Moved to each photo's date using their measured motion.</small></span></label>
+                  <label><input type="checkbox" checked={showWise} onChange={e => setShowWise(e.target.checked)} /><span>What NASA's WISE saw around 2015{showWise && !wise ? ' (loading…)' : ''}<small>Diamonds mark things WISE saw moving.</small></span></label>
+                  {wiseError && <span className="xp-small">{wiseError}</span>}
+                  <label><input type="checkbox" checked={showTrack} onChange={e => setShowTrack(e.target.checked)} disabled={!trackSource?.motion} /><span>Fitted path<small>A model, drawn dashed. Not a photo.</small></span></label>
+                  <label><input type="checkbox" checked={showGrid} onChange={e => setShowGrid(e.target.checked)} /><span>Sky grid (RA and Dec)</span></label>
+                  <label><input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} /><span>Smooth pixels<small>For viewing only. Measurements use the original pixels.</small></span></label>
+                  <label><input type="checkbox" checked={fade} onChange={e => setFade(e.target.checked)} /><span>Smooth playback<small>Each photo fades into the next.</small></span></label>
+                </div>
+              </div>
+            </details>
+
+            {shownFrame && (
+              <details className="xp-tool">
+                <summary><span className="xp-tool__k">About this photo</span><span className="xp-tool__t">Date, colour, quality flags and the original NASA file.</span></summary>
+                <div className="xp-tool__body">
+                  <dl className="xp-kv">
+                    <dt>Taken</dt><dd>{dateTime(shownFrame.time_utc)}</dd>
+                    <dt>Colour</dt><dd>{um(shownFrame.wavelength_um)} (band {um(shownFrame.bandwidth_um)} wide)</dd>
+                    <dt>Across the photo</dt><dd>{shownFrame.wavelength_range_um ? `${shownFrame.wavelength_range_um[0].toFixed(3)}–${shownFrame.wavelength_range_um[1].toFixed(3)} µm` : NA}</dd>
+                    <dt>Detector</dt><dd>{shownFrame.detector}</dd>
+                    <dt>Visit</dt><dd>{shownFrame.visit}</dd>
+                    <dt>Data release</dt><dd>{shownFrame.release} {shownFrame.processing_version ?? ''}</dd>
+                    <dt>Quality flags</dt><dd>{shownFrame.flags_at_center.length ? shownFrame.flags_at_center.join(', ') : 'none at the centre'}</dd>
+                    <dt>Photo ID</dt><dd className="mono">{shownFrame.id}</dd>
+                    <dt>Original file</dt><dd><a href={shownFrame.cutout_url} target="_blank" rel="noreferrer">FITS cutout ↗</a> <span className="mono xp-dim" title={shownFrame.sha256}>sha256 {shownFrame.sha256?.slice(0, 10)}…</span></dd>
+                  </dl>
+                  <p className="xp-small">Photos are lined up and smoothed for viewing. Every measurement uses the original pixels.</p>
+                </div>
+              </details>
+            )}
+
+            {field?.stacks && field.stacks.length > 0 && (
+              <details className="xp-tool">
+                <summary><span className="xp-tool__k">Photos added along its path</span><span className="xp-tool__t">Many photos lined up on the moving object, so it shows clearly.</span></summary>
+                <div className="xp-tool__body">
+                  <p className="xp-small">{field.stacks[0].note}</p>
+                  <div className="xp-stacks">
+                    {field.stacks.slice().sort((a, b) => STACK_ORDER(a.id) - STACK_ORDER(b.id)).map(s => (
+                      <figure key={s.id}>
+                        <StackStill stack={s} alt={`Shift-and-stack of ${s.n_frames} exposures, ${s.label}`} />
+                        <figcaption><strong>{s.label}</strong> · {s.n_frames} photos</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                  <p className="xp-small">Centre = where it was predicted to be. {field.stacks[0].pixel_arcsec}″ pixels.</p>
+                </div>
+              </details>
+            )}
+
+            {field?.archive && (
+              <details className="xp-tool">
+                <summary><span className="xp-tool__k">Where the photos come from</span><span className="xp-tool__t">Every SPHEREx visit to this spot, from NASA's IRSA archive.</span></summary>
+                <div className="xp-tool__body">
+                  <ul className="xp-visits">
+                    {field.archive.visits.map(v => (
+                      <li key={v.id}><strong>{v.id}</strong><span>{v.start_utc.slice(0, 10)} to {v.end_utc.slice(0, 10)}</span><span className="xp-dim">{v.n_products} photos · {(v.releases ?? []).join('/')}</span>{v.sealed && <span className="xp-tag">sealed</span>}</li>
+                    ))}
+                  </ul>
+                  <p className="xp-small">{field.archive.n_products} files from {(field.archive.collections ?? []).join(', ')} (IRSA SIA2), asked {field.archive.queried_utc?.slice(0, 16).replace('T', ' ')} UTC.</p>
+                </div>
+              </details>
             )}
           </div>
-
-          <details className="panel-more">
-          <summary>More controls</summary>
-          <div className="panel-sec">
-            <h2 className="panel-h">Infrared colour</h2>
-            <div className="dets">
-              {[1, 2, 3, 4, 5, 6].map(d => {
-                const on = !dets || dets.includes(d);
-                const n = detCounts.get(d) ?? 0;
-                const mid = [0.92, 1.36, 2.02, 3.12, 4.12, 4.71][d - 1];
-                return (
-                  <button key={d} className={`det${on ? ' is-on' : ''}`} disabled={!n} aria-pressed={on}
-                    onClick={() => setDets(prev => {
-                      const cur = prev ?? [1, 2, 3, 4, 5, 6];
-                      const next = cur.includes(d) ? cur.filter(x => x !== d) : [...cur, d].sort();
-                      return next.length === 6 ? null : next.length ? next : [d];
-                    })}
-                    style={{ ['--det' as string]: wavelengthColor(mid) }} title={`Detector ${d}: ${n} exposures`}>
-                    D{d}<span className="det__n mono">{n}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="wrange">
-              <label>λ min <input type="number" step={0.01} min={0.7} max={5.1} value={wmin ?? ''} placeholder="0.75" onChange={e => setWmin(e.target.value ? Number(e.target.value) : null)} /> µm</label>
-              <label>λ max <input type="number" step={0.01} min={0.7} max={5.1} value={wmax ?? ''} placeholder="5.00" onChange={e => setWmax(e.target.value ? Number(e.target.value) : null)} /> µm</label>
-            </div>
-            <div className="row-btns">
-              <button className="button button--ghost button--small" disabled={!current?.wavelength_um} onClick={() => {
-                if (!current?.wavelength_um) return;
-                const hw = Math.max(current.bandwidth_um ?? 0.02, 0.01);
-                setDets(null); setWmin(+(current.wavelength_um - hw).toFixed(3)); setWmax(+(current.wavelength_um + hw).toFixed(3));
-              }}>Only this colour</button>
-              <button className="button button--ghost button--small" onClick={() => { setDets(null); setWmin(null); setWmax(null); }}>All</button>
-            </div>
-            <p className="small dim">{frames.length} of {allFrames.length} images shown. <Term t="wavelength-matched">Why wavelength matters</Term></p>
-          </div>
-
-          <div className="panel-sec">
-            <h2 className="panel-h">Brightness and overlays</h2>
-            <div className="ctl-grid">
-              <label>Stretch
-                <select value={stretch} onChange={e => setStretch(e.target.value as StretchKind)}>
-                  <option value="asinh">asinh</option><option value="linear">linear</option><option value="log">log</option>
-                </select>
-              </label>
-              <label>Colour
-                <select value={cmap} onChange={e => setCmap(e.target.value as Colormap)} disabled={mode === 'difference'}>
-                  <option value="gray">grey</option><option value="ember">ember</option>
-                </select>
-              </label>
-              <label>Black point <span className="mono dim">−{black.toFixed(1)}σ</span>
-                <input type="range" min={0} max={5} step={0.1} value={black} onChange={e => setBlack(Number(e.target.value))} />
-              </label>
-              <label>Contrast <span className="mono dim">{contrast.toFixed(2)}×</span>
-                <input type="range" min={0.2} max={8} step={0.05} value={contrast} onChange={e => setContrast(Number(e.target.value))} />
-              </label>
-            </div>
-            <div className="checks">
-              <label><input type="checkbox" checked={showTrack} onChange={e => setShowTrack(e.target.checked)} disabled={!trackSource?.motion} /> Fitted path (a model)</label>
-              <label><input type="checkbox" checked={showCatalog} onChange={e => setShowCatalog(e.target.checked)} /> Known stars (Gaia)</label>
-              <label><input type="checkbox" checked={showWise} onChange={e => setShowWise(e.target.checked)} /> What WISE saw around 2015{showWise && !wise ? ' (loading…)' : ''}</label>
-              {wiseError && <span className="small" style={{ color: 'var(--bad)' }}>{wiseError}</span>}
-              <label><input type="checkbox" checked={showGrid} onChange={e => setShowGrid(e.target.checked)} /> Coordinate grid</label>
-              <label><input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} /> Smooth pixels (for viewing; measurements use the original pixels)</label>
-              <label><input type="checkbox" checked={fade} onChange={e => setFade(e.target.checked)} /> Smooth playback (each image fades into the next)</label>
-              <label><input type="checkbox" checked={independent} onChange={e => setIndependent(e.target.checked)} /> Rescale every image on its own</label>
-            </div>
-            <div className="row-btns">
-              <button className="button button--ghost button--small" onClick={() => canvasRef.current?.zoom(1.4)} aria-label="Zoom in">Zoom +</button>
-              <button className="button button--ghost button--small" onClick={() => canvasRef.current?.zoom(0.7)} aria-label="Zoom out">Zoom −</button>
-              <button className="button button--ghost button--small" onClick={() => canvasRef.current?.resetView()}>Fit</button>
-            </div>
-          </div>
-
-          {shownFrame && (
-            <div className="panel-sec">
-              <h2 className="panel-h">This image</h2>
-              <dl className="kv">
-                <dt>Product</dt><dd className="mono small">{shownFrame.id}</dd>
-                <dt>Observed</dt><dd className="mono small">{dateTime(shownFrame.time_utc)}</dd>
-                <dt>Wavelength</dt><dd className="mono small">{um(shownFrame.wavelength_um)} (bandwidth {um(shownFrame.bandwidth_um)})</dd>
-                <dt>Across cutout</dt><dd className="mono small">{shownFrame.wavelength_range_um ? `${shownFrame.wavelength_range_um[0].toFixed(3)}–${shownFrame.wavelength_range_um[1].toFixed(3)} µm` : NA}</dd>
-                <dt>Release</dt><dd className="small">{shownFrame.release} {shownFrame.processing_version ?? ''}</dd>
-                <dt>Flags at centre</dt><dd className="small">{shownFrame.flags_at_center.length ? shownFrame.flags_at_center.join(', ') : 'none'}</dd>
-                <dt>Source</dt><dd className="small"><a href={shownFrame.cutout_url} target="_blank" rel="noreferrer">FITS cutout ↗</a> · <span className="mono" title={shownFrame.sha256}>sha256 {shownFrame.sha256?.slice(0, 10)}…</span></dd>
-              </dl>
-            </div>
-          )}
-
-          {field?.stacks && field.stacks.length > 0 && (
-            <div className="panel-sec">
-              <h2 className="panel-h">Images added along the source's path</h2>
-              <p className="small dim">{field.stacks[0].note}</p>
-              <div className="stacks">
-                {field.stacks.slice().sort((a, b) => STACK_ORDER(a.id) - STACK_ORDER(b.id)).map(s => (
-                  <figure key={s.id} className="stackfig">
-                    <StackStill stack={s} alt={`Shift-and-stack of ${s.n_frames} exposures, ${s.label}`} />
-                    <figcaption><strong>{s.label}</strong><span className="mono dim"> · {s.n_frames} exp.</span></figcaption>
-                  </figure>
-                ))}
-              </div>
-              <p className="small dim">Centre = the predicted source position. {field.stacks[0].pixel_arcsec}″ pixels.</p>
-            </div>
-          )}
-
-          {field?.archive && (
-            <div className="panel-sec">
-              <h2 className="panel-h">Where the data comes from</h2>
-              <ul className="visits">
-                {field.archive.visits.map(v => (
-                  <li key={v.id}><span>{v.id}</span><span className="mono small">{v.start_utc.slice(0, 10)} → {v.end_utc.slice(0, 10)}</span><span className="mono small dim">{v.n_products} · {(v.releases ?? []).join('/')}</span>{v.sealed && <span className="badge badge--warn">sealed</span>}</li>
-                ))}
-              </ul>
-              <p className="small dim">{field.archive.n_products} products from {(field.archive.collections ?? []).join(', ')} (IRSA SIA2), queried {field.archive.queried_utc?.slice(0, 16).replace('T', ' ')} UTC.</p>
-            </div>
-          )}
-          </details>
-          <p className="small dim panel-keys">Keys: space plays · ← → step · B blinks · + − zoom</p>
-        </aside>
-
-        {/* Investigation drawer */}
-        {(invId || invError) && (
-          <aside className="drawer" aria-label="Investigation">
-            <div className="drawer__bar">
-              <span className="eyebrow">Measurement</span>
-              <div className="row-btns">
-                {invId && investigation?.status === 'ready' && <Link className="button button--ghost button--small" href={`/investigation/${encodeURIComponent(invId)}`}>Full page</Link>}
-                <button className="button button--ghost button--small" onClick={() => { setInvId(null); setInvError(null); }} aria-label="Close investigation (Esc)">Close</button>
-              </div>
-            </div>
-            <div className="drawer__body">
-              {invError && <p className="notice notice--bad">{invError}</p>}
-              {inv.error && <p className="notice notice--bad">{inv.error}</p>}
-              {!investigation && inv.loading && <div className="inv inv--processing"><p className="eyebrow">Measuring</p><Progress stage="loading" done={0} total={0} /></div>}
-              {investigation && <InvestigationView inv={investigation} compact />}
-            </div>
-          </aside>
-        )}
-      </div>
+          <p className="xp-keys">Keys: Space plays · ← → step · B blinks · D subtracts · + − zoom (or pinch, or Ctrl + scroll) · 0 fits · Esc closes</p>
+        </section>
+      )}
     </main>
   );
 }

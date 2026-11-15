@@ -111,6 +111,8 @@ const CATS: { id: Cat; label: string }[] = [
 // The five objects the challenge asks every tool to be tested on, in the order the challenge lists them.
 // They keep their own categories too; this chip just gathers them in one place.
 const NASA_FIVE = ["Barnard's Star", 'Epsilon Indi B', 'WISE 0855', 'RW Aurigae', 'R Draconis'];
+// The five NASA test targets have saved pages with every SPHEREx photo; open those, not a new archive download.
+const NASA_SLUG: Record<string, string> = { "Barnard's Star": 'barnards-star', 'Epsilon Indi B': 'epsilon-indi-b', 'WISE 0855': 'wise-0855', 'RW Aurigae': 'rw-aurigae', 'R Draconis': 'r-draconis' };
 const inList = (c: Cat) => (c === 'nasa' ? NASA_FIVE.flatMap(n => PLACES.filter(p => p.name === n)) : PLACES.filter(p => p.cat === c));
 const POPULAR = ['Makemake, where we found it', 'Pluto', 'WISE 0855', 'Orion Nebula', 'Planet Nine zone', 'Andromeda Galaxy'];
 
@@ -645,7 +647,7 @@ export function SkyMap() {
             </div>
             <div className="gm-acts">
               {objectImage && <a className="gm-act gm-act--main" href={objectImage.source} target="_blank" rel="noreferrer"><i><IcImages /></i>NASA image</a>}
-              {!sel.solarQuery && <button type="button" className="gm-act gm-act--main" onClick={() => navigate(openHere(sel.ra, sel.dec, imagesFov(sel)))}><i><IcImages /></i>Archive field</button>}
+              {!sel.solarQuery && <button type="button" className="gm-act gm-act--main" onClick={() => navigate(NASA_SLUG[sel.name] ? `/explore?target=${NASA_SLUG[sel.name]}` : openHere(sel.ra, sel.dec, imagesFov(sel)))}><i><IcImages /></i>SPHEREx photos</button>}
               <button type="button" className="gm-act" onClick={() => zoom(0.4)}><i><IcPlus /></i>Zoom in</button>
               <button type="button" className="gm-act" onClick={() => zoom(2.5)}><i><IcMinus /></i>Zoom out</button>
               <button type="button" className="gm-act" onClick={() => void share()}><i><IcShare /></i>Share</button>

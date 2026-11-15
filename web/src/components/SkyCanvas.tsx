@@ -244,8 +244,8 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
         const stepDec = niceStep(fovArcsec / 5);
         const cosd = Math.cos(grid.dec0 * Math.PI / 180) || 1e-3;
         const stepRaSec = niceStep(fovArcsec / 5 / cosd);
-        ctx.strokeStyle = 'rgba(160, 190, 230, 0.22)';
-        ctx.fillStyle = 'rgba(190, 210, 235, 0.7)';
+        ctx.strokeStyle = 'rgba(245, 245, 247, 0.2)';
+        ctx.fillStyle = 'rgba(245, 245, 247, 0.7)';
         ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
         const halfDeg = fovArcsec / 3600 * 0.75;
         const decMin = grid.dec0 - halfDeg, decMax = grid.dec0 + halfDeg;
@@ -280,7 +280,7 @@ export const SkyCanvas = forwardRef<SkyCanvasHandle, Props>(function SkyCanvas(p
       }
       // Catalog overlay
       if (showCatalog && overlays?.catalog && off) {
-        ctx.strokeStyle = 'rgba(140, 200, 255, 0.55)';
+        ctx.strokeStyle = 'rgba(245, 245, 247, 0.5)';
         for (const s of overlays.catalog) {
           const p = skyToScreen(s);
           if (p.x < -10 || p.y < -10 || p.x > size.w + 10 || p.y > size.h + 10) continue;

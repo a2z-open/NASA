@@ -27,6 +27,11 @@ from .astrometry import propagate
 from .spherex import Observation, HARD_FLAGS, STRICT_EXTRA, flag_mask
 
 GAIA_TAP = 'https://gea.esac.esa.int/tap-server/tap/sync'
+# NASA's MAST hosts a mirror of the same Gaia DR3 table (dbo.gaia_source, identical values).
+# It is used when ESA's archive does not answer.  MAST answers in VOTable XML only.
+GAIA_TAP_MAST = 'https://mast.stsci.edu/vo-tap/api/v0.1/gaiadr3/sync'
+GAIA_CONNECT_TIMEOUT = 8      # seconds; a dead server fails fast instead of holding a job for minutes
+GAIA_ESA_RETRY_AFTER = 600    # seconds to go straight to MAST after ESA has failed
 EPSF_CENTER = 16.0
 STAMP_RADIUS = 3            # pixels; 7x7 fitting stamp
 BKG_INNER, BKG_OUTER = 5, 9
@@ -181,19 +186,86 @@ def fit_source(obs: Observation, x0: float, y0: float, *, fix_position: bool = F
 # Gaia DR3 field stars (for registration and catalogue context)
 # ---------------------------------------------------------------------------
 
+_esa_skip_until = 0.0
+
+
+def _votable_rows(content: bytes) -> list[dict]:
+    from astropy.io.votable import parse
+    table = parse(io.BytesIO(content), verify='ignore').get_first_table().to_table()
+    rows = []
+    for rec in table:
+        row = {}
+        for k in table.colnames:
+            v = rec[k]
+            if v is np.ma.masked:
+                row[k] = None
+            elif k == 'source_id':
+                row[k] = str(int(v))
+            else:
+                row[k] = v.item() if hasattr(v, 'item') else v
+        rows.append(row)
+    return rows
+
+
+def gaia_query(adql: str, *, mast_adql: str | None = None, http=None, timeout: float = 60) -> list[dict]:
+    """Run an ADQL query on Gaia DR3 (table name gaiadr3.gaia_source) and return the rows.
+
+    ESA's archive is asked first.  If it does not answer, the same query (or ``mast_adql``) runs
+    on NASA's MAST mirror of the same table.  Values are the same; only the service differs.
+    MAST's CONTAINS/CIRCLE is approximate near the edge, so cone searches that need an exact
+    edge should pass a padded ``mast_adql`` and cut the rows themselves (see gaia_field).
+    After an ESA failure, real queries go straight to MAST for GAIA_ESA_RETRY_AFTER seconds.
+    A test can pass its own ``http`` object, which is used for both services and never remembered.
+    """
+    import time
+    global _esa_skip_until
+    real = http is None
+    http = http or requests
+    errors = []
+    if not (real and time.time() < _esa_skip_until):
+        try:
+            r = http.post(GAIA_TAP, data={'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv', 'QUERY': adql},
+                          timeout=(GAIA_CONNECT_TIMEOUT, timeout))
+            r.raise_for_status()
+            return list(csv.DictReader(io.StringIO(r.text)))
+        except Exception as error:  # noqa: BLE001
+            errors.append(f'ESA: {type(error).__name__}')
+            if real:
+                _esa_skip_until = time.time() + GAIA_ESA_RETRY_AFTER
+    try:
+        q = (mast_adql or adql).replace('gaiadr3.gaia_source', 'dbo.gaia_source')
+        r = http.post(GAIA_TAP_MAST, data={'REQUEST': 'doQuery', 'LANG': 'ADQL', 'QUERY': q},
+                      timeout=(GAIA_CONNECT_TIMEOUT, timeout))
+        r.raise_for_status()
+        return _votable_rows(r.content)
+    except Exception as error:  # noqa: BLE001
+        errors.append(f'MAST: {type(error).__name__}')
+    raise ConnectionError('Gaia DR3 could not be reached (' + '; '.join(errors) + ')')
+
+
 def gaia_field(ra: float, dec: float, radius_deg: float, *, gmax: float = 18.5, cache: Path | None = None) -> list[dict]:
     if cache is not None and cache.is_file():
         return json.loads(cache.read_text())
-    adql = (
-        'SELECT source_id, ra, dec, pmra, pmdec, parallax, pmra_error, pmdec_error, parallax_error, '
-        'phot_g_mean_mag, bp_rp, ruwe, ref_epoch FROM gaiadr3.gaia_source '
-        f'WHERE 1=CONTAINS(POINT(ra, dec), CIRCLE({ra:.7f}, {dec:.7f}, {radius_deg:.5f})) '
-        f'AND phot_g_mean_mag < {gmax}'
-    )
-    r = requests.post(GAIA_TAP, data={'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv', 'QUERY': adql}, timeout=90)
-    r.raise_for_status()
+    def adql(r):
+        return ('SELECT source_id, ra, dec, pmra, pmdec, parallax, pmra_error, pmdec_error, parallax_error, '
+                'phot_g_mean_mag, bp_rp, ruwe, ref_epoch FROM gaiadr3.gaia_source '
+                f'WHERE 1=CONTAINS(POINT(ra, dec), CIRCLE({ra:.7f}, {dec:.7f}, {r:.5f})) '
+                f'AND phot_g_mean_mag < {gmax}')
+
+    def inside(row):
+        # exact great-circle cut, so a padded MAST cone returns the same stars as ESA's exact circle
+        try:
+            r2, d2 = math.radians(float(row['ra'])), math.radians(float(row['dec']))
+        except (TypeError, ValueError):
+            return False
+        r1, d1 = math.radians(ra), math.radians(dec)
+        h = math.sin((d2 - d1) / 2) ** 2 + math.cos(d1) * math.cos(d2) * math.sin((r2 - r1) / 2) ** 2
+        return math.degrees(2 * math.asin(min(1.0, math.sqrt(h)))) <= radius_deg
+
     rows = []
-    for row in csv.DictReader(io.StringIO(r.text)):
+    for row in gaia_query(adql(radius_deg), mast_adql=adql(radius_deg * 1.1 + 2 / 3600), timeout=90):
+        if not inside(row):
+            continue
         def num(k):
             try:
                 v = float(row[k])

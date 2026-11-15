@@ -224,7 +224,7 @@ export function Home() {
     { ra: 331.1, dec: -56.8, label: 'Epsilon Indi B', big: true },
   ], [hunt]);
 
-  const nav = [['/map', 'Sky map'], ['/how', 'How'], ['/check', 'Check'], ['/hunt', 'Finds'], ['/proof', 'Proof']];
+  const nav = [['/map', 'Sky map'], ['/explore', 'Explore'], ['/how', 'How'], ['/check', 'Check'], ['/hunt', 'Finds'], ['/proof', 'Proof']];
   const delay = (ms: number) => ({ '--d': `${ms}ms` } as CSSProperties);
 
   return (
