@@ -1,0 +1,84 @@
+.discovery-panel {
+  width: 446px;
+  max-height: calc(100% - 172px);
+  z-index: 31;
+}
+
+.discovery-panel .gm-list__hd { flex: none; }
+.discovery-scroll { padding: 0 18px 18px; scrollbar-color: #585b5d var(--g-surface); }
+.discovery-panel p { margin: 0; color: var(--g-text-2); line-height: 1.5; }
+.discovery-panel h3 { margin: 0; font-size: 15px; font-weight: 600; color: var(--g-text); }
+.discovery-panel .discovery-intro { margin-bottom: 8px; }
+.discovery-planner { display: grid; gap: 5px; }
+.discovery-panel .discovery-mode { font-size: 12px; }
+.discovery-panel a { color: var(--g-text); text-decoration: underline; text-underline-offset: 3px; }
+.discovery-panel :is(a, button, input, select, [tabindex='0']):focus-visible { outline: 2px solid #a9cafa; outline-offset: 2px; }
+.discovery-form { display: grid; gap: 12px; }
+.discovery-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.discovery-field { min-width: 0; display: grid; gap: 5px; font-size: 12px; color: var(--g-text-2); }
+.discovery-field :is(input, select) {
+  min-width: 0;
+  height: 38px;
+  width: 100%;
+  padding: 0 8px;
+  border-radius: 8px;
+  border: 1px solid #545758;
+  background: var(--g-surface-2);
+  color: var(--g-text);
+  color-scheme: dark;
+  font: 400 14px var(--font);
+  font-variant-numeric: tabular-nums;
+}
+.discovery-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.discovery-actions .gm-btn { padding-inline: 14px; }
+.discovery-secondary {
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid #545758;
+  font-size: 13px;
+}
+.discovery-secondary:hover { background: var(--g-hover); }
+.discovery-panel button:disabled { opacity: .55; cursor: default; }
+.discovery-panel .discovery-progress, .discovery-panel .discovery-error { margin-top: 10px; }
+.discovery-panel .discovery-error, .discovery-panel [role='alert'] { color: #ffb2a1; }
+.discovery-activity { margin-top: 12px; color: var(--g-text-2); font-size: 12px; }
+.discovery-activity summary { color: var(--g-text); cursor: pointer; }
+.discovery-activity ol { display: grid; gap: 4px; margin: 6px 0 0; padding-left: 18px; }
+.discovery-followup-check { display: grid; gap: 3px; padding-top: 5px; overflow-wrap: anywhere; }
+.discovery-followup-check h4 { margin: 0; font-size: 13px; }
+.discovery-followup-check ul { margin: 4px 0 0; padding-left: 18px; color: var(--g-text-2); font-size: 12px; }
+.discovery-results { display: grid; gap: 10px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--g-line); }
+.discovery-results__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: baseline; }
+.discovery-results__head a { font-size: 12px; }
+.discovery-results > p { font-size: 12px; }
+.discovery-vet { display: grid; gap: 3px; }
+.discovery-vet strong { color: var(--g-text); font-size: 13px; }
+.discovery-section { display: grid; gap: 7px; padding-top: 10px; border-top: 1px solid var(--g-line); }
+.discovery-section p { font-size: 12px; }
+.discovery-section canvas { display: block; width: 100%; height: auto; border-radius: 6px; }
+.discovery-blink { margin: 0; display: grid; gap: 7px; }
+.discovery-blink__plate { height: min(30vh, 225px); background: #0b0b0c; border-radius: 6px; }
+.discovery-blink__plate img { width: 100%; height: 100%; object-fit: contain; }
+.discovery-blink figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 8px; font-size: 12px; }
+.discovery-blink figcaption .discovery-secondary { min-height: 30px; }
+.discovery-blink figcaption span { flex-basis: 100%; color: var(--g-text-2); font-variant-numeric: tabular-nums; }
+.discovery-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.discovery-legend span:first-child { color: #8fcdf2; }
+.discovery-legend span:last-child { color: #ffc477; }
+.discovery-table { max-height: 224px; overflow: auto; }
+.discovery-table table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.discovery-table th {
+  position: sticky;
+  top: 0;
+  background: var(--g-surface-2);
+  color: var(--g-text);
+  font-weight: 600;
+}
+.discovery-table :is(td, th) { text-align: left; padding: 6px 5px; border-bottom: 1px solid var(--g-line); }
+.discovery-table small { color: var(--g-text-2); font-size: inherit; }
+
+@media (max-width: 760px) {
+  .gm .discovery-panel { width: 100%; max-height: min(66%, calc(100% - 112px)); }
+}

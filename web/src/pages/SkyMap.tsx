@@ -11,6 +11,7 @@ import { parseDec, parseRA } from '../lib/astro.ts';
 import { distantApi } from './Distant.tsx';
 import '../map.css';
 import { OtherScopes } from '../components/OtherScopes.tsx';
+import { DiscoveryPanel } from '../components/DiscoveryPanel.tsx';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AladinNS = any;
@@ -251,6 +252,8 @@ export function SkyMap() {
   const [layersOpen, setLayersOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [scopes, setScopes] = useState<{ ra: number; dec: number; name: string } | null>(null);
+  const [discoveryChunk, setDiscoveryChunk] = useState<string | null>(null);
+  const discoveryOpener = useRef<HTMLButtonElement>(null);
 
   // ---- start the map ----
   useEffect(() => {
@@ -326,6 +329,7 @@ export function SkyMap() {
               if (Math.abs(cx - xy[0]) <= p.size / 2 + 3 && cy >= xy[1] - h - 3 && cy <= xy[1] + 5) { hit = p.place; if (p.size > 20) break; }
             }
           } catch { /* projection not ready */ }
+          setDiscoveryChunk(null);
           setList(null);
           setLayersOpen(false);
           setActiveChunk(null);
@@ -468,7 +472,7 @@ export function SkyMap() {
   async function find(text: string, known?: Place) {
     const t = text.trim();
     if (!t) return;
-    setErr(null); setFocus(false); setList(null); setActiveChunk(null);
+    setErr(null); setFocus(false); setList(null); setActiveChunk(null); setDiscoveryChunk(null);
     const chunk = chunkFromId(t);
     if (chunk && al.current) {
       setSel(null);
@@ -525,17 +529,23 @@ export function SkyMap() {
   }
   const imagesFov = (s: Sel) => Math.min(20, Math.max(4, Math.round(((s.fov ?? centre?.fov ?? 0.2) * 60) / 3)));
   const objectImage = sel?.solarQuery && sel.bodyId ? SOLAR_IMAGES[sel.bodyId] : undefined;
-  const hasCard = !!(sel && !sel.pin) || !!list || !!(scopes && sel?.pin);
+  const hasCard = !!(sel && !sel.pin) || !!list || !!(scopes && sel?.pin) || discoveryChunk !== null;
   const centreChunk = centre && centre.fov <= CHUNK_GRID_FOV ? chunkAt(centre.ra, centre.dec) : null;
   const centreStatus = centreChunk && chunkTeam.assignments?.[centreChunk.id]?.status;
   const suggestedChunk = chunkFromId(q);
 
   function openChunk(id: string, opener: HTMLButtonElement) {
     chunkOpener.current = opener;
+    setDiscoveryChunk(null);
     setSel(null);
     setList(null);
     setLayersOpen(false);
     setActiveChunk(id);
+  }
+
+  function closeDiscovery() {
+    setDiscoveryChunk(null);
+    discoveryOpener.current?.focus();
   }
 
   return (
@@ -587,12 +597,20 @@ export function SkyMap() {
       </div>
 
       <div className="gm-chips" role="group" aria-label="Kinds of places">
+        <button type="button" ref={discoveryOpener} className={`gm-chip${discoveryChunk !== null ? ' is-on' : ''}`}
+          aria-expanded={discoveryChunk !== null} onClick={() => {
+            if (discoveryChunk !== null) { closeDiscovery(); return; }
+            setDiscoveryChunk(activeChunk ?? centreChunk?.id ?? '');
+            setSel(null); setList(null); setActiveChunk(null); setLayersOpen(false); setFocus(false); setErr(null);
+          }}><IcTarget />Search agent</button>
         {CATS.map(c => (
-          <button key={c.id} type="button" className={`gm-chip${list === c.id ? ' is-on' : ''}`} onClick={() => { setSel(null); setErr(null); setActiveChunk(null); setList(list === c.id ? null : c.id); }}>
+          <button key={c.id} type="button" className={`gm-chip${list === c.id ? ' is-on' : ''}`} onClick={() => { setSel(null); setErr(null); setActiveChunk(null); setDiscoveryChunk(null); setList(list === c.id ? null : c.id); }}>
             {catIcon(c.id)}{c.label}
           </button>
         ))}
       </div>
+
+      {discoveryChunk !== null && <DiscoveryPanel initialChunk={discoveryChunk} onClose={closeDiscovery} />}
 
       {list && (
         <section className="gm-card" aria-label={CATS.find(c => c.id === list)?.label}>
@@ -644,7 +662,7 @@ export function SkyMap() {
       )}
 
       <div className="gm-layers">
-        <button type="button" className="gm-tile" aria-expanded={layersOpen} aria-label="Layers: choose which telescope's sky to show" onClick={() => { setActiveChunk(null); setLayersOpen(v => !v); }}>
+        <button type="button" className="gm-tile" aria-expanded={layersOpen} aria-label="Layers: choose which telescope's sky to show" onClick={() => { setActiveChunk(null); setDiscoveryChunk(null); setLayersOpen(v => !v); }}>
           {activeLayer.thumb && <img src={activeLayer.thumb} alt="" />}
           <span className="gm-tile__lb"><IcLayers />Layers</span>
         </button>

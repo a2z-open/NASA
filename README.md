@@ -101,6 +101,47 @@ Set `PARALLAX_CHUNKS_DB` to a path on persistent storage when hosting it.
 
 **Docker:** `docker build -t parallax . && docker run -p 8000:8000 parallax`.
 
+### Sky map search agent
+
+Open **Search agent** on the map, choose a task, and enter one or two chunk IDs and a UTC date range.
+**Replay NW034** uses the historical search region and dates with the selected task. The job runs on the
+server. Reopen the panel to see its work log and download the evidence packet.
+
+```sh
+.venv/bin/python -m pipeline.discovery --benchmark --no-ai --output output/nw034-replay
+.venv/bin/python -m pipeline.discovery --benchmark --find-exposures --output output/nw034-followup
+.venv/bin/python -m pipeline.discovery --chunk H-03 --chunk I-03 --start 2026-10-20 --end 2026-11-13 --output output/chunk-search
+```
+
+HelioLinC3D proposes links from the pinned MPC Isolated Tracklet File. The orbit fitter uses the training
+window, freezes the fits, and scores the rest. The NW034 replay also searches earlier dates with the updated
+orbit held fixed. The results include the original astrometry, per-position forecast covariance, offset controls,
+catalog receipts where available, and aligned blink frames from matched Catalina exposures. Their source hashes
+and fit stages are saved with the ranked `evidence.json` in the downloadable `evidence.zip`.
+
+For another server, set `PARALLAX_ITF_ARCHIVE` to the MPC snapshot and `PARALLAX_ITF_STATIONS` to the pinned
+observatory table. Set `PARALLAX_HELIOLINC_SOURCE` to the [HelioLinC3D checkout](https://github.com/heliolinx/heliolinx)
+with compiled `src/make_tracklets` and `src/heliolinc`. Set `PARALLAX_HELIOLINC_AUX` to its matching
+`ObsCodesNew.txt` and `Earth1day2020s_02a.csv` directory. The NW034 benchmark uses the original MPC snapshot
+`multi-family-holdout-1727-20261114.gz`. The engine records input hashes. The optional
+`PARALLAX_DISCOVERY_EVIDENCE_DIR` points at the historical expansion folder with the corresponding archive
+receipts and FITS exposures. Keep these inputs and `.parallax-cache/discovery/runs` on the API host.
+
+Set `OPENAI_API_KEY` in the API server's secret environment and restart the API to enable planning. Choose
+**GPT-6.1 Terra** (default) or **GPT-6.1 Sol** for each run in the map panel or with
+`--planner-model gpt-6.1-terra` or `--planner-model gpt-6.1-sol` in the CLI. Set
+`PARALLAX_OPENAI_MODEL` to override the server default. The model receives counts and fit summaries and
+chooses which evidence check runs first. Both checks run, and the packet records the requested model and
+planner outcome. For **Search and find follow-up images**, it also chooses which saved holdout prediction
+to query first. The server searches the SPHEREx DR1 and QR3 wide-survey archives within 3 arcminutes and
+30 minutes of that prediction. It tries a second night when the first query yields no images. The evidence
+includes query receipts and FITS links for possible exposures. A metadata match still requires pixel review.
+With no server key, the search uses the latest eligible prediction first and a fixed evidence order.
+
+This release screens archived main-belt asteroid linkages. Catalog and pixel evidence is limited to matches in
+the pinned historical packet. Live follow-up searches product metadata and keeps failed queries distinct from
+empty results. Search results are for human review.
+
 ## Reproduce the science
 
 ```sh

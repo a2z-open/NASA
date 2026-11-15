@@ -30,6 +30,7 @@ from fastapi.staticfiles import StaticFiles
 import requests
 
 from api.chunks import router as chunks_router
+from api.discovery import router as discovery_router
 from pipeline import ephem
 from pipeline.astrometry import CoordinateError, mjd_to_iso, parse_dec, parse_position, parse_ra, propagate, to_tangent
 from pipeline.spherex import CACHE, ROOT, ArchiveUnavailable, field_key, group_visits, search, fetch_many
@@ -46,6 +47,7 @@ INVESTIGATIONS.mkdir(parents=True, exist_ok=True)
 app = FastAPI(title='PARALLAX', version=VERSION)
 app.add_middleware(GZipMiddleware, minimum_size=2000)
 app.include_router(chunks_router)
+app.include_router(discovery_router)
 
 
 @app.middleware('http')
